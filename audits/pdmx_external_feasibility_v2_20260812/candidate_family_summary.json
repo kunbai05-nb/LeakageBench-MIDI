@@ -1,0 +1,30 @@
+{
+  "all_valid_rows": 254035,
+  "ambiguous_rejected_rows": 219471,
+  "ambiguous_rejection_records_saved": 10000,
+  "ambiguous_rejection_records_truncated": true,
+  "duplicate_identity_rejected_groups": 0,
+  "families_with_at_least_two_mid_path_fields": 322,
+  "families_with_at_least_two_mxl_path_fields": 322,
+  "families_with_both_mid_and_mxl": 322,
+  "families_with_explicit_arranger_marker": 0,
+  "families_with_instrumentation_variation": 223,
+  "families_with_subtitle_variation": 170,
+  "family_id_sequence_sha256": "b43c064553e3d5d83e257f9062bc1a36e98d142b067bd8dec8dbcf8cedd24175",
+  "formal_pool_rows": 222820,
+  "high_confidence_multi_member_families": 322,
+  "no_license_conflict_rows": 222856,
+  "path_availability_semantics": "non-empty CSV strings only; no MIDI/MXL filesystem access",
+  "rejection_reason_histogram": {
+    "COMPOSER_MISSING_OR_NONSPECIFIC": 191094,
+    "GENERIC_TITLE_AMBIGUOUS": 7879,
+    "MOVEMENT_CONFLICT": 156,
+    "MULTIPLE_CATALOG_IDENTITIES": 524,
+    "TIER_B_COMPOSER_NOT_CATALOG_ANCHORED": 217791,
+    "TITLE_MISSING": 47
+  },
+  "tier_a_families": 322,
+  "tier_b_candidate_groups_withheld": 79,
+  "tier_b_families": 0,
+  "total_csv_rows": 254077
+}

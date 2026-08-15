@@ -1,0 +1,47 @@
+{
+  "title": "LeakageBench-MIDI: Measuring and Mitigating Same-Work Family Leakage in Symbolic Music Generation",
+  "version": "1.0.0-rc1",
+  "git_tag": "v1.0.0-rc1",
+  "resource_type": "software",
+  "license": "MIT",
+  "description": "A reproducible framework for measuring prevalence, controlled downstream evaluation inflation, structurally non-exact robustness, model susceptibility, reduced protocol-eligible external evidence, and family-aware mitigation for same-work family leakage in symbolic music generation evaluation. The deposit redistributes no original LMD or PDMX music data.",
+  "keywords": [
+    "symbolic music generation",
+    "MIDI",
+    "data leakage",
+    "benchmark contamination",
+    "evaluation reliability",
+    "dataset deduplication",
+    "family-aware splitting",
+    "generative AI"
+  ],
+  "language": "eng",
+  "creators": [
+    {
+      "name": "Kun Bai",
+      "given_name": "Kun",
+      "family_name": "Bai",
+      "orcid": "0009-0006-4134-9796",
+      "affiliation": "School of Intelligence Science and Technology, Beijing University of Civil Engineering and Architecture, Beijing 102616, China"
+    }
+  ],
+  "repository_url": "https://github.com/kunbai05-nb/LeakageBench-MIDI",
+  "repository_status": "intended target; not verified live at final gate",
+  "publication_date": null,
+  "doi": null,
+  "related_works": [
+    {
+      "title": "On the De-duplication of the Lakh MIDI Dataset",
+      "authors": "Eunjin Choi; Hyerin Kim; Jiwoo Ryu; Juhan Nam; Dasaem Jeong",
+      "year": 2025,
+      "identifier": "https://arxiv.org/abs/2509.16662",
+      "relation": "isSupplementedBy"
+    },
+    {
+      "title": "PDMX frozen source record",
+      "identifier": "https://doi.org/10.5281/zenodo.15571083",
+      "relation": "references"
+    }
+  ],
+  "metadata_status": "ready except actual release date and DOI"
+}

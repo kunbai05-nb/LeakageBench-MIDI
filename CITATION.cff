@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use LeakageBench-MIDI, please cite this software artifact."
+title: "LeakageBench-MIDI: Measuring and Mitigating Same-Work Family Leakage in Symbolic Music Generation"
+type: software
+version: "1.0.0-rc1"
+license: MIT
+authors:
+  - family-names: Bai
+    given-names: Kun
+    orcid: "https://orcid.org/0009-0006-4134-9796"
+    affiliation: "School of Intelligence Science and Technology, Beijing University of Civil Engineering and Architecture, Beijing 102616, China"
+repository-code: "https://github.com/kunbai05-nb/LeakageBench-MIDI"
+abstract: "A reproducible framework for measuring and mitigating same-work family leakage in symbolic music generation evaluation."
+keywords:
+  - symbolic music generation
+  - MIDI
+  - data leakage
+  - benchmark contamination
+  - evaluation reliability
+  - dataset deduplication
+  - family-aware splitting
+  - generative AI

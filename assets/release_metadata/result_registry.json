@@ -1,0 +1,225 @@
+{
+  "release": "LeakageBench-MIDI v1.0.0-rc1",
+  "results": [
+    {
+      "ci95": null,
+      "dataset": "LMD",
+      "effect": {
+        "80_10_10_test_family_contamination": 0.2765669342,
+        "80_10_10_test_file_contamination": 0.297670108,
+        "90_10_test_family_contamination": 0.2934,
+        "90_5_5_test_family_contamination": 0.303
+      },
+      "experiment": "Full-LMD leakage census",
+      "interpretation_boundary": "Full corpus supports file, byte-dedup, and family-aware protocols; canonical and track-order cache covers only 4,300 files.",
+      "model": "not_applicable",
+      "parameter_count": null,
+      "relative_effect": null,
+      "result_id": "lmd_census_80_10_10",
+      "sample_or_family_count": {
+        "families": 140427,
+        "identities": 178561,
+        "multi_member_families": 20797,
+        "multi_member_files": 58931
+      },
+      "source_artifact_sha256": "9607daf226a6e51f281f6c52eb06c5a7c701309ca2f2e51b6febc61cfedfc84b",
+      "source_audit_path": "audits/full_lmd_leakage_census_20260809/monte_carlo_results.json",
+      "status": "FULL_LMD_CENSUS_PARTIAL"
+    },
+    {
+      "ci95": [
+        -0.13244426636,
+        -0.09896393327
+      ],
+      "dataset": "LMD",
+      "effect": -0.11531665896,
+      "experiment": "Controlled family leakage confirmatory",
+      "interpretation_boundary": "Treated-family, control-adjusted effect; not a universal dataset property.",
+      "model": "Transformer-L",
+      "negative_families": "99/100",
+      "parameter_count": 17821056,
+      "relative_effect": 0.13617306555,
+      "result_id": "lmd_transformer_l",
+      "sample_or_family_count": 100,
+      "seeds_negative": "3/3",
+      "source_artifact_sha256": "ad1be9ae32391d1f01aec96e87246e92d7195d3eaeb5d3883edb28b4a212afd6",
+      "source_audit_path": "audits/confirmatory_family_leakage_execution_20260804/primary_estimand.json",
+      "status": "CONFIRMATORY_FAMILY_LEAKAGE_PASS"
+    },
+    {
+      "ci95": [
+        -0.13075997022,
+        -0.09706527336
+      ],
+      "dataset": "LMD",
+      "effect": -0.113316,
+      "experiment": "Structurally non-exact secondary stratum",
+      "interpretation_boundary": "Frozen paper-facing structurally-nonexact analysis under the adopted canonicalization.",
+      "model": "Transformer-L",
+      "parameter_count": 17821056,
+      "relative_effect": null,
+      "result_id": "lmd_structurally_nonexact",
+      "sample_or_family_count": 95,
+      "source_artifact_sha256": "6349e5c91c1adc240ce480ec46aef93ef434eaec486dd85aff2e45fb8241ae84",
+      "source_audit_path": "audits/family_aware_mitigation_final_20260808/controlled_mitigation_effect.json",
+      "status": "SUPPORTED_SECONDARY"
+    },
+    {
+      "ci95": null,
+      "dataset": "LMD",
+      "effect": -0.09295846361,
+      "experiment": "Difficulty secondary stratum",
+      "interpretation_boundary": "Secondary descriptive difficulty stratum.",
+      "model": "Transformer-L",
+      "parameter_count": 17821056,
+      "relative_effect": null,
+      "result_id": "lmd_difficult_stratum",
+      "sample_or_family_count": null,
+      "source_artifact_sha256": "7d3a5e17f144610de68f51df385155f69da6d8b30bbb63b2d6e9b8f14edfda84",
+      "source_audit_path": "audits/confirmatory_paper_readiness_20260806/difficulty_strata.json",
+      "status": "SUPPORTED_SECONDARY"
+    },
+    {
+      "ci95": [
+        -0.08953893738,
+        -0.06633320981
+      ],
+      "dataset": "LMD",
+      "effect": -0.07759306071,
+      "experiment": "Capacity study",
+      "interpretation_boundary": "Capacity and architecture association, not a universal scaling law.",
+      "model": "Transformer-S",
+      "parameter_count": 10942512,
+      "relative_effect": 0.08571583116,
+      "result_id": "transformer_s",
+      "sample_or_family_count": 100,
+      "source_artifact_sha256": "6977a9dfb360c31d27b28d1f0241ff6ecdc7f1b9a4293bfc5a74819e31fc9300",
+      "source_audit_path": "audits/transformer_scale_execution_20260810/scale_effects.json",
+      "status": "CAPACITY_AND_ARCHITECTURE"
+    },
+    {
+      "ci95": [
+        -0.09882363737,
+        -0.0729263232
+      ],
+      "dataset": "LMD",
+      "effect": -0.08571254853,
+      "experiment": "Capacity study",
+      "interpretation_boundary": "Capacity and architecture association, not a universal scaling law.",
+      "model": "Transformer-M",
+      "parameter_count": 13658064,
+      "relative_effect": 0.10397596524,
+      "result_id": "transformer_m",
+      "sample_or_family_count": 100,
+      "source_artifact_sha256": "6977a9dfb360c31d27b28d1f0241ff6ecdc7f1b9a4293bfc5a74819e31fc9300",
+      "source_audit_path": "audits/transformer_scale_execution_20260810/scale_effects.json",
+      "status": "CAPACITY_AND_ARCHITECTURE"
+    },
+    {
+      "ci95": [
+        -0.03777569707,
+        -0.0263445101
+      ],
+      "dataset": "LMD",
+      "directionally_consistent": true,
+      "effect": -0.03172214738,
+      "experiment": "Second architecture TCN",
+      "formal_replication": false,
+      "interpretation_boundary": "Smaller statistically consistent same-direction effect; preregistered practical replication threshold failed.",
+      "model": "TCN-384",
+      "negative_families": "99/100",
+      "parameter_count": 10753536,
+      "relative_effect": 0.02530064531,
+      "result_id": "tcn_384",
+      "sample_or_family_count": 100,
+      "seeds_negative": "3/3",
+      "source_artifact_sha256": "dc65bb01c3bc2f3804af9c91e82d440b49601d396a19532cac1897eb4bc01ed3",
+      "source_audit_path": "audits/second_architecture_tcn_execution_20260807/primary_estimand.json",
+      "status": "SECOND_ARCHITECTURE_TCN_REPLICATION_REJECTED"
+    },
+    {
+      "ci95": null,
+      "dataset": "LMD cached pool",
+      "effect": {
+        "S0_cross_split": 177,
+        "S1_cross_split": 161,
+        "delete_multi_token_loss": 0.228357049,
+        "family_aware_cross_split": 0,
+        "family_aware_reassigned": 0.2595348837
+      },
+      "experiment": "Mitigation comparison",
+      "interpretation_boundary": "4,300-file frozen pool; zero known overlap under adopted family definition.",
+      "model": "not_applicable",
+      "parameter_count": null,
+      "relative_effect": null,
+      "result_id": "mitigation_4300",
+      "sample_or_family_count": 4300,
+      "source_artifact_sha256": "b8842a2a865e05c440d3a8f8a7addde15e5accd2a5ade3cc8abd7c0b098b4d49",
+      "source_audit_path": "audits/family_aware_mitigation_final_20260808/split_comparison.json",
+      "status": "FAMILY_AWARE_MITIGATION_SUPPORTED"
+    },
+    {
+      "ci95": null,
+      "dataset": "PDMX Tier-A",
+      "effect": null,
+      "experiment": "PDMX metadata feasibility",
+      "interpretation_boundary": "Metadata feasibility only; not a MIDI structure or model-effect PASS.",
+      "model": "not_applicable",
+      "parameter_count": null,
+      "relative_effect": null,
+      "result_id": "pdmx_feasibility_v2",
+      "sample_or_family_count": 322,
+      "source_artifact_sha256": "2f62d34097515f1113d85b16f17343b39f0fdd63316c781189fa86d5e43a7245",
+      "source_audit_path": "audits/pdmx_external_feasibility_v2_20260812/candidate_family_summary.json",
+      "status": "PDMX_EXTERNAL_FEASIBILITY_V2_PASS"
+    },
+    {
+      "ci95": null,
+      "dataset": "PDMX Tier-A",
+      "effect": null,
+      "experiment": "PDMX original 100-family structure gate",
+      "interpretation_boundary": "Frozen tokenizer eligibility left 67 structurally-nonexact families, below the original 100-family requirement.",
+      "model": "not_applicable",
+      "parameter_count": null,
+      "relative_effect": null,
+      "result_id": "pdmx_structure_gate",
+      "sample_or_family_count": {
+        "midi_eligible": 79,
+        "structurally_nonexact": 67,
+        "tier_a": 322
+      },
+      "source_artifact_sha256": "5426322dd25d56829319c65eeda3d4d8820783ea5f6e7223d26ae6c9dbc224a8",
+      "source_audit_path": "audits/pdmx_midi_structure_20260812/family_eligibility.json",
+      "status": "PDMX_MIDI_STRUCTURE_FAIL"
+    },
+    {
+      "ci95": [
+        -0.08321508803,
+        -0.05317508547
+      ],
+      "clean_validation_drift": -0.002673,
+      "control_drift": -0.00169370216,
+      "dataset": "PDMX reduced Tier-A",
+      "effect": -0.06777620934,
+      "experiment": "Reduced-cohort external estimation",
+      "interpretation_boundary": "Only Tier-A catalog-anchored, structurally-nonexact, 4/4, 1024-context-eligible reduced cohort.",
+      "model": "Transformer-L",
+      "negative_family_rate": 0.9552238806,
+      "original_100_family_gate": "failed",
+      "parameter_count": 17821056,
+      "reduced_cohort_supported": true,
+      "relative_effect": 0.11068005018,
+      "result_id": "pdmx_reduced",
+      "sample_or_family_count": 67,
+      "seeds": [
+        -0.07203421761,
+        -0.06272127534,
+        -0.06857313509
+      ],
+      "source_artifact_sha256": "9d13ff27a813d8d6f744df6aec863ddc5a3788a37b27c0408a46bdaa33915e64",
+      "source_audit_path": "audits/pdmx_reduced_external_execution_20260812/primary_effect.json",
+      "status": "PDMX_REDUCED_EXTERNAL_EFFECT_SUPPORTED",
+      "treated_n": 67
+    }
+  ]
+}

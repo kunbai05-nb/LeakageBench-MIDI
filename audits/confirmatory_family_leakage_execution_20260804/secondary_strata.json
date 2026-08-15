@@ -1,0 +1,24 @@
+{
+  "canonical_event_exact": {
+    "bootstrap_samples": 10000,
+    "ci95": [
+      -0.2534823831662741,
+      -0.06306754141242724
+    ],
+    "families": 5,
+    "mean": -0.15489477210340036,
+    "median": -0.10616665263507526,
+    "p_two_sided": 0.0
+  },
+  "structurally_nonexact": {
+    "bootstrap_samples": 10000,
+    "ci95": [
+      -0.1316362310942,
+      -0.0990482392903119
+    ],
+    "families": 95,
+    "mean": -0.11487992445759666,
+    "median": -0.09305203422849029,
+    "p_two_sided": 0.0
+  }
+}

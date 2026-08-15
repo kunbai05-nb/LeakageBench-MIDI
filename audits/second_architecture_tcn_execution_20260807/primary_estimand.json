@@ -1,0 +1,18 @@
+{
+  "H1_pass": false,
+  "at_least_two_seed_ci_exclude_zero": true,
+  "bootstrap_samples": 10000,
+  "bootstrap_unit": "family",
+  "ci95": [
+    -0.03777569706949579,
+    -0.026344510101156998
+  ],
+  "control_mean_delta": -0.0002972805645607563,
+  "family_negative_sign_rate": 0.99,
+  "p_two_sided": 0.0,
+  "practical_threshold_met": false,
+  "tau": -0.03172214737511123,
+  "three_of_three_seed_negative": true,
+  "treated_mean_delta": -0.03201942793967199,
+  "treated_relative_nll_improvement": 0.025300645307876662
+}

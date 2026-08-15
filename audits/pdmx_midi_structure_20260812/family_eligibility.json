@@ -1,0 +1,4579 @@
+{
+  "families": [
+    {
+      "family_id": "2573d087c78fd172c00a2b664dac8e46c850e02b8c15e38d2c6df2ca8cf1b17c",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 5,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 5
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "59509cfdef58a0a367af2af30289ac94e0cc5f01fe67df4869549b864ac8a6d9",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "487fd7413be6ad655f4b20f88f3e944412e8e958a7caa0fd5b3969eae10de094",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 2,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 1
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 2
+    },
+    {
+      "family_id": "71ee961f95c00d55969621a0fa07070fc92318f2cf3f36d47923814a1d642a77",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 1
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "e0ff816e38d2f52d9a637e58bbfbe4a116303292b5fb5803e0bb83eed4002301",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "15ec65dcffd2d16b4e5c22afa6a32416e1c87fc7ac30876eb0acaa8c0d0ddc15",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "97523c7ec299a156e8cebd3c5c790b3fc6d4412c627ea1aed7886579ef3b24a1",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "3ba533963d9428009f2248c9005a600c588fbe39a5f7275e774c0319d03a48fb",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 2,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 1
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 2
+    },
+    {
+      "family_id": "ad87b2126453f9f73adeab665ea5d86ed33c2cb361dc3812e54027b51f9b2d32",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "aa0b0e7749bbecbd350d135cd41a946dc7d270d652b4d30df25a0b71d9380e7e",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "TOO_FEW_BARS": 3
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "6de5c09bae437d2efa27e1d497eed2950b187d7cdd2f6dc0aaefd16bb32dd1bc",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "38dd2231fd721e8c81a9bcb30893aece93567191405aace6c0a7cb707f783f0d",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "b7e0609ee2f0c88df639a2ca86b383b6e0020b85a6619de9f75d3d12fe1b19b0",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "33f5b96d02cb2a4e091e5354e3c4ef3dc1b7a5930b06ce71e42fc5be93e6a8a1",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "89580edb19d2b15088cce0019ba1bbb5bfbce9eb311526a936178b3a01ac33f0",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "9ee68a771b71437497c75e24346cd383dcebdc1db82eacafab012580e3e2fd81",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "d4fa7eddad36ed7ba78e869e88806b5701fa285a4302bebac70a5c7e1b9e65b5",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "TOO_FEW_BARS": 1
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "5bad1ee02cb95abc4a0ac49caf786b622d951d685a3feefc9af9b961e8949ef4",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 2,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 1
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 2
+    },
+    {
+      "family_id": "2d6dd6422ee37f5249d9cf43a51c8a0789d75b1f31cc701ee1aec17359a59846",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "99cb1253b3bd6107d4be089c9babbc1114f2574a20c714fdffec431fc610e6d4",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 4
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "7c7bfb3a9ca081c8520e3eed8ea050744278864270075dc6129e461bf2cf6d77",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 4
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "c1bf27e5a714a610d21bb14f3aa441518809b7758904decaa4ea545233ee1586",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 4
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "43afa6f1e3597703f9d4d88912cb78a2ba26a7e79454e34d15bb217535b9524d",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "30cb0e8564be3876d6f2b6f743d4b5bb03c4630eb01009b33161fc59e3521eab",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 1
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "959aa277f45691dbe09178fbf61dac55a2623391365e4a4211921a2bff1e0513",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "bc076fe650829b225735198f46e5699e2823090ccf9e9c62a6f325676fa39232",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 5,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 5
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "64d93e8099549eb6bf89b97dc43f62a4deb2db948b451a61a437ea7180651cf9",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "8cbe70bd41c2d8ac9790665954234e9c7f2a8a81d126376dfcc51b160fbe79d5",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "da289f6a280c05405d017a06c72dec30ddb6524899366c6f3ec8112addfd07f7",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 1
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "48e7077f4e3f549f70358aee2bed6d9422d8f0183bf29173abe45236f0b227dc",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "6ee5359e785478a132934dd211f9256acb782969c772c992bea11c65338c36ae",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "73ccdab98d58767fa411039307b0f603f76589f8faa4dad7614811ec6e320849",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "8d3efdfdfc526a96693a389cb6502c71fe085d30936009be7e816d8156df5bd4",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "800ef0072bc1d44c85a06f2eb8bc948e5a120f788e0b60d4ccea8e819da7bc86",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "de272905160eafa7461df9b19e471dc4e291dacb9f27d499d949005e025163b7",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "7e2995f43ba63ea4d15db71a268cfb280676be1b7ea1d7ae6843f48501331b93",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 3,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 3
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 3
+    },
+    {
+      "family_id": "7033fb593953bb9a60c7ed33483c6b33b95c1a13de31ba1a057178f5cc81d058",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 1
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "c6bf6a8524f4946be0856281c7e87ddf5ea01a2ba35cdc0fe03b908f2a895710",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 4
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "17ee9a26d8dd43f84d6266de63d60d81be6956b8e5b167f55ea1e20cb112670a",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 2,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 1
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 2
+    },
+    {
+      "family_id": "61fdcf1229fdbaf1d109347701d8577f7c1d23d9b09d624e02d959bb16ce8afe",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "7e340e60985165fbf83dc515550ac7d0a08e2a8e0db5237a8a7494895770c383",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "dd335266be8905dd5cb477a922b13af18d4412c5f56274de1cef2fbabde14c9d",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "0021e7d1512f88368919ee5eda7321a1f27f86c9e16d411478510c1ab2ea413b",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "ea3964b6576e204e5d1f0d22f60456e1e6abaaf1b70e87528d0d1eeed35c4dff",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 2,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 1
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 2
+    },
+    {
+      "family_id": "cbefc59e00b287a24c37ac70059afc297d2192a4dea960a90ca711cfff7cecb6",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "85957db7c2d7a003669cb3123fbf981d8cc5c1ca37fc2ede03a9d6f9d4583643",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "b4a8a801d83e82c50ab00c68af542bbaf5393d84ac788d1e80625599a16fbf16",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 2,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 1
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 2
+    },
+    {
+      "family_id": "957e1f09612b2bcabbae7b5367a1565a37dc8f9ff4b490e8adeab7d2feb02966",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 2,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 1
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 2
+    },
+    {
+      "family_id": "a3309df19c3fa295f68ef42d14fdb9d3aeb799f4a848e828a065c681df7ab9db",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 4,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 6
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 4
+    },
+    {
+      "family_id": "df916f8d2aa97ae96ee1522fb6adc189b147c17c7f5b40ed770329a42f577a43",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "47cbe9d6eb649611c3e0eddd9069f8889501ad5dcbf55c6d81b6d1fef52fa443",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 4
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "538f9d8d404a6bff5c69179e7be95de1d0e8567d9e059e517d4c5d37d7de5539",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NO_CONTEXT_1024_WINDOW": 1
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "19e0017ce7bf0dc3e4f83019037f16aa98df462fd68e9345ecc834795deb8cfb",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 5,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 5
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "6dc7155647154652e254fbd9863526b3452b05c42c9ca6dbac1c25fc6d0245a0",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "71513644034e75e0e14b5c55683d507f5c355d808ef6973d48bb711892054092",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "df4d15d27f2cbf3341998e2adee6665abe0776fe3670c9308d97917651f4d1f9",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "BYTE_EXACT": 1
+      },
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 2
+    },
+    {
+      "family_id": "c55b50a000590bfce6bf7731b3bd039fb25a18d1cac8e1b5ba6d828a6b5b5ecf",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 5,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NO_CONTEXT_1024_WINDOW": 1,
+        "TOO_FEW_BARS": 3
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "138c8ac88f106da9c168efa36cb58b5223330ea97c62525182183c6ad90880ae",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 6,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 6
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "e302f8911c7f59d2ab25f6fba6cfb6b7726b46fe896ce116be2059df1659cba6",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "c53bcbaf641e11a54036db4ec790f121bba4f9b3200ac4631e6e7246319eb0a2",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "f1ca6ae665d8590f7818ac5b83b7f6aab105a9767c160236e5c5928e9441ca8a",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 2,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 1
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 2
+    },
+    {
+      "family_id": "ab84cac96cb614f7bfbd716c81f951de19be3205c30561d679981d2203f6db09",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "7858a2670e34800f136aacee625a09827a8ad830e252429337ad4a356dd11d2e",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "524e62ca9b591277158648c4ecfb95b51d0c8fd4954d89cc5a7d6c4bf00595a3",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 7,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 6
+      },
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 4
+    },
+    {
+      "family_id": "5f9de109dea40b79f56ea1b35ff0683d4643efbf61137c996a91e782d4379e58",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "1a43ecf6912046ba4533c494d21cf3ab0e9334d7656e2728ee892efe276cebce",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "d079d180d19dd5817d17713d4f309c1b57a55f63751c176c812451b933c118bd",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "9f6c34519bdfbdbed22fabd6651aaccf0f8c8d9eeec72c12d7f3ddd836c55160",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 4
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "ce1359e7d7935d03bdf8052169757dbc7736cec67fc5e23e10112f676873dc03",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "ee3c62b7b8e22a882a482f468493ff834c0acbbacf5ec14e1156de46368251fe",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "f18c0f5510b288be508889307c1d0e277145364e3efac2588ffaa6284637367c",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "d526d3598131431db91c73f0ae620bcaa482734631f8a2185bce3b3657fc325b",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 5,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 5
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "6ac7af0f23c1387d0f317ea28dd76df7248c203b750adb568a88f1a087091f65",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "83f8c393d7adb6d03682ae9d013f3d2652ac37f2b3466ae4a9b4e72ca8ad8386",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 5,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 3
+      },
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 3
+    },
+    {
+      "family_id": "d6037bb57faa884408f2e789ff5aad790b3a4152e321ce1315140e880e694588",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 15,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 36
+      },
+      "rejection_reasons": {
+        "NON_4_4_METER": 6
+      },
+      "tier": "A",
+      "valid_member_count": 9
+    },
+    {
+      "family_id": "4dc0b03bf5a680b67307ddccf9dfd8f1b63c4b7634b8bd78bd82d7bacd2b78e2",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 17,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 10
+      },
+      "rejection_reasons": {
+        "NON_4_4_METER": 12
+      },
+      "tier": "A",
+      "valid_member_count": 5
+    },
+    {
+      "family_id": "ca35f15aeaae020d8ae52a77d5ed3ddec19853f245c7d5729fba608cf2ea44a3",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "dd5dd30a7677db55e4cab7ae02c5a9af68de748e56a9779e3d03ba4888638414",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 1
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "1c4e313ba5cd0ebe64dd3545e60a8b8b1867485077cdd7029e4ffa6dffd245a2",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 4
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "aa0125d4af954f49ee0a9230cfd11813443b776ff49c1ac3e3acd52c09e62533",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 1
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "6da4ef6f4831cd53f8b66c40a320632bfae1bba12e72a213aaaead9f590c3c7f",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 4
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "dd914dfc0c1abab6fcfab0969de6a630a30029c3d364e98c36954ecc9312916d",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 13,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 6
+      },
+      "rejection_reasons": {
+        "NON_4_4_METER": 8,
+        "NO_CONTEXT_1024_WINDOW": 1
+      },
+      "tier": "A",
+      "valid_member_count": 4
+    },
+    {
+      "family_id": "dfb09d9cedc40707ea9c696d1d2d2a48ef66f7bf9b9fc240bcd1595176e9b2f3",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 3,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 1
+      },
+      "rejection_reasons": {
+        "NON_4_4_METER": 1
+      },
+      "tier": "A",
+      "valid_member_count": 2
+    },
+    {
+      "family_id": "1f4334309d378b723899c9abdc543e24df8a3f96b22c76c8cc44ec10221bdb81",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 4,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 6
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 4
+    },
+    {
+      "family_id": "5c9c13b329f5dd131c249956a620176e7b00b26aada52e0c9024d27feb20806e",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "8a9a86e53efd08af07a1c807bf4137a042ae2eff18678f81035f4279f466bf41",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 3,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 3
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 3
+    },
+    {
+      "family_id": "c02d90ce56ee3f1226a867685a0274300e0cfd72ef2034bef751621e7f86b84f",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 3,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "BYTE_EXACT": 1,
+        "STRUCTURALLY_NONEXACT": 2
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 3
+    },
+    {
+      "family_id": "69dda9237faee7d8a6b2a859e6be918e9f2ce506a6ec1459ca14fc25a508db8d",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "62d78ceb5fa0df9610e9c408dba27d4dca3e92fe370b209fb3127d6423950d12",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "bfd15ea971719a20b87322c60bc3e1ce7cb6c68631202837a75bc8a2a0141d84",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 2,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 1
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 2
+    },
+    {
+      "family_id": "284076d5b1e5aaf7fcf10d2a8c80ff7dd293efb3dfd984b4ed4abec23f1229e3",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "c896cccef772c2cc1170ecf7786daae3548d6ee619f14e0ff60712e6cfa6b79a",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "BYTE_EXACT": 1
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 2
+    },
+    {
+      "family_id": "b13dcc60b8865c03fa610d4a3bb3c89f192899d9269e055b27d22e38128d6fba",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "b74e8c19ebed71ee975ae156f1cffd5e9acd34d8b5c0bdc9315178d13027c6e9",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 6,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 6
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "407b7cdf828d2ddd3cc9dad99650ee833e2255a726d875a5b7c4cbecb176cadc",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 8,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 8
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "c9790efd528203a8087fc666fc1e051086312ae3e3ccfcb4401cf29a608edbce",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 9,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 9
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "b4d355b2729a2b699d30b1abfd9d58a097132df60bc8dffbb43ebebf27929216",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 8,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 7
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "1940c53851ed56afc7a2d7bde2bcbd724bb2b2d026016126480c601d8ff9ee86",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 5,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 5
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "88b283fe87de5b0f3669c126b6ed4ead2eba8cd4d0bb8b8abafc8ed0254f5aad",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 8,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 8
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "1f06fb9357108ffa63c37dc84dcccdec08dbde08bea41bfce7e097a11ac058a5",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 7,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 7
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "ba192f0dc805c78308daa8f6d6b6587979c16d0fd69153bfc4333090f4bb830c",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 8,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 8
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "db9fac992a397d385ed292226af9cf21932daccbfad5189166a967debdf562a8",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 7,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 6
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "f9dbd57103e8ca0f73b6a812246cd3333e7b90799eec4450d1d07cc4aa89d464",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 7,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 7
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "1d013b37be9503787bd1e588fdbbe429f4c9deefd8e05033cee3f19297a29b20",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 7,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 7
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "82d0fa1e2c8543cca772faae274888e43b69130045464778f92362efbd9ebd9a",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 9,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 9
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "2984bcce8861d2bd516d92e772b130d92b4709c0b32c33b15a66d43fc0e54823",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 8,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 1
+      },
+      "rejection_reasons": {
+        "NON_4_4_METER": 6
+      },
+      "tier": "A",
+      "valid_member_count": 2
+    },
+    {
+      "family_id": "0720539a3b8ba87d9967db8cc9b411f53c9673a0d09c1aa9decaf70b0b85983e",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 6,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 6
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "122cb4492876cb77473d1973fba37d2e9f80a343249dc9a0578c20270feac441",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 7,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 7
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "ab85ae1a5989665d2e3a2e357a953958a11f9070dc2ee90b895e560a68e4b245",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 10,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 10
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "d10c3effc378fbad0ba366caca5e3074bf6cd4d09372acb364067fcd7acd6e43",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 9,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 9
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "72ed9c3d072b399179ec295bafa2106f308c99d42fdb0ad50bdb7d759f89d214",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 9,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 9
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "6d9efbddc51ce3e19589a81d457fe46ffb06fa6c5d8a37d1467c04b5baabe97d",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 11,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 11
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "deb26741b8f094fc68e63fe5a40e34822aa635d5662b1558c88ad751fe62f571",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 1
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "91d7e3d764f1b7ef481036b6670c282cc0db1266dcdd9e67031eb9b738efa7b2",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 4,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 6
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 4
+    },
+    {
+      "family_id": "98bc93c0bf78a4b4290bac4d508d2c23ff43062fd292adca47e9231f92ed33bf",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 4,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 6
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 4
+    },
+    {
+      "family_id": "709f90fd04ba9de16cc4ecee3c28599ef7223b867682bfe8e5113ddc28f5edda",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "239dea6e5d99cc664fc0c5fc272bfa331cabc01686799117a275fe1e75fffc6a",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "130c4f509fc6692dc360b742e42782cd57c128a41d17f050bb1400c77552a96f",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "a9c44bae404b35c95b8c95173ae7db45310364f89f6147dc41594f1a1c40df83",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 4
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "48c094bed465d84e9b4fee3f7cd3ff95bfe5d1369fbd4acc157af4562b5c0727",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 4,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 6
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 4
+    },
+    {
+      "family_id": "e7b66e8acf6ae782e4eca539f25882d955c89a79c94a4be0c0ce14203e06cb02",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 5,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 4
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "6ef7625153aaee19ef5a6387bb853e72aa63a2e3cc2e8b1897707e62c56bd4c9",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "29a45aeeec7d67c3b1f394fd7fe9c3a42294cdc71c49c2f11b2f8ff3801c6e44",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "31240e06d5ce441377c6111781defa5743417339190ff0b2596e0bb16cf70ef7",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 4,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 6
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 4
+    },
+    {
+      "family_id": "9fa32bd0e0668d7b05811f045be4220c8b23e8f8e7426d45090a9932e6b539ad",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "9ebeac898500e3c65854d43055664a5712d820185318989449b659944dd26e53",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "7b31ecdca756d5054b091f45626f52e1f4540c00449f0c113de6d26ab44d8767",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "4e6814e3b6d0d9e559db2098a2199181d584db2136122551e0ff07087283f8f9",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "bbd7d13fa5163e03c135bac55792395eecd2ac050d6f40552099f4a0c385e82a",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "c38f0aa209d5dfb3ec5a69cdddfd7d1c67a84acf323bde23992245a0738762c2",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "65f1176a0510f53a2fb2cd38a4f052236e7878bf803158797138cb38271bbbf7",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 4,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 6
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 4
+    },
+    {
+      "family_id": "16a7169916afdf139d994dc3911a8fed3215725e58330acf84edf34af813c0c7",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 4,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 6
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 4
+    },
+    {
+      "family_id": "985de0ce961fbad01d8ae65ec8df559fbefaa53c8ea7e0c24e7b96ac4c06178d",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "67dde88ee068116be7620d2469157bdf74a1812e3a579e557797401601ef53c3",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 3,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 3
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 3
+    },
+    {
+      "family_id": "1ace32a93305dab16dcadb152c33a97864f0e3e7c1a7c21afb36d55aed263100",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "0d69d94aeaf2802c4d7e0a6f4eb99adbad9803ebd9b8f2e65cb1b930e0aab963",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 4
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "dbdcedf4741621bf472582480c1ab174167b58837ce00c8b1b418c5af13f60c2",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 4
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "742dcfc9491fcb052da8a0fafc045f002dcd52b82d4581e41c8a052dfbff3286",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "28fe83164a0a133bb3a4b8e3d9cd5b630fbc69dd08057e3808922a23b9b09728",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 5,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 5
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "dbcca488f8c189f756269d3e725e0b841280a3e61e30a765c72303179ff97642",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 4,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 6
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 4
+    },
+    {
+      "family_id": "eeab174cabce938056f3a5d9ed235acad7b1b77dc52bfeabd7ea16fe6cca1cdc",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 4
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "0cc1e030470bce46c9fe3dc09b35dfcb627d5f806cacfee0f2c5e467d4daecf6",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 4
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "a0e5e5c028cc603fd16177266004a62ad89748d3b2f1808bb7d21f8717ba5298",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 4
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "7039b3709ded69e114af2b97b5ad57806a3ea7ad997575ed71d0cf9cd3dcaa56",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 4
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "35452415ee4bfcef46cbe3789c3c8d8e63b1ed5c70796a8ed9fe4054b452e3b2",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 4
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "f92bedf969ec53cc6dcfd75b6e4d76ff973e031343bd96af36d812348cf63cef",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "57fcae31f32bd8234b5d2d2a65350840d7e26789ce7cea2b10498e1d391c6247",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 4
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "9df64d10a9f187d10de8acda37ea59c22d4b0d0322e8fc169091003b12297585",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "11a415b5b47a124132611ec87588f2fed6b2db4e6f691b9097b541ed00b226ba",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "7423d99abac79c1859d26afc89a33853d810ffc829b0652f4a3e33bf19dd4b02",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "573e0c3f4085cd2d565c290b15122755f384c0cb648e8f1be1e9a400dcc927ab",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "84574b596041391187a617b2196ec240e6d908e4e2b3e15f095c1f4b15facf24",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 4,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 6
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 4
+    },
+    {
+      "family_id": "0746032587cba46ee7613ed1a75c217b49be03e6cd44e1304bb225e5aac20e83",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 4
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "39499de22fb66ca0f8b17ade87d2d929169c1d058ee20bf4619329db66d07e88",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 4
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "4fded98fb98780e7c69d7666bd92dc3df5155663d745dcc7bfe54d44c5a7339a",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "2d47ee93f068e3a92d8469d47932026b3f18e9f4f0ccbece7b5adb5ee5cd891f",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 4
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "f85de10abe442757b692abfee089760a03b544fecdef3cdc3caad6c0005f9922",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "TOO_FEW_BARS": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "29e1d3e4a5524249a03afcd54e332cb8526d9be556bceb45f85a054e1215872d",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 2,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 1
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 2
+    },
+    {
+      "family_id": "31436f13c76f881094babda41985a3fd46c96456b03c4a70d847d74cf34c89b6",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "60390bce4b085a7ee8efb219788f4ec9027378b09e1ec5e489254fc44ed63bc3",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "7d065049150d150dff2af4e7eaa049ac376d6aa5245e996c82512d9605f00848",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "6e6889480b9f36e23f454153ade79ffa06021ef9f5b22296036f0ed5d1158b43",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "BYTE_EXACT": 1
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 2
+    },
+    {
+      "family_id": "ea88c769d765083ea5cc969dcefbfe7446bdbf2834b3ba8b00187946ebc93319",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "f5c3d1a9b5c345bfeb95ea5d2066bac317ec035212343f77757289f056ce99b7",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "TOO_FEW_BARS": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "59a88291e2f28cc7ece0c5fd0ac9f3756799b518f28f4e671471c0150312aae1",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "920355e69cd9fb863c87e12618e9af10da48ab63190b171d1168a2519745168c",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 31,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 1
+      },
+      "rejection_reasons": {
+        "NON_4_4_METER": 29
+      },
+      "tier": "A",
+      "valid_member_count": 2
+    },
+    {
+      "family_id": "d0def86f362e09dd2f35bb1e4ca43c6fd78069a59b93898e702d1e1f9f71c45c",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "8113e31b8c0cd6b48dd8eef6a1a8e2d25c8892094d1c4a7e6ed00a9cfda91f64",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "66d39c06d4d50231b02a5ba7d2aaf67b2ea8913c855c7c01865492a45c1e9d15",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "474c2cf2c6addfa874b7bd7dadb4625ff87d0c10ff74054435417c578da2f3ef",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 4
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "e2ddee5d2c292d5f1d4f20dd94e0ebf34ecf1fbc5fd71c0f6ffbac6c7b8f3e2a",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 11,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 1
+      },
+      "rejection_reasons": {
+        "NON_4_4_METER": 9
+      },
+      "tier": "A",
+      "valid_member_count": 2
+    },
+    {
+      "family_id": "24855473edbb7d428ab48898b972c05f263ec9e757fa3e41af830c4de9532e1a",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "5518e9657538f1244684ee89e52190fd7876c03eebd266a59147089473acaf4d",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "f0594e995c2dfb4ad9c40565f222376d16c9155e8acce37f6aa4a0da9a193230",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "e1be0ccc6213ad30110a7878b003e892673c6d9ac455acc9472f50eb1393bfd1",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 4
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "0fb8242b29932936ff05585edbe643fcabe86797a885dc080188951ada0a110d",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "9638ed0b6459c8b0590b6d4fb578ec08bc1443aaa953fa7f5193f42b07252b0d",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "b93b191b79094aff674024092c9bbe2b3be437c66409759e23f7f2b73d6f6e38",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 5,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 5
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "51b4922757efcd9cb75d1f75cd26bf33810914ba1918aa8355608de9337a7522",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 4,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 3
+      },
+      "rejection_reasons": {
+        "NON_4_4_METER": 1
+      },
+      "tier": "A",
+      "valid_member_count": 3
+    },
+    {
+      "family_id": "ea07e6d06844a9bcb27349e69644fd44e6e6034c0b98c325dcd3f561d66ae93e",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "ae35a59bdf7db4dab01aac758ce4cc606d74fd48777d89b4df36115d0552d746",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 1
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "f8a091a2f1b7776c587aaea9e433b649110d7e65682e70e17b75ae36e6151c3e",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "de131567671b9538206da4d2e29e112014a3edb6f7baac1c5b121b06396bc674",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "b729368630c6d3c99b8b3598e3bfd7419846449945460b07fcd273011cc8ef75",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 4,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 6
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 4
+    },
+    {
+      "family_id": "6ef97ab7d66deee4a8269f7c99e2967be422cdf1305e2bad0a431173ccba71a0",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 3,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 3
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 3
+    },
+    {
+      "family_id": "a25a1bb3d682a049d74552be3a4376bda0ce24ef1489d4c15a6c71f22954a1ab",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 1
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "c4cbc26670316aacc8544db36dcee9e19637b989b41f2fe675e4bbc6d7dff4ed",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 1,
+        "TOO_FEW_BARS": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "9f2ddbab77343834d3a1a35ac8fc5ac0c72ca4ba7f81711131f9896a8c8efd20",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "5062d90205574385bde4c5776597cc6ae90b2ebb04bccf91d1d04d3762aaea9f",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "088e31cd976665795d6d6218e1b8a7331e09cf3fa9a487c5972e513137d6643a",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "a4b0ae77ba1ff8fe5fa36038c9de6a7109251ca3ac89e3658f639333c4e7d14a",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "ce5a3be4280df3a5a5e642f3103e7662844fd7cee8e17c78c3ffe031e81609e8",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 1
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "8d926aa2949d07f1ef090f161270f7fb260382d8bb54751ce9ee6c11879f85a6",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 2,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 1
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 2
+    },
+    {
+      "family_id": "eb6bc05bb95433a4eefaa6073fb0e7b6f3e17f3c0e167a68affdba2c4a204f43",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 3,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "BYTE_EXACT": 1,
+        "STRUCTURALLY_NONEXACT": 2
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 3
+    },
+    {
+      "family_id": "1c9e869afcb8b9532315db45d5a1cc5ea8155d3d397ae8293669dc50817a765b",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 3,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 3
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 3
+    },
+    {
+      "family_id": "1d69eee39fce2bc1f76eb28b08a1bbe83a0c6b1c29a051835a55a9bdf6df0b9d",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "6b4b7d5b2ae616b4ef7fdcbb9c6b4e7e38fe8fa6d1a2495ac84a098653094eae",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 3,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 3
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 3
+    },
+    {
+      "family_id": "d1a8f302ef8d66cbcb11bf1b3ebf6c3f94c8af0c9fadba8f7f1424df7d4054b7",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "0cbebed81cef73297ea904f1b7c3c0b550db353d31e443b74e8f46be4c4abd15",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 3,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "BYTE_EXACT": 1,
+        "STRUCTURALLY_NONEXACT": 2
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 3
+    },
+    {
+      "family_id": "2b9942c2318f728d397616738a5c6c1b806b35d87d06dd9f88a7280ae63768ac",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "5aeaebb31bf8c3387bd5bec1fe78326dadfe506027ee73b948d78cdc30f690d7",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "07b8c689b2e3bdf3986c46140810732b8f26d815cfe4019cf14629b8ad2a12fa",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "896ce828995a7cd3bc0ba975684a003356c3e0abf956e282656d5a46aa97d479",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "BYTE_EXACT": 1
+      },
+      "rejection_reasons": {
+        "NON_4_4_METER": 1
+      },
+      "tier": "A",
+      "valid_member_count": 2
+    },
+    {
+      "family_id": "fc86ccd751febd4b29235e6c6c8b0d7a63f14e1ed9f303f8d48b1cbaa2f2bb3e",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 3,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 3
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 3
+    },
+    {
+      "family_id": "e595af3054dba38ad2466b890d30f7706ff249422bc25c6ec8abbf49c5f7d206",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "97416c757f3244ff6dc0a7a7f6db708e8dbb6c2d3da7eb4d9067cd3beed7447d",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 3,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 3
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 3
+    },
+    {
+      "family_id": "b947d1882050f3614b3bdce3dbaf89586a688a984404e26de90c58eafa7cd845",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 3,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "BYTE_EXACT": 1,
+        "STRUCTURALLY_NONEXACT": 2
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 3
+    },
+    {
+      "family_id": "120d3bec16b93ea6d6f41b8dad0a2458521b029ff5676b9afa26d9660456f5ed",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 3,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "BYTE_EXACT": 1,
+        "STRUCTURALLY_NONEXACT": 2
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 3
+    },
+    {
+      "family_id": "104cb88e237732157a3e991ac1893f1f40778254f2b64c6a4d093d3eff38e7f8",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 3,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "BYTE_EXACT": 1,
+        "STRUCTURALLY_NONEXACT": 2
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 3
+    },
+    {
+      "family_id": "ffddbd3dc1268367e9d592d0331eb13eac3ebe4d54dc556853125c0990a75ac8",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "17a82985bfd8555e4d6b697bac629460629d95f9a1bfeeab94c1d4df88403dd6",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 3,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "BYTE_EXACT": 1,
+        "STRUCTURALLY_NONEXACT": 2
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 3
+    },
+    {
+      "family_id": "dc80d0a9ee0e2cbd3f19d8349c57021bddf99d371c2fb2dc0fd66b1fb8f0b7b4",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "BYTE_EXACT": 1
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 2
+    },
+    {
+      "family_id": "88e29b5e0f34509579259c223af58da61a14f2270a5a33ff4d2ac2d403216de4",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "815fe2d0568f18250cd44ba8e04db4dd21d7d84cf4cfeee88f0c524bef5598c1",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "5793195f99ffbd6250801836f7ae46231d2144cd20e7281503f7c13eae98f416",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 2,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 1
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 2
+    },
+    {
+      "family_id": "10db3c0b034762637547f34d0893b2b9787704c470e597937a7ca26a844f8416",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "503695b825377cab04bff028ba6a3df5c6a3acca61ca07f81335e4d9ab8d9cc5",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "2ce565c47e24898b22da1f75c257c86c7823396a635dbe88d02780fc6e0ac0e2",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "BYTE_EXACT": 1
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 2
+    },
+    {
+      "family_id": "5d4f75b03baecf684e797e7c4ddc24fc11d456aedca58bf31fa1d0e989234bd9",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "4d95283fc1312ae9877f691d046632fbce970cb362e5d01e97858c86c9c01481",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "BYTE_EXACT": 1
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 2
+    },
+    {
+      "family_id": "271d75eefe57fffc74135d360ecc9229bd01dae439f9485a50f6ce27a36ee01f",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "34b27e59c2510584e2bc47228ba92153b16463bc416a5278b43853b31f867400",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 3,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 1
+      },
+      "rejection_reasons": {
+        "NON_4_4_METER": 1
+      },
+      "tier": "A",
+      "valid_member_count": 2
+    },
+    {
+      "family_id": "a8cc27f8d504419cf98b69200dd7cca66cfde40706d7863c7489798966eedc1b",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 6,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 15
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 6
+    },
+    {
+      "family_id": "61840a6c83e0577f789031aab45e740f4f84958799492c7a2a5dfe8155c93abe",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "BYTE_EXACT": 1
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 2
+    },
+    {
+      "family_id": "084697999a5fcb1d6b7806eb0405d095538ad08440a811a2e45a45bd83d1fee4",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 4,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 6
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 4
+    },
+    {
+      "family_id": "40284de1d0ad54c46080844622eab471bc49688d61b59cb62d9652915387cd37",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 6,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 1
+      },
+      "rejection_reasons": {
+        "NON_4_4_METER": 4
+      },
+      "tier": "A",
+      "valid_member_count": 2
+    },
+    {
+      "family_id": "0c08863bdaf7c3d2254b9d4861ac1c6ead2f036f322bb1d49a74aea3e1df7dd3",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "4df091f8bb50870c51f3b2372b2bdc1e7d411a28707bc2ad874c6b4883531257",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 3,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 3
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 3
+    },
+    {
+      "family_id": "514a61adef6ad12432f2cae6caf69e1ea1ee341e7e1ddfe3f25ca525ead988fd",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "1887db4bfe0d970f27681ee01587a8732ae496d58b469693870bf7ea12eca62d",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "BYTE_EXACT": 1
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 2
+    },
+    {
+      "family_id": "7853ba5362ce2828fd6e6b964d616e674178a9e083fb5353f9cc837872b7f104",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "e6a11fd99d8e3c41fe624422abecfaf6d4a5a2a6db8130256f6c1e56f2259465",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "BYTE_EXACT": 1
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 2
+    },
+    {
+      "family_id": "3f54bb788234440f442f357d8257a8bee78471ed0fd3c4f0ef9c0e518081b8fc",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "56161635c7f98948bbde18225d9222cc761e3e15b6c85c2f34e0316ca58a27ec",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "BYTE_EXACT": 1
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 2
+    },
+    {
+      "family_id": "d819abccae8ec9c8ecba5f2175a1073a6fff37fc9fc1e9209f14bd0bc5d33fa8",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "e96f784d182f3022d16cdec3d4c0f2f45a4a510eab84667cbcab7dc5b95e8d29",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 1
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "5f7970fb6917f1648c7494325756f7c36dde5d0289266f8fb9c54ec5da2aa8e8",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "61da650c3ff6f3c77ab320bd4b5945e4f0cc8db07c16cb665d024de4cd6d88cf",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "3318b4b6dfebd1aa97d9b82cb33cce6f369b92652f6aada3902a358fcfd75f2d",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "1bf9838d9b42b1279b31b5075d882ca34c72422bb17270705f7a1450033eae11",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 5,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 5
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "18861cebaceea00c55d8922a3160484bc4699a35231f08eea95e1c9f19f68fd4",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 6,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 5
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "b20a0bbb97eadac731fdd4f7227d5d103422c8c4177684ec87228befad992139",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "278c0b61fcc8c7430bd73b8d18db73e85b273ac2cbef721ece077f244bd26924",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 31,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 6
+      },
+      "rejection_reasons": {
+        "NON_4_4_METER": 27
+      },
+      "tier": "A",
+      "valid_member_count": 4
+    },
+    {
+      "family_id": "945a95ef9089bdc3b8b10b3d1d1df57e5d0228716eb354b179bc72592ce3a3b3",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "7f828c737bcc767c042f3ccff0db49f914761ed0473442f02ad3ab5d37d9909a",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 5,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 6
+      },
+      "rejection_reasons": {
+        "NON_4_4_METER": 1
+      },
+      "tier": "A",
+      "valid_member_count": 4
+    },
+    {
+      "family_id": "b3db23a7051fb20b6212e8b49044212f754549450e9733e162e35935770fca5d",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "7b681b3d0c3617caeb508804a4e7d71b14bdd472668cf195010ec239b4388ad5",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 2,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 1
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 2
+    },
+    {
+      "family_id": "caebee136182a9c9d7fa5817472d863051c7e3b5fb9834e79686f5db4f9008c9",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "508ef78d5f7e1631cf2bc8949d97a02a0a2cd813bbd2b06a5d927647d77524c0",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "97a6eac35a9d5722c505d44707c1104ffb46526222d36e3f6e2fd1b16e0eda7b",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "e3f1beedb6ac0d1c8a86f62ff2b73592cd6c7d081c9adcc626c1f2ad8e68f000",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 7,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 6
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "e210220a7278863c3485def606ebeddd27362f4bb325577070a4d18e8aa30708",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 4
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "14e18d16ae39ac62ab9185ef98eeb738b1eee2de418fa2061d2ceb26c7910104",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "b42c683843fb8eb27745214ec304c5d87abf4716a4e3e1d621e8f0e7a0e635aa",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "e8e02ad55021f9668258891f6a1f323cbaea8744846b8ee686adb9d6033550ee",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "3c667240111ba9ba15aa94e442563db2a663ff0f2934db07672518beb2e5bfd3",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "12b0e9065f72557d65fcc5cde16bd00d2f4664396c1e2c00429e99aa9df4207b",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "3b22105c5b113abf72564d9a90b38aacf764275639ef30d79453a38ebbdc7bcf",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 6,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 5
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "ef4dbf90f92a440c851b78431aa4a0a2179d8f49624afbce9013a74b0f01f716",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "8895584a0558e8be74c3493e42eba457bae87f681514d05715dc9fcec000ef02",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 7,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 3
+      },
+      "rejection_reasons": {
+        "NON_4_4_METER": 4
+      },
+      "tier": "A",
+      "valid_member_count": 3
+    },
+    {
+      "family_id": "b59537d118cf5c83008e91e19212aea5ada763197e2273325dab5cc2904f9e19",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "3ca0dee6a04179517e1ce0a6cba9b50f1d20d3647823bb5c7b2983e9450264c8",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 9,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 9
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "2fe8389d1b9c71498eb28390e2faf6c3ebc91b0a95d7b2487235ab887a9b6db6",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "bc98c2c285065622f78170112aeaf92adb614c515a6bebc628a1909d3cf1d25b",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "be90f1b2eb763942ad2d8a7033ccfa8940c04192e7209cc54d08c45182bfb2fd",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 4
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "fa86f3fb2c1a7ee22eee132abaaa37bb2ae498847372c9fb0183c08931070a8e",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "BYTE_EXACT": 1
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 2
+    },
+    {
+      "family_id": "0bd94dd64ebe0a17e1fd88d1b599b2c9e05e0cd75a70b29ad886b019f32a906a",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "9bd90a0a87d8a3f9a49880be80e908fb28d9ce55686903c43277cdbd37ecbbea",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "706c50f4b5da276b3554578d08953ed1a4c248c89a2e0d0b52b9af18299395f9",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "56f31cd698be8fef2a239ae62dd626120dcc783336bd0114706a80c62385a1f2",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 2,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 1
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 2
+    },
+    {
+      "family_id": "d2910f1f859efe4f86d4d49d84dd6e12584e9bbe416fb13a6e1670e84916f306",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "b50e65ea28be6e357280ba1114285a88a99379850abbb183d3fa0f9bf32d31a0",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "4283e29e14ffdb091147002e0a40168f6c32be3a1d7a541178fd1dd60a4f3be9",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "455a31c6a9a318225b5fa6b31ee5bcebedae3a656665800c500979567564ed73",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 1
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "96f304807090f6caf2402610df0a020e6a4565d1da48a54fe32d853a52742957",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "823b81d508b89d535f52bd3c760fcbc390f9899cbab297998125492e3382cd6b",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "a509fef4a1dfdbdaea0b33d3c20b34516d06cf87d5daa48d55fb32daf1c60a32",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "14c7103294f630c6457767fb6f5e7386427be82ead29d73b4ebe3aa99a02dc00",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "d29edc76009e5ca8f98480a1b5e6b1f4085a0bca73fbefc7ae5c0080c2bdb2a9",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 4,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 6
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 4
+    },
+    {
+      "family_id": "a9d0f29ef2782d8ffd051526f84f5322e748c538e8028bab0ffa8d226e7ee3d4",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 4
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "cf26c763cb42b2843e70bfac45a1916ec898b6b850da3101dda40c4c51adc96b",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "5d25fc4aaf7df024223a981f464490d9625ed189912a0a6986e7a250a12c137d",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 2,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 1
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 2
+    },
+    {
+      "family_id": "c0ff5326a086444d4e9854954eb1ed54771987408912028226107679d0193084",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "5849726e6658a25d5881426c9961d2d6c2c85781b9dd6c50266c8cb13e616489",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 1,
+        "NO_CONTEXT_1024_WINDOW": 1
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "386c00e8947018fa4be8cfa1d9c872e2bdf0d6972b77cb6e7f476386b1d94e8d",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "eedeb799431e0a7c1f137a11df345b3abd2fa6b23a754158d74f3fa6a8ea518f",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 1
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "d9a8bc221d97bfc05ad5d5bfb0dcb224133f27ef28eac6a467951c7686002289",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 1
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "22d4aa44bbccc6d30d76960a1456c299e611d172cdff02558f17e0f9a7927a2b",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 4
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "0ca889db18d6daa5d44236f63ec281a70eb851a10151b3868b797034387a0932",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "3cf86131885043f4afc97a063e521910d6937ed49e4b5af0a9f82a9bf11b5f7b",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "e01222628a5d9416de5c64401f667edf9d416c6f620b6e716e74d2b2c4cb8935",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "61fe5b45df1fb0e93330318f1b5e43fb8d7d79a1dc743110cc38272d615b2441",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 1
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "f114619a2a0f3b1007739c7e35247dd6d432d0d13ac492e8762b78f4dc522806",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "86a758db724e919c10aeba6aeff005cd0885e61a72e440fbabf9d1e0ab79a2eb",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "17a624be92b54f816b437306694e69752db6c575b820a6659ff374bfe17fefdc",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 6,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 6
+      },
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 4
+    },
+    {
+      "family_id": "53d17ae81d038596f8f5fa9f08c5e1749488e9265d7ffe576aaa439021e3d7ec",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 2,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 1
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 2
+    },
+    {
+      "family_id": "a5e3d6c232e9a7f9edd917c916e3d1fee8316317a7a530feb0a516d09b7a0d6e",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "848b75deac3a1ed9328a7427387e1814102a12e443f08c9af8084faf375f9d1e",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 3,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 1
+      },
+      "rejection_reasons": {
+        "NON_4_4_METER": 1
+      },
+      "tier": "A",
+      "valid_member_count": 2
+    },
+    {
+      "family_id": "cadc4a046c072b75e0b289049f3ef2665b59f0334e3a8189435ab4dfd3455b70",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "374c383513c2a3def76d0889401954f42b484af61e5862ca6eb780525748686d",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "ec6482d3972639f7e27838c29df0c3630b86eb34f8d90250b0cbafbfe7f76f1d",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "59fe75328b5e9cda7271748138951c105efef29932cd0ec2230d94b9860f8036",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 4,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "ac13c85a3cb3ef8ac79b67681c9795f304bc51e7a4b5d2d9a5ab8aff951495c9",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "0a45c21ba5eb2ec1da16d5ec59eaa9e9bfefe2b77a187ed4ec1042f76fa2646b",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NO_CONTEXT_1024_WINDOW": 1
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "f37a95ec81f09af88c8588eb590bc6e67b010a816f13b7c08d9fbfe4f9aa091d",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "100e252473013465cc7d51323e4a62eaf86c66e1734eff7f2da084ee711b754a",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "25fedbe9694962793ab57a7f7a06c948ab656e6b2e707e7264c1d558ba167bf8",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 2,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 1
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 2
+    },
+    {
+      "family_id": "dd8fd5bd3d630ad870ee64f4e432320d1261f269e690607752aaf5f5dc9bbe87",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "96b2a25f2aa4f7328d084cf4b56d09703cd5b40174daf9898a923146b4270ea1",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "173067616e098ac45a40c36cdd69a5fa8c166d3004b868b039c757d78bfb5d03",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "ca59d74b4e2e38c29a71728d0f6e4833fc0c5c1c7a7cf460ccc166e1cdfc6293",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "TOO_FEW_BARS": 1
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "e21b3e56cc1abea4957221740e91d60f38807c0a22df5f8dd2fe936a916bee14",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 2,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 1
+      },
+      "rejection_reasons": {},
+      "tier": "A",
+      "valid_member_count": 2
+    },
+    {
+      "family_id": "1679c0715ab64a84612929fc381b3cf4e3cfdafdbd861fa828baba0bef60acb6",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 1
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "a3d8d3d87ddac2cbd91476dfc3abbdd96954093f39ecd581d0834e3f182ab45e",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 2,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "898cac8908c78fd777f4e3af13b9ba9982d482fc90224d1525da387e26f7a87a",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "77986d826b56905be7f3c8226ec24d0be3358874b6d6e94b08640ef07de80be6",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 5,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "STRUCTURALLY_NONEXACT": 6
+      },
+      "rejection_reasons": {
+        "NON_4_4_METER": 1
+      },
+      "tier": "A",
+      "valid_member_count": 4
+    },
+    {
+      "family_id": "a3f112232f52cd433b977f437524fb6753182cbe50c92a8dbbd1df33750729a0",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 5,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 4
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "0915a7331defb294c66b835fa24a5a248c8dbd48161b16d5659fa9a4e3d1e85d",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 6,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 6
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "45fc7706133355ea8432e615dde4d2e8fbaaf3b0cd47c8b8ef6995802bc07783",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3
+      },
+      "tier": "A",
+      "valid_member_count": 0
+    },
+    {
+      "family_id": "554d440fccf2ba595558745b133bae7a96a3889ed415db017b16c55d504d4ef1",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 3,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 2
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    },
+    {
+      "family_id": "4d7d5ac2df97ffeb9695e0976e79ecd1b60aac15157c7f7921c80e5e39e69f13",
+      "has_byte_nonexact_pair": true,
+      "has_canonical_nonexact_pair": true,
+      "has_structurally_nonexact_pair": true,
+      "member_count": 10,
+      "midi_eligible": true,
+      "pair_class_counts": {
+        "BYTE_EXACT": 1,
+        "STRUCTURALLY_NONEXACT": 2
+      },
+      "rejection_reasons": {
+        "NON_4_4_METER": 4,
+        "NO_CONTEXT_1024_WINDOW": 3
+      },
+      "tier": "A",
+      "valid_member_count": 3
+    },
+    {
+      "family_id": "5af8517ae16ee474ab44fa07f92a03cc3b7dc4bca20086c09286d6730d90aaeb",
+      "has_byte_nonexact_pair": false,
+      "has_canonical_nonexact_pair": false,
+      "has_structurally_nonexact_pair": false,
+      "member_count": 6,
+      "midi_eligible": false,
+      "pair_class_counts": {},
+      "rejection_reasons": {
+        "NON_4_4_METER": 3,
+        "NO_CONTEXT_1024_WINDOW": 2
+      },
+      "tier": "A",
+      "valid_member_count": 1
+    }
+  ],
+  "families_containing_some_byte_identical_members": 20,
+  "families_entirely_byte_identical": 12,
+  "families_with_byte_nonexact_pair": 67,
+  "families_with_canonical_nonexact_pair": 67,
+  "families_with_parse_failures": 0,
+  "families_with_structurally_nonexact_pair": 67,
+  "families_with_tokenizer_failures": 264,
+  "midi_eligible_families": 79,
+  "single_valid_member_families": 56,
+  "total_frozen_tier_a_families": 322,
+  "zero_valid_member_families": 187
+}

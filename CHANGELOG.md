@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.0.0-rc2 — 2026-08-16
+
+- Normalized the public package to `leakagebench_midi`.
+- Replaced internal audit/date path names with stable reproducibility evidence paths.
+- Separated reusable framework code from paper tables, figures, protocol, and aggregate evidence.
+- Renamed scripts and documentation around user tasks and updated all public references.
+- Removed obsolete package glue and development-only registry/wrapper scripts.
+- Preserved all frozen scientific results, claims, cohorts, and evaluation boundaries.
+
+Scientific results unchanged.
+
 ## v1.0.0-rc1 — 2026-08-15
 
 - Frozen the public result and claim registries for the paper-grade release candidate.

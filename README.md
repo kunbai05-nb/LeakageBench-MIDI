@@ -2,80 +2,92 @@
 
 > A reproducible framework for measuring and mitigating same-work family leakage in symbolic music generation evaluation.
 
-Release candidate: **v1.0.0-rc1**.
+## Overview
 
-## Why this matters
+LeakageBench-MIDI provides data-agnostic Python APIs and command-line workflows for building same-work family maps, auditing split contamination, constructing family-atomic splits, designing controlled contamination datasets, estimating family-level effects, and reproducing the paper's frozen tables. The repository redistributes no LMD/PDMX music data, checkpoints, or closed evaluation material.
 
-File identity is not musical-work identity. The same work can appear as duplicate exports, versions, transcriptions, or arrangements, so a random file split can place a training sibling beside an evaluation receiver. That can create leakage-induced likelihood advantage without establishing better perceptual music quality.
+Choi et al. (2025), *On the De-duplication of the Lakh MIDI Dataset*, provides the duplicate/same-song identification and filtering precedent used for the adopted LMD family relations. LeakageBench-MIDI studies downstream consequences and mitigation; it does not present that upstream resource as a project contribution.
 
-## What LeakageBench-MIDI studies
+## Why file split != work split
 
-- prevalence of known same-work family contamination;
-- controlled downstream evaluation inflation;
-- robustness on structurally non-exact family relations;
-- model susceptibility across tested architectures and Transformer capacities;
-- reduced, protocol-eligible PDMX external evidence; and
-- family-aware split mitigation.
+File identity is not musical-work identity. Duplicate exports, versions, transcriptions, and arrangements of the same work can cross a random file split, placing a training sibling beside an evaluation receiver. This can create leakage-induced likelihood advantage without establishing better perceptual music quality.
 
-Choi et al. (2025), *On the De-duplication of the Lakh MIDI Dataset*, is the duplicate/same-song identification and filtering precedent used for the adopted LMD family relations. LeakageBench-MIDI studies controlled downstream consequences, structural robustness, model susceptibility, and mitigation; it does not present that upstream identification resource as a project contribution.
-
-## Key frozen findings
+## Key findings
 
 - **LMD 80/10/10:** 27.66% known test-family contamination and 29.77% known test-file contamination.
 - **Transformer-L:** control-adjusted `tau = -0.115317`, corresponding to a 13.62% relative treated-family NLL improvement.
 - **Structurally non-exact:** 95/100 treated LMD families retained a same-direction effect (`tau ≈ -0.113316`).
-- **PDMX:** a 67-family reduced, protocol-eligible external cohort showed an 11.07% same-direction relative effect (`tau ≈ -0.067776`).
+- **TCN:** a smaller 2.53% same-direction relative effect; the preregistered practical replication threshold was rejected.
+- **PDMX:** a 67-family reduced, protocol-eligible cohort showed an 11.07% same-direction relative effect.
 - **Mitigation:** family-aware assignment achieved zero known cross-split family overlap under the adopted family definition with 0% data deletion in the frozen 4,300-file pool.
 
-All numerical claims are governed by [`result_registry.json`](assets/release_metadata/result_registry.json); permitted interpretation boundaries are governed by [`claim_registry.json`](assets/release_metadata/claim_registry.json).
+Numerical results are governed by [`metadata/result_registry.json`](metadata/result_registry.json); interpretation boundaries are governed by [`metadata/claim_registry.json`](metadata/claim_registry.json).
 
-## What this project does NOT claim
-
-- It is not a new music-generation architecture.
-- It is not a new duplicate detector; the adopted LMD relations build on Choi et al. (2025).
-- Family membership or leakage evidence does not establish plagiarism.
-- NLL differences do not establish perceptual music quality.
-- The PDMX result is reduced, protocol-eligible external evidence rather than a corpus-wide replication.
-- The Transformer result is a monotonic capacity-associated trend within the tested Transformer family, not a claim about every architecture or dataset.
-- Zero known cross-split family overlap under the adopted family definition does not establish absence of latent, unlabeled relations.
-
-The TCN result is a smaller but statistically consistent same-direction effect; its preregistered practical replication threshold was rejected.
-
-## Quick Start
-
-The first example is fully synthetic and does not require LMD, PDMX, or other restricted data.
+## Installation
 
 ```bash
 python -m venv .venv
 .venv/bin/pip install -e '.[test]'
-bash scripts/run_synthetic_mini_pipeline.sh /tmp/leakagebench-synthetic
 ```
 
-## Reproducing Results
+## Quick Start
 
-Frozen release tables can be regenerated without training or dataset access:
+The first workflow is fully synthetic and requires no LMD, PDMX, or other restricted data:
 
 ```bash
-bash scripts/reproduce_release_tables.sh
+bash scripts/run_synthetic_demo.sh /tmp/leakagebench-synthetic
 ```
 
-See [`docs/REPRODUCING_RESULTS.md`](docs/REPRODUCING_RESULTS.md) for scope and [`docs/PROTOCOL.md`](docs/PROTOCOL.md) for the frozen estimand.
+See [`examples/synthetic_demo/README.md`](examples/synthetic_demo/README.md) for the generated artifacts.
 
-## Data Provenance
+## Core workflows
 
-This repository does not redistribute LMD/PDMX MIDI, audio, scores, checkpoints, or the permanently closed clean-test. Users must legally obtain source datasets themselves. The official LMD v0.1 documentation reports 176,581 MD5-distinct MIDI files; this release uses a frozen 178,561-identity downstream analysis universe. These are different provenance scopes, and this release does not independently reconstruct a transformation between them. See [`docs/DATA_PROVENANCE.md`](docs/DATA_PROVENANCE.md) and [`docs/DATASETS.md`](docs/DATASETS.md).
+The stable task-oriented CLIs live in [`scripts/`](scripts/):
+
+- `build_family_map.py` constructs connected family components from identifiers and edges;
+- `audit_split.py` measures known family crossings;
+- `build_family_split.py` assigns whole families atomically;
+- `construct_contamination.py` creates token-budget-matched controlled conditions;
+- `analyze_family_effects.py` estimates control-adjusted family effects;
+- `run_leakage_census.py` evaluates contamination under random file splitting; and
+- `classify_pair_structure.py` compares MIDI pairs under the frozen structural hierarchy.
+
+Each CLI documents its arguments with `--help`. Dataset acquisition and redistribution boundaries are in [`docs/datasets.md`](docs/datasets.md) and [`docs/data_policy.md`](docs/data_policy.md).
+
+## Reproducing paper results
+
+Frozen paper tables and figure source data can be regenerated without training or dataset access:
+
+```bash
+python scripts/reproduce_paper_results.py
+```
+
+The script reads the frozen result registry and writes deterministic CSVs under [`reproducibility/tables/`](reproducibility/tables/) and [`reproducibility/figures/`](reproducibility/figures/). See [`docs/reproducing_results.md`](docs/reproducing_results.md) and [`docs/methodology.md`](docs/methodology.md).
+
+## Data provenance
+
+The official LMD v0.1 documentation reports **176,581 MD5-distinct files**. The frozen downstream LeakageBench-MIDI family universe contains **178,561 identities**. These are different provenance scopes; this project does not relabel 178,561 as the official LMD file count and does not claim to have independently reconstructed the transformation between them. See [`docs/data_provenance.md`](docs/data_provenance.md).
+
+## Repository structure
+
+- [`leakagebench_midi/`](leakagebench_midi/) — reusable, data-agnostic Python package;
+- [`scripts/`](scripts/) — task-oriented command-line workflows;
+- [`metadata/`](metadata/) — frozen result and claim registries;
+- [`examples/synthetic_demo/`](examples/synthetic_demo/) — self-contained synthetic workflow;
+- [`docs/`](docs/) — methodology, provenance, policy, and limitations context;
+- [`reproducibility/`](reproducibility/) — paper protocol, aggregate evidence, tables, and figure source data; and
+- [`tests/`](tests/) — lightweight public workflow tests.
 
 ## Limitations
 
-Family labels have incomplete recall, so unknown relations may remain. Full-LMD canonical-event and track-order hashing covers only 4,300 of 178,561 frozen identities. The TCN practical replication decision was rejected. PDMX evidence is limited to 67 eligible treated families biased toward 4/4, 1024-window-eligible works. Copy evidence is secondary. The frozen identity-count provenance distinction described above remains unresolved but disclosed and does not change the downstream calculations performed on the frozen universe.
+Family labels have incomplete recall, so unknown relations may remain. Zero known cross-split family overlap is conditional on the adopted family definition. Canonical-event and track-order hashing covers only 4,300 of 178,561 frozen identities. NLL is an evaluation endpoint, not a perceptual-quality measure. PDMX evidence is limited to 67 eligible treated families, and the TCN practical replication decision was rejected. The tested Transformer capacity trend is not a universal scaling law. Family membership or leakage evidence does not establish plagiarism.
 
 ## Citation
 
 **Author:** Kun Bai  
-**ORCID:** [0009-0006-4134-9796](https://orcid.org/0009-0006-4134-9796)  
-**GitHub repository target:** <https://github.com/kunbai05-nb/LeakageBench-MIDI> (intended URL; not verified live at this release gate)
+**ORCID:** [0009-0006-4134-9796](https://orcid.org/0009-0006-4134-9796)
 
-Software citation before archival DOI assignment: Bai, K. *LeakageBench-MIDI*, v1.0.0-rc1. See [`CITATION.cff`](CITATION.cff). A DOI will be added only after an archival release creates one.
+Software citation metadata is provided in [`CITATION.cff`](CITATION.cff). DOI will be added after archival release.
 
 ## License
 

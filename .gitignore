@@ -2,17 +2,15 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 .venv/
-external/**/*.pt
-external/**/*.pth
-external/**/*.ckpt
-external/**/*.mid
-external/**/*.midi
-external/**/*.bin
-# Reproducible third-party downloads may have separate licenses; keep them out of Git.
-external/*
+
+# Third-party datasets and generated outputs are not public repository content.
+external/
+data_external/
 outputs/
 checkpoints/
-data_external/
+examples/synthetic_demo/generated/
+
+# Never stage raw media, model weights, archives, logs, or closed-test material.
 *.mid
 *.midi
 *.wav
@@ -23,10 +21,6 @@ data_external/
 *.pt
 *.pth
 *.ckpt
+*.bin
 *.log
 *clean_test*
-examples/synthetic_mini/generated/
-audits/release_package_20260815/private_scan_raw.txt
-artifacts/gru_replication_v1/*.pt
-artifacts/tcn_replication_v1/*.pt
-audits/family_aware_mitigation_final_20260808/clean_test_materialized.jsonl

@@ -2,7 +2,8 @@ cff-version: 1.2.0
 message: "If you use LeakageBench-MIDI, please cite this software artifact."
 title: "LeakageBench-MIDI: Measuring and Mitigating Same-Work Family Leakage in Symbolic Music Generation"
 type: software
-version: "1.0.0-rc1"
+version: "1.0.0-rc2"
+date-released: 2026-08-16
 license: MIT
 authors:
   - family-names: Bai

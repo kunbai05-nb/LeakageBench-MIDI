@@ -1,4 +1,4 @@
 protocol,cross_split_known_families
-file_split,177
-exact_dedup,161
-family_aware,0
+S0_FILE_SPLIT,177
+S1_EXACT_DEDUP_SPLIT,161
+S2_FAMILY_AWARE_SPLIT,0

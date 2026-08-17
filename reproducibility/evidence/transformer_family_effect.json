@@ -1,6 +1,7 @@
 {
   "H1_pass": true,
   "at_least_two_seed_ci_exclude_zero": true,
+  "bootstrap_extreme_count": 0,
   "bootstrap_samples": 10000,
   "bootstrap_unit": "family",
   "ci95": [
@@ -8,7 +9,8 @@
     -0.098963933267461
   ],
   "control_mean_delta": -0.0015640078809271512,
-  "p_two_sided": 0.0,
+  "p_correction": "add-one",
+  "p_two_sided": 9.999000099990002e-05,
   "practical_threshold_met": true,
   "seed_fixed_effect": "balanced-design seed intercept removed by within-seed delta; pooled family means equally weight three seeds",
   "tau": -0.11531665895895968,

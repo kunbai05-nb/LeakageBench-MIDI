@@ -37,7 +37,8 @@ def main():
   for split,group in [('treated',treated),('control',control),('clean_validation',validation)]:
    for j,x in enumerate(group):
     f=x['family_id'];base_nll=2+.01*j+.02*s;effect=-.12-.005*j if split=='treated' else -.01 if split=='control' else -.005
-    clean.append({'seed':s,'split':split,'family_id':f,'nll':base_nll});leak.append({'seed':s,'split':split,'family_id':f,'nll':base_nll+effect})
+    common={'dataset':'synthetic','architecture':'toy','model_size':'tiny','seed':s,'split':split,'family_id':f}
+    clean.append({**common,'nll':base_nll});leak.append({**common,'nll':base_nll+effect})
  write_jsonl(o/'clean_results.jsonl',clean);write_jsonl(o/'leak_results.jsonl',leak)
  notes=[60,62,64,65];midi(md/'byte_a.mid',notes);shutil.copyfile(md/'byte_a.mid',md/'byte_b.mid');midi(md/'canonical_a.mid',notes,1,'A');midi(md/'canonical_b.mid',notes,1,'B');midi(md/'track_a.mid',[60,64,62,65],2);midi(md/'track_b.mid',[60,64,62,65],2,reverse_tracks=True);midi(md/'struct_a.mid',notes);midi(md/'struct_b.mid',[60,63,67,70])
  (o/'structural_cases.json').write_text(json.dumps({'BYTE_EXACT':['midi/byte_a.mid','midi/byte_b.mid'],'CANONICAL_EQUIVALENT':['midi/canonical_a.mid','midi/canonical_b.mid'],'TRACK_ORDER_EQUIVALENT':['midi/track_a.mid','midi/track_b.mid'],'STRUCTURALLY_NONEXACT':['midi/struct_a.mid','midi/struct_b.mid']},indent=2,sort_keys=True)+'\n')

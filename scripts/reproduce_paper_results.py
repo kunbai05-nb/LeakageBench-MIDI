@@ -1,87 +1,79 @@
 #!/usr/bin/env python3
-"""Reproduce paper-facing tables and figure source data from the frozen registry."""
-
+"""Recompute model effects from frozen public rows and render paper tables."""
 from __future__ import annotations
-
-import argparse
-import csv
-import json
+import argparse, csv, hashlib, importlib.util, json
 from pathlib import Path
-
 ROOT = Path(__file__).resolve().parents[1]
-TABLES = ROOT / "reproducibility" / "tables"
-FIGURES = ROOT / "reproducibility" / "figures"
+spec = importlib.util.spec_from_file_location('public_core', ROOT / 'leakagebench_midi/core.py')
+core = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(core)
 
+def sha(p):
+    return hashlib.sha256(p.read_bytes()).hexdigest()
 
-def write_csv(directory: Path, name: str, fields: list[str], rows: list[dict]) -> None:
-    directory.mkdir(parents=True, exist_ok=True)
-    with (directory / name).open("w", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fields, lineterminator="\n")
-        writer.writeheader()
-        writer.writerows(rows)
+def load(p):
+    return json.loads(p.read_text())
 
+def rows(p):
+    return [json.loads(x) for x in p.read_text().splitlines() if x]
 
-def main() -> None:
-    parser = argparse.ArgumentParser(
-        description="Reproduce frozen paper CSVs without training or dataset access."
-    )
-    parser.parse_args()
+def write(name, records, directory='tables'):
+    p = ROOT / 'reproducibility' / directory / name
+    p.parent.mkdir(parents=True, exist_ok=True)
+    with p.open('w', newline='') as f:
+        w = csv.DictWriter(f, fieldnames=list(records[0]))
+        w.writeheader()
+        w.writerows(records)
 
-    registry = json.loads((ROOT / "metadata" / "result_registry.json").read_text())
-    results = {entry["result_id"]: entry for entry in registry["results"]}
-
-    census = results["lmd_census_80_10_10"]
-    write_csv(
-        TABLES,
-        "lmd_census.csv",
-        ["protocol", "identities", "families", "test_family_contamination", "test_file_contamination"],
-        [
-            {"protocol": "80/10/10 random file split", "identities": 178561, "families": 140427, "test_family_contamination": .2765669342, "test_file_contamination": .297670108},
-            {"protocol": "90/5/5 random file split", "identities": 178561, "families": 140427, "test_family_contamination": .3030, "test_file_contamination": ""},
-            {"protocol": "90/10 random file split", "identities": 178561, "families": 140427, "test_family_contamination": .2934, "test_file_contamination": ""},
-        ],
-    )
-
-    transformer_l = results["lmd_transformer_l"]
-    write_csv(
-        TABLES,
-        "confirmatory_effect.csv",
-        ["model", "parameters", "treated_families", "tau", "ci_low", "ci_high", "relative_improvement", "status"],
-        [{"model": transformer_l["model"], "parameters": transformer_l["parameter_count"], "treated_families": 100, "tau": transformer_l["effect"], "ci_low": transformer_l["ci95"][0], "ci_high": transformer_l["ci95"][1], "relative_improvement": transformer_l["relative_effect"], "status": transformer_l["status"]}],
-    )
-
-    capacity_rows = []
-    for result_id in ["tcn_384", "transformer_s", "transformer_m", "lmd_transformer_l"]:
-        result = results[result_id]
-        capacity_rows.append({"model": result["model"], "parameters": result["parameter_count"], "tau": result["effect"], "ci_low": result["ci95"][0], "ci_high": result["ci95"][1], "relative_improvement": result["relative_effect"], "status": result["status"]})
-    write_csv(TABLES, "architecture_capacity.csv", list(capacity_rows[0]), capacity_rows)
-
-    mitigation = results["mitigation_4300"]["effect"]
-    write_csv(
-        TABLES,
-        "mitigation.csv",
-        ["protocol", "files", "cross_split_known_families", "token_loss", "reassigned_files"],
-        [
-            {"protocol": "file_split", "files": 4300, "cross_split_known_families": 177, "token_loss": 0, "reassigned_files": 0},
-            {"protocol": "exact_dedup", "files": 4263, "cross_split_known_families": 161, "token_loss": .0080, "reassigned_files": ""},
-            {"protocol": "family_aware", "files": 4300, "cross_split_known_families": 0, "token_loss": 0, "reassigned_files": .2595348837},
-            {"protocol": "delete_multi_member", "files": "", "cross_split_known_families": 0, "token_loss": .2283570490, "reassigned_files": ""},
-        ],
-    )
-
-    pdmx = results["pdmx_reduced"]
-    write_csv(
-        TABLES,
-        "pdmx_external.csv",
-        ["cohort", "treated", "tau", "ci_low", "ci_high", "relative_improvement", "status"],
-        [{"cohort": "reduced eligible PDMX", "treated": 67, "tau": pdmx["effect"], "ci_low": pdmx["ci95"][0], "ci_high": pdmx["ci95"][1], "relative_improvement": pdmx["relative_effect"], "status": pdmx["status"]}],
-    )
-
-    write_csv(FIGURES, "prevalence.csv", ["split", "test_family_contamination"], [{"split": "80/10/10", "test_family_contamination": .2765669342}, {"split": "90/5/5", "test_family_contamination": .3030}, {"split": "90/10", "test_family_contamination": .2934}])
-    write_csv(FIGURES, "capacity.csv", ["model", "parameters", "tau"], [{"model": row["model"], "parameters": row["parameters"], "tau": row["tau"]} for row in capacity_rows])
-    write_csv(FIGURES, "mitigation.csv", ["protocol", "cross_split_known_families"], [{"protocol": "file_split", "cross_split_known_families": 177}, {"protocol": "exact_dedup", "cross_split_known_families": 161}, {"protocol": "family_aware", "cross_split_known_families": 0}])
-    write_csv(FIGURES, "external_evidence.csv", ["dataset", "tau", "relative_improvement"], [{"dataset": "LMD", "tau": transformer_l["effect"], "relative_improvement": transformer_l["relative_effect"]}, {"dataset": "PDMX reduced", "tau": pdmx["effect"], "relative_improvement": pdmx["relative_effect"]}])
-
-
-if __name__ == "__main__":
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument('--verify-only', action='store_true')
+    a = ap.parse_args()
+    manifest = load(ROOT / 'reproducibility/INTEGRITY_MANIFEST.json')
+    for item in manifest['artifacts']:
+        p = ROOT / item['relative_path']
+        if item['artifact_type'] in {'RAW_RESULT', 'EVIDENCE', 'REGISTRY'} and (not p.is_file() or sha(p) != item['sha256']):
+            raise ValueError(f"integrity check failed: {item['relative_path']}")
+    registry = load(ROOT / 'metadata/result_registry.json')
+    by = {x['result_id']: x for x in registry['results']}
+    for r in registry['results']:
+        ep = ROOT / r['source_audit_path']
+        if sha(ep) != r['source_artifact_sha256']:
+            raise ValueError(f"registry/evidence hash mismatch: {r['result_id']}")
+        if 'provenance' in r:
+            q = r['provenance']
+            rp = ROOT / q['raw_result_path']
+            if sha(rp) != q['raw_result_sha256']:
+                raise ValueError(f"raw result hash mismatch: {r['result_id']}")
+            out = core.analyze_effect(rows(rp), q['bootstrap_samples'], q['bootstrap_seed'], family_manifest=load(ROOT / q['family_manifest_path']), bootstrap_draw_mode=q['bootstrap_draw_mode'], family_order=q.get('family_order', 'sorted'))
+            if abs(out['tau'] - r['effect']) > 5e-11 or max((abs(x - y) for (x, y) in zip(out['ci95'], r['ci95']))) > 5e-10:
+                raise ValueError(f"derived result mismatch: {r['result_id']}")
+    if a.verify_only:
+        return
+    cap = []
+    for rid in ('tcn_384', 'transformer_s', 'transformer_m', 'lmd_transformer_l'):
+        r = by[rid]
+        cap.append({'model': r['model'], 'parameters': r['parameter_count'], 'tau': r['effect'], 'ci_low': r['ci95'][0], 'ci_high': r['ci95'][1], 'relative_improvement': r['relative_effect'], 'status': r['status']})
+    write('architecture_capacity.csv', cap)
+    r = by['lmd_transformer_l']
+    write('confirmatory_effect.csv', [{'model': r['model'], 'parameters': r['parameter_count'], 'treated_families': r['sample_or_family_count'], 'tau': r['effect'], 'ci_low': r['ci95'][0], 'ci_high': r['ci95'][1], 'relative_improvement': r['relative_effect'], 'status': r['status']}])
+    r = by['pdmx_reduced']
+    write('pdmx_external.csv', [{'cohort': r['experiment'], 'treated': r['sample_or_family_count'], 'tau': r['effect'], 'ci_low': r['ci95'][0], 'ci_high': r['ci95'][1], 'relative_improvement': r['relative_effect'], 'status': r['status']}])
+    census = load(ROOT / by['lmd_census_80_10_10']['source_audit_path'])['aggregate']
+    records = []
+    for (protocol, stages) in census.items():
+        s = stages['S0_FILE_SPLIT']
+        records.append({'protocol': protocol, 'test_family_contamination': s['test_family_contamination_rate']['mean'], 'test_file_contamination': s['test_file_contamination_rate']['mean']})
+    write('lmd_census.csv', records)
+    split = load(ROOT / 'reproducibility/evidence/split_comparison.json')
+    cost = load(ROOT / 'reproducibility/evidence/family_aware_data_cost.json')
+    mitigation = [{'protocol': v['protocol'], 'files': v['files_retained'], 'cross_split_known_families': v['family_overlap_count'], 'token_loss': v['discarded_token_ratio'], 'reassigned_files': cost['component_assignment']['file_reassignment_ratio'] if k == 'S2' else ''} for (k, v) in split.items() if k.startswith('S')]
+    write('mitigation.csv', mitigation)
+    write('prevalence.csv', [{'split': x['protocol'], 'test_family_contamination': x['test_family_contamination']} for x in records], 'figures')
+    write('capacity.csv', [{'model': x['model'], 'parameters': x['parameters'], 'tau': x['tau']} for x in cap], 'figures')
+    write('mitigation.csv', [{'protocol': x['protocol'], 'cross_split_known_families': x['cross_split_known_families']} for x in mitigation], 'figures')
+    lmd = by['lmd_transformer_l']
+    pdmx = by['pdmx_reduced']
+    write('external_evidence.csv', [{'dataset': lmd['dataset'], 'tau': lmd['effect'], 'relative_improvement': lmd['relative_effect']}, {'dataset': pdmx['dataset'], 'tau': pdmx['effect'], 'relative_improvement': pdmx['relative_effect']}], 'figures')
+if __name__ == '__main__':
     main()

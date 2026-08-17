@@ -1,0 +1,489 @@
+{
+  "artifacts": [
+    {
+      "artifact_type": "RAW_RESULT",
+      "relative_path": "reproducibility/raw_results/pdmx_transformer_l.jsonl",
+      "result_ids": [
+        "pdmx_reduced"
+      ],
+      "sha256": "8ef5b9d18005f4c4eb1054a989705337d26c25f06174a709220fb24fc5bb27de",
+      "size_bytes": 705964
+    },
+    {
+      "artifact_type": "RAW_RESULT",
+      "relative_path": "reproducibility/raw_results/pdmx_transformer_l_family_manifest.json",
+      "result_ids": [
+        "pdmx_reduced"
+      ],
+      "sha256": "0f8a21ec43df0a1abba771c79306413dcb29756b12f9329efeef3198b11154b3",
+      "size_bytes": 63494
+    },
+    {
+      "artifact_type": "RAW_RESULT",
+      "relative_path": "reproducibility/raw_results/tcn.jsonl",
+      "result_ids": [
+        "tcn_384"
+      ],
+      "sha256": "a7428bf1db3bcc7cf58f73d6580d433325dd97d3086763a12943271e56306e91",
+      "size_bytes": 1026981
+    },
+    {
+      "artifact_type": "RAW_RESULT",
+      "relative_path": "reproducibility/raw_results/tcn_family_manifest.json",
+      "result_ids": [
+        "tcn_384"
+      ],
+      "sha256": "ba9e3fe22420f73f3f166063825644194b841536954258350bb9b5219f59593d",
+      "size_bytes": 95150
+    },
+    {
+      "artifact_type": "RAW_RESULT",
+      "relative_path": "reproducibility/raw_results/transformer_l.jsonl",
+      "result_ids": [
+        "lmd_transformer_l"
+      ],
+      "sha256": "a5149dd4d3971bf90e9f66ddb866f8d1409d3aa9b1b345ace4e77777227f1d69",
+      "size_bytes": 1052705
+    },
+    {
+      "artifact_type": "RAW_RESULT",
+      "relative_path": "reproducibility/raw_results/transformer_l_family_manifest.json",
+      "result_ids": [
+        "lmd_transformer_l"
+      ],
+      "sha256": "ba9e3fe22420f73f3f166063825644194b841536954258350bb9b5219f59593d",
+      "size_bytes": 95150
+    },
+    {
+      "artifact_type": "RAW_RESULT",
+      "relative_path": "reproducibility/raw_results/transformer_m.jsonl",
+      "result_ids": [
+        "transformer_m"
+      ],
+      "sha256": "1a458a1565f442d0b1c5d95fcc85983ce9bf6bef15406c66c2a5b5fad2cc4f32",
+      "size_bytes": 1052646
+    },
+    {
+      "artifact_type": "RAW_RESULT",
+      "relative_path": "reproducibility/raw_results/transformer_m_family_manifest.json",
+      "result_ids": [
+        "transformer_m"
+      ],
+      "sha256": "ba9e3fe22420f73f3f166063825644194b841536954258350bb9b5219f59593d",
+      "size_bytes": 95150
+    },
+    {
+      "artifact_type": "RAW_RESULT",
+      "relative_path": "reproducibility/raw_results/transformer_s.jsonl",
+      "result_ids": [
+        "transformer_s"
+      ],
+      "sha256": "9317343791e98422a5908b1a0e23c9b401106a6cb8f47c376846161f3d482dc5",
+      "size_bytes": 1052641
+    },
+    {
+      "artifact_type": "RAW_RESULT",
+      "relative_path": "reproducibility/raw_results/transformer_s_family_manifest.json",
+      "result_ids": [
+        "transformer_s"
+      ],
+      "sha256": "ba9e3fe22420f73f3f166063825644194b841536954258350bb9b5219f59593d",
+      "size_bytes": 95150
+    },
+    {
+      "artifact_type": "ANALYSIS_OUTPUT",
+      "relative_path": "reproducibility/derived/pdmx_transformer_l_analysis.json",
+      "result_ids": [
+        "pdmx_reduced"
+      ],
+      "sha256": "dfd91f93118460e0823743d8b0c4995583c3a616431be12eca7dc634355266ea",
+      "size_bytes": 858
+    },
+    {
+      "artifact_type": "ANALYSIS_OUTPUT",
+      "relative_path": "reproducibility/derived/tcn_analysis.json",
+      "result_ids": [
+        "tcn_384"
+      ],
+      "sha256": "e3518aaf25ada4d2a5fe733aba02793748c9552d7abbe028148c053469e37f05",
+      "size_bytes": 854
+    },
+    {
+      "artifact_type": "ANALYSIS_OUTPUT",
+      "relative_path": "reproducibility/derived/transformer_l_analysis.json",
+      "result_ids": [
+        "lmd_transformer_l"
+      ],
+      "sha256": "60d55723891c45546d18b3d70193a8485a674621f867c61d1b839547f0d42dbf",
+      "size_bytes": 844
+    },
+    {
+      "artifact_type": "ANALYSIS_OUTPUT",
+      "relative_path": "reproducibility/derived/transformer_m_analysis.json",
+      "result_ids": [
+        "transformer_m"
+      ],
+      "sha256": "4156572767eeddc17c7663f4d10856cae99b1bcce0d29dd220358f22d3edae75",
+      "size_bytes": 842
+    },
+    {
+      "artifact_type": "ANALYSIS_OUTPUT",
+      "relative_path": "reproducibility/derived/transformer_s_analysis.json",
+      "result_ids": [
+        "transformer_s"
+      ],
+      "sha256": "6e81a6d44c6e1bc87c929ff4680365f78819d48dfc55a0813648e2ba363a900b",
+      "size_bytes": 841
+    },
+    {
+      "artifact_type": "EVIDENCE",
+      "relative_path": "reproducibility/evidence/difficulty_strata.json",
+      "result_ids": [
+        "lmd_difficult_stratum"
+      ],
+      "sha256": "7d3a5e17f144610de68f51df385155f69da6d8b30bbb63b2d6e9b8f14edfda84",
+      "size_bytes": 65836
+    },
+    {
+      "artifact_type": "EVIDENCE",
+      "relative_path": "reproducibility/evidence/family_aware_data_cost.json",
+      "result_ids": [],
+      "sha256": "77d58447908292130f76303fe93623520aa5252e52c6196e2fc6cb2a416d61ac",
+      "size_bytes": 1065
+    },
+    {
+      "artifact_type": "EVIDENCE",
+      "relative_path": "reproducibility/evidence/lmd_leakage_census.json",
+      "result_ids": [
+        "lmd_census_80_10_10"
+      ],
+      "sha256": "9607daf226a6e51f281f6c52eb06c5a7c701309ca2f2e51b6febc61cfedfc84b",
+      "size_bytes": 7066515
+    },
+    {
+      "artifact_type": "EVIDENCE",
+      "relative_path": "reproducibility/evidence/normalized_structural_effect.json",
+      "result_ids": [
+        "lmd_normalized_structurally_nonexact"
+      ],
+      "sha256": "8d93807de5262fab62fc1e7a523f48c86558ae8789aa90b280149374b7aa04be",
+      "size_bytes": 984
+    },
+    {
+      "artifact_type": "EVIDENCE",
+      "relative_path": "reproducibility/evidence/pdmx_feasibility.json",
+      "result_ids": [
+        "pdmx_feasibility_v2"
+      ],
+      "sha256": "2f62d34097515f1113d85b16f17343b39f0fdd63316c781189fa86d5e43a7245",
+      "size_bytes": 1191
+    },
+    {
+      "artifact_type": "EVIDENCE",
+      "relative_path": "reproducibility/evidence/pdmx_reduced_effect.json",
+      "result_ids": [
+        "pdmx_reduced"
+      ],
+      "sha256": "9d13ff27a813d8d6f744df6aec863ddc5a3788a37b27c0408a46bdaa33915e64",
+      "size_bytes": 640
+    },
+    {
+      "artifact_type": "EVIDENCE",
+      "relative_path": "reproducibility/evidence/pdmx_structure_eligibility.json",
+      "result_ids": [
+        "pdmx_structure_gate"
+      ],
+      "sha256": "5426322dd25d56829319c65eeda3d4d8820783ea5f6e7223d26ae6c9dbc224a8",
+      "size_bytes": 140322
+    },
+    {
+      "artifact_type": "EVIDENCE",
+      "relative_path": "reproducibility/evidence/seed_uncertainty_sensitivity.json",
+      "result_ids": [],
+      "sha256": "49d0ca1689c07d5ed4bb8574afb92fa535d2afffb12540e0477c519f67929f67",
+      "size_bytes": 3422
+    },
+    {
+      "artifact_type": "EVIDENCE",
+      "relative_path": "reproducibility/evidence/split_comparison.json",
+      "result_ids": [
+        "mitigation_4300"
+      ],
+      "sha256": "b8842a2a865e05c440d3a8f8a7addde15e5accd2a5ade3cc8abd7c0b098b4d49",
+      "size_bytes": 5435
+    },
+    {
+      "artifact_type": "EVIDENCE",
+      "relative_path": "reproducibility/evidence/structurally_nonexact_effect.json",
+      "result_ids": [
+        "lmd_structurally_nonexact"
+      ],
+      "sha256": "6349e5c91c1adc240ce480ec46aef93ef434eaec486dd85aff2e45fb8241ae84",
+      "size_bytes": 720
+    },
+    {
+      "artifact_type": "EVIDENCE",
+      "relative_path": "reproducibility/evidence/tcn_family_effect.json",
+      "result_ids": [
+        "tcn_384"
+      ],
+      "sha256": "4fb3914121e6b88ca1382052c6df543af817ccef0608b725c8f149bd2a5e8a02",
+      "size_bytes": 596
+    },
+    {
+      "artifact_type": "EVIDENCE",
+      "relative_path": "reproducibility/evidence/transformer_capacity_effects.json",
+      "result_ids": [
+        "transformer_m",
+        "transformer_s"
+      ],
+      "sha256": "b6d0bdd2b85dbfd9f15b3976d25f0272c2ea04c499696916d1d962ef687d7080",
+      "size_bytes": 5146
+    },
+    {
+      "artifact_type": "EVIDENCE",
+      "relative_path": "reproducibility/evidence/transformer_family_effect.json",
+      "result_ids": [
+        "lmd_transformer_l"
+      ],
+      "sha256": "840104ea75ab356bf94a0b2051956cc2bb2f295ab8559b193c282c29f7d31f2d",
+      "size_bytes": 686
+    },
+    {
+      "artifact_type": "EVIDENCE",
+      "relative_path": "reproducibility/evidence/transformer_secondary_strata.json",
+      "result_ids": [],
+      "sha256": "6189da8e3c56a1ba570bab4cec8eaa89995a5f546381b5168f37e49f6cce0c6e",
+      "size_bytes": 672
+    },
+    {
+      "artifact_type": "REGISTRY",
+      "relative_path": "metadata/claim_registry.json",
+      "result_ids": [
+        "lmd_census_80_10_10",
+        "lmd_difficult_stratum",
+        "lmd_normalized_structurally_nonexact",
+        "lmd_structurally_nonexact",
+        "lmd_transformer_l",
+        "mitigation_4300",
+        "pdmx_feasibility_v2",
+        "pdmx_reduced",
+        "pdmx_structure_gate",
+        "tcn_384",
+        "transformer_m",
+        "transformer_s"
+      ],
+      "sha256": "25fade31c6d8042bc37f23933a22bc64671b38ec0eb058cb82861945fa1e72b1",
+      "size_bytes": 4108
+    },
+    {
+      "artifact_type": "REGISTRY",
+      "relative_path": "metadata/result_registry.json",
+      "result_ids": [
+        "lmd_census_80_10_10",
+        "lmd_difficult_stratum",
+        "lmd_normalized_structurally_nonexact",
+        "lmd_structurally_nonexact",
+        "lmd_transformer_l",
+        "mitigation_4300",
+        "pdmx_feasibility_v2",
+        "pdmx_reduced",
+        "pdmx_structure_gate",
+        "tcn_384",
+        "transformer_m",
+        "transformer_s"
+      ],
+      "sha256": "f2cb3d61bc9cae44348384301423f28782f6011c00151e6e2b7d6082ee30fb6b",
+      "size_bytes": 14095
+    },
+    {
+      "artifact_type": "TABLE",
+      "relative_path": "reproducibility/tables/architecture_capacity.csv",
+      "result_ids": [
+        "lmd_transformer_l",
+        "pdmx_reduced",
+        "tcn_384",
+        "transformer_m",
+        "transformer_s"
+      ],
+      "sha256": "4391049931cf53a7c93a3b90505256f132d6f748550d847d33700a88de72fe79",
+      "size_bytes": 519
+    },
+    {
+      "artifact_type": "TABLE",
+      "relative_path": "reproducibility/tables/confirmatory_effect.csv",
+      "result_ids": [
+        "lmd_transformer_l",
+        "pdmx_reduced",
+        "tcn_384",
+        "transformer_m",
+        "transformer_s"
+      ],
+      "sha256": "83af665c897e894a1dd3f9d008dbece1d2fecce5fdb5761c1ee3c4a2b5d69cb0",
+      "size_bytes": 202
+    },
+    {
+      "artifact_type": "TABLE",
+      "relative_path": "reproducibility/tables/lmd_census.csv",
+      "result_ids": [
+        "lmd_census_80_10_10",
+        "lmd_difficult_stratum",
+        "lmd_normalized_structurally_nonexact",
+        "lmd_structurally_nonexact",
+        "lmd_transformer_l",
+        "mitigation_4300",
+        "pdmx_feasibility_v2",
+        "pdmx_reduced",
+        "pdmx_structure_gate",
+        "tcn_384",
+        "transformer_m",
+        "transformer_s"
+      ],
+      "sha256": "899038eb39623a17c8ba8e2ff8996d9e066a0f261d70d424a7de381f5099c514",
+      "size_bytes": 208
+    },
+    {
+      "artifact_type": "TABLE",
+      "relative_path": "reproducibility/tables/mitigation.csv",
+      "result_ids": [
+        "lmd_census_80_10_10",
+        "lmd_difficult_stratum",
+        "lmd_normalized_structurally_nonexact",
+        "lmd_structurally_nonexact",
+        "lmd_transformer_l",
+        "mitigation_4300",
+        "pdmx_feasibility_v2",
+        "pdmx_reduced",
+        "pdmx_structure_gate",
+        "tcn_384",
+        "transformer_m",
+        "transformer_s"
+      ],
+      "sha256": "37edb7c807e161493226e1e9a14e4dede38210fbe9dcf0daa3e231e3054b0d81",
+      "size_bytes": 207
+    },
+    {
+      "artifact_type": "TABLE",
+      "relative_path": "reproducibility/tables/pdmx_external.csv",
+      "result_ids": [
+        "lmd_census_80_10_10",
+        "lmd_difficult_stratum",
+        "lmd_normalized_structurally_nonexact",
+        "lmd_structurally_nonexact",
+        "lmd_transformer_l",
+        "mitigation_4300",
+        "pdmx_feasibility_v2",
+        "pdmx_reduced",
+        "pdmx_structure_gate",
+        "tcn_384",
+        "transformer_m",
+        "transformer_s"
+      ],
+      "sha256": "ac23a8c0e97826b5ba5cced83897f2ab17dd102dfb7dcd4935a6d503796569fd",
+      "size_bytes": 200
+    },
+    {
+      "artifact_type": "FIGURE",
+      "relative_path": "reproducibility/figures/capacity.csv",
+      "result_ids": [
+        "lmd_census_80_10_10",
+        "lmd_difficult_stratum",
+        "lmd_normalized_structurally_nonexact",
+        "lmd_structurally_nonexact",
+        "lmd_transformer_l",
+        "mitigation_4300",
+        "pdmx_feasibility_v2",
+        "pdmx_reduced",
+        "pdmx_structure_gate",
+        "tcn_384",
+        "transformer_m",
+        "transformer_s"
+      ],
+      "sha256": "4376d4084dd0eb412f3bdf9713f10bb2203be7f8cd064a466aa122788880401c",
+      "size_bytes": 172
+    },
+    {
+      "artifact_type": "FIGURE",
+      "relative_path": "reproducibility/figures/external_evidence.csv",
+      "result_ids": [
+        "lmd_census_80_10_10",
+        "lmd_difficult_stratum",
+        "lmd_normalized_structurally_nonexact",
+        "lmd_structurally_nonexact",
+        "lmd_transformer_l",
+        "mitigation_4300",
+        "pdmx_feasibility_v2",
+        "pdmx_reduced",
+        "pdmx_structure_gate",
+        "tcn_384",
+        "transformer_m",
+        "transformer_s"
+      ],
+      "sha256": "c2e6068e2fbe33845308090751e00d54dbf73c03820217f5dda668bdd1a8fa8e",
+      "size_bytes": 118
+    },
+    {
+      "artifact_type": "FIGURE",
+      "relative_path": "reproducibility/figures/mitigation.csv",
+      "result_ids": [
+        "lmd_census_80_10_10",
+        "lmd_difficult_stratum",
+        "lmd_normalized_structurally_nonexact",
+        "lmd_structurally_nonexact",
+        "lmd_transformer_l",
+        "mitigation_4300",
+        "pdmx_feasibility_v2",
+        "pdmx_reduced",
+        "pdmx_structure_gate",
+        "tcn_384",
+        "transformer_m",
+        "transformer_s"
+      ],
+      "sha256": "4acc5c8db8230fc63b54412f68ff4277224d600a62e75e9413949b8fe39628d1",
+      "size_bytes": 107
+    },
+    {
+      "artifact_type": "FIGURE",
+      "relative_path": "reproducibility/figures/prevalence.csv",
+      "result_ids": [
+        "lmd_census_80_10_10",
+        "lmd_difficult_stratum",
+        "lmd_normalized_structurally_nonexact",
+        "lmd_structurally_nonexact",
+        "lmd_transformer_l",
+        "mitigation_4300",
+        "pdmx_feasibility_v2",
+        "pdmx_reduced",
+        "pdmx_structure_gate",
+        "tcn_384",
+        "transformer_m",
+        "transformer_s"
+      ],
+      "sha256": "8a182247396f47d8d78b4861fb09d583c7a858b40e3052a09118f95f286dc55f",
+      "size_bytes": 123
+    },
+    {
+      "artifact_type": "PROTOCOL",
+      "relative_path": "reproducibility/protocol.json",
+      "result_ids": [
+        "lmd_census_80_10_10",
+        "lmd_transformer_l",
+        "lmd_structurally_nonexact",
+        "lmd_difficult_stratum",
+        "transformer_s",
+        "transformer_m",
+        "tcn_384",
+        "mitigation_4300",
+        "pdmx_feasibility_v2",
+        "pdmx_structure_gate",
+        "pdmx_reduced",
+        "lmd_normalized_structurally_nonexact"
+      ],
+      "sha256": "edd067fb6dc3ac11eedbf931dadab7165122251d21fdd3daf05b78a6a868359f",
+      "size_bytes": 423
+    }
+  ],
+  "format_version": "1.0",
+  "hash_algorithm": "SHA-256",
+  "self_excluded": true
+}

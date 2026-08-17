@@ -18,12 +18,14 @@ def test_component_map():
 def test_contamination_integrity_and_matching():
  base=[{'id':f'b{i}','family_id':f'b{i}','tokens':100+i} for i in range(5)];treated=[{'family_id':'t','members':[{'id':'r','family_id':'t','tokens':100},{'id':'d','family_id':'t','tokens':102}]}];control=[{'id':'c','family_id':'c','tokens':100}];val=[{'id':'v','family_id':'v','tokens':100}];x=build_contamination(base,treated,control,val,[{'family_id':'t','receiver_id':'r','donor_id':'d'}],1)
  assert x['integrity']['receiver_in_train']==0 and x['integrity']['non_designated_treated_in_train']==0
- assert x['token_budget']['relative_mismatch']==0
+ assert x['token_budget']['relative_total_difference']==0
 def test_bootstrap_determinism():
  rows=[]
  for s in range(3):
   for split,fs,e in [('treated',['t1','t2'],-.1),('control',['c1','c2'],0),('clean_validation',['v1','v2'],0)]:
-   for f in fs:rows += [{'seed':s,'condition':'clean','split':split,'family_id':f,'nll':2},{'seed':s,'condition':'family_leak','split':split,'family_id':f,'nll':2+e}]
+   for f in fs:
+    common={'dataset':'synthetic','architecture':'toy','model_size':'tiny','seed':s,'split':split,'family_id':f}
+    rows += [{**common,'condition':'clean','nll':2},{**common,'condition':'family_leak','nll':2+e}]
  assert analyze_effect(rows,1000,5)==analyze_effect(rows,1000,5)
 def test_synthetic_integration_and_structure(tmp_path):
  out=tmp_path/'demo';env=dict(os.environ,PYTHON=sys.executable);subprocess.run(['bash',str(ROOT/'scripts/run_synthetic_demo.sh'),str(out)],cwd=ROOT,env=env,check=True)

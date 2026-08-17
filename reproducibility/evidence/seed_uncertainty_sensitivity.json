@@ -1,0 +1,109 @@
+{
+  "all_groups_direction_consistent": true,
+  "classification": "FORMAL_RESULT_NEEDS_SENSITIVITY",
+  "disclosure": "Only three training seeds are available; this is sensitivity analysis, not a precise population-variance estimate.",
+  "groups": [
+    {
+      "across_seed_mean": -0.11531665895895969,
+      "direction_consistent": true,
+      "group": "Transformer-L",
+      "interpretation": "sensitivity only; not a high-precision training-randomness estimate",
+      "range": [
+        -0.12621114635365716,
+        -0.10281558661565594
+      ],
+      "seed_effects": {
+        "seed_202608040": -0.11692324390756598,
+        "seed_202608041": -0.10281558661565594,
+        "seed_202608042": -0.12621114635365716
+      },
+      "seed_resampling_ci95": [
+        -0.12621114635365716,
+        -0.10281558661565594
+      ],
+      "training_seed_count": 3
+    },
+    {
+      "across_seed_mean": -0.0775930607060294,
+      "direction_consistent": true,
+      "group": "Transformer-S",
+      "interpretation": "sensitivity only; not a high-precision training-randomness estimate",
+      "range": [
+        -0.08303606530414694,
+        -0.06951314378615023
+      ],
+      "seed_effects": {
+        "seed_202608100": -0.06951314378615023,
+        "seed_202608101": -0.08022997302779103,
+        "seed_202608102": -0.08303606530414694
+      },
+      "seed_resampling_ci95": [
+        -0.08303606530414694,
+        -0.06951314378615023
+      ],
+      "training_seed_count": 3
+    },
+    {
+      "across_seed_mean": -0.0857125485284136,
+      "direction_consistent": true,
+      "group": "Transformer-M",
+      "interpretation": "sensitivity only; not a high-precision training-randomness estimate",
+      "range": [
+        -0.09340850003179157,
+        -0.07496033097092719
+      ],
+      "seed_effects": {
+        "seed_202608100": -0.09340850003179157,
+        "seed_202608101": -0.08876881458252206,
+        "seed_202608102": -0.07496033097092719
+      },
+      "seed_resampling_ci95": [
+        -0.09340850003179157,
+        -0.07496033097092719
+      ],
+      "training_seed_count": 3
+    },
+    {
+      "across_seed_mean": -0.03172214737511123,
+      "direction_consistent": true,
+      "group": "TCN",
+      "interpretation": "sensitivity only; not a high-precision training-randomness estimate",
+      "range": [
+        -0.03177775175338448,
+        -0.03165116066430346
+      ],
+      "seed_effects": {
+        "seed_202608070": -0.03177775175338448,
+        "seed_202608071": -0.031737529707645755,
+        "seed_202608072": -0.03165116066430346
+      },
+      "seed_resampling_ci95": [
+        -0.03177775175338448,
+        -0.03165116066430346
+      ],
+      "training_seed_count": 3
+    },
+    {
+      "across_seed_mean": -0.06777620934471183,
+      "direction_consistent": true,
+      "group": "PDMX Transformer-L",
+      "interpretation": "sensitivity only; not a high-precision training-randomness estimate",
+      "range": [
+        -0.07203421760925909,
+        -0.06272127533744251
+      ],
+      "seed_effects": {
+        "seed_202608130": -0.07203421760925909,
+        "seed_202608131": -0.06272127533744251,
+        "seed_202608132": -0.06857313508743393
+      },
+      "seed_resampling_ci95": [
+        -0.07203421760925909,
+        -0.06272127533744251
+      ],
+      "training_seed_count": 3
+    }
+  ],
+  "primary_estimator": "family-level paired bootstrap",
+  "primary_estimator_unchanged": true
+}

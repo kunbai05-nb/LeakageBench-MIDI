@@ -1,4 +1,4 @@
-name: leakagebench-midi-rc1
+name: leakagebench-midi-v1
 channels: [pytorch, conda-forge]
 dependencies:
   - python=3.10.12
@@ -7,4 +7,3 @@ dependencies:
   - mido=1.3.3
   - pytorch=2.3.0
   - pytest=9.1.1
-

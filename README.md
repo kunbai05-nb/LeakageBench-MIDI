@@ -6,6 +6,8 @@
 
 LeakageBench-MIDI provides data-agnostic Python APIs and command-line workflows for building same-work family maps, auditing split contamination, constructing family-atomic splits, designing controlled contamination datasets, estimating family-level effects, and reproducing the paper's frozen tables. The repository redistributes no LMD/PDMX music data, checkpoints, or closed evaluation material.
 
+This candidate targets the stable software release **v1.0.0**.
+
 Choi et al. (2025), *On the De-duplication of the Lakh MIDI Dataset*, provides the duplicate/same-song identification and filtering precedent used for the adopted LMD family relations. LeakageBench-MIDI studies downstream consequences and mitigation; it does not present that upstream resource as a project contribution.
 
 ## Why file split != work split
@@ -16,7 +18,7 @@ File identity is not musical-work identity. Duplicate exports, versions, transcr
 
 - **LMD 80/10/10:** 27.66% known test-family contamination and 29.77% known test-file contamination.
 - **Transformer-L:** control-adjusted `tau = -0.115317`, corresponding to a 13.62% relative treated-family NLL improvement.
-- **Structurally non-exact:** 95/100 treated LMD families retained a same-direction effect (`tau ≈ -0.113316`).
+- **Normalized structural robustness:** after PPQ, serialization, event-order, metadata, and track-container normalization, 50/100 treated LMD families remained structurally non-exact. Within this stricter subset, the effect remained strong (`tau = -0.11485`, 95% CI `[-0.13946, -0.09208]`).
 - **TCN:** a smaller 2.53% same-direction relative effect; the preregistered practical replication threshold was rejected.
 - **PDMX:** a 67-family reduced, protocol-eligible cohort showed an 11.07% same-direction relative effect.
 - **Mitigation:** family-aware assignment achieved zero known cross-split family overlap under the adopted family definition with 0% data deletion in the frozen 4,300-file pool.
@@ -40,6 +42,28 @@ bash scripts/run_synthetic_demo.sh /tmp/leakagebench-synthetic
 
 See [`examples/synthetic_demo/README.md`](examples/synthetic_demo/README.md) for the generated artifacts.
 
+## Model checkpoint loading
+
+The companion model artifact is loaded through the stable, inference-only API. After installing LeakageBench-MIDI v1.0.0 and downloading a checkpoint archive:
+
+```python
+from pathlib import Path
+import torch
+from leakagebench_midi.models import load_checkpoint
+
+model, metadata = load_checkpoint(
+    Path("lmd/transformer_l/clean/seed_202608040.pt")
+)
+token_ids = torch.zeros((1, 8), dtype=torch.long)
+attention_mask = torch.ones_like(token_ids)
+loss_mask = torch.ones_like(token_ids)
+with torch.inference_mode():
+    output = model(token_ids, attention_mask, loss_mask)
+print(metadata["model_id"], output["logits"].shape)
+```
+
+The loader reads the embedded public configuration, instantiates the exact Transformer or TCN architecture, loads with `strict=True`, and returns an evaluation-mode model. It needs no training checkout, private module, source checkpoint, or dataset path.
+
 ## Core workflows
 
 The stable task-oriented CLIs live in [`scripts/`](scripts/):
@@ -47,7 +71,7 @@ The stable task-oriented CLIs live in [`scripts/`](scripts/):
 - `build_family_map.py` constructs connected family components from identifiers and edges;
 - `audit_split.py` measures known family crossings;
 - `build_family_split.py` assigns whole families atomically;
-- `construct_contamination.py` creates token-budget-matched controlled conditions;
+- `construct_contamination.py` creates approximately token-budget-matched controlled conditions and records every pairwise and total difference;
 - `analyze_family_effects.py` estimates control-adjusted family effects;
 - `run_leakage_census.py` evaluates contamination under random file splitting; and
 - `classify_pair_structure.py` compares MIDI pairs under the frozen structural hierarchy.
@@ -62,7 +86,7 @@ Frozen paper tables and figure source data can be regenerated without training o
 python scripts/reproduce_paper_results.py
 ```
 
-The script reads the frozen result registry and writes deterministic CSVs under [`reproducibility/tables/`](reproducibility/tables/) and [`reproducibility/figures/`](reproducibility/figures/). See [`docs/reproducing_results.md`](docs/reproducing_results.md) and [`docs/methodology.md`](docs/methodology.md).
+The script verifies [`reproducibility/INTEGRITY_MANIFEST.json`](reproducibility/INTEGRITY_MANIFEST.json), recomputes model effects from public-safe frozen raw-result rows, validates registry/evidence hashes, and writes deterministic CSVs. See [`docs/reproducing_results.md`](docs/reproducing_results.md) and [`docs/methodology.md`](docs/methodology.md).
 
 ## Data provenance
 
@@ -92,3 +116,5 @@ Software citation metadata is provided in [`CITATION.cff`](CITATION.cff). DOI wi
 ## License
 
 Project code and documentation are licensed under the [MIT License](LICENSE). This license does not grant redistribution rights for LMD, PDMX, or other third-party datasets.
+
+The 30 traceable model checkpoints are released as a separate v1.0.0 companion archival artifact. The approved model-artifact policy is documented in [`docs/model_artifacts.md`](docs/model_artifacts.md); no model weights or dataset files are included in this software repository. Archival DOIs are assigned only during publication.

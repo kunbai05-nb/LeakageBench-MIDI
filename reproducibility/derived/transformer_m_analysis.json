@@ -1,0 +1,28 @@
+{
+  "bootstrap_draw_mode": "alternating",
+  "bootstrap_extreme_count": 0,
+  "bootstrap_samples": 10000,
+  "bootstrap_seed": 33918876,
+  "bootstrap_unit": "family",
+  "ci95": [
+    -0.09882363737480272,
+    -0.07292632319794395
+  ],
+  "clean_validation_drift": -0.003196352710650486,
+  "control_drift": -0.00445947550304951,
+  "family_manifest_validated": true,
+  "family_order": "input",
+  "p_correction": "add-one",
+  "p_two_sided": 9.999000099990002e-05,
+  "seed_effects": {
+    "202608100": -0.09340850003179157,
+    "202608101": -0.08876881458252206,
+    "202608102": -0.07496033097092719
+  },
+  "seed_fixed_effect": true,
+  "tau": -0.08571254852841363,
+  "three_of_three_seed_negative": true,
+  "treated_mean_delta": -0.09017202403146314,
+  "treated_negative_sign_rate": 0.97,
+  "treated_relative_nll_improvement": 0.10397596524069766
+}

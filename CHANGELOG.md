@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.0.0 candidate
+
+- Added fail-closed validation for contamination assignments, result pairing, family manifests, input values, split ratios, and undefined contamination denominators.
+- Reframed token replacement as approximately token-budget matched and exposed pairwise and total reconciliation metrics with optional tolerances.
+- Added normalized MIDI structural equivalence and the frozen normalized robustness evidence.
+- Replaced hardcoded paper fields with hash-validated reconstruction from public-safe frozen raw result rows and evidence.
+- Added an independent integrity manifest, seed-sensitivity disclosure, add-one bootstrap p-value reporting, and the LMD universe provenance limitation.
+- Scientific results unchanged.
+
 ## v1.0.0-rc2 — 2026-08-16
 
 - Normalized the public package to `leakagebench_midi`.

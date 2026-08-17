@@ -1,7 +1,7 @@
 {
   "title": "LeakageBench-MIDI: Measuring and Mitigating Same-Work Family Leakage in Symbolic Music Generation",
-  "version": "1.0.0-rc2",
-  "git_tag": "v1.0.0-rc2",
+  "version": "1.0.0",
+  "git_tag": "v1.0.0",
   "resource_type": "software",
   "license": "MIT",
   "description": "A reproducible framework for measuring prevalence, controlled downstream evaluation inflation, structurally non-exact robustness, model susceptibility, reduced protocol-eligible external evidence, and family-aware mitigation for same-work family leakage in symbolic music generation evaluation. The deposit redistributes no original LMD or PDMX music data.",
@@ -26,8 +26,7 @@
     }
   ],
   "repository_url": "https://github.com/kunbai05-nb/LeakageBench-MIDI",
-  "repository_status": "public GitHub repository; v1.0.0-rc2 prerelease",
-  "publication_date": "2026-08-16",
+  "repository_status": "public GitHub repository; v1.0.0 final release pending",
   "doi": null,
   "related_works": [
     {
@@ -43,5 +42,5 @@
       "relation": "references"
     }
   ],
-  "metadata_status": "GitHub prerelease metadata complete; archival deposit and DOI pending"
+  "metadata_status": "Final release date, archival deposit, and DOI pending"
 }

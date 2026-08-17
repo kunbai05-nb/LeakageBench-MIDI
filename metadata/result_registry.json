@@ -1,5 +1,5 @@
 {
-  "release": "LeakageBench-MIDI v1.0.0-rc1",
+  "release": "LeakageBench-MIDI v1.0.0",
   "results": [
     {
       "ci95": null,
@@ -38,11 +38,27 @@
       "model": "Transformer-L",
       "negative_families": "99/100",
       "parameter_count": 17821056,
+      "provenance": {
+        "analysis_output_path": "reproducibility/derived/transformer_l_analysis.json",
+        "analysis_output_sha256": "60d55723891c45546d18b3d70193a8485a674621f867c61d1b839547f0d42dbf",
+        "bootstrap_draw_mode": "alternating",
+        "bootstrap_samples": 10000,
+        "bootstrap_seed": 20260804,
+        "estimator": "family-level paired bootstrap; seed fixed effect",
+        "family_manifest_path": "reproducibility/raw_results/transformer_l_family_manifest.json",
+        "family_order": "sorted",
+        "raw_result_path": "reproducibility/raw_results/transformer_l.jsonl",
+        "raw_result_sha256": "a5149dd4d3971bf90e9f66ddb866f8d1409d3aa9b1b345ace4e77777227f1d69",
+        "table_linkage": [
+          "reproducibility/tables/confirmatory_effect.csv",
+          "reproducibility/tables/architecture_capacity.csv"
+        ]
+      },
       "relative_effect": 0.13617306555,
       "result_id": "lmd_transformer_l",
       "sample_or_family_count": 100,
       "seeds_negative": "3/3",
-      "source_artifact_sha256": "ad1be9ae32391d1f01aec96e87246e92d7195d3eaeb5d3883edb28b4a212afd6",
+      "source_artifact_sha256": "840104ea75ab356bf94a0b2051956cc2bb2f295ab8559b193c282c29f7d31f2d",
       "source_audit_path": "reproducibility/evidence/transformer_family_effect.json",
       "status": "CONFIRMATORY_FAMILY_LEAKAGE_PASS"
     },
@@ -90,10 +106,26 @@
       "interpretation_boundary": "Capacity and architecture association, not a universal scaling law.",
       "model": "Transformer-S",
       "parameter_count": 10942512,
+      "provenance": {
+        "analysis_output_path": "reproducibility/derived/transformer_s_analysis.json",
+        "analysis_output_sha256": "6e81a6d44c6e1bc87c929ff4680365f78819d48dfc55a0813648e2ba363a900b",
+        "bootstrap_draw_mode": "alternating",
+        "bootstrap_samples": 10000,
+        "bootstrap_seed": 31203324,
+        "estimator": "family-level paired bootstrap; seed fixed effect",
+        "family_manifest_path": "reproducibility/raw_results/transformer_s_family_manifest.json",
+        "family_order": "input",
+        "raw_result_path": "reproducibility/raw_results/transformer_s.jsonl",
+        "raw_result_sha256": "9317343791e98422a5908b1a0e23c9b401106a6cb8f47c376846161f3d482dc5",
+        "table_linkage": [
+          "reproducibility/tables/confirmatory_effect.csv",
+          "reproducibility/tables/architecture_capacity.csv"
+        ]
+      },
       "relative_effect": 0.08571583116,
       "result_id": "transformer_s",
       "sample_or_family_count": 100,
-      "source_artifact_sha256": "6977a9dfb360c31d27b28d1f0241ff6ecdc7f1b9a4293bfc5a74819e31fc9300",
+      "source_artifact_sha256": "b6d0bdd2b85dbfd9f15b3976d25f0272c2ea04c499696916d1d962ef687d7080",
       "source_audit_path": "reproducibility/evidence/transformer_capacity_effects.json",
       "status": "CAPACITY_AND_ARCHITECTURE"
     },
@@ -108,10 +140,26 @@
       "interpretation_boundary": "Capacity and architecture association, not a universal scaling law.",
       "model": "Transformer-M",
       "parameter_count": 13658064,
+      "provenance": {
+        "analysis_output_path": "reproducibility/derived/transformer_m_analysis.json",
+        "analysis_output_sha256": "4156572767eeddc17c7663f4d10856cae99b1bcce0d29dd220358f22d3edae75",
+        "bootstrap_draw_mode": "alternating",
+        "bootstrap_samples": 10000,
+        "bootstrap_seed": 33918876,
+        "estimator": "family-level paired bootstrap; seed fixed effect",
+        "family_manifest_path": "reproducibility/raw_results/transformer_m_family_manifest.json",
+        "family_order": "input",
+        "raw_result_path": "reproducibility/raw_results/transformer_m.jsonl",
+        "raw_result_sha256": "1a458a1565f442d0b1c5d95fcc85983ce9bf6bef15406c66c2a5b5fad2cc4f32",
+        "table_linkage": [
+          "reproducibility/tables/confirmatory_effect.csv",
+          "reproducibility/tables/architecture_capacity.csv"
+        ]
+      },
       "relative_effect": 0.10397596524,
       "result_id": "transformer_m",
       "sample_or_family_count": 100,
-      "source_artifact_sha256": "6977a9dfb360c31d27b28d1f0241ff6ecdc7f1b9a4293bfc5a74819e31fc9300",
+      "source_artifact_sha256": "b6d0bdd2b85dbfd9f15b3976d25f0272c2ea04c499696916d1d962ef687d7080",
       "source_audit_path": "reproducibility/evidence/transformer_capacity_effects.json",
       "status": "CAPACITY_AND_ARCHITECTURE"
     },
@@ -129,11 +177,27 @@
       "model": "TCN-384",
       "negative_families": "99/100",
       "parameter_count": 10753536,
+      "provenance": {
+        "analysis_output_path": "reproducibility/derived/tcn_analysis.json",
+        "analysis_output_sha256": "e3518aaf25ada4d2a5fe733aba02793748c9552d7abbe028148c053469e37f05",
+        "bootstrap_draw_mode": "vectorized_blocks",
+        "bootstrap_samples": 10000,
+        "bootstrap_seed": 20260870,
+        "estimator": "family-level paired bootstrap; seed fixed effect",
+        "family_manifest_path": "reproducibility/raw_results/tcn_family_manifest.json",
+        "family_order": "sorted",
+        "raw_result_path": "reproducibility/raw_results/tcn.jsonl",
+        "raw_result_sha256": "a7428bf1db3bcc7cf58f73d6580d433325dd97d3086763a12943271e56306e91",
+        "table_linkage": [
+          "reproducibility/tables/confirmatory_effect.csv",
+          "reproducibility/tables/architecture_capacity.csv"
+        ]
+      },
       "relative_effect": 0.02530064531,
       "result_id": "tcn_384",
       "sample_or_family_count": 100,
       "seeds_negative": "3/3",
-      "source_artifact_sha256": "dc65bb01c3bc2f3804af9c91e82d440b49601d396a19532cac1897eb4bc01ed3",
+      "source_artifact_sha256": "4fb3914121e6b88ca1382052c6df543af817ccef0608b725c8f149bd2a5e8a02",
       "source_audit_path": "reproducibility/evidence/tcn_family_effect.json",
       "status": "SECOND_ARCHITECTURE_TCN_REPLICATION_REJECTED"
     },
@@ -207,6 +271,22 @@
       "negative_family_rate": 0.9552238806,
       "original_100_family_gate": "failed",
       "parameter_count": 17821056,
+      "provenance": {
+        "analysis_output_path": "reproducibility/derived/pdmx_transformer_l_analysis.json",
+        "analysis_output_sha256": "dfd91f93118460e0823743d8b0c4995583c3a616431be12eca7dc634355266ea",
+        "bootstrap_draw_mode": "alternating",
+        "bootstrap_samples": 10000,
+        "bootstrap_seed": 20260813,
+        "estimator": "family-level paired bootstrap; seed fixed effect",
+        "family_manifest_path": "reproducibility/raw_results/pdmx_transformer_l_family_manifest.json",
+        "family_order": "sorted",
+        "raw_result_path": "reproducibility/raw_results/pdmx_transformer_l.jsonl",
+        "raw_result_sha256": "8ef5b9d18005f4c4eb1054a989705337d26c25f06174a709220fb24fc5bb27de",
+        "table_linkage": [
+          "reproducibility/tables/confirmatory_effect.csv",
+          "reproducibility/tables/architecture_capacity.csv"
+        ]
+      },
       "reduced_cohort_supported": true,
       "relative_effect": 0.11068005018,
       "result_id": "pdmx_reduced",
@@ -220,6 +300,24 @@
       "source_audit_path": "reproducibility/evidence/pdmx_reduced_effect.json",
       "status": "PDMX_REDUCED_EXTERNAL_EFFECT_SUPPORTED",
       "treated_n": 67
+    },
+    {
+      "ci95": [
+        -0.13945789815154971,
+        -0.09207913236010917
+      ],
+      "dataset": "LMD",
+      "effect": -0.1148488750406808,
+      "experiment": "Normalized structural-equivalence robustness",
+      "interpretation_boundary": "Stricter normalized MIDI structural equivalence; secondary robustness analysis using frozen results.",
+      "model": "Transformer-L",
+      "parameter_count": 17821056,
+      "relative_effect": 0.13470676014523217,
+      "result_id": "lmd_normalized_structurally_nonexact",
+      "sample_or_family_count": 50,
+      "source_artifact_sha256": "8d93807de5262fab62fc1e7a523f48c86558ae8789aa90b280149374b7aa04be",
+      "source_audit_path": "reproducibility/evidence/normalized_structural_effect.json",
+      "status": "SUPPORTED_SECONDARY_SENSITIVITY"
     }
   ]
 }

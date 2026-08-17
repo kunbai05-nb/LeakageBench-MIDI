@@ -16,16 +16,16 @@
       "permitted_wording": "Controlled designated-donor exposure reduced treated-family NLL relative to controls.",
       "support_status": "supported",
       "supporting_artifact": "reproducibility/evidence/transformer_family_effect.json",
-      "supporting_artifact_sha256": "ad1be9ae32391d1f01aec96e87246e92d7195d3eaeb5d3883edb28b4a212afd6"
+      "supporting_artifact_sha256": "840104ea75ab356bf94a0b2051956cc2bb2f295ab8559b193c282c29f7d31f2d"
     },
     {
       "claim_id": "C3",
-      "claim_text": "The Transformer effect persists for structurally non-exact variants.",
+      "claim_text": "The Transformer effect persists under normalized MIDI structural equivalence.",
       "forbidden_wording": "All non-exact works are distinct compositions.",
-      "permitted_wording": "The frozen structurally-nonexact LMD stratum showed a same-direction effect.",
+      "permitted_wording": "After normalized MIDI structural equivalence, 50/100 treated families remained structurally non-exact; the frozen effect remained strong (tau=-0.11485, 95% CI [-0.13946,-0.09208]).",
       "support_status": "supported_secondary",
-      "supporting_artifact": "reproducibility/evidence/structurally_nonexact_effect.json",
-      "supporting_artifact_sha256": "6349e5c91c1adc240ce480ec46aef93ef434eaec486dd85aff2e45fb8241ae84"
+      "supporting_artifact": "reproducibility/evidence/normalized_structural_effect.json",
+      "supporting_artifact_sha256": "8d93807de5262fab62fc1e7a523f48c86558ae8789aa90b280149374b7aa04be"
     },
     {
       "claim_id": "C4",
@@ -34,7 +34,7 @@
       "permitted_wording": "Results support capacity-and-architecture dependence in the evaluated configurations.",
       "support_status": "supported",
       "supporting_artifact": "reproducibility/evidence/transformer_capacity_effects.json",
-      "supporting_artifact_sha256": "6977a9dfb360c31d27b28d1f0241ff6ecdc7f1b9a4293bfc5a74819e31fc9300"
+      "supporting_artifact_sha256": "b6d0bdd2b85dbfd9f15b3976d25f0272c2ea04c499696916d1d962ef687d7080"
     },
     {
       "claim_id": "C5",
@@ -64,5 +64,5 @@
       "supporting_artifact_sha256": "77d58447908292130f76303fe93623520aa5252e52c6196e2fc6cb2a416d61ac"
     }
   ],
-  "release": "LeakageBench-MIDI v1.0.0-rc1"
+  "release": "LeakageBench-MIDI v1.0.0"
 }

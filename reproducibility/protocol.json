@@ -3,7 +3,7 @@
   "confirmatory_bootstrap_samples": 10000,
   "context_length": 1024,
   "family_assignment_atomic": true,
-  "release": "LeakageBench-MIDI v1.0.0-rc1",
+  "release": "LeakageBench-MIDI v1.0.0",
   "result_recomputation": false,
   "training_allowed_in_release_reproduction": false,
   "transformer_l": {
@@ -15,4 +15,3 @@
     "rope": true
   }
 }
-

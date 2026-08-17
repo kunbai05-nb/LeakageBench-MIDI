@@ -10,7 +10,7 @@ For each frozen treated family, one receiver and one designated donor are select
 
 ## Token-budget matching
 
-Adding donor tokens changes optimization exposure. LeakageBench deterministically removes matched family-disjoint base samples so clean and family-leak conditions have matched token budgets. This isolates donor-family exposure from corpus-size effects.
+Adding donor tokens changes optimization exposure. LeakageBench deterministically removes nearest-token family-disjoint base samples, producing approximately token-budget-matched clean and family-leak conditions. The formal runs' maximum total relative difference was `5.062852358702753e-07`. No preregistered token tolerance existed, so this observed value is disclosed rather than promoted to a post-hoc threshold. The toolkit records pairwise and total differences and optionally enforces user-specified tolerances.
 
 ## Controls and estimand
 
@@ -27,4 +27,3 @@ Seed effects are removed through within-seed differences. Families receive equal
 ## Bootstrap
 
 Confidence intervals use a frozen-seed, family-cluster bootstrap. The family—not a window, note, or token—is the statistical unit. Treating windows as independent would understate uncertainty.
-

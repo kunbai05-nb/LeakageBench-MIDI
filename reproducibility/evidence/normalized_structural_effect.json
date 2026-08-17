@@ -1,0 +1,24 @@
+{
+  "bootstrap_samples": 10000,
+  "ci95": [
+    -0.13945789815154971,
+    -0.09207913236010917
+  ],
+  "classification": "FORMAL_RESULT_NEEDS_SENSITIVITY",
+  "core_result_strong_arrangement_level_supported": true,
+  "estimator": "same frozen treated delta minus all-control delta; family-equal pooled means",
+  "estimator_provenance": "Frozen per-family/per-seed NLL; treated-minus-control family-level paired bootstrap; no training or re-evaluation.",
+  "frozen_results_only": true,
+  "n_families": 50,
+  "normalization_version": "normalized-midi-structure-v1",
+  "normalized_nonexact_families": 50,
+  "original_nonexact_families": 95,
+  "relative_treated_nll_improvement": 0.13470676014523217,
+  "seed_wise_effects": {
+    "seed_202608040": -0.11612554997849951,
+    "seed_202608041": -0.10096776041264771,
+    "seed_202608042": -0.1274533147308952
+  },
+  "source_raw_result_sha256": "a5149dd4d3971bf90e9f66ddb866f8d1409d3aa9b1b345ace4e77777227f1d69",
+  "tau": -0.1148488750406808
+}

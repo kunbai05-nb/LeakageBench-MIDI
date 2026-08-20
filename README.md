@@ -28,23 +28,26 @@ The demo creates synthetic MIDI files locally in the selected output directory; 
 
 ## Strong paper-statistics reproduction
 
-This release includes a public-safe minimum sufficient dataset: anonymous
+This release includes a public-safe analysis bundle: anonymous
 per-family/per-seed model objectives, family-level generation and mechanism
 metrics, family-size statistics, and all 2,900 mitigation-robustness simulation
 runs. It contains scalar measurements only—no MIDI, token sequences, file
 identities, original family hashes, or checkpoints.
 
-Recompute every numerical field used by `manuscript_results_v2`:
+Audit every numerical field used by `manuscript_results_v2`:
 
 ```bash
 python scripts/reproduce_paper_statistics.py --output ./_reproduced_paper_statistics
 ```
 
 The command verifies the reproduction-data manifest, reruns deterministic
-estimators and bootstraps, and writes a field-by-field audit. The expected
-release status is 232 numerical fields passed, zero mismatches, zero
-unreproduced fields, and three qualitative/intentionally-missing entries marked
-not applicable. It is CPU-only and does not access the network.
+estimators where the public rows are sufficient, and writes provenance for
+every field. The expected release status is 232 numerical fields passed: 193
+recomputed from public rows and 39 verified against frozen nonidentifying
+summaries, with zero mismatches, zero unreproduced fields, and three
+qualitative/intentionally-missing entries marked not applicable. It is
+CPU-only and does not access the network. “Verified” is not presented as
+independent recomputation.
 
 For a single-command reviewer workflow that recomputes the paper statistics,
 verifies and materializes the frozen typeset artifacts, and runs the public
@@ -73,10 +76,11 @@ python scripts/reproduce_public_results.py --output ./_reproduced_results
 ```
 
 This verifies and materializes the frozen typeset artifacts after the paper
-statistics can be independently recomputed as above. It does not retrain
+statistics have been audited as above. It does not retrain
 models or reconstruct restricted datasets. Training reproduction requires
 users to obtain the underlying datasets under their own terms and follow the
-frozen method described in [METHODS_PUBLIC.md](docs/METHODS_PUBLIC.md).
+frozen method described in [METHODS_PUBLIC.md](docs/METHODS_PUBLIC.md) and the
+detailed [public v2 protocol](docs/PROTOCOL_V2.md).
 
 ## Tests
 
@@ -88,9 +92,10 @@ The tests cover family-component construction, leakage auditing, component-aware
 
 ## Companion model checkpoints
 
-The separately archived **LeakageBench-MIDI Model Checkpoints v1.1.0** package is
-licensed under CC-BY-4.0 to the extent of rights held by the authors. It is split
-by architecture so users can download only the model families they need. Every
+The current **LeakageBench-MIDI v1.1.2** GitHub release includes the unchanged
+**Model Checkpoints v1.1.0** companion assets. The weights are licensed under
+CC-BY-4.0 to the extent of rights held by the authors and are split by
+architecture so users can download only the model families they need. Every
 checkpoint records its condition, seed, configuration, source-checkpoint hash,
 and paper role in `MODEL_MANIFEST.json`.
 
@@ -102,13 +107,25 @@ from leakagebench_midi.models import load_checkpoint
 model, metadata = load_checkpoint("path/to/seed_202608040.pt", map_location="cpu")
 ```
 
+Verify a complete extracted companion directory without training:
+
+```bash
+python scripts/verify_model_checkpoints.py \
+  ../models/LeakageBench-MIDI-Model-Checkpoints-v1.1.0
+```
+
+The expected result is 60/60 integrity and strict-load passes plus five/five
+representative fixed-input output checks. These are final inference-only
+weights; optimizer, scheduler, RNG state, and intermediate checkpoints are not
+included.
+
 Phase-2 covers `clean`, `unrelated_donor`, and `same_family_donor` for all three
 formal seeds. Conditional VAE and Latent Diffusion use the same three-condition
 coverage. Each diffusion checkpoint must be paired with the neutral encoder of
 the same seed identified by `linked_encoder_model_id`. The checkpoint package is
 not needed to recompute the released paper statistics, but it supports direct
 inference and model-level inspection. Download the grouped assets from the
-[model checkpoint release](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/tag/models-v1.1.0).
+[current consolidated release](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/tag/v1.1.2).
 
 ## Repository structure
 
@@ -122,20 +139,23 @@ inference and model-level inspection. Download the grouped assets from the
   statistics, a data dictionary, and a hash manifest.
 - `examples/`: self-contained synthetic example specification.
 
-A Chinese file-by-file guide to every public artifact is available in
-[docs/PUBLIC_FILE_GUIDE_CN.md](docs/PUBLIC_FILE_GUIDE_CN.md).
-
 ## Scientific scope
 
 File identity is not necessarily musical-work identity. Multiple exports, arrangements, transcriptions, and versions can cross a random file split. LeakageBench-MIDI audits the resulting known family crossings and provides family/component-atomic splitting. Family labels have incomplete coverage, and detector quality must be reported through relation, pairwise, and component-level metrics. NLL effects do not by themselves establish perceptual quality or plagiarism.
 
+The available family evidence and missing human-annotation boundary are
+reported in [family_reference_validation.md](docs/family_reference_validation.md).
+The official 176,581-file count and frozen 178,561-identity downstream count
+are intentionally kept as separate provenance scopes in
+[data_provenance.md](docs/data_provenance.md); their 1,980 difference is not
+given an unsupported causal explanation.
+
 ## Citation and license
 
-Citation metadata are in [CITATION.cff](CITATION.cff). Cite the immutable v1.1.1
-archive with DOI
-[`10.5281/zenodo.22023101`](https://doi.org/10.5281/zenodo.22023101). Use the
-concept DOI [`10.5281/zenodo.22023100`](https://doi.org/10.5281/zenodo.22023100)
-when referring to the software project across versions.
+Citation metadata are in [CITATION.cff](CITATION.cff). Cite the current software
+through the version-independent concept DOI
+[`10.5281/zenodo.22023100`](https://doi.org/10.5281/zenodo.22023100), which
+resolves to the latest retained Zenodo record.
 
 Project code and documentation are released under the [MIT License](LICENSE);
 that license does not grant redistribution rights for third-party music

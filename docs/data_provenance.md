@@ -1,9 +1,9 @@
 # Data provenance
 
-The immutable public software archive for release v1.1.1 is registered as
-[10.5281/zenodo.22023101](https://doi.org/10.5281/zenodo.22023101). The
-version-independent project identifier is
-[10.5281/zenodo.22023100](https://doi.org/10.5281/zenodo.22023100).
+The current public software archive is registered under the
+version-independent project identifier
+[10.5281/zenodo.22023100](https://doi.org/10.5281/zenodo.22023100), which
+resolves to the latest retained Zenodo record.
 
 ## LMD v0.1 official count
 
@@ -19,6 +19,21 @@ The frozen full-LMD census uses **178,561 identities**. The earliest retained lo
 - 119,630 archive identities outside those multi-member components.
 
 The corresponding frozen Monte Carlo result artifact has SHA-256 `9607daf226a6e51f281f6c52eb06c5a7c701309ca2f2e51b6febc61cfedfc84b`. This release does not redistribute the archive, its MIDI bytes, or a private identity manifest.
+
+## Count ledger
+
+| Count | Meaning | Role in the paper |
+|---:|---|---|
+| 176,581 | Official LMD v0.1 MD5-distinct count | External dataset-documentation reference; not asserted to be the direct input row count of the frozen census |
+| 178,561 | Distinct archive-header identities in the retained downstream inventory | Denominator for the frozen census and split simulations |
+| 58,931 | Downstream identities in adopted multi-member components | Known multi-member family coverage |
+| 119,630 | Downstream identities outside adopted multi-member components | Treated as singleton components in the frozen census |
+| 1,980 | Arithmetic difference between 178,561 and 176,581 | Unresolved provenance difference; not interpreted as added, duplicated, or recovered files |
+
+The two top-line counts are parallel provenance facts, not consecutive rows in
+a demonstrated processing flow. No file-level bridge table is retained or
+published, so presenting 176,581 → 178,561 as a known transformation would be
+unsupported.
 
 ## Adopted family resource
 
@@ -47,6 +62,10 @@ supplements were recorded at revision
 ## What is not independently reconstructed
 
 The exact transformation from the official 176,581 count to the frozen 178,561 identity inventory is **not independently reconstructed by this release**. Existing records do not prove a one-to-one conversion, enumerate a 1,980-item difference, or justify a causal explanation for that difference. The counts refer to different processing/provenance scopes. This release does not claim that 178,561 is the original LMD v0.1 file count and does not claim that the number itself comes directly from Choi et al.'s processing universe.
+
+This means that a reviewer can reproduce the reported statistics conditional
+on the frozen downstream inventory, but cannot use this public release to audit
+the identity-level transition from the provider's count to that inventory.
 
 ## Why frozen downstream statistics do not change
 

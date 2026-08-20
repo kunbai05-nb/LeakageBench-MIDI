@@ -2,9 +2,11 @@
 """Recompute paper statistics from the public-safe analysis-unit bundle.
 
 No MIDI, token sequence, checkpoint, GPU, or network access is required.
-The script writes a machine-readable field audit plus compact regenerated
-tables/figures.  Expensive model fitting/training is intentionally out of
-scope; its already-produced anonymous per-family outputs are the inputs.
+The script writes a machine-readable field audit and a compact Markdown
+summary. Expensive model fitting/training is intentionally out of scope; its
+already-produced anonymous per-family outputs are the inputs. Each numerical
+field is explicitly labelled as recomputed from public rows or verified from
+a frozen aggregate summary.
 """
 from __future__ import annotations
 
@@ -25,6 +27,8 @@ DATA = ROOT / "reproduction/data"
 FROZEN = ROOT / "reproduction/frozen"
 EXPECTED = ROOT / "results/manuscript_results_v2_public.json"
 NUMERIC_FIELDS = ("mean_a", "mean_b", "effect", "relative_effect", "ci_low", "ci_high", "p_raw", "p_adjusted")
+RECOMPUTED = "RECOMPUTED_FROM_PUBLIC_ROWS"
+VERIFIED = "VERIFIED_FROM_FROZEN_SUMMARY"
 
 
 def load_json(path: Path):
@@ -53,6 +57,10 @@ def is_finite(value) -> bool:
 
 def bootstrap_mean(values, seed: int, samples: int = 10_000, plus_one: bool = False) -> dict:
     values = np.asarray(values, dtype=float)
+    if values.size == 0 or not np.isfinite(values).all():
+        raise ValueError("bootstrap values must be non-empty and finite")
+    if samples <= 0:
+        raise ValueError("bootstrap samples must be positive")
     rng = np.random.default_rng(seed)
     draws = values[rng.integers(0, len(values), size=(samples, len(values)))].mean(axis=1)
     lower, upper = int(np.count_nonzero(draws <= 0)), int(np.count_nonzero(draws >= 0))
@@ -73,6 +81,10 @@ def bootstrap_mean(values, seed: int, samples: int = 10_000, plus_one: bool = Fa
 def bootstrap_mean_loop(values, seed: int, samples: int = 10_000, plus_one: bool = False) -> dict:
     """Exact loop-based bootstrap used by the Phase-2 formal postprocessor."""
     values = np.asarray(values, dtype=float)
+    if values.size == 0 or not np.isfinite(values).all():
+        raise ValueError("bootstrap values must be non-empty and finite")
+    if samples <= 0:
+        raise ValueError("bootstrap samples must be positive")
     rng = np.random.default_rng(seed)
     draws = np.asarray([rng.choice(values, size=len(values), replace=True).mean() for _ in range(samples)])
     lower, upper = int(np.count_nonzero(draws <= 0)), int(np.count_nonzero(draws >= 0))
@@ -82,6 +94,10 @@ def bootstrap_mean_loop(values, seed: int, samples: int = 10_000, plus_one: bool
 
 def bootstrap_difference(left, right, seed: int, samples: int = 10_000) -> dict:
     left, right = np.asarray(left, float), np.asarray(right, float)
+    if left.size == 0 or right.size == 0 or not np.isfinite(left).all() or not np.isfinite(right).all():
+        raise ValueError("bootstrap groups must be non-empty and finite")
+    if samples <= 0:
+        raise ValueError("bootstrap samples must be positive")
     rng = np.random.default_rng(seed)
     draws = np.asarray([
         rng.choice(left, len(left), True).mean() - rng.choice(right, len(right), True).mean()
@@ -99,12 +115,14 @@ def bootstrap_difference(left, right, seed: int, samples: int = 10_000) -> dict:
 class Audit:
     def __init__(self, expected: dict[str, dict]):
         self.expected = expected
-        self.values: dict[str, dict[str, tuple[object, str, float]]] = defaultdict(dict)
+        self.values: dict[str, dict[str, tuple[object, str, str, float]]] = defaultdict(dict)
 
-    def add(self, result_id: str, method: str, tolerance: float = 1e-10, **values) -> None:
+    def add(self, result_id: str, method: str, provenance: str = RECOMPUTED, tolerance: float = 1e-10, **values) -> None:
+        if provenance not in {RECOMPUTED, VERIFIED}:
+            raise ValueError(f"unsupported audit provenance: {provenance}")
         for field, value in values.items():
             if value is not None:
-                self.values[result_id][field] = (value, method, tolerance)
+                self.values[result_id][field] = (value, method, provenance, tolerance)
 
     def rows(self) -> list[dict]:
         rows = []
@@ -118,7 +136,7 @@ class Audit:
                 if item is None:
                     rows.append({"result_id": rid, "field": field, "expected": expected[field], "recomputed": "", "absolute_difference": "", "tolerance": "", "method": "unavailable", "status": "UNREPRODUCED"})
                     continue
-                value, method, tolerance = item
+                value, method, provenance, tolerance = item
                 # Values extracted from display-oriented tables are sometimes
                 # intentionally rounded.  Infer half-unit-in-last-place from
                 # the expected decimal representation while keeping full-
@@ -128,7 +146,7 @@ class Audit:
                     decimals = len(text.split(".", 1)[1])
                     tolerance = max(tolerance, 0.5000001 * 10 ** (-decimals))
                 delta = abs(float(value) - float(expected[field]))
-                rows.append({"result_id": rid, "field": field, "expected": expected[field], "recomputed": value, "absolute_difference": delta, "tolerance": tolerance, "method": method, "status": "PASS" if delta <= tolerance else "MISMATCH"})
+                rows.append({"result_id": rid, "field": field, "expected": expected[field], "recomputed": value, "absolute_difference": delta, "tolerance": tolerance, "method": method, "provenance": provenance, "status": "PASS" if delta <= tolerance else "MISMATCH"})
         return rows
 
 
@@ -183,23 +201,61 @@ def legacy_and_capacity(audit: Audit) -> None:
         rid = result_ids[model]
         audit.add(rid, "recomputed_from_anonymous_family_seed_nll", tolerance=5e-5, **stat, relative_effect=float(-tv.mean() / clean_nll), n_families=len(tv))
 
-    # Legacy confirmatory uses the same family rows but a separately frozen bootstrap.
-    confirm = load_json(FROZEN / "confirmatory_summary.json")["H1"]
-    audit.add("lmd_transformer_l_legacy_confirmatory", "point_estimate_recomputed; CI/p verified_from_public_frozen_preregistered_summary",
-              effect=confirm["tau"], relative_effect=confirm["treated_relative_nll_improvement"], ci_low=confirm["ci95"][0], ci_high=confirm["ci95"][1], p_raw=confirm["p_two_sided"], n_families=100, n_seeds=3, bootstrap_B=confirm["bootstrap_samples"])
+    # Re-run the exact legacy confirmatory estimator: pool each family over the
+    # three training seeds, then independently resample treated and control
+    # families with the preregistered bootstrap seed 20260804.
+    legacy_rows = read_csv(DATA / "legacy_nll_rows.csv")
+    legacy_by = pooled_nll([row for row in legacy_rows if row["model"] == "transformer_l_legacy"])
+    # The formal script sorted the original family identifiers before drawing
+    # bootstrap indices.  Public IDs preserve that order in ``family_order``;
+    # sorting the pseudonyms themselves would change the deterministic draws.
+    legacy_order = {
+        row["family_id"]: int(row["family_order"])
+        for row in legacy_rows
+        if row["model"] == "transformer_l_legacy"
+    }
+    legacy_treated_ids = sorted(
+        legacy_by["transformer_l_legacy", 0, "clean", "treated"], key=legacy_order.get
+    )
+    legacy_control_ids = sorted(
+        legacy_by["transformer_l_legacy", 0, "clean", "control"], key=legacy_order.get
+    )
+    legacy_treated = np.asarray([
+        mean(legacy_by["transformer_l_legacy", seed, "family_leak", "treated"][family]
+             - legacy_by["transformer_l_legacy", seed, "clean", "treated"][family]
+             for seed in range(3))
+        for family in legacy_treated_ids
+    ])
+    legacy_control = np.asarray([
+        mean(legacy_by["transformer_l_legacy", seed, "family_leak", "control"][family]
+             - legacy_by["transformer_l_legacy", seed, "clean", "control"][family]
+             for seed in range(3))
+        for family in legacy_control_ids
+    ])
+    legacy_clean_nll = mean(
+        legacy_by["transformer_l_legacy", seed, "clean", "treated"][family]
+        for seed in range(3) for family in legacy_treated_ids
+    )
+    legacy_stat = bootstrap_difference(legacy_treated, legacy_control, 20260804)
+    audit.add("lmd_transformer_l_legacy_confirmatory", "exact_preregistered_estimator_recomputed_from_public_family_seed_nll",
+              effect=legacy_stat["effect"], relative_effect=float(-legacy_treated.mean() / legacy_clean_nll),
+              ci_low=legacy_stat["ci_low"], ci_high=legacy_stat["ci_high"], p_raw=legacy_stat["p_raw"],
+              n_families=len(legacy_treated), n_seeds=3, bootstrap_B=10000)
 
     # Normalized structurally-nonexact receiver sensitivity, joined by public family ID.
     labels = {r["family_id"]: r["normalized_classification"] for r in read_csv(DATA / "normalized_subset_rows.csv")}
-    lrows = read_csv(DATA / "legacy_nll_rows.csv")
-    lby = pooled_nll([r for r in lrows if r["model"] == "transformer_l_legacy"])
+    lby = legacy_by
     selected = sorted(fam for fam, label in labels.items() if label == "NORMALIZED_STRUCTURAL_NONEXACT")
     treated = [mean(lby["transformer_l_legacy", seed, "family_leak", "treated"][fam] - lby["transformer_l_legacy", seed, "clean", "treated"][fam] for seed in range(3)) for fam in selected]
     controls = [mean(lby["transformer_l_legacy", seed, "family_leak", "control"][fam] - lby["transformer_l_legacy", seed, "clean", "control"][fam] for seed in range(3)) for fam in lby["transformer_l_legacy", 0, "clean", "control"]]
     clean_subset = mean(lby["transformer_l_legacy", seed, "clean", "treated"][fam] for seed in range(3) for fam in selected)
     normalized = load_json(FROZEN / "normalized_structural_summary.json")
-    audit.add("lmd_structurally_nonexact_normalized", "point_estimate_recomputed_from_joined_public_rows; CI verified_from_public_frozen_summary",
+    audit.add("lmd_structurally_nonexact_normalized", "point_estimate_recomputed_from_joined_public_rows",
               effect=mean(treated) - mean(controls), relative_effect=-mean(treated) / clean_subset,
-              ci_low=normalized["ci95"][0], ci_high=normalized["ci95"][1], n_families=len(selected), bootstrap_B=normalized["bootstrap_samples"])
+              n_families=len(selected))
+    audit.add("lmd_structurally_nonexact_normalized", "verified_from_frozen_normalized_structural_bootstrap_summary",
+              provenance=VERIFIED, ci_low=normalized["ci95"][0], ci_high=normalized["ci95"][1],
+              n_families=len(selected), bootstrap_B=normalized["bootstrap_samples"])
 
     # Family-disjoint clean-test generalization control.
     clean_test = read_csv(DATA / "clean_test_nll_rows.csv")
@@ -262,11 +318,15 @@ def cross_paradigm(audit: Audit) -> None:
         pooled = {condition: {fam: mean(grouped[paradigm, seed, condition][fam] for seed in (202608040, 202608041, 202608042)) for fam in fams} for condition in ("clean", "unrelated_donor", "same_family_donor")}
         diffs = np.asarray([pooled["same_family_donor"][fam] - pooled["unrelated_donor"][fam] for fam in fams])
         stat = bootstrap_mean_loop(diffs, 20260818)
-        rng = np.random.default_rng(20260818)
+        # The frozen analysis reserved bootstrap_seed + 1 for the paired sign
+        # randomization, so its stream is independent of the CI bootstrap.
+        rng = np.random.default_rng(20260819)
         null = (diffs * rng.choice((-1.0, 1.0), size=(10000, len(diffs)))).mean(axis=1)
         p_sign = float((np.count_nonzero(np.abs(null) >= abs(diffs.mean())) + 1) / 10001)
-        frozen = load_json(FROZEN / "cross_paradigm_summary.json")["paradigms"][paradigm]["primary_effect"]
-        audit.add(rid, "point_and_CI_recomputed_from_public_family_rows; sign-randomization verified_from_public_summary", mean_a=mean(pooled["same_family_donor"].values()), mean_b=mean(pooled["unrelated_donor"].values()), effect=mean(diffs), ci_low=stat["ci_low"], ci_high=stat["ci_high"], p_raw=frozen["p_two_sided_sign_randomization"], n_families=100, n_seeds=3, bootstrap_B=10000)
+        audit.add(rid, "point_CI_and_sign_randomization_recomputed_from_public_family_rows",
+                  mean_a=mean(pooled["same_family_donor"].values()), mean_b=mean(pooled["unrelated_donor"].values()),
+                  effect=mean(diffs), ci_low=stat["ci_low"], ci_high=stat["ci_high"], p_raw=p_sign,
+                  n_families=100, n_seeds=3, bootstrap_B=10000)
 
 
 def pdmx(audit: Audit) -> None:
@@ -308,9 +368,11 @@ def musical_and_generation(audit: Audit) -> None:
         key = f"transformer_l|{metric}|same_minus_unrelated"
         c = canonical[key]
         t = three_condition.get(key, c)
-        audit.add(rid, "point_estimate_recomputed_from_public_family_metrics; canonical_bootstrap_and_Holm_verified_from_public_stat_audit",
-                  mean_a=mean(left[x] for x in fams), mean_b=mean(right[x] for x in fams), effect=mean(diffs),
-                  ci_low=f(t["ci95_low"]), ci_high=f(t["ci95_high"]), p_raw=f(t["raw_p"]), p_adjusted=f(c["global_holm_p"]))
+        audit.add(rid, "point_estimate_recomputed_from_public_family_metrics",
+                  mean_a=mean(left[x] for x in fams), mean_b=mean(right[x] for x in fams), effect=mean(diffs))
+        audit.add(rid, "verified_from_frozen_canonical_bootstrap_and_multiplicity_audit", provenance=VERIFIED,
+                  ci_low=f(t["ci95_low"]), ci_high=f(t["ci95_high"]), p_raw=f(t["raw_p"]),
+                  p_adjusted=f(c["global_holm_p"]))
 
     generation = metric_rows(DATA / "generation_family_metrics.csv")
     gsummary = load_json(FROZEN / "generation_statistics_summary.json")["results"]["transformer_l"]["same_minus_unrelated"]
@@ -377,10 +439,10 @@ def mitigation_and_imperfect(audit: Audit) -> None:
     for key, rid in (("S0", "mitigation_s0"), ("S1", "mitigation_s1"), ("S2", "mitigation_s2")):
         row = mitigation[key]
         effect = cost["component_assignment"]["file_reassignment_ratio"] if key == "S2" else 0.0
-        audit.add(rid, "verified_from_public_nonidentifying_split_sufficient_statistics", tolerance=5e-4,
+        audit.add(rid, "verified_from_public_nonidentifying_split_sufficient_statistics", provenance=VERIFIED, tolerance=5e-4,
                   mean_a=row["family_overlap_count"], mean_b=row["discarded_token_ratio"], effect=effect, n_files=row["files_retained"])
     delete = cost["delete_all_multimember_families_counterfactual"]
-    audit.add("mitigation_delete_all_multifamily", "verified_from_public_counterfactual_sufficient_statistics", tolerance=5e-4,
+    audit.add("mitigation_delete_all_multifamily", "verified_from_public_counterfactual_sufficient_statistics", provenance=VERIFIED, tolerance=5e-4,
               mean_a=delete["token_deletion_ratio"], n_files=cost["source_files"] - delete["files_deleted"])
 
     rows = read_csv(DATA / "imperfect_inference_runs.csv")
@@ -420,11 +482,32 @@ def write_outputs(output: Path, rows: list[dict]) -> None:
         writer = csv.DictWriter(handle, fieldnames=fields); writer.writeheader(); writer.writerows(rows)
     counts = defaultdict(int)
     for row in rows: counts[row["status"]] += 1
-    payload = {"status": "PASS" if not counts["MISMATCH"] and not counts["UNREPRODUCED"] else "FAIL", "field_status_counts": dict(counts), "formal_results_changed": False, "formal_protocol_changed": False, "gpu_required": False}
+    provenance_counts = defaultdict(int)
+    for row in rows:
+        if row.get("provenance"):
+            provenance_counts[row["provenance"]] += 1
+    payload = {
+        "status": "PASS" if not counts["MISMATCH"] and not counts["UNREPRODUCED"] else "FAIL",
+        "field_status_counts": dict(counts),
+        "numeric_field_provenance_counts": dict(provenance_counts),
+        "interpretation": {
+            RECOMPUTED: "calculated from public analysis rows or public simulation rows",
+            VERIFIED: "compared with a released frozen aggregate because public analysis rows are insufficient to reconstruct the exact display-chain statistic",
+        },
+        "formal_results_changed": False,
+        "formal_protocol_changed": False,
+        "gpu_required": False,
+    }
     (output / "REPRODUCTION_STATUS.json").write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     by_result = defaultdict(list)
     for row in rows: by_result[row["result_id"]].append(row)
-    lines = ["# Recomputed paper-statistics audit", "", "| Result | Fields | Status |", "|---|---:|---|"]
+    lines = [
+        "# Paper-statistics audit", "",
+        f"- Numerical fields recomputed from public rows: **{provenance_counts[RECOMPUTED]}**",
+        f"- Numerical fields verified from frozen summaries: **{provenance_counts[VERIFIED]}**",
+        "",
+        "| Result | Fields | Status |", "|---|---:|---|",
+    ]
     for rid, items in sorted(by_result.items()):
         status = "PASS" if all(x["status"] in ("PASS", "NOT_APPLICABLE") for x in items) else "FAIL"
         lines.append(f"| `{rid}` | {len(items)} | {status} |")
@@ -436,8 +519,10 @@ def verify_manifest() -> None:
     manifest = load_json(ROOT / "reproduction/PUBLIC_REPRODUCTION_MANIFEST.json")
     for item in manifest["files"]:
         path = ROOT / item["path"]
+        if not path.is_file():
+            raise SystemExit(f"reproduction manifest failure: missing {item['path']}")
         digest = hashlib.sha256(path.read_bytes()).hexdigest()
-        if not path.is_file() or path.stat().st_size != item["bytes"] or digest != item["sha256"]:
+        if path.stat().st_size != item["bytes"] or digest != item["sha256"]:
             raise SystemExit(f"reproduction manifest failure: {item['path']}")
 
 

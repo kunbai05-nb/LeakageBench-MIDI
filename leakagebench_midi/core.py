@@ -390,6 +390,8 @@ def validate_family_manifest(rows, manifest):
 
 
 def analyze_effect(rows, bootstrap_samples=10000, bootstrap_seed=0, *, family_manifest=None, require_validation=True, bootstrap_draw_mode="alternating", family_order="sorted"):
+    if not isinstance(bootstrap_samples, int) or isinstance(bootstrap_samples, bool) or bootstrap_samples <= 0:
+        raise ValueError("bootstrap_samples must be a positive integer")
     if not rows:
         raise ValueError("result rows are empty")
     key_counts = Counter()
@@ -480,8 +482,8 @@ def analyze_effect(rows, bootstrap_samples=10000, bootstrap_seed=0, *, family_ma
     return {
         "tau": tau,
         "ci95": [float(np.quantile(draws, .025)), float(np.quantile(draws, .975))],
-        "p_two_sided": (extreme_count + 1) / (bootstrap_samples + 1),
-        "p_correction": "add-one",
+        "p_two_sided": min(1.0, 2.0 * (extreme_count + 1) / (bootstrap_samples + 1)),
+        "p_correction": "two-sided add-one",
         "bootstrap_extreme_count": extreme_count,
         "seed_effects": seed_effects,
         "three_of_three_seed_negative": len(ordered_seeds) == 3 and all(x < 0 for x in seed_effects.values()),

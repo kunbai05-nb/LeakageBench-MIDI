@@ -67,11 +67,6 @@
       "sha256": "e91bba1c9d75e53b6d79959c748f31466150c72ad087ee113fb1331a39e153ee"
     },
     {
-      "bytes": 9276,
-      "path": "tables/MAIN_6_TABLES_FINAL_CN.md",
-      "sha256": "465573ede5cb10ed6c64b80d10ee8be635dc3fc2680c6d1a81d6c84e0e4e6666"
-    },
-    {
       "bytes": 6503,
       "path": "tables/table1_final.svg",
       "sha256": "c815380d18f8aa3b9838f72722795e05eef4fcede5c87a11904e4d3e4962036a"

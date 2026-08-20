@@ -78,6 +78,11 @@ def test_missing_pairs_empty_groups_and_nonfinite():
   q=[dict(x) for x in r];q[0]['nll']=val
   with pytest.raises(ValueError,match='non-finite'):analyze_effect(q)
 
+@pytest.mark.parametrize('samples', [0, -1, 1.5, True])
+def test_bootstrap_samples_must_be_positive_integer(samples):
+ with pytest.raises(ValueError, match='positive integer'):
+  analyze_effect(result_rows(), bootstrap_samples=samples)
+
 def test_zero_denominator_is_undefined():
  out=audit_split([{'id':'a','family_id':'a','tokens':1,'split':'train'}])
  assert out['test_file_contamination_rate'] is None and out['test_family_contamination_rate'] is None

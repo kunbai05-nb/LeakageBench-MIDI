@@ -7,8 +7,11 @@ redistribution or zero-cost retraining.
   data-governance reasons.
 - Training checkpoints are prepared as a separately governed companion
   artifact but are not included in this GitHub tree.
-- Published anonymous model-output rows allow exact re-analysis of the paper's
-  claims but do not regenerate those outputs from MIDI.
+- Published anonymous model-output rows support exact re-analysis where the
+  released units are sufficient but do not regenerate those outputs from MIDI.
+- Of 232 numerical fields, 193 are recomputed from public rows and 39 are
+  verified against frozen nonidentifying summaries; the latter are not
+  independent recomputations.
 - The adopted graph is a reference known-family relation. It is neither
   complete ground truth nor a universal detector.
 - Zero overlap means zero known overlap under that reference relation.

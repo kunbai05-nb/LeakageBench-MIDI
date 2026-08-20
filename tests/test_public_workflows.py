@@ -26,7 +26,9 @@ def test_bootstrap_determinism():
    for f in fs:
     common={'dataset':'synthetic','architecture':'toy','model_size':'tiny','seed':s,'split':split,'family_id':f}
     rows += [{**common,'condition':'clean','nll':2},{**common,'condition':'family_leak','nll':2+e}]
- assert analyze_effect(rows,1000,5)==analyze_effect(rows,1000,5)
+ result=analyze_effect(rows,1000,5)
+ assert result==analyze_effect(rows,1000,5)
+ assert result['p_two_sided']==2/1001
 def test_synthetic_integration_and_structure(tmp_path):
  out=tmp_path/'demo';env=dict(os.environ,PYTHON=sys.executable);subprocess.run(['bash',str(ROOT/'scripts/run_synthetic_demo.sh'),str(out)],cwd=ROOT,env=env,check=True)
  assert json.loads((out/'family_aware_leakage_audit.json').read_text())['contaminated_test_families']==0

@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "model_artifact_version": "v1.1.0",
+  "software_version": "v1.1.1",
+  "reference_environment": "Python 3.10.12, PyTorch 2.3.0, CPU float32",
+  "comparison_atol": 1e-05,
+  "references": {
+    "lmd-conditional-vae-clean-seed-202608040": {
+      "relative_path": "lmd/conditional_vae/clean/seed_202608040.pt",
+      "architecture": "conditional_vae",
+      "signature": {
+        "prior_nll": 5.951057434082031,
+        "embedding": [-0.12070631235837936, -0.27041900157928467, -0.006347838323563337],
+        "embedding_mean": -0.008437413722276688
+      }
+    },
+    "lmd-latent-diffusion-clean-seed-202608040": {
+      "relative_path": "lmd/latent_diffusion/clean/seed_202608040.pt",
+      "architecture": "latent_diffusion",
+      "signature": {
+        "denoiser": [-0.04284200817346573, 0.036752186715602875, -0.031191397458314896],
+        "denoiser_mean": -0.012165225110948086
+      }
+    },
+    "lmd-neutral-encoder-seed-202608040": {
+      "relative_path": "lmd/neutral_encoder/seed_202608040.pt",
+      "architecture": "neutral_encoder",
+      "signature": {
+        "prior_nll": 3.8678083419799805,
+        "embedding": [0.12036213278770447, 0.31453919410705566, 0.4057837426662445],
+        "embedding_mean": 0.008534468710422516
+      }
+    },
+    "lmd-phase2-transformer-l-clean-seed-202608040": {
+      "relative_path": "lmd/phase2_transformer_l/clean/seed_202608040.pt",
+      "architecture": "transformer",
+      "signature": {
+        "loss": 5.355704307556152,
+        "logits": [-5.117338180541992, -2.1541340351104736, -0.1636456698179245],
+        "logits_mean": -0.9782711863517761
+      }
+    },
+    "lmd-tcn-clean-seed-202608070": {
+      "relative_path": "lmd/tcn/clean/seed_202608070.pt",
+      "architecture": "tcn",
+      "signature": {
+        "loss": 6.444218158721924,
+        "logits": [-3.610311269760132, -1.9834195375442505, 1.6320852041244507],
+        "logits_mean": -0.8531628847122192
+      }
+    }
+  }
+}

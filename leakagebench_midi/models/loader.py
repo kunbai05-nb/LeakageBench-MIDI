@@ -27,7 +27,7 @@ def build_latent_diffusion(config: dict[str, Any]) -> GaussianLatentDiffusion:
 
 def load_checkpoint(path: str | Path, *, map_location: str | torch.device='cpu'):
     """Load a v1 public artifact, strictly instantiate it, and return model + metadata."""
-    artifact = torch.load(Path(path), map_location=map_location)
+    artifact = torch.load(Path(path), map_location=map_location, weights_only=True)
     if not isinstance(artifact, dict):
         raise ValueError('model artifact must be a mapping')
     missing = sorted(REQUIRED_METADATA - set(artifact))
@@ -45,6 +45,14 @@ def load_checkpoint(path: str | Path, *, map_location: str | torch.device='cpu')
     state = artifact['state_dict']
     if not isinstance(state, dict):
         raise ValueError('state_dict must be a mapping')
+    if not state or any(not isinstance(key, str) or not torch.is_tensor(value) for key, value in state.items()):
+        raise ValueError('state_dict must contain only named tensors')
+    if not isinstance(artifact['model_config'], dict) or not isinstance(artifact['tokenizer_config'], dict):
+        raise ValueError('model_config and tokenizer_config must be mappings')
+    model_vocab = artifact['model_config'].get('vocab_size')
+    tokenizer_vocab = artifact['tokenizer_config'].get('vocab_size')
+    if model_vocab is not None and tokenizer_vocab != model_vocab:
+        raise ValueError(f'tokenizer/model vocabulary mismatch: {tokenizer_vocab} != {model_vocab}')
     architecture = artifact['architecture']
     if architecture == 'transformer':
         model = build_transformer(artifact['model_config'])
@@ -60,6 +68,11 @@ def load_checkpoint(path: str | Path, *, map_location: str | torch.device='cpu')
     if floating_tensors and all(value.dtype == floating_tensors[0].dtype for value in floating_tensors):
         model = model.to(dtype=floating_tensors[0].dtype)
     model.load_state_dict(state, strict=True)
+    observed_parameter_count = sum(parameter.numel() for parameter in model.parameters())
+    if artifact['parameter_count'] != observed_parameter_count:
+        raise ValueError(
+            f"parameter_count mismatch: metadata={artifact['parameter_count']} model={observed_parameter_count}"
+        )
     model.eval()
     metadata = {k: v for (k, v) in artifact.items() if k != 'state_dict'}
     return (model, metadata)

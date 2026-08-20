@@ -96,9 +96,27 @@ def test_model_metadata_version(tmp_path):
     with pytest.raises(ValueError, match='unsupported model metadata version'):
         load_checkpoint(path)
 
+def test_model_metadata_parameter_count_is_validated(tmp_path):
+    cfg = transformer_config()
+    value = artifact(build_transformer(cfg), 'transformer', cfg)
+    value['parameter_count'] += 1
+    path = tmp_path / 'bad-count.pt'
+    torch.save(value, path)
+    with pytest.raises(ValueError, match='parameter_count mismatch'):
+        load_checkpoint(path)
+
+def test_model_tokenizer_vocabulary_is_validated(tmp_path):
+    cfg = transformer_config()
+    value = artifact(build_transformer(cfg), 'transformer', cfg)
+    value['tokenizer_config']['vocab_size'] += 1
+    path = tmp_path / 'bad-vocab.pt'
+    torch.save(value, path)
+    with pytest.raises(ValueError, match='vocabulary mismatch'):
+        load_checkpoint(path)
+
 def test_model_manifest_loader_reference():
-    root = Path(__file__).resolve().parents[2]
-    manifest = root.parent.parent / 'models/LeakageBench-MIDI-Model-Checkpoints-v1.0.0-candidate/MODEL_MANIFEST.json'
+    public_root = Path(__file__).resolve().parents[1]
+    manifest = public_root.parent / 'models/LeakageBench-MIDI-Model-Checkpoints-v1.1.0/MODEL_MANIFEST.json'
     if manifest.exists():
         rows = json.loads(manifest.read_text())['models']
-        assert len(rows) == 30 and all((x['public_loader'] == 'leakagebench_midi.models.load_checkpoint' for x in rows))
+        assert len(rows) == 60 and all((x['public_loader'] == 'leakagebench_midi.models.load_checkpoint' for x in rows))

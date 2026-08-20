@@ -1,50 +1,28 @@
 # Changelog
 
-## v1.1.1 — 2026-08-20
+## v1.1.2 — 2026-08-20
+
+- Consolidated the source archive and all 60 inference-only checkpoint assets
+  into one current GitHub release.
+- Replaced version-specific public links with the current release URL and the
+  version-independent Zenodo concept DOI.
+- Retained the checkpoint artifact version (`v1.1.0`) and its hashes unchanged;
+  this release does not retrain or repack any model.
 
 - Replaced legacy/custom `.zenodo.json` keys with Zenodo's documented GitHub
   integration schema (`upload_type`, `access_right`, normalized creator name,
   and SPDX-compatible license identifier).
-- No code, analysis data, formal results, or formal protocol changed.
+- No formal result or frozen experimental protocol changed.
+- Clarified field-level reproduction provenance: 193 numerical fields are
+  recomputed from public rows and 39 are verified from frozen summaries.
+- Added a public v2 protocol disclosure, family-reference evidence boundary,
+  and deterministic verification for all 60 companion checkpoints.
+- Hardened checkpoint metadata validation and corrected the reusable
+  two-sided bootstrap p-value helper to use a plus-one finite-sample rule.
+- Removed an obsolete RC1 protocol copy, a stale file-by-file guide, an
+  internal Chinese table-writing note, and an unused mechanism intermediate
+  table from the current branch; tagged history retains prior versions.
 
-## v1.1.0 — 2026-08-20
-
-- Added anonymous minimum-sufficient family/seed analysis units for strong
-  paper-statistics reproduction without raw MIDI, token sequences, or weights.
-- Added deterministic CPU-only recomputation and field-by-field comparison for
-  all 232 numerical `manuscript_results_v2` fields.
-- Added a one-command reviewer workflow, clean-environment GitHub Actions CI,
-  data dictionary, limitations statement, and complete Chinese file guide.
-- Added final public v2 tables and figures plus hash-verified materialization.
-- Added imperfect-family-inference robustness simulation rows and summaries.
-- Replaced legacy full-length family hashes and result registries on `main`
-  with release-specific pseudonymous identifiers and public-safe manifests.
-
-Scientific results and the frozen formal protocol are unchanged.
-
-## v1.0.0 — 2026-08-17
-
-- Published the first stable research-software release.
-- Added fail-closed validation, normalized structural equivalence, frozen
-  result reconstruction, integrity manifests, and public model interfaces.
-
-Scientific results unchanged.
-
-## v1.0.0-rc2 — 2026-08-16
-
-- Normalized the public package layout and separated reusable framework code
-  from paper-specific reproducibility evidence.
-- Removed obsolete development-only wrappers while preserving frozen results.
-
-Scientific results unchanged.
-
-## v1.0.0-rc1 — 2026-08-15
-
-- Frozen the public result and claim registries for the paper-grade release candidate.
-- Added deterministic table reproduction that requires neither model training nor dataset access.
-- Added a fully synthetic end-to-end demonstration.
-- Released family-map, leakage-audit, and family-aware split tooling.
-- Documented LMD/PDMX acquisition, attribution, redistribution boundaries, and unresolved identity-count provenance.
-- Recorded bounded evidence for prevalence, controlled evaluation inflation, structural robustness, model susceptibility, reduced protocol-eligible PDMX evidence, and mitigation.
-
-No original LMD/PDMX music files, audio, checkpoints, or closed evaluation data are redistributed.
+These changes document and verify the already frozen experiments; no model was
+retrained and no new experimental result was created. Earlier online release
+objects were retired after this consolidated release was verified.

@@ -4,6 +4,11 @@
 
 LeakageBench-MIDI studies same-work family leakage in symbolic-music generation evaluation. A file-level split is contaminated under the adopted relation when a training file and an evaluation file belong to the same connected reference family. The reference relation is deliberately treated as incomplete: it is an operational known-family graph, not a universal detector or exhaustive ground truth.
 
+The exact frozen model, training, generation, and statistical settings are in
+[PROTOCOL_V2.md](PROTOCOL_V2.md) and
+[`configs/protocol_v2.json`](../configs/protocol_v2.json). This page is the
+short conceptual overview.
+
 ## Family construction and audit
 
 Files are represented as graph nodes and inferred same-work relations as undirected edges. Connected components define operational families. Split audits report known cross-split family count, test-family contamination, and test-file contamination. Unknown relations are outside the estimand and remain an explicit limitation.
@@ -26,7 +31,7 @@ Structural comparison distinguishes byte identity, canonical event equivalence, 
 
 ## Public reproduction boundary
 
-This GitHub release contains no research MIDI, token-bearing manifest, training checkpoint, or private evaluation item. It supports data-free unit tests, a synthetic end-to-end demonstration, and deterministic verification/materialization of final public result artifacts. Re-running restricted-data training requires separately obtained datasets and is outside this software archive.
+This GitHub release contains no research MIDI, token-bearing manifest, training checkpoint, or private evaluation item. It supports data-free unit tests, a synthetic end-to-end demonstration, and a field-level audit of final public results. Of 232 numerical fields, 193 are recalculated from anonymous public analysis rows and 39 are verified against frozen nonidentifying summaries because their exact display-chain inputs are not public. Re-running restricted-data training requires separately obtained datasets and is outside this software archive. Inference-only final weights are distributed separately.
 
 ## Result governance
 

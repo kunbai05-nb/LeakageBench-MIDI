@@ -10,14 +10,14 @@
       "sha256": "b791aeb8700a767dd3344e7f6ae9e5e738e91b773b9ba777b7b957ea581b4cc7"
     },
     {
-      "bytes": 982,
+      "bytes": 1177,
       "path": "reproduction/LIMITATIONS.md",
-      "sha256": "90f1c6251594dd21739a2e55a6ca0a205307dfbf2a315717bd2d945874338a9d"
+      "sha256": "4dfa9abf052e2f86bc2750870cda2e9c1568b4225b918bc08adb2975b4c1455f"
     },
     {
-      "bytes": 1023,
+      "bytes": 1189,
       "path": "reproduction/README.md",
-      "sha256": "fc244d9bd7cd56242ab417c13e0169bf2447c52b606384882859b415fe6b078d"
+      "sha256": "5aa9546f2572cb1ed340322f690481f068e124a808a0cc61b385a13c03942dee"
     },
     {
       "bytes": 1413028,
@@ -45,9 +45,9 @@
       "sha256": "68f10e4cc3cafd1a022baac222f216a08cb920298fb5b1428f236439fd610501"
     },
     {
-      "bytes": 786158,
+      "bytes": 810050,
       "path": "reproduction/data/legacy_nll_rows.csv",
-      "sha256": "8112c9255df161579b3bb463941420b00fb68819033a16783839a49c9410a04a"
+      "sha256": "5c9d938aef745a34a06a8d0edefe3aa34a9fa7dc5be5cb9f70fe81485071ba94"
     },
     {
       "bytes": 308,
@@ -58,11 +58,6 @@
       "bytes": 7066515,
       "path": "reproduction/data/lmd_monte_carlo_runs.json",
       "sha256": "9607daf226a6e51f281f6c52eb06c5a7c701309ca2f2e51b6febc61cfedfc84b"
-    },
-    {
-      "bytes": 22876,
-      "path": "reproduction/data/mechanism_family_rows.csv",
-      "sha256": "3b85c6f96b9cdb1cf08a0cf2324e242f005fed777fb2568f258b3bafd1471abe"
     },
     {
       "bytes": 2810528,
@@ -207,7 +202,7 @@
   ],
   "formal_protocol_changed": false,
   "formal_results_changed": false,
-  "release_scope": "public-safe minimum sufficient dataset for paper-statistics reproduction",
+  "release_scope": "public-safe analysis bundle for provenance-labelled paper-statistics auditing",
   "row_counts": {
     "capacity_nll_rows.csv": 16800,
     "clean_test_nll_rows.csv": 1158,
@@ -215,7 +210,6 @@
     "generation_family_metrics.csv": 7200,
     "imperfect_inference_runs.csv": 2900,
     "legacy_nll_rows.csv": 8400,
-    "mechanism_family_rows.csv": 100,
     "musical_family_metrics.csv": 33000,
     "normalized_subset_rows.csv": 100,
     "pdmx_family_deltas.csv": 467,

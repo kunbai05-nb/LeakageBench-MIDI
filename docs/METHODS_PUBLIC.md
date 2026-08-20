@@ -17,6 +17,24 @@ Files are represented as graph nodes and inferred same-work relations as undirec
 
 Inferred connected components are assigned atomically to train, validation, or test. The splitter targets requested file or token ratios without deleting members. The bounded claim is zero known cross-split overlap under the adopted relation. When family inference is incomplete, residual known leakage is evaluated against the full frozen reference graph; false-positive simulations additionally track over-merging, largest-component growth, and ratio distortion.
 
+For family size `k`, train probability `p_train`, test probability `p_test`,
+and all other splits combined as `p_other`, the random-file-split crossing
+probability is:
+
+```text
+P_cross(k) = 1 - (1-p_train)^k - (1-p_test)^k + p_other^k
+```
+
+Conditioned on one designated test member, the probability that at least one
+sibling enters training is:
+
+```text
+P(train sibling | one test member, k) = 1 - (1-p_train)^(k-1)
+```
+
+Both probabilities increase with family size. This motivates assigning whole
+connected components atomically rather than splitting files independently.
+
 ## Controlled exposure design
 
 For each treated family, a receiver is held out and a designated same-family donor is either excluded or admitted to training. Clean and unrelated-donor conditions separate family-specific exposure from generic added-data effects. Receivers, controls, and validation families remain outside training. Token budgets are matched by deterministic, family-disjoint removal from the base pool.

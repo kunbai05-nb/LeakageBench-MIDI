@@ -23,7 +23,11 @@
   two-sided bootstrap p-value helper to use a plus-one finite-sample rule.
 - Removed an obsolete RC1 protocol copy, a stale file-by-file guide, an
   internal Chinese table-writing note, and an unused mechanism intermediate
-  table from the current branch; tagged history retains prior versions.
+  table from the current branch.
+- Consolidated the splitting and reproduction-boundary notes into their main
+  documents, and removed redundant configuration, policy, environment, and
+  validation wrappers from the current branch. Git commit history retains the
+  prior file states.
 
 These changes document and verify the already frozen experiments; no model was
 retrained and no new experimental result was created. Earlier online release

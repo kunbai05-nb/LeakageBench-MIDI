@@ -24,3 +24,25 @@ IDs, file hashes, dataset keys, or a universal family detector.
 No file in this directory contains MIDI/audio, token sequences, local paths,
 usernames, server locations, model weights, or training logs. `token_count`
 columns are scalar denominators only.
+
+## Boundaries
+
+This is strong paper-statistics reproduction, not unrestricted raw-data
+redistribution or exact retraining.
+
+- Raw LMD/PDMX MIDI and token-bearing manifests are excluded for licensing and
+  data-governance reasons.
+- The release attachments contain final inference checkpoints, not optimizer,
+  scheduler, RNG, intermediate-checkpoint, or training-log state.
+- Anonymous model-output rows support exact re-analysis where their released
+  units are sufficient, but they do not regenerate model outputs from MIDI.
+- Of 232 numerical fields, 193 are recomputed from public rows and 39 are
+  verified against frozen nonidentifying summaries; the latter are not
+  independent recomputations.
+- The adopted graph is a reference known-family relation, not complete ground
+  truth or a universal detector. Zero overlap means zero known overlap under
+  that relation.
+
+End-to-end retraining additionally requires the original datasets and a full
+training pipeline. These limits do not prevent CPU-only recomputation of the
+released paper statistics.

@@ -1,0 +1,5 @@
+protocol,files,cross_split_known_families,token_loss,reassigned_files
+file_split,4300,177,0,0
+exact_dedup,4263,161,0.008,
+family_aware,4300,0,0,0.2595348837
+delete_multi_member,,0,0.228357049,

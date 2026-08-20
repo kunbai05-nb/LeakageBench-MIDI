@@ -343,11 +343,21 @@ def validate_family_manifest(rows, manifest):
     else:
         raise ValueError("malformed family manifest")
     manifest_ids = []
+    manifest_splits = {}
     member_ids = set()
     for index, family in enumerate(families):
-        _required(family, ["family_id"], f"family manifest[{index}]")
+        _required(family, ["family_id", "split"], f"family manifest[{index}]")
         _valid_id(family["family_id"], "family id")
+        _valid_id(family["split"], "family split")
+        if family["split"] not in {"treated", "control", "clean_validation"}:
+            raise ValueError(f"unsupported family manifest split: {family['split']}")
+        if family["family_id"] in manifest_splits:
+            previous = manifest_splits[family["family_id"]]
+            if previous != family["split"]:
+                raise ValueError(f"family appears in multiple manifest splits: {family['family_id']}")
+            raise ValueError(f"duplicate family IDs in family manifest: {family['family_id']}")
         manifest_ids.append(family["family_id"])
+        manifest_splits[family["family_id"]] = family["split"]
         if "members" in family:
             if not isinstance(family["members"], list) or not family["members"]:
                 raise ValueError(f"family manifest[{index}] members must be a non-empty list")
@@ -359,11 +369,23 @@ def validate_family_manifest(rows, manifest):
                 if member_id in member_ids:
                     raise ValueError(f"duplicate member ID in family manifest: {member_id}")
                 member_ids.add(member_id)
-    if len(manifest_ids) != len(set(manifest_ids)):
-        raise ValueError("duplicate family IDs in family manifest")
     analysis_ids = {row["family_id"] for row in rows}
     if analysis_ids != set(manifest_ids):
         raise ValueError(f"analysis families do not match family manifest: analysis={len(analysis_ids)} manifest={len(set(manifest_ids))}")
+    analysis_splits = {}
+    for row in rows:
+        family_id = row["family_id"]
+        analysis_splits.setdefault(family_id, set()).add(row["split"])
+    collisions = sorted(family_id for family_id, splits in analysis_splits.items() if len(splits) != 1)
+    if collisions:
+        raise ValueError(f"family appears in multiple analysis cohorts: {collisions[0]}")
+    for family_id, splits in analysis_splits.items():
+        analysis_split = next(iter(splits))
+        if manifest_splits[family_id] != analysis_split:
+            raise ValueError(
+                f"family manifest split does not match analysis split for {family_id}: "
+                f"manifest={manifest_splits[family_id]} analysis={analysis_split}"
+            )
     return True
 
 

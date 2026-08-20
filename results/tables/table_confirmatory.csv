@@ -1,0 +1,2 @@
+model,parameters,treated_families,tau,ci_low,ci_high,relative_improvement,status
+Transformer-L,17821056,100,-0.11531665896,-0.13244426636,-0.09896393327,0.13617306555,CONFIRMATORY_FAMILY_LEAKAGE_PASS

@@ -1,0 +1,53 @@
+{
+  "checkpoint_selection_uses_receiver_evaluation": false,
+  "development_only": false,
+  "family_count": 100,
+  "formal_result": true,
+  "formal_run_count": 18,
+  "paradigms": {
+    "conditional_vae": {
+      "condition_means": {
+        "clean": 0.8604145829519839,
+        "same_family_donor": 0.8391602505720784,
+        "unrelated_donor": 0.8482132824503025
+      },
+      "direction": "SUPPORTIVE",
+      "primary_contrast": "same_family_donor_minus_unrelated_donor",
+      "primary_effect": {
+        "bootstrap_replicates": 10000,
+        "bootstrap_seed": 20260818,
+        "ci95": [
+          -0.014357902925570645,
+          -0.003997131860821095
+        ],
+        "family_count": 100,
+        "mean_effect": -0.009053031878224153,
+        "p_two_sided_sign_randomization": 0.0008999100089991,
+        "positive_supportive_fraction": 0.66
+      }
+    },
+    "latent_diffusion": {
+      "condition_means": {
+        "clean": 0.015258284690910411,
+        "same_family_donor": 0.015256896192058647,
+        "unrelated_donor": 0.015261240119764737
+      },
+      "direction": "SUPPORTIVE",
+      "primary_contrast": "same_family_donor_minus_unrelated_donor",
+      "primary_effect": {
+        "bootstrap_replicates": 10000,
+        "bootstrap_seed": 20260818,
+        "ci95": [
+          -1.775371296993512e-05,
+          8.729277129787328e-06
+        ],
+        "family_count": 100,
+        "mean_effect": -4.3439277060874625e-06,
+        "p_two_sided_sign_randomization": 0.5184481551844815,
+        "positive_supportive_fraction": 0.51
+      }
+    }
+  },
+  "seed_count": 3,
+  "status": "CROSS_PARADIGM_FORMAL_COMPLETE"
+}

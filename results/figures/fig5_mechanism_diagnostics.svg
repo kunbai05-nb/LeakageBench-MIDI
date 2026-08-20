@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="420" viewBox="0 0 1500 420">
+<rect width="100%" height="100%" fill="white"/>
+<text x="45" y="42" font-family="DejaVu Sans, sans-serif" font-size="25px" font-weight="700" text-anchor="start" fill="#222">Fig 5 Mechanism diagnostics</text>
+<line x1="45" y1="68" x2="1455" y2="68" stroke="#222" stroke-width="2"/>
+<text x="55" y="125" font-family="DejaVu Sans, sans-serif" font-size="17px" font-weight="400" text-anchor="start" fill="#222">4-event differential</text>
+<text x="570" y="125" font-family="DejaVu Sans, sans-serif" font-size="17px" font-weight="400" text-anchor="start" fill="#222">-0.11814</text>
+<text x="850" y="125" font-family="DejaVu Sans, sans-serif" font-size="16px" font-weight="400" text-anchor="start" fill="#222">[-0.2271, -0.0291]</text>
+<text x="1160" y="125" font-family="DejaVu Sans, sans-serif" font-size="15px" font-weight="400" text-anchor="start" fill="#666">shared localization</text>
+<text x="55" y="180" font-family="DejaVu Sans, sans-serif" font-size="17px" font-weight="400" text-anchor="start" fill="#222">8-event differential</text>
+<text x="570" y="180" font-family="DejaVu Sans, sans-serif" font-size="17px" font-weight="400" text-anchor="start" fill="#222">0.00268</text>
+<text x="850" y="180" font-family="DejaVu Sans, sans-serif" font-size="16px" font-weight="400" text-anchor="start" fill="#222">[-0.1107, 0.1719]</text>
+<text x="1160" y="180" font-family="DejaVu Sans, sans-serif" font-size="15px" font-weight="400" text-anchor="start" fill="#666">no significant differential</text>
+<text x="55" y="235" font-family="DejaVu Sans, sans-serif" font-size="17px" font-weight="400" text-anchor="start" fill="#222">16-event differential</text>
+<text x="570" y="235" font-family="DejaVu Sans, sans-serif" font-size="17px" font-weight="400" text-anchor="start" fill="#222">0.00660</text>
+<text x="850" y="235" font-family="DejaVu Sans, sans-serif" font-size="16px" font-weight="400" text-anchor="start" fill="#222">[-0.0895, 0.1646]</text>
+<text x="1160" y="235" font-family="DejaVu Sans, sans-serif" font-size="15px" font-weight="400" text-anchor="start" fill="#666">no significant differential</text>
+<text x="55" y="290" font-family="DejaVu Sans, sans-serif" font-size="17px" font-weight="400" text-anchor="start" fill="#222">Spearman rho</text>
+<text x="570" y="290" font-family="DejaVu Sans, sans-serif" font-size="17px" font-weight="400" text-anchor="start" fill="#222">0.40907</text>
+<text x="850" y="290" font-family="DejaVu Sans, sans-serif" font-size="16px" font-weight="400" text-anchor="start" fill="#222">[0.2109, 0.5784]</text>
+<text x="1160" y="290" font-family="DejaVu Sans, sans-serif" font-size="15px" font-weight="400" text-anchor="start" fill="#666">moderate association</text>
+<text x="55" y="357" font-family="DejaVu Sans, sans-serif" font-size="14px" font-weight="400" text-anchor="start" fill="#555">local shared-region localization plus family-relatedness association</text>
+<line x1="45" y1="380" x2="1455" y2="380" stroke="#222" stroke-width="2"/>
+</svg>

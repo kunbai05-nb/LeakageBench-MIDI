@@ -1,0 +1,963 @@
+{
+  "aggregation": "generation seeds -> model seed -> family",
+  "family_bootstrap_replicates": 10000,
+  "family_bootstrap_seed": 20260818,
+  "p_values_never_zero": true,
+  "primary_contrast": "same_minus_unrelated",
+  "primary_statistical_unit": "family",
+  "results": {
+    "conditional_vae": {
+      "same_minus_clean": {
+        "assigned_donor_Copy_at_tau": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260821,
+          "ci95": [
+            -0.009333333333333365,
+            0.03199999999999999
+          ],
+          "families": 100,
+          "mean": 0.01066666666666665,
+          "median": 0.0,
+          "p_two_sided_finite_sample": 0.3153684631536846,
+          "unit": "family"
+        },
+        "assigned_donor_longest_normalized_span": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260820,
+          "ci95": [
+            -0.0022759217109580066,
+            0.0011712332345175612
+          ],
+          "families": 100,
+          "mean": -0.0005321574386535011,
+          "median": -0.0007812500000000042,
+          "p_two_sided_finite_sample": 0.5523447655234477,
+          "unit": "family"
+        },
+        "donor_retrieval_rank": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260826,
+          "ci95": [
+            -0.1700166666666667,
+            0.3939999999999999
+          ],
+          "families": 100,
+          "mean": 0.0873333333333333,
+          "median": 0.0,
+          "p_two_sided_finite_sample": 0.5655434456554345,
+          "unit": "family"
+        },
+        "exact_multi_bar_extraction": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260828,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "families": 100,
+          "mean": 0.0,
+          "median": 0.0,
+          "p_two_sided_finite_sample": 1.0,
+          "unit": "family"
+        },
+        "family_reference_Copy_at_tau": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260819,
+          "ci95": [
+            -0.010000000000000009,
+            0.03199999999999997
+          ],
+          "families": 100,
+          "mean": 0.01066666666666665,
+          "median": 0.0,
+          "p_two_sided_finite_sample": 0.32456754324567544,
+          "unit": "family"
+        },
+        "family_reference_longest_normalized_span": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260818,
+          "ci95": [
+            -0.00231772794351227,
+            0.0011449516564335713
+          ],
+          "families": 100,
+          "mean": -0.0005321574386535011,
+          "median": -0.0007812500000000042,
+          "p_two_sided_finite_sample": 0.5431456854314568,
+          "unit": "family"
+        },
+        "family_retrieval_at_1": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260827,
+          "ci95": [
+            -0.011999999999999988,
+            0.038000000000000006
+          ],
+          "families": 100,
+          "mean": 0.01266666666666667,
+          "median": 0.0,
+          "p_two_sided_finite_sample": 0.30496950304969506,
+          "unit": "family"
+        },
+        "interval_4gram_overlap": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260823,
+          "ci95": [
+            -0.00040397145601169426,
+            0.0009177862879632747
+          ],
+          "families": 100,
+          "mean": 0.0002600047304254823,
+          "median": 0.00020060693106693425,
+          "p_two_sided_finite_sample": 0.44735526447355267,
+          "unit": "family"
+        },
+        "normalized_edit_similarity": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260825,
+          "ci95": [
+            -0.0013416703489784422,
+            0.0019719735631055124
+          ],
+          "families": 100,
+          "mean": 0.00034078618021514547,
+          "median": 4.1121532143501005e-05,
+          "p_two_sided_finite_sample": 0.6881311868813119,
+          "unit": "family"
+        },
+        "pitch_4gram_overlap": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260822,
+          "ci95": [
+            -0.0004068892704850095,
+            0.0012940053837073844
+          ],
+          "families": 100,
+          "mean": 0.000424663771563136,
+          "median": 0.00020168993896683843,
+          "p_two_sided_finite_sample": 0.31516848315168483,
+          "unit": "family"
+        },
+        "rhythm_4gram_overlap": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260824,
+          "ci95": [
+            -0.0005648160735508022,
+            0.0036627279873597267
+          ],
+          "families": 100,
+          "mean": 0.001317213308292168,
+          "median": -0.000836452795674146,
+          "p_two_sided_finite_sample": 0.1999800019998,
+          "unit": "family"
+        },
+        "whole_train_nearest_neighbor_similarity": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260829,
+          "ci95": [
+            0.0012253423612655252,
+            0.003145260447077004
+          ],
+          "families": 100,
+          "mean": 0.0021015601639155024,
+          "median": 0.0005603540397053253,
+          "p_two_sided_finite_sample": 0.00019998000199980003,
+          "unit": "family"
+        }
+      },
+      "same_minus_unrelated": {
+        "assigned_donor_Copy_at_tau": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260821,
+          "ci95": [
+            0.6833333333333335,
+            0.80535
+          ],
+          "families": 100,
+          "mean": 0.7460000000000001,
+          "median": 0.8666666666666667,
+          "p_two_sided_finite_sample": 0.00019998000199980003,
+          "unit": "family"
+        },
+        "assigned_donor_longest_normalized_span": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260820,
+          "ci95": [
+            0.039322925894028866,
+            0.05044861794619423
+          ],
+          "families": 100,
+          "mean": 0.04470357611548557,
+          "median": 0.04088541666666667,
+          "p_two_sided_finite_sample": 0.00019998000199980003,
+          "unit": "family"
+        },
+        "donor_retrieval_rank": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260826,
+          "ci95": [
+            -0.6353333333333333,
+            0.08666666666666659
+          ],
+          "families": 100,
+          "mean": -0.21733333333333338,
+          "median": 0.0,
+          "p_two_sided_finite_sample": 0.2111788821117888,
+          "unit": "family"
+        },
+        "exact_multi_bar_extraction": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260828,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "families": 100,
+          "mean": 0.0,
+          "median": 0.0,
+          "p_two_sided_finite_sample": 1.0,
+          "unit": "family"
+        },
+        "family_reference_Copy_at_tau": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260819,
+          "ci95": [
+            -0.018000000000000002,
+            0.024666666666666663
+          ],
+          "families": 100,
+          "mean": 0.0033333333333333283,
+          "median": 0.0,
+          "p_two_sided_finite_sample": 0.7767223277672233,
+          "unit": "family"
+        },
+        "family_reference_longest_normalized_span": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260818,
+          "ci95": [
+            -0.002963381725721786,
+            0.0005732129675196847
+          ],
+          "families": 100,
+          "mean": -0.0011350065616797902,
+          "median": -0.0005208333333333419,
+          "p_two_sided_finite_sample": 0.21237876212378762,
+          "unit": "family"
+        },
+        "family_retrieval_at_1": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260827,
+          "ci95": [
+            -0.008666666666666658,
+            0.03000000000000003
+          ],
+          "families": 100,
+          "mean": 0.010666666666666678,
+          "median": 0.0,
+          "p_two_sided_finite_sample": 0.267973202679732,
+          "unit": "family"
+        },
+        "interval_4gram_overlap": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260823,
+          "ci95": [
+            -0.0005486114382353835,
+            0.0010334402830699436
+          ],
+          "families": 100,
+          "mean": 0.00023078863201236272,
+          "median": 8.296991356497889e-05,
+          "p_two_sided_finite_sample": 0.5963403659634037,
+          "unit": "family"
+        },
+        "normalized_edit_similarity": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260825,
+          "ci95": [
+            -0.003258501157323942,
+            0.00033687202983456423
+          ],
+          "families": 100,
+          "mean": -0.0014647961489737424,
+          "median": -0.000811818366724823,
+          "p_two_sided_finite_sample": 0.1085891410858914,
+          "unit": "family"
+        },
+        "pitch_4gram_overlap": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260822,
+          "ci95": [
+            -0.0009897991388358597,
+            0.0010133376714712473
+          ],
+          "families": 100,
+          "mean": -1.8186073521394425e-05,
+          "median": -0.0003097657251001254,
+          "p_two_sided_finite_sample": 0.9605039496050395,
+          "unit": "family"
+        },
+        "rhythm_4gram_overlap": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260824,
+          "ci95": [
+            -0.002389816662011621,
+            0.001092676790953892
+          ],
+          "families": 100,
+          "mean": -0.0006638669962887097,
+          "median": -0.000939195965322874,
+          "p_two_sided_finite_sample": 0.4467553244675532,
+          "unit": "family"
+        },
+        "whole_train_nearest_neighbor_similarity": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260829,
+          "ci95": [
+            0.0012819277887127323,
+            0.0031888741854845986
+          ],
+          "families": 100,
+          "mean": 0.0021490553949428913,
+          "median": 0.0004636801827716155,
+          "p_two_sided_finite_sample": 0.00019998000199980003,
+          "unit": "family"
+        }
+      },
+      "unrelated_minus_clean": {
+        "assigned_donor_Copy_at_tau": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260821,
+          "ci95": [
+            -0.7933333333333334,
+            -0.674
+          ],
+          "families": 100,
+          "mean": -0.7353333333333332,
+          "median": -0.8666666666666667,
+          "p_two_sided_finite_sample": 0.00019998000199980003,
+          "unit": "family"
+        },
+        "assigned_donor_longest_normalized_span": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260820,
+          "ci95": [
+            -0.051084691887472396,
+            -0.03970700252637691
+          ],
+          "families": 100,
+          "mean": -0.04523573355413907,
+          "median": -0.04036458333333333,
+          "p_two_sided_finite_sample": 0.00019998000199980003,
+          "unit": "family"
+        },
+        "donor_retrieval_rank": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260826,
+          "ci95": [
+            -0.07466666666666663,
+            0.9240166666666665
+          ],
+          "families": 100,
+          "mean": 0.3046666666666667,
+          "median": 0.0,
+          "p_two_sided_finite_sample": 0.202979702029797,
+          "unit": "family"
+        },
+        "exact_multi_bar_extraction": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260828,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "families": 100,
+          "mean": 0.0,
+          "median": 0.0,
+          "p_two_sided_finite_sample": 1.0,
+          "unit": "family"
+        },
+        "family_reference_Copy_at_tau": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260819,
+          "ci95": [
+            -0.014666666666666685,
+            0.029999999999999995
+          ],
+          "families": 100,
+          "mean": 0.007333333333333322,
+          "median": 0.0,
+          "p_two_sided_finite_sample": 0.5463453654634537,
+          "unit": "family"
+        },
+        "family_reference_longest_normalized_span": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260818,
+          "ci95": [
+            -0.0011718750000000006,
+            0.0023946130594352786
+          ],
+          "families": 100,
+          "mean": 0.0006028491230262886,
+          "median": -0.00026041666666665186,
+          "p_two_sided_finite_sample": 0.5109489051094891,
+          "unit": "family"
+        },
+        "family_retrieval_at_1": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260827,
+          "ci95": [
+            -0.02,
+            0.022666666666666654
+          ],
+          "families": 100,
+          "mean": 0.00199999999999999,
+          "median": 0.0,
+          "p_two_sided_finite_sample": 0.8567143285671432,
+          "unit": "family"
+        },
+        "interval_4gram_overlap": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260823,
+          "ci95": [
+            -0.0005473585616918218,
+            0.0005942637881918706
+          ],
+          "families": 100,
+          "mean": 2.9216098413119657e-05,
+          "median": -5.9053137435925804e-06,
+          "p_two_sided_finite_sample": 0.8989101089891011,
+          "unit": "family"
+        },
+        "normalized_edit_similarity": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260825,
+          "ci95": [
+            2.7112856361630643e-05,
+            0.0036346458566474554
+          ],
+          "families": 100,
+          "mean": 0.0018055823291888878,
+          "median": 0.0007249640730954687,
+          "p_two_sided_finite_sample": 0.046795320467953205,
+          "unit": "family"
+        },
+        "pitch_4gram_overlap": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260822,
+          "ci95": [
+            -0.0003589038714210625,
+            0.0012165034322315267
+          ],
+          "families": 100,
+          "mean": 0.0004428498450845303,
+          "median": 0.0003472691196062485,
+          "p_two_sided_finite_sample": 0.2645735426457354,
+          "unit": "family"
+        },
+        "rhythm_4gram_overlap": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260824,
+          "ci95": [
+            0.0001051900879485317,
+            0.003991102825239258
+          ],
+          "families": 100,
+          "mean": 0.0019810803045808775,
+          "median": 0.0014491639034755338,
+          "p_two_sided_finite_sample": 0.038396160383961604,
+          "unit": "family"
+        },
+        "whole_train_nearest_neighbor_similarity": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260829,
+          "ci95": [
+            -0.00015393551417099648,
+            5.249500281765142e-05
+          ],
+          "families": 100,
+          "mean": -4.749523102738833e-05,
+          "median": 0.0,
+          "p_two_sided_finite_sample": 0.36696330366963303,
+          "unit": "family"
+        }
+      }
+    },
+    "transformer_l": {
+      "same_minus_clean": {
+        "assigned_donor_Copy_at_tau": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260821,
+          "ci95": [
+            -0.012666666666666661,
+            0.02599999999999999
+          ],
+          "families": 100,
+          "mean": 0.006000000000000002,
+          "median": 0.0,
+          "p_two_sided_finite_sample": 0.5313468653134686,
+          "unit": "family"
+        },
+        "assigned_donor_longest_normalized_span": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260820,
+          "ci95": [
+            0.0050832154281496055,
+            0.013943098958333327
+          ],
+          "families": 100,
+          "mean": 0.009260908792650919,
+          "median": 0.002343750000000009,
+          "p_two_sided_finite_sample": 0.00019998000199980003,
+          "unit": "family"
+        },
+        "donor_retrieval_rank": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260826,
+          "ci95": [
+            -0.5333666666666667,
+            -0.06333333333333337
+          ],
+          "families": 100,
+          "mean": -0.28600000000000003,
+          "median": 0.0,
+          "p_two_sided_finite_sample": 0.012598740125987402,
+          "unit": "family"
+        },
+        "exact_multi_bar_extraction": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260828,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "families": 100,
+          "mean": 0.0,
+          "median": 0.0,
+          "p_two_sided_finite_sample": 1.0,
+          "unit": "family"
+        },
+        "family_reference_Copy_at_tau": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260819,
+          "ci95": [
+            -0.012666666666666649,
+            0.02599999999999999
+          ],
+          "families": 100,
+          "mean": 0.006000000000000002,
+          "median": 0.0,
+          "p_two_sided_finite_sample": 0.5385461453854614,
+          "unit": "family"
+        },
+        "family_reference_longest_normalized_span": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260818,
+          "ci95": [
+            0.005026391281167978,
+            0.013938146940616798
+          ],
+          "families": 100,
+          "mean": 0.009260908792650919,
+          "median": 0.002343750000000009,
+          "p_two_sided_finite_sample": 0.00019998000199980003,
+          "unit": "family"
+        },
+        "family_retrieval_at_1": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260827,
+          "ci95": [
+            0.005999999999999986,
+            0.05799999999999998
+          ],
+          "families": 100,
+          "mean": 0.03199999999999998,
+          "median": 0.0,
+          "p_two_sided_finite_sample": 0.015198480151984802,
+          "unit": "family"
+        },
+        "interval_4gram_overlap": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260823,
+          "ci95": [
+            0.002451585292017177,
+            0.0056750158009226245
+          ],
+          "families": 100,
+          "mean": 0.00401759545870457,
+          "median": 0.0015294375986321242,
+          "p_two_sided_finite_sample": 0.00019998000199980003,
+          "unit": "family"
+        },
+        "normalized_edit_similarity": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260825,
+          "ci95": [
+            0.0038981703765565458,
+            0.008315284167467093
+          ],
+          "families": 100,
+          "mean": 0.006058056935548586,
+          "median": 0.0047428588454371465,
+          "p_two_sided_finite_sample": 0.00019998000199980003,
+          "unit": "family"
+        },
+        "pitch_4gram_overlap": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260822,
+          "ci95": [
+            0.004463393289637714,
+            0.008557499346608089
+          ],
+          "families": 100,
+          "mean": 0.0064704037484248555,
+          "median": 0.003032247080749142,
+          "p_two_sided_finite_sample": 0.00019998000199980003,
+          "unit": "family"
+        },
+        "rhythm_4gram_overlap": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260824,
+          "ci95": [
+            0.0015447194413092105,
+            0.00546761132040932
+          ],
+          "families": 100,
+          "mean": 0.0033947434448755743,
+          "median": 0.0010445757883655038,
+          "p_two_sided_finite_sample": 0.000999900009999,
+          "unit": "family"
+        },
+        "whole_train_nearest_neighbor_similarity": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260829,
+          "ci95": [
+            0.00436487519048232,
+            0.007797872891177784
+          ],
+          "families": 100,
+          "mean": 0.006006392896379828,
+          "median": 0.001743454117716519,
+          "p_two_sided_finite_sample": 0.00019998000199980003,
+          "unit": "family"
+        }
+      },
+      "same_minus_unrelated": {
+        "assigned_donor_Copy_at_tau": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260821,
+          "ci95": [
+            0.7173333333333334,
+            0.8373499999999999
+          ],
+          "families": 100,
+          "mean": 0.7793333333333333,
+          "median": 0.9333333333333332,
+          "p_two_sided_finite_sample": 0.00019998000199980003,
+          "unit": "family"
+        },
+        "assigned_donor_longest_normalized_span": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260820,
+          "ci95": [
+            0.05520881315616798,
+            0.07435990403543306
+          ],
+          "families": 100,
+          "mean": 0.06443278379265092,
+          "median": 0.05520833333333333,
+          "p_two_sided_finite_sample": 0.00019998000199980003,
+          "unit": "family"
+        },
+        "donor_retrieval_rank": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260826,
+          "ci95": [
+            -0.29733333333333334,
+            0.20466666666666666
+          ],
+          "families": 100,
+          "mean": -0.04466666666666667,
+          "median": 0.0,
+          "p_two_sided_finite_sample": 0.7461253874612539,
+          "unit": "family"
+        },
+        "exact_multi_bar_extraction": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260828,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "families": 100,
+          "mean": 0.0,
+          "median": 0.0,
+          "p_two_sided_finite_sample": 1.0,
+          "unit": "family"
+        },
+        "family_reference_Copy_at_tau": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260819,
+          "ci95": [
+            -0.01866666666666666,
+            0.020666666666666673
+          ],
+          "families": 100,
+          "mean": 0.0006666666666666704,
+          "median": 0.0,
+          "p_two_sided_finite_sample": 0.940905909409059,
+          "unit": "family"
+        },
+        "family_reference_longest_normalized_span": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260818,
+          "ci95": [
+            0.005447786458333331,
+            0.015068798187335954
+          ],
+          "families": 100,
+          "mean": 0.009948408792650914,
+          "median": 0.0031249999999999993,
+          "p_two_sided_finite_sample": 0.00019998000199980003,
+          "unit": "family"
+        },
+        "family_retrieval_at_1": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260827,
+          "ci95": [
+            -0.022666666666666675,
+            0.02866666666666667
+          ],
+          "families": 100,
+          "mean": 0.0033333333333333296,
+          "median": 0.0,
+          "p_two_sided_finite_sample": 0.8185181481851814,
+          "unit": "family"
+        },
+        "interval_4gram_overlap": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260823,
+          "ci95": [
+            0.001847862300394789,
+            0.004724555529921619
+          ],
+          "families": 100,
+          "mean": 0.0032327488785641196,
+          "median": 0.0012747801983388407,
+          "p_two_sided_finite_sample": 0.00019998000199980003,
+          "unit": "family"
+        },
+        "normalized_edit_similarity": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260825,
+          "ci95": [
+            0.002436901007365393,
+            0.006675289292505364
+          ],
+          "families": 100,
+          "mean": 0.004515784644572166,
+          "median": 0.0030039132079236475,
+          "p_two_sided_finite_sample": 0.00019998000199980003,
+          "unit": "family"
+        },
+        "pitch_4gram_overlap": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260822,
+          "ci95": [
+            0.0034617586829170212,
+            0.007205411865639831
+          ],
+          "families": 100,
+          "mean": 0.005282809344063181,
+          "median": 0.0024972159591272382,
+          "p_two_sided_finite_sample": 0.00019998000199980003,
+          "unit": "family"
+        },
+        "rhythm_4gram_overlap": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260824,
+          "ci95": [
+            0.0021202369028732932,
+            0.005840629667661238
+          ],
+          "families": 100,
+          "mean": 0.0038945199353925715,
+          "median": 0.0015164354055750007,
+          "p_two_sided_finite_sample": 0.00019998000199980003,
+          "unit": "family"
+        },
+        "whole_train_nearest_neighbor_similarity": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260829,
+          "ci95": [
+            0.004407712251847437,
+            0.0077643844115358384
+          ],
+          "families": 100,
+          "mean": 0.006012546108645659,
+          "median": 0.0020035207925569705,
+          "p_two_sided_finite_sample": 0.00019998000199980003,
+          "unit": "family"
+        }
+      },
+      "unrelated_minus_clean": {
+        "assigned_donor_Copy_at_tau": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260821,
+          "ci95": [
+            -0.8326666666666668,
+            -0.7093333333333334
+          ],
+          "families": 100,
+          "mean": -0.7733333333333334,
+          "median": -0.9333333333333332,
+          "p_two_sided_finite_sample": 0.00019998000199980003,
+          "unit": "family"
+        },
+        "assigned_donor_longest_normalized_span": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260820,
+          "ci95": [
+            -0.06294830729166667,
+            -0.04784856770833335
+          ],
+          "families": 100,
+          "mean": -0.055171875,
+          "median": -0.046614583333333334,
+          "p_two_sided_finite_sample": 0.00019998000199980003,
+          "unit": "family"
+        },
+        "donor_retrieval_rank": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260826,
+          "ci95": [
+            -0.5013333333333332,
+            -0.008650000000000229
+          ],
+          "families": 100,
+          "mean": -0.24133333333333332,
+          "median": 0.0,
+          "p_two_sided_finite_sample": 0.04279572042795721,
+          "unit": "family"
+        },
+        "exact_multi_bar_extraction": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260828,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "families": 100,
+          "mean": 0.0,
+          "median": 0.0,
+          "p_two_sided_finite_sample": 1.0,
+          "unit": "family"
+        },
+        "family_reference_Copy_at_tau": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260819,
+          "ci95": [
+            -0.013333333333333334,
+            0.02266666666666666
+          ],
+          "families": 100,
+          "mean": 0.005333333333333331,
+          "median": 0.0,
+          "p_two_sided_finite_sample": 0.557944205579442,
+          "unit": "family"
+        },
+        "family_reference_longest_normalized_span": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260818,
+          "ci95": [
+            -0.0027916666666666663,
+            0.0014687500000000004
+          ],
+          "families": 100,
+          "mean": -0.0006874999999999991,
+          "median": 0.0,
+          "p_two_sided_finite_sample": 0.5153484651534846,
+          "unit": "family"
+        },
+        "family_retrieval_at_1": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260827,
+          "ci95": [
+            0.005333333333333309,
+            0.052666666666666646
+          ],
+          "families": 100,
+          "mean": 0.02866666666666665,
+          "median": 0.0,
+          "p_two_sided_finite_sample": 0.017998200179982,
+          "unit": "family"
+        },
+        "interval_4gram_overlap": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260823,
+          "ci95": [
+            -0.0003385796935536576,
+            0.0019392287086715846
+          ],
+          "families": 100,
+          "mean": 0.0007848465801404492,
+          "median": 0.0006322674346753664,
+          "p_two_sided_finite_sample": 0.17518248175182483,
+          "unit": "family"
+        },
+        "normalized_edit_similarity": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260825,
+          "ci95": [
+            -0.0001166773063541401,
+            0.0032203114710368857
+          ],
+          "families": 100,
+          "mean": 0.001542272290976421,
+          "median": 0.0012174187000702844,
+          "p_two_sided_finite_sample": 0.0683931606839316,
+          "unit": "family"
+        },
+        "pitch_4gram_overlap": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260822,
+          "ci95": [
+            -0.00012278527801187422,
+            0.002583244964460997
+          ],
+          "families": 100,
+          "mean": 0.001187594404361677,
+          "median": 0.0005627778499233856,
+          "p_two_sided_finite_sample": 0.07679232076792321,
+          "unit": "family"
+        },
+        "rhythm_4gram_overlap": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260824,
+          "ci95": [
+            -0.002548148975318498,
+            0.0014900798047342077
+          ],
+          "families": 100,
+          "mean": -0.000499776490516997,
+          "median": -9.728131064336287e-05,
+          "p_two_sided_finite_sample": 0.6187381261873812,
+          "unit": "family"
+        },
+        "whole_train_nearest_neighbor_similarity": {
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20260829,
+          "ci95": [
+            -0.0001242597194682145,
+            0.00012937792300272803
+          ],
+          "families": 100,
+          "mean": -6.153212265830044e-06,
+          "median": 0.0,
+          "p_two_sided_finite_sample": 0.9009099090090991,
+          "unit": "family"
+        }
+      }
+    }
+  },
+  "status": "COMPLETE"
+}

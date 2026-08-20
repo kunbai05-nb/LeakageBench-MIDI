@@ -1,0 +1,64 @@
+{
+  "bootstrap_samples": 10000,
+  "bootstrap_seed": 0,
+  "bootstrap_unit": "family",
+  "comparisons": {
+    "same_family_donor_vs_clean": {
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 0,
+      "ci95": [
+        -0.23631201361368903,
+        -0.18248821757317446
+      ],
+      "effect_size_dz": -1.5125293437447638,
+      "families": 100,
+      "first_condition": "same_family_donor",
+      "mean_difference": -0.20876233263265614,
+      "median_difference": -0.18215294754803335,
+      "p_two_sided_finite_sample": 0.00019998000199980003,
+      "p_value_method": "two-sided bootstrap tail count with plus-one finite-sample correction",
+      "relative_effect": -0.261709536574987,
+      "second_condition": "clean",
+      "unit": "family"
+    },
+    "same_family_donor_vs_unrelated_donor": {
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 0,
+      "ci95": [
+        -0.2287191119389179,
+        -0.1767065892135995
+      ],
+      "effect_size_dz": -1.5201796320255365,
+      "families": 100,
+      "first_condition": "same_family_donor",
+      "mean_difference": -0.20199325009179617,
+      "median_difference": -0.1753286399614289,
+      "p_two_sided_finite_sample": 0.00019998000199980003,
+      "p_value_method": "two-sided bootstrap tail count with plus-one finite-sample correction",
+      "relative_effect": -0.2553908680133082,
+      "second_condition": "unrelated_donor",
+      "unit": "family"
+    },
+    "unrelated_donor_vs_clean": {
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 0,
+      "ci95": [
+        -0.012749886581906402,
+        -0.0022861338108883154
+      ],
+      "effect_size_dz": -0.24122747655954663,
+      "families": 100,
+      "first_condition": "unrelated_donor",
+      "mean_difference": -0.0067690825408599845,
+      "median_difference": -0.00458223627520038,
+      "p_two_sided_finite_sample": 0.000999900009999,
+      "p_value_method": "two-sided bootstrap tail count with plus-one finite-sample correction",
+      "relative_effect": -0.008485886474182776,
+      "second_condition": "clean",
+      "unit": "family"
+    }
+  },
+  "primary_contrast": "same_family_donor_vs_unrelated_donor",
+  "primary_direction": "SUPPORTIVE",
+  "selective_reporting": false
+}

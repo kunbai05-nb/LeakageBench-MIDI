@@ -1,0 +1,131 @@
+{
+  "file_count": 25,
+  "files": [
+    {
+      "bytes": 2922,
+      "path": "figures/fig1_leakage_landscape.svg",
+      "sha256": "a4bb7981574286c8fffa52fa05b81d585beba75ee519ab7af6ddc1f1ff2101c9"
+    },
+    {
+      "bytes": 2953,
+      "path": "figures/fig2_phase2_core.svg",
+      "sha256": "6a8908bc6ae329c08388f8367779fda6fd3bc739bf232556a8ae89b8cc86b2c7"
+    },
+    {
+      "bytes": 4754,
+      "path": "figures/fig3_model_dependence.svg",
+      "sha256": "deea6e61161313a2c871f0206a3b862cd7402a31375aad78717819fbebb0d11b"
+    },
+    {
+      "bytes": 2415,
+      "path": "figures/fig4_musical_alignment.svg",
+      "sha256": "f19a93d8432a3e1bc122ea7b81aafc7ca0e93a63a8e08b1f782947d3032b01ff"
+    },
+    {
+      "bytes": 3077,
+      "path": "figures/fig5_mechanism_diagnostics.svg",
+      "sha256": "058d97142d00971da7e57946d03f6d71f41cfdfe64051c622c37168e1656cf7a"
+    },
+    {
+      "bytes": 4707,
+      "path": "figures/fig6_imperfect_inference_robustness.svg",
+      "sha256": "a9efbb5e02958514f0da47f4d06e745064b7dc85ed411e6b57ca1a740aa79053"
+    },
+    {
+      "bytes": 167,
+      "path": "figures/figure_capacity.csv",
+      "sha256": "964e59fbc4aed1e63aba7d653c21eab6c8baa6cb630c3719f1b5e2758c4d3b32"
+    },
+    {
+      "bytes": 108,
+      "path": "figures/figure_external.csv",
+      "sha256": "ab2093ab151e1001ca76d2d31300b5ddb62ca1ffbb89d979ba47a1d0eeb43bfd"
+    },
+    {
+      "bytes": 82,
+      "path": "figures/figure_mitigation.csv",
+      "sha256": "d8025ea19a1e6beecdbc456547b0032fb74afaf0f27999614048a3d8a2b6f353"
+    },
+    {
+      "bytes": 80,
+      "path": "figures/figure_prevalence.csv",
+      "sha256": "9172e366094dd1859e98465e3102a12afe8169ffca4c199fab6c5dfc141573eb"
+    },
+    {
+      "bytes": 38561,
+      "path": "manuscript_results_v2_public.csv",
+      "sha256": "cd351bce78534d723b1d5cbe199b578db3d2fb87201f827fe7bc35c53e64cc53"
+    },
+    {
+      "bytes": 95942,
+      "path": "manuscript_results_v2_public.json",
+      "sha256": "a56e3c96698bf27e0db31e262d8c052f7ef20b9081c8e7cd6b63659b54901988"
+    },
+    {
+      "bytes": 100,
+      "path": "manuscript_results_v2_public.sha256",
+      "sha256": "e91bba1c9d75e53b6d79959c748f31466150c72ad087ee113fb1331a39e153ee"
+    },
+    {
+      "bytes": 9276,
+      "path": "tables/MAIN_6_TABLES_FINAL_CN.md",
+      "sha256": "465573ede5cb10ed6c64b80d10ee8be635dc3fc2680c6d1a81d6c84e0e4e6666"
+    },
+    {
+      "bytes": 6503,
+      "path": "tables/table1_final.svg",
+      "sha256": "c815380d18f8aa3b9838f72722795e05eef4fcede5c87a11904e4d3e4962036a"
+    },
+    {
+      "bytes": 5545,
+      "path": "tables/table2_final.svg",
+      "sha256": "16b5bd49f48cae3ab896837e370b5df15576e60db1e3fdbae85419080e4e6bf1"
+    },
+    {
+      "bytes": 6348,
+      "path": "tables/table3_final.svg",
+      "sha256": "212c96a9ac1f7d6c52206519bd451bf59013d1573715c567bca6a4ac60573da5"
+    },
+    {
+      "bytes": 5814,
+      "path": "tables/table4_final.svg",
+      "sha256": "b820260126f6e457f1c10bd6146b0d71cdb4b88a79be66da46515bcefcad5a9e"
+    },
+    {
+      "bytes": 5743,
+      "path": "tables/table5_final.svg",
+      "sha256": "4288d8fe7f39156efe4444c5f56015407004869bf5a5c0821f36a9bd54c861ff"
+    },
+    {
+      "bytes": 11745,
+      "path": "tables/table6_final.svg",
+      "sha256": "b7ce08438013416c1ef8168bc0eafa86de42609d80fe085470b38b2ae00ba4a1"
+    },
+    {
+      "bytes": 514,
+      "path": "tables/table_architecture_capacity.csv",
+      "sha256": "b1e7bfae85b20e52a2b071917bcda22623a61e5f5861d47cfe528edc84621a31"
+    },
+    {
+      "bytes": 200,
+      "path": "tables/table_confirmatory.csv",
+      "sha256": "2c2db6a9dc2ab6e5864eef392cb3f3848716cf88cad28c74609142a7626af7bc"
+    },
+    {
+      "bytes": 237,
+      "path": "tables/table_lmd_census.csv",
+      "sha256": "9591b5645daa89e94b6a35360ad8552ab3a47e4bfb28b3ac232c4fb621b11c58"
+    },
+    {
+      "bytes": 193,
+      "path": "tables/table_mitigation.csv",
+      "sha256": "1c947a6a3467af2d963cb80ebf3f7a5a6ab6fb5581b36579cf25d45459336db4"
+    },
+    {
+      "bytes": 185,
+      "path": "tables/table_pdmx_external.csv",
+      "sha256": "95ee905822145509661d63c0868f3376bacb2d211b506f8f688f544368f647c6"
+    }
+  ],
+  "schema_version": 1
+}

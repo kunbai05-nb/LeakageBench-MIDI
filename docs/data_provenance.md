@@ -23,7 +23,14 @@ Family edges come from the conservative `CAugBERT_0.99_with_CLaMP_0.99.json` fil
 
 The frozen upstream repository revision is `c42fa1c3f881261b92c0cf0d58dba5b0e5955d26`. The locally recorded SHA-256 of the conservative filtering JSON is `8b0989f76ea4dcf13f9333c027110949bae4ff0e1b23202224bb0d48fa6a8751`. Choi et al. (2025) is the duplicate/same-song identification and filtering precedent. LeakageBench-MIDI contributes the downstream controlled consequence, robustness, model-susceptibility, and mitigation analyses.
 
-The upstream GitHub filtering-list revision had no observed license file. Consequently, this public release does not redistribute that filtering JSON or derived pair-level/private manifests; it publishes aggregate statistics, frozen artifact hashes, and attribution. The separately hosted LMD de-duplication supplements were recorded at revision `7565f0d1d814f2ce3915439a302a767d9109aa2b` with a CC BY 4.0 dataset card.
+The upstream GitHub filtering-list revision had no observed license file.
+Consequently, this public release does not redistribute that filtering JSON or
+derived pair-level/private manifests. It publishes aggregate family-size
+statistics and release-specific anonymous analysis units sufficient to
+recompute paper statistics; those rows contain no original file/family hash,
+MIDI content, or token sequence. The separately hosted LMD de-duplication
+supplements were recorded at revision
+`7565f0d1d814f2ce3915439a302a767d9109aa2b` with a CC BY 4.0 dataset card.
 
 ## What is known
 

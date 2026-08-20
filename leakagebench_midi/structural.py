@@ -82,6 +82,10 @@ def normalize_midi_structure(path):
                 if active[key]:
                     onset, velocity = active[key].pop(0)
                     notes.append((Fraction(onset, ppq), Fraction(tick - onset, ppq), int(message.note), int(velocity), message.channel == 9))
+        unclosed = [(channel, pitch, len(starts)) for (channel, pitch), starts in active.items() if starts]
+        if unclosed:
+            channel, pitch, count = sorted(unclosed)[0]
+            raise ValueError(f"unclosed active MIDI note: channel={channel} pitch={pitch} count={count}")
     # Counter semantics make same-timestamp event order and track containers irrelevant.
     counter = Counter(notes)
     events = []

@@ -1,22 +1,33 @@
 # Changelog
 
-## v1.0.0 candidate
+## v1.1.0 — 2026-08-20
 
-- Added fail-closed validation for contamination assignments, result pairing, family manifests, input values, split ratios, and undefined contamination denominators.
-- Reframed token replacement as approximately token-budget matched and exposed pairwise and total reconciliation metrics with optional tolerances.
-- Added normalized MIDI structural equivalence and the frozen normalized robustness evidence.
-- Replaced hardcoded paper fields with hash-validated reconstruction from public-safe frozen raw result rows and evidence.
-- Added an independent integrity manifest, seed-sensitivity disclosure, add-one bootstrap p-value reporting, and the LMD universe provenance limitation.
-- Scientific results unchanged.
+- Added anonymous minimum-sufficient family/seed analysis units for strong
+  paper-statistics reproduction without raw MIDI, token sequences, or weights.
+- Added deterministic CPU-only recomputation and field-by-field comparison for
+  all 232 numerical `manuscript_results_v2` fields.
+- Added a one-command reviewer workflow, clean-environment GitHub Actions CI,
+  data dictionary, limitations statement, and complete Chinese file guide.
+- Added final public v2 tables and figures plus hash-verified materialization.
+- Added imperfect-family-inference robustness simulation rows and summaries.
+- Replaced legacy full-length family hashes and result registries on `main`
+  with release-specific pseudonymous identifiers and public-safe manifests.
+
+Scientific results and the frozen formal protocol are unchanged.
+
+## v1.0.0 — 2026-08-17
+
+- Published the first stable research-software release.
+- Added fail-closed validation, normalized structural equivalence, frozen
+  result reconstruction, integrity manifests, and public model interfaces.
+
+Scientific results unchanged.
 
 ## v1.0.0-rc2 — 2026-08-16
 
-- Normalized the public package to `leakagebench_midi`.
-- Replaced internal audit/date path names with stable reproducibility evidence paths.
-- Separated reusable framework code from paper tables, figures, protocol, and aggregate evidence.
-- Renamed scripts and documentation around user tasks and updated all public references.
-- Removed obsolete package glue and development-only registry/wrapper scripts.
-- Preserved all frozen scientific results, claims, cohorts, and evaluation boundaries.
+- Normalized the public package layout and separated reusable framework code
+  from paper-specific reproducibility evidence.
+- Removed obsolete development-only wrappers while preserving frozen results.
 
 Scientific results unchanged.
 

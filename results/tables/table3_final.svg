@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="520" viewBox="0 0 1800 520">
+<rect width="100%" height="100%" fill="white"/>
+<text x="35" y="38" font-family="DejaVu Sans, sans-serif" font-size="25px" font-weight="700" text-anchor="start" fill="#222">表3 模型依赖</text>
+<text x="35" y="75" font-family="DejaVu Sans, sans-serif" font-size="19px" font-weight="700" text-anchor="start" fill="#222">Panel A</text>
+<line x1="35" y1="101" x2="1765" y2="101" stroke="#222" stroke-width="2"/>
+<text x="42.0" y="126" font-family="DejaVu Sans, sans-serif" font-size="14px" font-weight="700" text-anchor="start" fill="#222">Model</text>
+<text x="474.5" y="126" font-family="DejaVu Sans, sans-serif" font-size="14px" font-weight="700" text-anchor="start" fill="#222">Effect</text>
+<text x="907.0" y="126" font-family="DejaVu Sans, sans-serif" font-size="14px" font-weight="700" text-anchor="start" fill="#222">Relative</text>
+<text x="1339.5" y="126" font-family="DejaVu Sans, sans-serif" font-size="14px" font-weight="700" text-anchor="start" fill="#222">95% CI</text>
+<line x1="35" y1="140" x2="1765" y2="140" stroke="#777" stroke-width="1"/>
+<text x="42.0" y="154" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">Transformer-S</text>
+<text x="474.5" y="154" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">-0.07759</text>
+<text x="907.0" y="154" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">8.57%</text>
+<text x="1339.5" y="154" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">[-0.0895, -0.0663]</text>
+<text x="42.0" y="182" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">Transformer-M</text>
+<text x="474.5" y="182" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">-0.08571</text>
+<text x="907.0" y="182" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">10.40%</text>
+<text x="1339.5" y="182" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">[-0.0988, -0.0729]</text>
+<text x="42.0" y="210" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">Transformer-L</text>
+<text x="474.5" y="210" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">-0.11532</text>
+<text x="907.0" y="210" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">13.62%</text>
+<text x="1339.5" y="210" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">[-0.1326, -0.0991]</text>
+<text x="42.0" y="238" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">Capacity trend</text>
+<text x="474.5" y="238" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">-0.07847</text>
+<text x="907.0" y="238" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">—</text>
+<text x="1339.5" y="238" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">[-0.1212, -0.0374]</text>
+<line x1="35" y1="254" x2="1765" y2="254" stroke="#222" stroke-width="2"/>
+<text x="35" y="284" font-family="DejaVu Sans, sans-serif" font-size="19px" font-weight="700" text-anchor="start" fill="#222">Panel B</text>
+<line x1="35" y1="310" x2="1765" y2="310" stroke="#222" stroke-width="2"/>
+<text x="42.0" y="335" font-family="DejaVu Sans, sans-serif" font-size="14px" font-weight="700" text-anchor="start" fill="#222">Model</text>
+<text x="474.5" y="335" font-family="DejaVu Sans, sans-serif" font-size="14px" font-weight="700" text-anchor="start" fill="#222">Effect</text>
+<text x="907.0" y="335" font-family="DejaVu Sans, sans-serif" font-size="14px" font-weight="700" text-anchor="start" fill="#222">95% CI</text>
+<text x="1339.5" y="335" font-family="DejaVu Sans, sans-serif" font-size="14px" font-weight="700" text-anchor="start" fill="#222">Reading</text>
+<line x1="35" y1="349" x2="1765" y2="349" stroke="#777" stroke-width="1"/>
+<text x="42.0" y="363" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">TCN</text>
+<text x="474.5" y="363" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">-0.03172</text>
+<text x="907.0" y="363" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">[-0.0378, -0.0263]</text>
+<text x="1339.5" y="363" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">弱同方向支持</text>
+<text x="42.0" y="391" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">Conditional VAE</text>
+<text x="474.5" y="391" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">-0.00905</text>
+<text x="907.0" y="391" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">[-0.0144, -0.0040]</text>
+<text x="1339.5" y="391" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">小但可靠</text>
+<text x="42.0" y="419" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">Latent Diffusion</text>
+<text x="474.5" y="419" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">-0.00000</text>
+<text x="907.0" y="419" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">[-0.0000, 0.0000]</text>
+<text x="1339.5" y="419" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">未检测到显著效应</text>
+<line x1="35" y1="435" x2="1765" y2="435" stroke="#222" stroke-width="2"/>
+</svg>

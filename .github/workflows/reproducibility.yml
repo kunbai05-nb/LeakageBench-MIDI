@@ -1,0 +1,48 @@
+name: Public reproducibility
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  reproduce-and-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      OMP_NUM_THREADS: "2"
+      MKL_NUM_THREADS: "2"
+    steps:
+      - name: Check out public release
+        uses: actions/checkout@v6
+
+      - name: Set up frozen Python version
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.10.12"
+          cache: pip
+          cache-dependency-path: requirements-lock.txt
+
+      - name: Install locked environment
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements-lock.txt
+          python -m pip install --no-deps -e .
+
+      - name: Recompute paper statistics and verify release
+        run: bash scripts/reproduce_all.sh "${RUNNER_TEMP}/leakagebench-reproduced"
+
+      - name: Upload field-by-field reproduction audit
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: leakagebench-reproduction-audit
+          path: |
+            ${{ runner.temp }}/leakagebench-reproduced/paper_statistics/REPRODUCED_FIELD_AUDIT.csv
+            ${{ runner.temp }}/leakagebench-reproduced/paper_statistics/REPRODUCTION_STATUS.json
+            ${{ runner.temp }}/leakagebench-reproduced/paper_statistics/REPRODUCED_RESULTS.md
+          if-no-files-found: warn

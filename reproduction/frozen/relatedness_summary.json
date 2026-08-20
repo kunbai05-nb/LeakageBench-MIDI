@@ -1,0 +1,156 @@
+{
+  "interpretation": "mechanism-consistent association; not causal mediation",
+  "metrics": {
+    "duration_4gram_similarity": {
+      "controls": [
+        "receiver_length",
+        "donor_token_count",
+        "family_window_count_proxy"
+      ],
+      "robust_family_bootstrap_ci95": [
+        -0.0024045412744539986,
+        0.04075608224099972
+      ],
+      "robust_huber_standardized_similarity_coefficient": 0.019180310207613203,
+      "spearman": {
+        "bootstrap_samples": 10000,
+        "bootstrap_seed": 20260821,
+        "ci95": [
+          -0.07397501648228073,
+          0.3489401662398539
+        ],
+        "estimate": 0.13957545167541427,
+        "families": 100,
+        "unit": "family"
+      }
+    },
+    "interval_4gram_similarity": {
+      "controls": [
+        "receiver_length",
+        "donor_token_count",
+        "family_window_count_proxy"
+      ],
+      "robust_family_bootstrap_ci95": [
+        0.001105903615559439,
+        0.04885462765371209
+      ],
+      "robust_huber_standardized_similarity_coefficient": 0.02657658809818165,
+      "spearman": {
+        "bootstrap_samples": 10000,
+        "bootstrap_seed": 20260819,
+        "ci95": [
+          -0.017584880330917076,
+          0.3956255359097611
+        ],
+        "estimate": 0.19317107616737528,
+        "families": 100,
+        "unit": "family"
+      }
+    },
+    "longest_shared_normalized_event_subsequence": {
+      "controls": [
+        "receiver_length",
+        "donor_token_count",
+        "family_window_count_proxy"
+      ],
+      "robust_family_bootstrap_ci95": [
+        0.008930917196001588,
+        0.04189520495035172
+      ],
+      "robust_huber_standardized_similarity_coefficient": 0.027068210926711446,
+      "spearman": {
+        "bootstrap_samples": 10000,
+        "bootstrap_seed": 20260823,
+        "ci95": [
+          0.21086204038757164,
+          0.5784355897334605
+        ],
+        "estimate": 0.40907368485543644,
+        "families": 100,
+        "unit": "family"
+      }
+    },
+    "normalized_structural_edit_similarity": {
+      "controls": [
+        "receiver_length",
+        "donor_token_count",
+        "family_window_count_proxy"
+      ],
+      "robust_family_bootstrap_ci95": [
+        -0.003075150723314369,
+        0.04795422170297195
+      ],
+      "robust_huber_standardized_similarity_coefficient": 0.02199360021619235,
+      "spearman": {
+        "bootstrap_samples": 10000,
+        "bootstrap_seed": 20260822,
+        "ci95": [
+          -0.08464068080706398,
+          0.3385383422465879
+        ],
+        "estimate": 0.1297475911593568,
+        "families": 100,
+        "unit": "family"
+      }
+    },
+    "pitch_4gram_similarity": {
+      "controls": [
+        "receiver_length",
+        "donor_token_count",
+        "family_window_count_proxy"
+      ],
+      "robust_family_bootstrap_ci95": [
+        0.005285628455450336,
+        0.05055113244194229
+      ],
+      "robust_huber_standardized_similarity_coefficient": 0.030177052899646728,
+      "spearman": {
+        "bootstrap_samples": 10000,
+        "bootstrap_seed": 20260818,
+        "ci95": [
+          0.019739606336967606,
+          0.4379992327433066
+        ],
+        "estimate": 0.2360183502870637,
+        "families": 100,
+        "unit": "family"
+      }
+    },
+    "rhythm_4gram_similarity": {
+      "controls": [
+        "receiver_length",
+        "donor_token_count",
+        "family_window_count_proxy"
+      ],
+      "robust_family_bootstrap_ci95": [
+        -0.011197171093093287,
+        0.05347335961454418
+      ],
+      "robust_huber_standardized_similarity_coefficient": 0.013983279903422277,
+      "spearman": {
+        "bootstrap_samples": 10000,
+        "bootstrap_seed": 20260820,
+        "ci95": [
+          -0.07171241548620116,
+          0.36647511119445564
+        ],
+        "estimate": 0.15619535198128742,
+        "families": 100,
+        "unit": "family"
+      }
+    }
+  },
+  "metrics_frozen_without_outcome_selection": true,
+  "seed_aware_sensitivity": {
+    "202608040": {
+      "spearman_rho": 0.18934871283888213
+    },
+    "202608041": {
+      "spearman_rho": 0.17825097481548186
+    },
+    "202608042": {
+      "spearman_rho": 0.1964608855040334
+    }
+  },
+  "status": "COMPLETE"
+}

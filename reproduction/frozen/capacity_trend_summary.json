@@ -1,0 +1,11 @@
+{
+  "bootstrap_samples": 10000,
+  "ci95": [
+    -0.12124262340418279,
+    -0.03741185232414631
+  ],
+  "estimand": "OLS slope of pooled tau against natural log parameter count for frozen Transformer S/M/L",
+  "interpretation_guard": "Descriptive capacity analysis; no new PASS threshold was introduced after training.",
+  "p_two_sided": 0.0,
+  "slope": -0.07846546216393269
+}

@@ -33,10 +33,3 @@ def test_synthetic_integration_and_structure(tmp_path):
  assert json.loads((out/'contamination/integrity.json').read_text())['receiver_in_train']==0
  cases=json.loads((out/'structural_cases.json').read_text())
  for expected,(a,b) in cases.items():assert classify_pair(out/a,out/b)['classification']==expected
-def test_paper_results_byte_deterministic():
- def digest():
-  paths=sorted((ROOT/'reproducibility/tables').glob('*.csv'))+sorted((ROOT/'reproducibility/figures').glob('*.csv'))
-  return {str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in paths}
- subprocess.run([sys.executable,str(ROOT/'scripts/reproduce_paper_results.py')],cwd=ROOT,check=True)
- one=digest();subprocess.run([sys.executable,str(ROOT/'scripts/reproduce_paper_results.py')],cwd=ROOT,check=True)
- assert one==digest() and len(one)==9

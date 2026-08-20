@@ -1,0 +1,201 @@
+{
+  "H1": {
+    "H1_pass": true,
+    "at_least_two_seed_ci_exclude_zero": true,
+    "bootstrap_samples": 10000,
+    "bootstrap_unit": "family",
+    "ci95": [
+      -0.13244426636038353,
+      -0.098963933267461
+    ],
+    "control_mean_delta": -0.0015640078809271512,
+    "p_two_sided": 0.0,
+    "practical_threshold_met": true,
+    "seed_fixed_effect": "balanced-design seed intercept removed by within-seed delta; pooled family means equally weight three seeds",
+    "tau": -0.11531665895895968,
+    "three_of_three_seed_negative": true,
+    "treated_mean_delta": -0.11688066683988683,
+    "treated_relative_nll_improvement": 0.1361730655515673
+  },
+  "H2": {
+    "pass": true,
+    "primary_metrics": {
+      "C1_normalized_lcs": {
+        "H2_metric_pass": true,
+        "bootstrap_samples": 10000,
+        "ci95": [
+          0.002959529174279815,
+          0.006801972225763483
+        ],
+        "families": 100,
+        "families_positive": 62,
+        "holm_adjusted_p": 0,
+        "mean": 0.004839005497037202,
+        "median": 0.0026041666666666665,
+        "median_direction_consistent": true,
+        "p_two_sided": 0.0
+      },
+      "C2_donor_16gram_excess": {
+        "H2_metric_pass": true,
+        "bootstrap_samples": 10000,
+        "ci95": [
+          0.0006726896954091289,
+          0.0020710618827333243
+        ],
+        "families": 100,
+        "families_positive": 48,
+        "holm_adjusted_p": 0,
+        "mean": 0.001327009388886975,
+        "median": 0.0,
+        "median_direction_consistent": true,
+        "p_two_sided": 0.0
+      },
+      "C3_transposition_two_bar_match": {
+        "H2_metric_pass": false,
+        "bootstrap_samples": 10000,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "families": 100,
+        "families_positive": 0,
+        "holm_adjusted_p": 1,
+        "mean": 0.0,
+        "median": 0.0,
+        "median_direction_consistent": true,
+        "p_two_sided": 1.0
+      }
+    }
+  },
+  "H3": {
+    "H3_pass": true,
+    "clean_validation_delta": {
+      "bootstrap_samples": 10000,
+      "ci95": [
+        -0.0018631838549353571,
+        0.0014750900606047227
+      ],
+      "families": 300,
+      "mean": -0.00020023002160349655,
+      "median": -0.0009206087478568215,
+      "p_two_sided": 0.8242
+    },
+    "quarter_treated_threshold": 0.02922016670997171,
+    "tau_minus_clean_validation_drift": -0.11511642893735619,
+    "treated_improvement_magnitude": 0.11688066683988683
+  },
+  "bootstrap_results": {
+    "clean_validation": {
+      "bootstrap_samples": 10000,
+      "ci95": [
+        -0.0018631838549353571,
+        0.0014750900606047227
+      ],
+      "families": 300,
+      "mean": -0.00020023002160349655,
+      "median": -0.0009206087478568215,
+      "p_two_sided": 0.8242
+    },
+    "copy_primary": {
+      "C1_normalized_lcs": {
+        "H2_metric_pass": true,
+        "bootstrap_samples": 10000,
+        "ci95": [
+          0.002959529174279815,
+          0.006801972225763483
+        ],
+        "families": 100,
+        "families_positive": 62,
+        "holm_adjusted_p": 0,
+        "mean": 0.004839005497037202,
+        "median": 0.0026041666666666665,
+        "median_direction_consistent": true,
+        "p_two_sided": 0.0
+      },
+      "C2_donor_16gram_excess": {
+        "H2_metric_pass": true,
+        "bootstrap_samples": 10000,
+        "ci95": [
+          0.0006726896954091289,
+          0.0020710618827333243
+        ],
+        "families": 100,
+        "families_positive": 48,
+        "holm_adjusted_p": 0,
+        "mean": 0.001327009388886975,
+        "median": 0.0,
+        "median_direction_consistent": true,
+        "p_two_sided": 0.0
+      },
+      "C3_transposition_two_bar_match": {
+        "H2_metric_pass": false,
+        "bootstrap_samples": 10000,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "families": 100,
+        "families_positive": 0,
+        "holm_adjusted_p": 1,
+        "mean": 0.0,
+        "median": 0.0,
+        "median_direction_consistent": true,
+        "p_two_sided": 1.0
+      }
+    },
+    "primary_tau": {
+      "H1_pass": true,
+      "at_least_two_seed_ci_exclude_zero": true,
+      "bootstrap_samples": 10000,
+      "bootstrap_unit": "family",
+      "ci95": [
+        -0.13244426636038353,
+        -0.098963933267461
+      ],
+      "control_mean_delta": -0.0015640078809271512,
+      "p_two_sided": 0.0,
+      "practical_threshold_met": true,
+      "seed_fixed_effect": "balanced-design seed intercept removed by within-seed delta; pooled family means equally weight three seeds",
+      "tau": -0.11531665895895968,
+      "three_of_three_seed_negative": true,
+      "treated_mean_delta": -0.11688066683988683,
+      "treated_relative_nll_improvement": 0.1361730655515673
+    }
+  },
+  "clean_test_accessed": false,
+  "formal_claim": "FAMILY_SPECIFIC_EVALUATION_INFLATION_WITH_COPY_SIGNAL",
+  "formal_status": "CONFIRMATORY_FAMILY_LEAKAGE_PASS",
+  "pilot_status_unchanged": "CONTAMINATION_PILOT_REJECTED",
+  "seed_level_effects": {
+    "seed_0": {
+      "ci95": [
+        -0.13439680872604745,
+        -0.10053611072834778
+      ],
+      "control_mean_delta": 0.01707311513365704,
+      "p_two_sided": 0.0,
+      "tau": -0.11692324390756599,
+      "treated_mean_delta": -0.09985012877390895
+    },
+    "seed_1": {
+      "ci95": [
+        -0.1187249974108671,
+        -0.08785815016009249
+      ],
+      "control_mean_delta": -0.009103124397869465,
+      "p_two_sided": 0.0,
+      "tau": -0.10281558661565597,
+      "treated_mean_delta": -0.11191871101352543
+    },
+    "seed_2": {
+      "ci95": [
+        -0.14593276832268812,
+        -0.10744859365461304
+      ],
+      "control_mean_delta": -0.01266201437856903,
+      "p_two_sided": 0.0,
+      "tau": -0.12621114635365713,
+      "treated_mean_delta": -0.13887316073222616
+    }
+  }
+}

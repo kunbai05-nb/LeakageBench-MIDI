@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="520" viewBox="0 0 1800 520">
+<rect width="100%" height="100%" fill="white"/>
+<text x="35" y="38" font-family="DejaVu Sans, sans-serif" font-size="25px" font-weight="700" text-anchor="start" fill="#222">表5 机制诊断</text>
+<text x="35" y="75" font-family="DejaVu Sans, sans-serif" font-size="19px" font-weight="700" text-anchor="start" fill="#222">Panel A</text>
+<line x1="35" y1="101" x2="1765" y2="101" stroke="#222" stroke-width="2"/>
+<text x="42.0" y="126" font-family="DejaVu Sans, sans-serif" font-size="14px" font-weight="700" text-anchor="start" fill="#222">Scale</text>
+<text x="388.0" y="126" font-family="DejaVu Sans, sans-serif" font-size="14px" font-weight="700" text-anchor="start" fill="#222">Shared</text>
+<text x="734.0" y="126" font-family="DejaVu Sans, sans-serif" font-size="14px" font-weight="700" text-anchor="start" fill="#222">Nonshared</text>
+<text x="1080.0" y="126" font-family="DejaVu Sans, sans-serif" font-size="14px" font-weight="700" text-anchor="start" fill="#222">Differential</text>
+<text x="1426.0" y="126" font-family="DejaVu Sans, sans-serif" font-size="14px" font-weight="700" text-anchor="start" fill="#222">95% CI</text>
+<line x1="35" y1="140" x2="1765" y2="140" stroke="#777" stroke-width="1"/>
+<text x="42.0" y="154" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">4-event</text>
+<text x="388.0" y="154" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">-0.15528</text>
+<text x="734.0" y="154" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">-0.03713</text>
+<text x="1080.0" y="154" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">-0.11814</text>
+<text x="1426.0" y="154" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">[-0.2271, -0.0291]</text>
+<text x="42.0" y="182" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">8-event</text>
+<text x="388.0" y="182" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">-0.16390</text>
+<text x="734.0" y="182" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">-0.16658</text>
+<text x="1080.0" y="182" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">0.00268</text>
+<text x="1426.0" y="182" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">[-0.1107, 0.1719]</text>
+<text x="42.0" y="210" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">16-event</text>
+<text x="388.0" y="210" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">-0.16823</text>
+<text x="734.0" y="210" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">-0.17483</text>
+<text x="1080.0" y="210" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">0.00660</text>
+<text x="1426.0" y="210" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">[-0.0895, 0.1646]</text>
+<line x1="35" y1="226" x2="1765" y2="226" stroke="#222" stroke-width="2"/>
+<text x="35" y="256" font-family="DejaVu Sans, sans-serif" font-size="19px" font-weight="700" text-anchor="start" fill="#222">Panel B</text>
+<line x1="35" y1="282" x2="1765" y2="282" stroke="#222" stroke-width="2"/>
+<text x="42.0" y="307" font-family="DejaVu Sans, sans-serif" font-size="14px" font-weight="700" text-anchor="start" fill="#222">Metric</text>
+<text x="474.5" y="307" font-family="DejaVu Sans, sans-serif" font-size="14px" font-weight="700" text-anchor="start" fill="#222">Estimate</text>
+<text x="907.0" y="307" font-family="DejaVu Sans, sans-serif" font-size="14px" font-weight="700" text-anchor="start" fill="#222">95% CI</text>
+<text x="1339.5" y="307" font-family="DejaVu Sans, sans-serif" font-size="14px" font-weight="700" text-anchor="start" fill="#222">Reading</text>
+<line x1="35" y1="321" x2="1765" y2="321" stroke="#777" stroke-width="1"/>
+<text x="42.0" y="335" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">Spearman rho</text>
+<text x="474.5" y="335" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">0.40907</text>
+<text x="907.0" y="335" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">[0.2109, 0.5784]</text>
+<text x="1339.5" y="335" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">moderate positive association</text>
+<text x="42.0" y="363" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">Huber</text>
+<text x="474.5" y="363" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">0.02707</text>
+<text x="907.0" y="363" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">[0.0089, 0.0419]</text>
+<text x="1339.5" y="363" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">adjusted positive association</text>
+<line x1="35" y1="379" x2="1765" y2="379" stroke="#222" stroke-width="2"/>
+</svg>

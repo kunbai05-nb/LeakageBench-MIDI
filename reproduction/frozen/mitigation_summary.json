@@ -1,0 +1,92 @@
+{
+  "S0": {
+    "canonical_event_overlap": 16,
+    "cross_split_family_pairs": 177,
+    "discarded_files": 0,
+    "discarded_token_ratio": 0.0,
+    "exact_overlap": 0,
+    "families_retained": 3800,
+    "family_overlap_count": 177,
+    "files_retained": 4300,
+    "protocol": "S0_FILE_SPLIT",
+    "split_family_counts": {
+      "test": 427,
+      "train": 3119,
+      "validation": 431
+    },
+    "split_token_counts": {
+      "test": 4814195,
+      "train": 40934218,
+      "validation": 4747208
+    },
+    "structurally_nonexact_cross_split_family_overlap": 161,
+    "test_size": 433,
+    "token_count": 50495621,
+    "track_order_invariant_overlap": 16,
+    "train_size": 3429,
+    "transposition_normalized_overlap_pressure": 120,
+    "usable_windows": 54500,
+    "validation_size": 438
+  },
+  "S1": {
+    "canonical_event_overlap": 0,
+    "cross_split_family_pairs": 161,
+    "discarded_files": 37,
+    "discarded_token_ratio": 0.007959482268769405,
+    "exact_overlap": 0,
+    "families_retained": 3800,
+    "family_overlap_count": 161,
+    "files_retained": 4263,
+    "protocol": "S1_EXACT_DEDUP_SPLIT",
+    "split_family_counts": {
+      "test": 421,
+      "train": 3112,
+      "validation": 428
+    },
+    "split_token_counts": {
+      "test": 4724821,
+      "train": 40644267,
+      "validation": 4724614
+    },
+    "structurally_nonexact_cross_split_family_overlap": 161,
+    "test_size": 426,
+    "token_count": 50093702,
+    "track_order_invariant_overlap": 0,
+    "train_size": 3402,
+    "transposition_normalized_overlap_pressure": 104,
+    "usable_windows": 54060,
+    "validation_size": 435
+  },
+  "S2": {
+    "canonical_event_overlap": 0,
+    "cross_split_family_pairs": 0,
+    "discarded_files": 0,
+    "discarded_token_ratio": 0.0,
+    "exact_overlap": 0,
+    "families_retained": 3800,
+    "family_overlap_count": 0,
+    "files_retained": 4300,
+    "protocol": "S2_FAMILY_AWARE_SPLIT",
+    "split_family_counts": {
+      "test": 127,
+      "train": 3547,
+      "validation": 126
+    },
+    "split_token_counts": {
+      "test": 5049770,
+      "train": 40396117,
+      "validation": 5049734
+    },
+    "structurally_nonexact_cross_split_family_overlap": 0,
+    "test_size": 172,
+    "token_count": 50495621,
+    "track_order_invariant_overlap": 0,
+    "train_size": 3958,
+    "transposition_normalized_overlap_pressure": 0,
+    "usable_windows": 54500,
+    "validation_size": 170
+  },
+  "candidate_families": 3800,
+  "candidate_files": 4300,
+  "candidate_pool_definition": "frozen usable LMD pieces in pilot base/validation/probe manifests; no clean-test content used"
+}

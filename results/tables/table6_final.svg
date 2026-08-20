@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="690" viewBox="0 0 1800 690">
+<rect width="100%" height="100%" fill="white"/>
+<text x="35" y="38" font-family="DejaVu Sans, sans-serif" font-size="25px" font-weight="700" text-anchor="start" fill="#222">表6 缓解与不完全关系图稳健性</text>
+<text x="35" y="75" font-family="DejaVu Sans, sans-serif" font-size="19px" font-weight="700" text-anchor="start" fill="#222">Panel A · 4,300-file cohort</text>
+<line x1="35" y1="101" x2="1765" y2="101" stroke="#222" stroke-width="2"/>
+<text x="42.0" y="126" font-family="DejaVu Sans, sans-serif" font-size="14px" font-weight="700" text-anchor="start" fill="#222">Method</text>
+<text x="388.0" y="126" font-family="DejaVu Sans, sans-serif" font-size="14px" font-weight="700" text-anchor="start" fill="#222">Files</text>
+<text x="734.0" y="126" font-family="DejaVu Sans, sans-serif" font-size="14px" font-weight="700" text-anchor="start" fill="#222">Token loss</text>
+<text x="1080.0" y="126" font-family="DejaVu Sans, sans-serif" font-size="14px" font-weight="700" text-anchor="start" fill="#222">Known families</text>
+<text x="1426.0" y="126" font-family="DejaVu Sans, sans-serif" font-size="14px" font-weight="700" text-anchor="start" fill="#222">Reassignment</text>
+<line x1="35" y1="140" x2="1765" y2="140" stroke="#777" stroke-width="1"/>
+<text x="42.0" y="154" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">S0</text>
+<text x="388.0" y="154" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">4,300</text>
+<text x="734.0" y="154" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">0.00%</text>
+<text x="1080.0" y="154" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">177</text>
+<text x="1426.0" y="154" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">0.00%</text>
+<text x="42.0" y="182" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">S1</text>
+<text x="388.0" y="182" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">4,263</text>
+<text x="734.0" y="182" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">0.80%</text>
+<text x="1080.0" y="182" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">161</text>
+<text x="1426.0" y="182" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">0.00%</text>
+<text x="42.0" y="210" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">S2</text>
+<text x="388.0" y="210" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">4,300</text>
+<text x="734.0" y="210" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">0.00%</text>
+<text x="1080.0" y="210" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">0</text>
+<text x="1426.0" y="210" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">25.95%</text>
+<text x="42.0" y="238" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">Delete-all</text>
+<text x="388.0" y="238" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">3,300</text>
+<text x="734.0" y="238" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">22.84%</text>
+<text x="1080.0" y="238" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">—</text>
+<text x="1426.0" y="238" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">—</text>
+<line x1="35" y1="254" x2="1765" y2="254" stroke="#222" stroke-width="2"/>
+<text x="35" y="284" font-family="DejaVu Sans, sans-serif" font-size="19px" font-weight="700" text-anchor="start" fill="#222">Panel B1 · FULL-UNIVERSE SIMULATION</text>
+<line x1="35" y1="310" x2="1765" y2="310" stroke="#222" stroke-width="2"/>
+<text x="42.0" y="335" font-family="DejaVu Sans, sans-serif" font-size="14px" font-weight="700" text-anchor="start" fill="#222">Condition</text>
+<text x="388.0" y="335" font-family="DejaVu Sans, sans-serif" font-size="14px" font-weight="700" text-anchor="start" fill="#222">Residual families</text>
+<text x="734.0" y="335" font-family="DejaVu Sans, sans-serif" font-size="14px" font-weight="700" text-anchor="start" fill="#222">Interval</text>
+<text x="1080.0" y="335" font-family="DejaVu Sans, sans-serif" font-size="14px" font-weight="700" text-anchor="start" fill="#222">Pairwise recall</text>
+<text x="1426.0" y="335" font-family="DejaVu Sans, sans-serif" font-size="14px" font-weight="700" text-anchor="start" fill="#222">Reading</text>
+<line x1="35" y1="349" x2="1765" y2="349" stroke="#777" stroke-width="1"/>
+<text x="42.0" y="363" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">File-level baseline</text>
+<text x="388.0" y="363" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">5033.34</text>
+<text x="734.0" y="363" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">[4932.38, 5120.52]</text>
+<text x="1080.0" y="363" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">—</text>
+<text x="1426.0" y="363" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">baseline</text>
+<text x="42.0" y="391" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">Perfect reference graph</text>
+<text x="388.0" y="391" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">0.00</text>
+<text x="734.0" y="391" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">—</text>
+<text x="1080.0" y="391" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">1.0000</text>
+<text x="1426.0" y="391" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">upper bound</text>
+<text x="42.0" y="419" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">simulated recall 0.95</text>
+<text x="388.0" y="419" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">343.92</text>
+<text x="734.0" y="419" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">[311.43, 376]</text>
+<text x="1080.0" y="419" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">0.9234</text>
+<text x="1426.0" y="419" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">high-recall region</text>
+<text x="42.0" y="447" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">simulated recall 0.90</text>
+<text x="388.0" y="447" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">675.26</text>
+<text x="734.0" y="447" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">[635.48, 716.62]</text>
+<text x="1080.0" y="447" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">0.8494</text>
+<text x="1426.0" y="447" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">degraded</text>
+<text x="42.0" y="475" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">simulated recall 0.50</text>
+<text x="388.0" y="475" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">2880.01</text>
+<text x="734.0" y="475" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">[2799.85, 2948.15]</text>
+<text x="1080.0" y="475" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">0.3585</text>
+<text x="1426.0" y="475" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">further degraded</text>
+<line x1="35" y1="491" x2="1765" y2="491" stroke="#222" stroke-width="2"/>
+<text x="35" y="521" font-family="DejaVu Sans, sans-serif" font-size="19px" font-weight="700" text-anchor="start" fill="#222">Panel B2 · FULL-UNIVERSE SIMULATION</text>
+<line x1="35" y1="547" x2="1765" y2="547" stroke="#222" stroke-width="2"/>
+<text x="42.0" y="572" font-family="DejaVu Sans, sans-serif" font-size="14px" font-weight="700" text-anchor="start" fill="#222">FP injection</text>
+<text x="388.0" y="572" font-family="DejaVu Sans, sans-serif" font-size="14px" font-weight="700" text-anchor="start" fill="#222">Relation precision</text>
+<text x="734.0" y="572" font-family="DejaVu Sans, sans-serif" font-size="14px" font-weight="700" text-anchor="start" fill="#222">Over-merged</text>
+<text x="1080.0" y="572" font-family="DejaVu Sans, sans-serif" font-size="14px" font-weight="700" text-anchor="start" fill="#222">Split-ratio error</text>
+<text x="1426.0" y="572" font-family="DejaVu Sans, sans-serif" font-size="14px" font-weight="700" text-anchor="start" fill="#222">Reading</text>
+<line x1="35" y1="586" x2="1765" y2="586" stroke="#777" stroke-width="1"/>
+<text x="42.0" y="600" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">1%</text>
+<text x="388.0" y="600" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">98.31%</text>
+<text x="734.0" y="600" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">381.77</text>
+<text x="1080.0" y="600" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">0.0000011</text>
+<text x="1426.0" y="600" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">conservative practical region</text>
+<text x="42.0" y="628" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">5%</text>
+<text x="388.0" y="628" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">91.44%</text>
+<text x="734.0" y="628" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">1921.82</text>
+<text x="1080.0" y="628" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">0.0000011</text>
+<text x="1426.0" y="628" font-family="DejaVu Sans, sans-serif" font-size="13px" font-weight="400" text-anchor="start" fill="#222">false-positive stress test</text>
+<line x1="35" y1="644" x2="1765" y2="644" stroke="#222" stroke-width="2"/>
+</svg>

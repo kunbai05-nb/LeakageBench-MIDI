@@ -24,3 +24,4 @@ examples/synthetic_demo/generated/
 *.bin
 *.log
 *clean_test*
+!reproduction/data/clean_test_nll_rows.csv

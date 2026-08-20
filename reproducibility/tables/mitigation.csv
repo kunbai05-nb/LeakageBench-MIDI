@@ -1,4 +1,0 @@
-protocol,files,cross_split_known_families,token_loss,reassigned_files
-S0_FILE_SPLIT,4300,177,0.0,
-S1_EXACT_DEDUP_SPLIT,4263,161,0.007959482268769405,
-S2_FAMILY_AWARE_SPLIT,4300,0,0.0,0.25953488372093025

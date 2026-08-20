@@ -1,0 +1,19 @@
+{
+  "bootstrap_samples": 10000,
+  "ci95": [
+    -0.13945789815154971,
+    -0.09207913236010917
+  ],
+  "classification": "FORMAL_RESULT_NEEDS_SENSITIVITY",
+  "core_result_strong_arrangement_level_supported": true,
+  "estimator": "same frozen treated delta minus all-control delta; family-equal pooled means",
+  "frozen_results_only": true,
+  "n_families": 50,
+  "relative_treated_nll_improvement": 0.13470676014523217,
+  "seed_wise_effects": {
+    "seed_202608040": -0.11612554997849951,
+    "seed_202608041": -0.10096776041264771,
+    "seed_202608042": -0.1274533147308952
+  },
+  "tau": -0.1148488750406808
+}

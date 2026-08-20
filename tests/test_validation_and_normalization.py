@@ -2,7 +2,7 @@ from __future__ import annotations
 import math
 from pathlib import Path
 import mido, pytest
-from leakagebench_midi import analyze_effect, audit_split, build_contamination, family_aware_split, classify_pair_normalized
+from leakagebench_midi import analyze_effect, audit_split, build_contamination, family_aware_split, classify_pair_normalized, normalize_midi_structure
 
 def sample():
  base=[{'id':'b','family_id':'b','tokens':100}]
@@ -39,6 +39,29 @@ def result_rows():
    for condition,nll in [('clean',2.0),('family_leak',1.9 if split=='treated' else 2.0)]:
     for fid in ids:out.append({'dataset':'d','architecture':'a','model_size':'s','seed':seed,'condition':condition,'split':split,'family_id':fid,'nll':nll})
  return out
+
+def family_manifest(rows=None):
+ rows = result_rows() if rows is None else rows
+ splits = {}
+ for row in rows:
+  splits.setdefault(row['family_id'], row['split'])
+ return {'format_version': 1, 'families': [{'family_id': family_id, 'split': split} for family_id, split in sorted(splits.items())]}
+
+def test_family_manifest_split_corruption():
+ rows=result_rows();manifest=family_manifest(rows);manifest['families'][0]['split']='treated' if manifest['families'][0]['split']!='treated' else 'control'
+ with pytest.raises(ValueError,match='manifest split does not match analysis split'):
+  analyze_effect(rows,family_manifest=manifest)
+
+def test_cross_cohort_family_collision():
+ rows=result_rows();collision=dict(next(row for row in rows if row['family_id']=='t' and row['seed']==0 and row['condition']=='clean'))
+ collision['split']='control'
+ with pytest.raises(ValueError,match='multiple analysis cohorts'):
+  analyze_effect(rows+[collision],family_manifest=family_manifest(rows))
+
+def test_family_manifest_cross_split_collision():
+ rows=result_rows();manifest=family_manifest(rows);duplicate=dict(manifest['families'][0]);duplicate['split']='treated' if duplicate['split']!='treated' else 'control';manifest['families'].append(duplicate)
+ with pytest.raises(ValueError,match='multiple manifest splits'):
+  analyze_effect(rows,family_manifest=manifest)
 
 def test_duplicate_identical_and_conflicting_rows():
  r=result_rows();
@@ -88,3 +111,18 @@ def test_normalized_equivalences(tmp_path):
 @pytest.mark.parametrize('left,right', [([(0,480,60)],[(0,480,61)]), ([(0,480,60)],[(240,480,60)]), ([(0,480,60)],[(0,240,60)])])
 def test_normalized_musical_differences(tmp_path,left,right):
  a=tmp_path/'a.mid';b=tmp_path/'b.mid';save(a,480,[left]);save(b,480,[right]);assert not exact(a,b)
+
+def test_normalize_empty_midi(tmp_path):
+ path=tmp_path/'empty.mid';m=mido.MidiFile(ticks_per_beat=480);m.tracks.append(mido.MidiTrack());m.save(path)
+ assert normalize_midi_structure(path)['events']==[]
+
+def test_normalize_unclosed_note_fails(tmp_path):
+ path=tmp_path/'unclosed.mid';m=mido.MidiFile(ticks_per_beat=480);track=mido.MidiTrack();track.append(mido.Message('note_on',note=60,velocity=64,time=0));m.tracks.append(track);m.save(path)
+ with pytest.raises(ValueError,match='unclosed active MIDI note'):
+  normalize_midi_structure(path)
+
+def test_normalize_overlapping_notes(tmp_path):
+ path=tmp_path/'overlap.mid';m=mido.MidiFile(ticks_per_beat=480);track=mido.MidiTrack()
+ track.extend([mido.Message('note_on',note=60,velocity=64,time=0),mido.Message('note_on',note=60,velocity=72,time=120),mido.Message('note_off',note=60,velocity=0,time=120),mido.Message('note_off',note=60,velocity=0,time=120)])
+ m.tracks.append(track);m.save(path);events=normalize_midi_structure(path)['events']
+ assert len(events)==2 and sum(event['multiplicity'] for event in events)==2

@@ -4,6 +4,8 @@
 
 - Consolidated the source archive and all 60 inference-only checkpoint assets
   into one current GitHub release.
+- Added prominent source/reproduction downloads and direct links to every
+  checkpoint archive in the README and model-artifact guide.
 - Replaced version-specific public links with the current release URL and the
   version-independent Zenodo concept DOI.
 - Retained the checkpoint artifact version (`v1.1.0`) and its hashes unchanged;

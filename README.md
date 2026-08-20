@@ -4,6 +4,8 @@
 
 LeakageBench-MIDI is a data-agnostic toolkit for measuring and mitigating same-work family leakage in symbolic-music generation evaluation. This directory is the public GitHub software release.
 
+**Downloads:** [source code and public reproduction bundle (ZIP)](https://github.com/kunbai05-nb/LeakageBench-MIDI/archive/refs/tags/v1.1.2.zip) · [all v1.1.2 release files and model checkpoints](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/tag/v1.1.2) · [Zenodo archive](https://doi.org/10.5281/zenodo.22025589)
+
 ## Public-release boundaries
 
 - **Data are not distributed.** No raw MIDI, audio, token-bearing training/evaluation manifest, private evaluation item, or third-party dataset is included.
@@ -98,6 +100,31 @@ CC-BY-4.0 to the extent of rights held by the authors and are split by
 architecture so users can download only the model families they need. Every
 checkpoint records its condition, seed, configuration, source-checkpoint hash,
 and paper role in `MODEL_MANIFEST.json`.
+
+### Direct checkpoint downloads
+
+Download [`SHA256SUMS`](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.1.2/SHA256SUMS)
+and [`model-release-metadata.tar.gz`](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.1.2/model-release-metadata.tar.gz)
+first. The metadata archive contains `MODEL_MANIFEST.json`, licenses, model
+card, and verification metadata.
+
+| Models | Download | Approx. size |
+|---|---|---:|
+| Phase-2 Transformer-L (9 checkpoints) | [`phase2-transformer-l.tar.gz`](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.1.2/phase2-transformer-l.tar.gz) | 297 MB |
+| Conditional VAE (9 checkpoints) | [`conditional-vae.tar.gz`](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.1.2/conditional-vae.tar.gz) | 40 MB |
+| Latent Diffusion + neutral encoders (12 artifacts) | [`latent-diffusion-and-neutral-encoders.tar.gz`](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.1.2/latent-diffusion-and-neutral-encoders.tar.gz) | 31 MB |
+| Legacy LMD Transformer-L | [`lmd-transformer-l-legacy.tar.gz`](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.1.2/lmd-transformer-l-legacy.tar.gz) | 166 MB |
+| LMD Transformer-M | [`lmd-transformer-m.tar.gz`](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.1.2/lmd-transformer-m.tar.gz) | 127 MB |
+| LMD Transformer-S | [`lmd-transformer-s.tar.gz`](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.1.2/lmd-transformer-s.tar.gz) | 102 MB |
+| LMD TCN | [`lmd-tcn.tar.gz`](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.1.2/lmd-tcn.tar.gz) | 101 MB |
+| PDMX Transformer-L | [`pdmx-transformer-l.tar.gz`](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.1.2/pdmx-transformer-l.tar.gz) | 166 MB |
+
+To download every release attachment with the GitHub CLI:
+
+```bash
+gh release download v1.1.2 \
+  --repo kunbai05-nb/LeakageBench-MIDI
+```
 
 After downloading and extracting a model archive:
 

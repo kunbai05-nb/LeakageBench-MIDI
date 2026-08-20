@@ -11,6 +11,7 @@ authors:
     orcid: "https://orcid.org/0009-0006-4134-9796"
     affiliation: "School of Intelligence Science and Technology, Beijing University of Civil Engineering and Architecture, Beijing 102616, China"
 repository-code: "https://github.com/kunbai05-nb/LeakageBench-MIDI"
+doi: "10.5281/zenodo.22023101"
 abstract: "A reproducible framework for measuring and mitigating same-work family leakage in symbolic music generation evaluation."
 keywords:
   - symbolic music generation

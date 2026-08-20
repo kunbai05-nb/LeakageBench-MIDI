@@ -1,5 +1,7 @@
 # LeakageBench-MIDI
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22023100.svg)](https://doi.org/10.5281/zenodo.22023100)
+
 LeakageBench-MIDI is a data-agnostic toolkit for measuring and mitigating same-work family leakage in symbolic-music generation evaluation. This directory is the public GitHub software release.
 
 ## Public-release boundaries
@@ -105,4 +107,12 @@ File identity is not necessarily musical-work identity. Multiple exports, arrang
 
 ## Citation and license
 
-Citation metadata are in [CITATION.cff](CITATION.cff). Project code and documentation are released under the [MIT License](LICENSE); that license does not grant redistribution rights for third-party music datasets.
+Citation metadata are in [CITATION.cff](CITATION.cff). Cite the immutable v1.1.1
+archive with DOI
+[`10.5281/zenodo.22023101`](https://doi.org/10.5281/zenodo.22023101). Use the
+concept DOI [`10.5281/zenodo.22023100`](https://doi.org/10.5281/zenodo.22023100)
+when referring to the software project across versions.
+
+Project code and documentation are released under the [MIT License](LICENSE);
+that license does not grant redistribution rights for third-party music
+datasets.

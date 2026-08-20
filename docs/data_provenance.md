@@ -1,5 +1,10 @@
 # Data provenance
 
+The immutable public software archive for release v1.1.1 is registered as
+[10.5281/zenodo.22023101](https://doi.org/10.5281/zenodo.22023101). The
+version-independent project identifier is
+[10.5281/zenodo.22023100](https://doi.org/10.5281/zenodo.22023100).
+
 ## LMD v0.1 official count
 
 The [official Lakh MIDI Dataset page](https://colinraffel.com/projects/lmd/) describes LMD v0.1 as containing **176,581 MD5-distinct MIDI files**. LeakageBench-MIDI treats that number as the original dataset documentation's count. It does not relabel that count as the size of the downstream analysis universe.

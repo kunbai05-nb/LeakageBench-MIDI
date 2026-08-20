@@ -41,7 +41,7 @@
 | `docs/data_policy.md` | 说明哪些数据可公开、哪些因版权或隐私边界不公开，以及用户自行取得第三方数据时应遵守的条件。 | 数据合规。 |
 | `docs/data_provenance.md` | 公开级 provenance：解释数值材料来自哪些冻结分析阶段、如何匿名化、如何以哈希绑定；不包含内部服务器路径和私有 registry。 | 证据链核查。 |
 | `docs/datasets.md` | 描述论文涉及的数据集角色、公开获取责任和本仓库不随附原始音乐数据的原因。 | 数据准备。 |
-| `docs/model_artifacts.md` | 说明模型定义与 checkpoint 的区别、GitHub 版是否提供权重，以及未来 companion artifact 应满足的发布条件。 | 权重和推理边界。 |
+| `docs/model_artifacts.md` | 说明独立 companion checkpoint 档案的 60 个推理权重覆盖范围、许可、下载边界与加载方式。 | 权重和推理边界。 |
 | `docs/splitting_protocol.md` | 专门说明 file-level split、known-family component split、泄漏度量和不完整 family inference 的报告方式。 | split 实现与审查。 |
 
 ## 4. 合成示例
@@ -59,7 +59,8 @@
 | `leakagebench_midi/core.py` | 核心数据结构与算法：family relation 图、连通分量、split 泄漏审计、component-atomic 分配和相关验证逻辑。 | 论文 mitigation 方法的主要实现。 |
 | `leakagebench_midi/structural.py` | MIDI 结构标准化、结构特征与 pair 分类相关逻辑，用于区分 exact、规范化后等价和结构非精确关系。 | 结构控制分析。 |
 | `leakagebench_midi/models/__init__.py` | 模型子包入口，集中导出公开模型组件，避免调用者依赖内部文件布局。 | 推理代码组织。 |
-| `leakagebench_midi/models/loader.py` | 安全加载公开支持的模型结构和外部权重，校验 checkpoint 元数据与形状；仓库自身不附带权重。 | 用户自行取得权重后的推理。 |
+| `leakagebench_midi/models/loader.py` | 严格加载 Transformer、TCN、Conditional VAE、neutral encoder 与 Latent Diffusion 外部权重，并校验 checkpoint 元数据、版本和形状；仓库自身不附带权重。 | 用户下载 companion artifact 后的推理。 |
+| `leakagebench_midi/models/cross_paradigm.py` | 提供正式 Conditional VAE、Latent Diffusion 及 condition-invariant neutral encoder 所用模型定义。 | 跨范式模型权重的公开加载与推理。 |
 | `leakagebench_midi/models/tcn.py` | 论文使用的 TCN 类模型结构公开实现，用于架构核对和合成权重加载测试。 | 模型定义复核。 |
 | `leakagebench_midi/models/tokenizer.py` | 符号音乐事件 tokenizer 的公开实现和词表接口。只提供转换逻辑，不包含论文 token 序列。 | 数据预处理接口。 |
 | `leakagebench_midi/models/transformer.py` | Transformer 模型结构公开实现，包括配置到模块的构造逻辑。 | 模型定义复核。 |
@@ -187,7 +188,7 @@
 
 | 文件 | 作用 | 覆盖风险 |
 |---|---|---|
-| `tests/test_model_loader.py` | 用临时合成权重测试模型 loader、配置校验和错误 checkpoint 拒绝逻辑。 | 模型定义与加载兼容性；不需要正式权重。 |
+| `tests/test_model_loader.py` | 用临时合成权重测试五类公开架构的 loader、CPU 前向、配置校验和错误 checkpoint 拒绝逻辑。 | 模型定义与加载兼容性；不需要正式权重。 |
 | `tests/test_public_workflows.py` | 测试公开 CLI 和合成端到端工作流。 | 命令行连接错误、输出契约和 split 审计。 |
 | `tests/test_release_safety.py` | 检查公开树不包含原始 MIDI、checkpoint、危险目录、绝对路径或明显敏感文件。 | 发布边界回归。 |
 | `tests/test_strong_reproduction_bundle.py` | 验证强复现 manifest 哈希、伪匿名 family ID 形状、无 token-sequence 字段及 CPU-only 脚本约束。 | 匿名统计包完整性与敏感内容防护。 |

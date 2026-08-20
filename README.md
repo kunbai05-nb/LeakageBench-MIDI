@@ -8,7 +8,7 @@ LeakageBench-MIDI is a data-agnostic toolkit for measuring and mitigating same-w
 
 - **Data are not distributed.** No raw MIDI, audio, token-bearing training/evaluation manifest, private evaluation item, or third-party dataset is included.
 - **The family graph is a reference relation, not a universal detector.** Reported zero overlap always means zero *known* overlap under the adopted reference relation; unknown same-work relations may remain.
-- **Checkpoints are not included in this GitHub release.** The code contains an inference loader and model definitions, but no model weights. A separately governed companion checkpoint artifact may be published independently; it is not required for the public tests or result verification.
+- **Checkpoints are not included in this Git source tree; they are distributed separately.** The companion model release contains 60 inference-only artifacts: 30 confirmatory/capacity/external checkpoints, 9 Phase-2 Transformer-L checkpoints, 9 Conditional VAE checkpoints, 9 Latent Diffusion checkpoints, and 3 condition-invariant neutral encoders required by the diffusion endpoint. Intermediate checkpoints, optimizer/RNG state, and training logs are excluded. See [docs/model_artifacts.md](docs/model_artifacts.md).
 - **Internal provenance is not distributed.** Server paths, synchronization records, training logs, private registries, and internal evidence trees are excluded.
 
 ## Installation
@@ -85,6 +85,30 @@ python -m pytest -q
 ```
 
 The tests cover family-component construction, leakage auditing, component-aware splitting, controlled contamination logic, structural normalization, synthetic integration, model-loader validation with temporary synthetic weights, and public-result integrity.
+
+## Companion model checkpoints
+
+The separately archived **LeakageBench-MIDI Model Checkpoints v1.1.0** package is
+licensed under CC-BY-4.0 to the extent of rights held by the authors. It is split
+by architecture so users can download only the model families they need. Every
+checkpoint records its condition, seed, configuration, source-checkpoint hash,
+and paper role in `MODEL_MANIFEST.json`.
+
+After downloading and extracting a model archive:
+
+```python
+from leakagebench_midi.models import load_checkpoint
+
+model, metadata = load_checkpoint("path/to/seed_202608040.pt", map_location="cpu")
+```
+
+Phase-2 covers `clean`, `unrelated_donor`, and `same_family_donor` for all three
+formal seeds. Conditional VAE and Latent Diffusion use the same three-condition
+coverage. Each diffusion checkpoint must be paired with the neutral encoder of
+the same seed identified by `linked_encoder_model_id`. The checkpoint package is
+not needed to recompute the released paper statistics, but it supports direct
+inference and model-level inspection. Download the grouped assets from the
+[model checkpoint release](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/tag/models-v1.1.0).
 
 ## Repository structure
 

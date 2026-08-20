@@ -2,7 +2,13 @@ from pathlib import Path
 import json
 import pytest
 torch = pytest.importorskip('torch')
-from leakagebench_midi.models import build_tcn, build_transformer, load_checkpoint
+from leakagebench_midi.models import (
+    build_conditional_vae,
+    build_latent_diffusion,
+    build_tcn,
+    build_transformer,
+    load_checkpoint,
+)
 
 def transformer_config():
     return {'vocab_size': 17, 'context_length': 16, 'layers': 1, 'd_model': 16, 'heads': 2, 'ffn_dim': 32, 'dropout': 0.0, 'gradient_checkpointing': False}
@@ -10,8 +16,19 @@ def transformer_config():
 def tcn_config():
     return {'vocab_size': 17, 'context_length': 16, 'channels': 256, 'ffn_dim': 1024, 'blocks': 9, 'kernel_size': 5, 'dilations': [1, 2, 4, 8, 16, 32, 64, 128, 256], 'dropout': 0.0}
 
+def cvae_config():
+    return {'vocab_size': 17, 'context_length': 16, 'd_model': 16, 'encoder_layers': 1, 'decoder_layers': 1, 'heads': 2, 'ffn_dim': 32, 'latent_dim': 8, 'dropout': 0.0, 'beta': 0.01}
+
+def diffusion_config():
+    return {'latent_dim': 8, 'hidden_dim': 16, 'time_dim': 8, 'timesteps': 20, 'beta_start': 0.0001, 'beta_end': 0.02}
+
 def artifact(model, architecture, config):
     return {'format_version': '1.0', 'artifact_type': 'LeakageBench-MIDI model checkpoint', 'model_id': 'test-model', 'dataset': 'lmd', 'architecture': architecture, 'model_size': 'test', 'condition': 'clean', 'seed': 7, 'paper_role': 'test', 'parameter_count': sum((p.numel() for p in model.parameters())), 'state_dict': model.state_dict(), 'model_config': config, 'tokenizer_config': {'vocab_size': 17}, 'source_checkpoint_sha256': '0' * 64, 'software_version': 'v1.0.0', 'model_artifact_version': 'v1.0.0', 'weight_license': 'CC-BY-4.0'}
+
+def v11_artifact(model, architecture, config):
+    value = artifact(model, architecture, config)
+    value.update(format_version='1.1', software_version='v1.1.1', model_artifact_version='v1.1.0')
+    return value
 
 @pytest.mark.parametrize('architecture,config,builder', [('transformer', transformer_config(), build_transformer), ('tcn', tcn_config(), build_tcn)])
 def test_checkpoint_load(tmp_path, architecture, config, builder):
@@ -19,6 +36,26 @@ def test_checkpoint_load(tmp_path, architecture, config, builder):
     torch.save(artifact(builder(config), architecture, config), path)
     (loaded, metadata) = load_checkpoint(path)
     assert not loaded.training and metadata['software_version'] == 'v1.0.0'
+
+@pytest.mark.parametrize('architecture,config,builder', [
+    ('conditional_vae', cvae_config(), build_conditional_vae),
+    ('neutral_encoder', cvae_config(), build_conditional_vae),
+    ('latent_diffusion', diffusion_config(), build_latent_diffusion),
+])
+def test_cross_paradigm_checkpoint_load_and_forward(tmp_path, architecture, config, builder):
+    path = tmp_path / f'{architecture}.pt'
+    torch.save(v11_artifact(builder(config), architecture, config), path)
+    loaded, metadata = load_checkpoint(path)
+    assert not loaded.training and metadata['software_version'] == 'v1.1.1'
+    if architecture == 'latent_diffusion':
+        output = loaded.denoiser(torch.zeros(2, config['latent_dim']), torch.tensor([1, 2]))
+        assert output.shape == (2, config['latent_dim'])
+    else:
+        token_ids = torch.zeros((2, 8), dtype=torch.long)
+        attention = torch.ones_like(token_ids, dtype=torch.bool)
+        loss = torch.zeros_like(attention)
+        loss[:, 4:] = True
+        assert torch.isfinite(loaded.prior_nll(token_ids, attention, loss)['nll'])
 
 def test_public_loader_unknown_architecture(tmp_path):
     cfg = transformer_config()

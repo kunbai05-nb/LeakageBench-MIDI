@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.1.1 — 2026-08-20
+
+- Replaced legacy/custom `.zenodo.json` keys with Zenodo's documented GitHub
+  integration schema (`upload_type`, `access_right`, normalized creator name,
+  and SPDX-compatible license identifier).
+- No code, analysis data, formal results, or formal protocol changed.
+
 ## v1.1.0 — 2026-08-20
 
 - Added anonymous minimum-sufficient family/seed analysis units for strong

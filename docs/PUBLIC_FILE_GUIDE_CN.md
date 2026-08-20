@@ -15,7 +15,7 @@
 |---|---|---|
 | `.github/workflows/reproducibility.yml` | GitHub Actions 自动化定义。在每次 push、pull request 或手动触发时，创建干净的 Ubuntu/Python 3.10.12 环境，安装锁定依赖，运行一键强复现，并上传逐字段审计产物。它把本地“能跑”升级为托管环境持续验证。 | CI、维护者、审稿人查看绿色构建状态。 |
 | `.gitignore` | 阻止缓存、虚拟环境、原始 MIDI、音频、checkpoint、日志、归档和合成生成物进入版本控制；同时显式允许安全的 `clean_test_nll_rows.csv` 匿名标量文件。 | 发布安全边界。 |
-| `.zenodo.json` | Zenodo 归档元数据，保存正式标题、v1.1.0 tag、作者、ORCID、单位、许可证、关键词和关联工作；DOI 生成后再填入真实 DOI。 | GitHub–Zenodo 长期归档。 |
+| `.zenodo.json` | Zenodo GitHub 集成元数据，使用官方支持的字段保存正式标题、v1.1.1 版本、作者、ORCID、单位、许可证和关键词；Zenodo 会在 release 归档时分配 DOI。 | GitHub–Zenodo 长期归档。 |
 | `CHANGELOG.md` | 记录公开 release 的版本变化、兼容性变化和公开材料增减，帮助引用者确认自己使用的是哪一版。 | 版本追踪。 |
 | `CITATION.cff` | 机器可读引用元数据，GitHub 可据此生成 Cite this repository 信息。 | 论文引用与软件归档。 |
 | `LICENSE` | MIT 软件许可证；只覆盖本仓库代码和文档，不赋予第三方音乐数据再分发权。 | 法律边界。 |

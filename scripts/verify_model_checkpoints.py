@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify a downloaded v1.1.0 checkpoint companion directory without training."""
+"""Verify a downloaded checkpoint bundle."""
 from __future__ import annotations
 
 import argparse

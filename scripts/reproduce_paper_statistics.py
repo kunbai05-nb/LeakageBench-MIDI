@@ -1,13 +1,5 @@
 #!/usr/bin/env python3
-"""Recompute paper statistics from the public-safe analysis-unit bundle.
-
-No MIDI, token sequence, checkpoint, GPU, or network access is required.
-The script writes a machine-readable field audit and a compact Markdown
-summary. Expensive model fitting/training is intentionally out of scope; its
-already-produced anonymous per-family outputs are the inputs. Each numerical
-field is explicitly labelled as recomputed from public rows or verified from
-a frozen aggregate summary.
-"""
+"""Recompute paper statistics from the public analysis bundle."""
 from __future__ import annotations
 
 import argparse
@@ -26,6 +18,23 @@ ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "reproduction/data"
 FROZEN = ROOT / "reproduction/frozen"
 EXPECTED = ROOT / "results/manuscript_results_v2_public.json"
+PROTOCOL = json.loads((ROOT / "configs/protocol_v2.json").read_text(encoding="utf-8"))
+STATISTICS = PROTOCOL["statistics"]
+PHASE2_SEEDS = tuple(PROTOCOL["controlled_exposure"]["formal_seeds"])
+PHASE2_CONDITIONS = tuple(PROTOCOL["controlled_exposure"]["conditions"])
+CROSS_PARADIGM_SEEDS = tuple(PROTOCOL["cross_paradigm"]["formal_seeds"])
+CROSS_PARADIGM_CONDITIONS = tuple(PROTOCOL["cross_paradigm"]["conditions"])
+BOOTSTRAP_SAMPLES = int(STATISTICS["bootstrap_replicates"])
+PHASE2_BOOTSTRAP_SEED = int(STATISTICS["phase2_bootstrap_seed"])
+CROSS_PARADIGM_BOOTSTRAP_SEED = int(STATISTICS["cross_paradigm_bootstrap_seed"])
+CROSS_PARADIGM_SIGN_SEED = int(STATISTICS["cross_paradigm_sign_randomization_seed"])
+LEGACY_SEEDS = range(3)
+LEGACY_CONFIRMATORY_SEED = 20260804
+CLEAN_VALIDATION_SEED = 20260808
+CAPACITY_BOOTSTRAP_SEED = 20260812
+PDMX_BOOTSTRAP_SEED = 20260813
+RELATEDNESS_SPEARMAN_SEED = 20260823
+RELATEDNESS_HUBER_SEED = 20260905
 NUMERIC_FIELDS = ("mean_a", "mean_b", "effect", "relative_effect", "ci_low", "ci_high", "p_raw", "p_adjusted")
 RECOMPUTED = "RECOMPUTED_FROM_PUBLIC_ROWS"
 VERIFIED = "VERIFIED_FROM_FROZEN_SUMMARY"
@@ -55,7 +64,7 @@ def is_finite(value) -> bool:
     return value is not None and math.isfinite(value)
 
 
-def bootstrap_mean(values, seed: int, samples: int = 10_000, plus_one: bool = False) -> dict:
+def bootstrap_mean(values, seed: int, samples: int = BOOTSTRAP_SAMPLES, plus_one: bool = False) -> dict:
     values = np.asarray(values, dtype=float)
     if values.size == 0 or not np.isfinite(values).all():
         raise ValueError("bootstrap values must be non-empty and finite")
@@ -78,7 +87,7 @@ def bootstrap_mean(values, seed: int, samples: int = 10_000, plus_one: bool = Fa
     }
 
 
-def bootstrap_mean_loop(values, seed: int, samples: int = 10_000, plus_one: bool = False) -> dict:
+def bootstrap_mean_loop(values, seed: int, samples: int = BOOTSTRAP_SAMPLES, plus_one: bool = False) -> dict:
     """Exact loop-based bootstrap used by the Phase-2 formal postprocessor."""
     values = np.asarray(values, dtype=float)
     if values.size == 0 or not np.isfinite(values).all():
@@ -92,7 +101,7 @@ def bootstrap_mean_loop(values, seed: int, samples: int = 10_000, plus_one: bool
     return {"effect": float(values.mean()), "ci_low": float(np.quantile(draws, .025)), "ci_high": float(np.quantile(draws, .975)), "p_raw": float(p), "n_families": len(values), "bootstrap_B": samples}
 
 
-def bootstrap_difference(left, right, seed: int, samples: int = 10_000) -> dict:
+def bootstrap_difference(left, right, seed: int, samples: int = BOOTSTRAP_SAMPLES) -> dict:
     left, right = np.asarray(left, float), np.asarray(right, float)
     if left.size == 0 or right.size == 0 or not np.isfinite(left).all() or not np.isfinite(right).all():
         raise ValueError("bootstrap groups must be non-empty and finite")
@@ -137,10 +146,7 @@ class Audit:
                     rows.append({"result_id": rid, "field": field, "expected": expected[field], "recomputed": "", "absolute_difference": "", "tolerance": "", "method": "unavailable", "status": "UNREPRODUCED"})
                     continue
                 value, method, provenance, tolerance = item
-                # Values extracted from display-oriented tables are sometimes
-                # intentionally rounded.  Infer half-unit-in-last-place from
-                # the expected decimal representation while keeping full-
-                # precision lockfile values at near-machine tolerance.
+                # Display tables may be rounded; lockfile values retain tight tolerance.
                 text = str(expected[field]).lower()
                 if "e" not in text and "." in text:
                     decimals = len(text.split(".", 1)[1])
@@ -186,29 +192,30 @@ def pooled_nll(rows: list[dict], model_field="model"):
 def legacy_and_capacity(audit: Audit) -> None:
     rows = read_csv(DATA / "capacity_nll_rows.csv")
     by = pooled_nll(rows)
-    params = {"transformer_s": 10942512, "transformer_m": 13658064, "transformer_l": 17821056, "tcn_384": 10753536}
+    scale = PROTOCOL["architecture_checks"]["transformer_scale"]["models"]
+    params = {
+        "transformer_s": scale["S"]["parameter_count"],
+        "transformer_m": scale["M"]["parameter_count"],
+        "transformer_l": scale["L"]["parameter_count"],
+        "tcn_384": PROTOCOL["architecture_checks"]["tcn"]["parameter_count"],
+    }
     result_ids = {"transformer_s": "transformer_s_capacity", "transformer_m": "transformer_m_capacity", "transformer_l": "transformer_l_capacity", "tcn_384": "tcn_384_legacy"}
     family_values = {}
     for model in params:
         cohorts = {}
         for cohort in ("treated", "control", "clean_validation"):
             ids = list(by[model, 0, "clean", cohort])
-            cohorts[cohort] = {family: mean(by[model, seed, "family_leak", cohort][family] - by[model, seed, "clean", cohort][family] for seed in range(3)) for family in ids}
+            cohorts[cohort] = {family: mean(by[model, seed, "family_leak", cohort][family] - by[model, seed, "clean", cohort][family] for seed in LEGACY_SEEDS) for family in ids}
         tv, cv = np.asarray(list(cohorts["treated"].values())), np.asarray(list(cohorts["control"].values()))
         family_values[model] = (tv, cv)
-        stat = bootstrap_difference(tv, cv, 20260812 + params[model])
-        clean_nll = mean(by[model, seed, "clean", "treated"][family] for seed in range(3) for family in by[model, seed, "clean", "treated"])
+        stat = bootstrap_difference(tv, cv, CAPACITY_BOOTSTRAP_SEED + params[model])
+        clean_nll = mean(by[model, seed, "clean", "treated"][family] for seed in LEGACY_SEEDS for family in by[model, seed, "clean", "treated"])
         rid = result_ids[model]
         audit.add(rid, "recomputed_from_anonymous_family_seed_nll", tolerance=5e-5, **stat, relative_effect=float(-tv.mean() / clean_nll), n_families=len(tv))
 
-    # Re-run the exact legacy confirmatory estimator: pool each family over the
-    # three training seeds, then independently resample treated and control
-    # families with the preregistered bootstrap seed 20260804.
     legacy_rows = read_csv(DATA / "legacy_nll_rows.csv")
     legacy_by = pooled_nll([row for row in legacy_rows if row["model"] == "transformer_l_legacy"])
-    # The formal script sorted the original family identifiers before drawing
-    # bootstrap indices.  Public IDs preserve that order in ``family_order``;
-    # sorting the pseudonyms themselves would change the deterministic draws.
+    # family_order preserves the original deterministic bootstrap order.
     legacy_order = {
         row["family_id"]: int(row["family_order"])
         for row in legacy_rows
@@ -223,32 +230,31 @@ def legacy_and_capacity(audit: Audit) -> None:
     legacy_treated = np.asarray([
         mean(legacy_by["transformer_l_legacy", seed, "family_leak", "treated"][family]
              - legacy_by["transformer_l_legacy", seed, "clean", "treated"][family]
-             for seed in range(3))
+             for seed in LEGACY_SEEDS)
         for family in legacy_treated_ids
     ])
     legacy_control = np.asarray([
         mean(legacy_by["transformer_l_legacy", seed, "family_leak", "control"][family]
              - legacy_by["transformer_l_legacy", seed, "clean", "control"][family]
-             for seed in range(3))
+             for seed in LEGACY_SEEDS)
         for family in legacy_control_ids
     ])
     legacy_clean_nll = mean(
         legacy_by["transformer_l_legacy", seed, "clean", "treated"][family]
-        for seed in range(3) for family in legacy_treated_ids
+        for seed in LEGACY_SEEDS for family in legacy_treated_ids
     )
-    legacy_stat = bootstrap_difference(legacy_treated, legacy_control, 20260804)
+    legacy_stat = bootstrap_difference(legacy_treated, legacy_control, LEGACY_CONFIRMATORY_SEED)
     audit.add("lmd_transformer_l_legacy_confirmatory", "exact_preregistered_estimator_recomputed_from_public_family_seed_nll",
               effect=legacy_stat["effect"], relative_effect=float(-legacy_treated.mean() / legacy_clean_nll),
               ci_low=legacy_stat["ci_low"], ci_high=legacy_stat["ci_high"], p_raw=legacy_stat["p_raw"],
-              n_families=len(legacy_treated), n_seeds=3, bootstrap_B=10000)
+              n_families=len(legacy_treated), n_seeds=len(LEGACY_SEEDS), bootstrap_B=BOOTSTRAP_SAMPLES)
 
-    # Normalized structurally-nonexact receiver sensitivity, joined by public family ID.
     labels = {r["family_id"]: r["normalized_classification"] for r in read_csv(DATA / "normalized_subset_rows.csv")}
     lby = legacy_by
     selected = sorted(fam for fam, label in labels.items() if label == "NORMALIZED_STRUCTURAL_NONEXACT")
-    treated = [mean(lby["transformer_l_legacy", seed, "family_leak", "treated"][fam] - lby["transformer_l_legacy", seed, "clean", "treated"][fam] for seed in range(3)) for fam in selected]
-    controls = [mean(lby["transformer_l_legacy", seed, "family_leak", "control"][fam] - lby["transformer_l_legacy", seed, "clean", "control"][fam] for seed in range(3)) for fam in lby["transformer_l_legacy", 0, "clean", "control"]]
-    clean_subset = mean(lby["transformer_l_legacy", seed, "clean", "treated"][fam] for seed in range(3) for fam in selected)
+    treated = [mean(lby["transformer_l_legacy", seed, "family_leak", "treated"][fam] - lby["transformer_l_legacy", seed, "clean", "treated"][fam] for seed in LEGACY_SEEDS) for fam in selected]
+    controls = [mean(lby["transformer_l_legacy", seed, "family_leak", "control"][fam] - lby["transformer_l_legacy", seed, "clean", "control"][fam] for seed in LEGACY_SEEDS) for fam in lby["transformer_l_legacy", 0, "clean", "control"]]
+    clean_subset = mean(lby["transformer_l_legacy", seed, "clean", "treated"][fam] for seed in LEGACY_SEEDS for fam in selected)
     normalized = load_json(FROZEN / "normalized_structural_summary.json")
     audit.add("lmd_structurally_nonexact_normalized", "point_estimate_recomputed_from_joined_public_rows",
               effect=mean(treated) - mean(controls), relative_effect=-mean(treated) / clean_subset,
@@ -257,31 +263,28 @@ def legacy_and_capacity(audit: Audit) -> None:
               provenance=VERIFIED, ci_low=normalized["ci95"][0], ci_high=normalized["ci95"][1],
               n_families=len(selected), bootstrap_B=normalized["bootstrap_samples"])
 
-    # Family-disjoint clean-test generalization control.
     clean_test = read_csv(DATA / "clean_test_nll_rows.csv")
     cby = defaultdict(dict)
     for row in clean_test: cby[int(row["seed"]), row["condition"]][row["family_id"]] = f(row["nll"])
     fams = [r["family_id"] for r in sorted(clean_test, key=lambda r: int(r["family_order"])) if int(r["seed"]) == 0 and r["condition"] == "clean"]
     seen = set(); fams = [x for x in fams if not (x in seen or seen.add(x))]
-    validation = [mean(cby[seed, "family_leak"][fam] - cby[seed, "clean"][fam] for seed in range(3)) for fam in fams]
-    # The public rows reproduce the point estimate. CI is deterministic family
-    # bootstrap seed 20260808 used by the frozen mitigation analysis.
-    stat = bootstrap_mean(validation, 20260808)
-    audit.add("lmd_clean_validation_generalization", "recomputed_from_193_family_disjoint_public_nll_rows", effect=mean(validation), ci_low=stat["ci_low"], ci_high=stat["ci_high"], n_families=len(validation), bootstrap_B=10000)
+    validation = [mean(cby[seed, "family_leak"][fam] - cby[seed, "clean"][fam] for seed in LEGACY_SEEDS) for fam in fams]
+    stat = bootstrap_mean(validation, CLEAN_VALIDATION_SEED)
+    audit.add("lmd_clean_validation_generalization", "recomputed_from_family_disjoint_public_nll_rows", effect=mean(validation), ci_low=stat["ci_low"], ci_high=stat["ci_high"], n_families=len(validation), bootstrap_B=BOOTSTRAP_SAMPLES)
 
-    # Capacity slope uses the frozen independent-family bootstrap exactly.
     names = ("transformer_s", "transformer_m", "transformer_l")
     x = np.log([params[name] for name in names])
     observed = float(np.polyfit(x, [family_values[name][0].mean() - family_values[name][1].mean() for name in names], 1)[0])
-    rng = np.random.default_rng(20260812)
+    rng = np.random.default_rng(CAPACITY_BOOTSTRAP_SEED)
     slopes = []
-    for _ in range(10000):
+    for _ in range(BOOTSTRAP_SAMPLES):
         taus = [rng.choice(family_values[name][0], len(family_values[name][0]), True).mean() - rng.choice(family_values[name][1], len(family_values[name][1]), True).mean() for name in names]
         slopes.append(np.polyfit(x, taus, 1)[0])
     slopes = np.asarray(slopes)
     audit.add("transformer_capacity_trend_slope", "recomputed_from_anonymous_family_effect_rows",
               effect=observed, ci_low=float(np.quantile(slopes, .025)), ci_high=float(np.quantile(slopes, .975)),
-              p_raw=float(min(1, 2 * min(np.mean(slopes <= 0), np.mean(slopes >= 0)))), n_families=300, bootstrap_B=10000)
+              p_raw=float(min(1, 2 * min(np.mean(slopes <= 0), np.mean(slopes >= 0)))),
+              n_families=sum(len(family_values[name][0]) for name in names), bootstrap_B=BOOTSTRAP_SAMPLES)
 
 
 def phase2(audit: Audit) -> None:
@@ -291,9 +294,21 @@ def phase2(audit: Audit) -> None:
         maps[int(row["seed"]), row["condition"]][row["family_id"]] = f(row["nll"])
     order = {row["family_id"]: int(row["family_order"]) for row in rows}
     families = sorted(next(iter(maps.values())), key=order.get)
-    pooled = {condition: {fam: mean(maps[seed, condition][fam] for seed in (202608040, 202608041, 202608042)) for fam in families} for condition in ("clean", "unrelated_donor", "same_family_donor")}
+    pooled = {
+        condition: {
+            fam: mean(maps[seed, condition][fam] for seed in PHASE2_SEEDS)
+            for fam in families
+        }
+        for condition in PHASE2_CONDITIONS
+    }
     for condition, rid in (("clean", "phase2_transformer_l_clean_nll"), ("unrelated_donor", "phase2_transformer_l_unrelated_donor_nll"), ("same_family_donor", "phase2_transformer_l_same_family_donor_nll")):
-        audit.add(rid, "recomputed_from_100_anonymous_families_x_3_seeds", mean_a=mean(pooled[condition].values()), n_families=100, n_seeds=3)
+        audit.add(
+            rid,
+            "recomputed_from_anonymous_family_seed_rows",
+            mean_a=mean(pooled[condition].values()),
+            n_families=len(families),
+            n_seeds=len(PHASE2_SEEDS),
+        )
     contrasts = {
         "phase2_transformer_l_same_family_donor_vs_clean": ("same_family_donor", "clean"),
         "phase2_transformer_l_unrelated_donor_vs_clean": ("unrelated_donor", "clean"),
@@ -301,10 +316,10 @@ def phase2(audit: Audit) -> None:
     }
     for rid, (left, right) in contrasts.items():
         diffs = np.asarray([pooled[left][fam] - pooled[right][fam] for fam in families])
-        stat = bootstrap_mean_loop(diffs, 0, plus_one=True)
-        audit.add(rid, "recomputed_frozen_family_bootstrap_seed_0", **stat,
+        stat = bootstrap_mean_loop(diffs, PHASE2_BOOTSTRAP_SEED, plus_one=True)
+        audit.add(rid, "recomputed_frozen_family_bootstrap", **stat,
                   mean_a=mean(pooled[left].values()), mean_b=mean(pooled[right].values()),
-                  relative_effect=-mean(diffs) / mean(pooled[right].values()), n_seeds=3)
+                  relative_effect=-mean(diffs) / mean(pooled[right].values()), n_seeds=len(PHASE2_SEEDS))
 
 
 def cross_paradigm(audit: Audit) -> None:
@@ -314,29 +329,39 @@ def cross_paradigm(audit: Audit) -> None:
         grouped[row["paradigm"], int(row["seed"]), row["condition"]][row["family_id"]] = f(row["metric"])
     for paradigm, rid in (("conditional_vae", "cross_paradigm_conditional_vae"), ("latent_diffusion", "cross_paradigm_latent_diffusion")):
         order = {row["family_id"]: int(row["family_order"]) for row in rows if row["paradigm"] == paradigm}
-        fams = sorted(grouped[paradigm, 202608040, "clean"], key=order.get)
-        pooled = {condition: {fam: mean(grouped[paradigm, seed, condition][fam] for seed in (202608040, 202608041, 202608042)) for fam in fams} for condition in ("clean", "unrelated_donor", "same_family_donor")}
+        fams = sorted(grouped[paradigm, CROSS_PARADIGM_SEEDS[0], "clean"], key=order.get)
+        pooled = {
+            condition: {
+                fam: mean(grouped[paradigm, seed, condition][fam] for seed in CROSS_PARADIGM_SEEDS)
+                for fam in fams
+            }
+            for condition in CROSS_PARADIGM_CONDITIONS
+        }
         diffs = np.asarray([pooled["same_family_donor"][fam] - pooled["unrelated_donor"][fam] for fam in fams])
-        stat = bootstrap_mean_loop(diffs, 20260818)
-        # The frozen analysis reserved bootstrap_seed + 1 for the paired sign
-        # randomization, so its stream is independent of the CI bootstrap.
-        rng = np.random.default_rng(20260819)
-        null = (diffs * rng.choice((-1.0, 1.0), size=(10000, len(diffs)))).mean(axis=1)
-        p_sign = float((np.count_nonzero(np.abs(null) >= abs(diffs.mean())) + 1) / 10001)
+        stat = bootstrap_mean_loop(diffs, CROSS_PARADIGM_BOOTSTRAP_SEED)
+        rng = np.random.default_rng(CROSS_PARADIGM_SIGN_SEED)
+        null = (
+            diffs
+            * rng.choice((-1.0, 1.0), size=(BOOTSTRAP_SAMPLES, len(diffs)))
+        ).mean(axis=1)
+        p_sign = float(
+            (np.count_nonzero(np.abs(null) >= abs(diffs.mean())) + 1)
+            / (BOOTSTRAP_SAMPLES + 1)
+        )
         audit.add(rid, "point_CI_and_sign_randomization_recomputed_from_public_family_rows",
                   mean_a=mean(pooled["same_family_donor"].values()), mean_b=mean(pooled["unrelated_donor"].values()),
                   effect=mean(diffs), ci_low=stat["ci_low"], ci_high=stat["ci_high"], p_raw=p_sign,
-                  n_families=100, n_seeds=3, bootstrap_B=10000)
+                  n_families=len(fams), n_seeds=len(CROSS_PARADIGM_SEEDS), bootstrap_B=BOOTSTRAP_SAMPLES)
 
 
 def pdmx(audit: Audit) -> None:
     rows = read_csv(DATA / "pdmx_nll_rows.csv"); by = pooled_nll([{"model": "pdmx", **r} for r in rows])
     deltas = read_csv(DATA / "pdmx_family_deltas.csv")
     values = {cohort: np.asarray([f(row["mean_delta"]) for row in sorted((x for x in deltas if x["split"] == cohort), key=lambda x: int(x["family_order"]))]) for cohort in ("treated", "control")}
-    stat = bootstrap_difference(values["treated"], values["control"], 20260813)
-    clean = mean(by["pdmx", seed, "clean", "treated"][fam] for seed in range(3) for fam in by["pdmx", seed, "clean", "treated"])
+    stat = bootstrap_difference(values["treated"], values["control"], PDMX_BOOTSTRAP_SEED)
+    clean = mean(by["pdmx", seed, "clean", "treated"][fam] for seed in LEGACY_SEEDS for fam in by["pdmx", seed, "clean", "treated"])
     audit.add("pdmx_reduced_external", "recomputed_from_anonymous_family_seed_nll", **stat,
-              relative_effect=float(-values["treated"].mean() / clean), n_families=len(values["treated"]), n_seeds=3)
+              relative_effect=float(-values["treated"].mean() / clean), n_families=len(values["treated"]), n_seeds=len(LEGACY_SEEDS))
 
 
 def metric_rows(path: Path):
@@ -395,11 +420,11 @@ def relatedness(audit: Audit) -> None:
     field = "longest_shared_normalized_event_subsequence"
     x = np.asarray([f(r[field]) for r in rows]); y = np.asarray([f(r["gain"]) for r in rows])
     point = float(spearmanr(x, y).statistic)
-    rng = np.random.default_rng(20260823); draws = []
-    for _ in range(10000):
+    rng = np.random.default_rng(RELATEDNESS_SPEARMAN_SEED); draws = []
+    for _ in range(BOOTSTRAP_SAMPLES):
         idx = rng.integers(0, len(x), len(x)); value = spearmanr(x[idx], y[idx]).statistic
         if np.isfinite(value): draws.append(value)
-    audit.add("relatedness_spearman_rho", "recomputed_family_bootstrap_spearman", effect=point, ci_low=float(np.quantile(draws, .025)), ci_high=float(np.quantile(draws, .975)), n_families=len(x), bootstrap_B=10000)
+    audit.add("relatedness_spearman_rho", "recomputed_family_bootstrap_spearman", effect=point, ci_low=float(np.quantile(draws, .025)), ci_high=float(np.quantile(draws, .975)), n_families=len(x), bootstrap_B=BOOTSTRAP_SAMPLES)
 
     try:
         from sklearn.linear_model import HuberRegressor
@@ -407,12 +432,12 @@ def relatedness(audit: Audit) -> None:
         raise SystemExit("scikit-learn is required for the Huber reproduction; install the locked reproduction extra") from error
     controls = np.asarray([[f(r["receiver_length"]), f(r["donor_token_count"]), f(r["family_window_count_proxy"])] for r in rows]); controls = (controls - controls.mean(0)) / controls.std(0)
     design = np.column_stack(((x - x.mean()) / x.std(), controls)); model = HuberRegressor().fit(design, y)
-    rng = np.random.default_rng(20260905); coefficients = []
-    for _ in range(10000):
+    rng = np.random.default_rng(RELATEDNESS_HUBER_SEED); coefficients = []
+    for _ in range(BOOTSTRAP_SAMPLES):
         idx = rng.integers(0, len(x), len(x))
         try: coefficients.append(HuberRegressor().fit(design[idx], y[idx]).coef_[0])
         except ValueError: pass
-    audit.add("relatedness_robust_huber", "recomputed_HuberRegressor_and_family_bootstrap", effect=float(model.coef_[0]), ci_low=float(np.quantile(coefficients, .025)), ci_high=float(np.quantile(coefficients, .975)), n_families=len(x), bootstrap_B=10000)
+    audit.add("relatedness_robust_huber", "recomputed_HuberRegressor_and_family_bootstrap", effect=float(model.coef_[0]), ci_low=float(np.quantile(coefficients, .025)), ci_high=float(np.quantile(coefficients, .975)), n_families=len(x), bootstrap_B=BOOTSTRAP_SAMPLES)
 
 
 def localization(audit: Audit) -> None:

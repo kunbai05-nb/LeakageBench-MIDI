@@ -26,5 +26,6 @@ def test_readme_has_primary_workflows():
  text=(ROOT/'README.md').read_text().lower()
  assert 'scripts/reproduce_all.sh' in text
  assert 'scripts/verify_model_checkpoints.py' in text
- assert 'releases/tag/v1.1.2' in text
+ assert '/releases/tag/' in text
+ assert 'phase2-transformer-l.tar.gz' in text
  assert 'docs/repository_guide.md' in text

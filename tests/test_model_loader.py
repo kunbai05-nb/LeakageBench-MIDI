@@ -1,5 +1,7 @@
-from pathlib import Path
 import json
+import os
+from pathlib import Path
+
 import pytest
 torch = pytest.importorskip('torch')
 from leakagebench_midi.models import (
@@ -148,7 +150,10 @@ def test_artifact_type_is_validated(tmp_path):
 
 def test_model_manifest_loader_reference():
     public_root = Path(__file__).resolve().parents[1]
-    manifest = public_root.parent / 'models/LeakageBench-MIDI-Model-Checkpoints-v1.1.0/MODEL_MANIFEST.json'
+    checkpoint_root = Path(
+        os.environ.get('LEAKAGEBENCH_CHECKPOINT_DIR', public_root / 'checkpoints')
+    )
+    manifest = checkpoint_root / 'MODEL_MANIFEST.json'
     if not manifest.exists():
         pytest.skip('external checkpoint bundle is not present')
     rows = json.loads(manifest.read_text())['models']

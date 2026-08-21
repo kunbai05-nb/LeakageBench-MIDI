@@ -37,6 +37,20 @@ def test_checkpoint_load(tmp_path, architecture, config, builder):
     (loaded, metadata) = load_checkpoint(path)
     assert not loaded.training and metadata['software_version'] == 'v1.0.0'
 
+def test_float16_transformer_is_cpu_ready_by_default(tmp_path):
+    cfg = transformer_config()
+    value = artifact(build_transformer(cfg).half(), 'transformer', cfg)
+    path = tmp_path / 'fp16-transformer.pt'
+    torch.save(value, path)
+    loaded, metadata = load_checkpoint(path, map_location='cpu')
+    assert next(loaded.parameters()).dtype == torch.float32
+    assert metadata['checkpoint_dtype'] == 'torch.float16'
+    tokens = torch.zeros((1, 8), dtype=torch.long)
+    mask = torch.ones_like(tokens, dtype=torch.bool)
+    assert torch.isfinite(loaded(tokens, mask, mask)['loss'])
+    preserved, _ = load_checkpoint(path, map_location='cpu', preserve_dtype=True)
+    assert next(preserved.parameters()).dtype == torch.float16
+
 @pytest.mark.parametrize('architecture,config,builder', [
     ('conditional_vae', cvae_config(), build_conditional_vae),
     ('neutral_encoder', cvae_config(), build_conditional_vae),
@@ -114,9 +128,28 @@ def test_model_tokenizer_vocabulary_is_validated(tmp_path):
     with pytest.raises(ValueError, match='vocabulary mismatch'):
         load_checkpoint(path)
 
+def test_model_config_resource_limits_are_enforced(tmp_path):
+    cfg = transformer_config()
+    value = artifact(build_transformer(cfg), 'transformer', cfg)
+    value['model_config']['d_model'] = 1_000_000
+    path = tmp_path / 'unsafe-config.pt'
+    torch.save(value, path)
+    with pytest.raises(ValueError, match='invalid or unsafe model_config.d_model'):
+        load_checkpoint(path)
+
+def test_artifact_type_is_validated(tmp_path):
+    cfg = transformer_config()
+    value = artifact(build_transformer(cfg), 'transformer', cfg)
+    value['artifact_type'] = 'not-a-model'
+    path = tmp_path / 'wrong-type.pt'
+    torch.save(value, path)
+    with pytest.raises(ValueError, match='unsupported artifact_type'):
+        load_checkpoint(path)
+
 def test_model_manifest_loader_reference():
     public_root = Path(__file__).resolve().parents[1]
     manifest = public_root.parent / 'models/LeakageBench-MIDI-Model-Checkpoints-v1.1.0/MODEL_MANIFEST.json'
-    if manifest.exists():
-        rows = json.loads(manifest.read_text())['models']
-        assert len(rows) == 60 and all((x['public_loader'] == 'leakagebench_midi.models.load_checkpoint' for x in rows))
+    if not manifest.exists():
+        pytest.skip('external checkpoint bundle is not present')
+    rows = json.loads(manifest.read_text())['models']
+    assert len(rows) == 60 and all((x['public_loader'] == 'leakagebench_midi.models.load_checkpoint' for x in rows))

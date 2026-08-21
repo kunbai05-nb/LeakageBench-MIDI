@@ -1,11 +1,19 @@
 from __future__ import annotations
 import hashlib,json,os,subprocess,sys
+import importlib.util
 from pathlib import Path
 import numpy as np
+import pytest
 from leakagebench_midi import cross_probability,conditional_sibling_probability,family_aware_split,audit_split,build_contamination,analyze_effect,read_jsonl,build_family_map
 from leakagebench_midi import classify_pair
 
 ROOT=Path(__file__).resolve().parents[1]
+
+def test_checkpoint_verifier_rejects_paths_outside_bundle(tmp_path):
+ spec = importlib.util.spec_from_file_location('verify_model_checkpoints', ROOT/'scripts/verify_model_checkpoints.py')
+ module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
+ with pytest.raises(ValueError, match='escapes bundle root'):
+  module.safe_checkpoint_path(tmp_path, '../outside.pt')
 def test_analytical_probability():
  assert abs(cross_probability(2,.8,.1)-.16)<1e-12
  assert abs(conditional_sibling_probability(3,.8)-.96)<1e-12

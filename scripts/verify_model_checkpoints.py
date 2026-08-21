@@ -68,22 +68,40 @@ def close(actual, expected, tolerance: float) -> bool:
     return bool(np.isclose(actual, expected, rtol=0.0, atol=tolerance))
 
 
+def safe_checkpoint_path(root: Path, relative_path: object) -> Path:
+    if not isinstance(relative_path, str) or not relative_path or Path(relative_path).is_absolute():
+        raise ValueError(f"invalid checkpoint path: {relative_path!r}")
+    resolved_root = root.resolve()
+    resolved_path = (resolved_root / relative_path).resolve()
+    if resolved_path.parent != resolved_root and resolved_root not in resolved_path.parents:
+        raise ValueError(f"checkpoint path escapes bundle root: {relative_path}")
+    return resolved_path
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("checkpoint_root", type=Path)
     parser.add_argument("--allow-partial", action="store_true", help="verify only model files present in a grouped download")
     args = parser.parse_args()
 
-    manifest_path = args.checkpoint_root / "MODEL_MANIFEST.json"
+    checkpoint_root = args.checkpoint_root.resolve()
+    manifest_path = checkpoint_root / "MODEL_MANIFEST.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     references = json.loads(REFERENCES.read_text(encoding="utf-8"))
     tolerance = float(references["comparison_atol"])
     available = []
     missing = []
     reference_passes = 0
+    seen_model_ids = set()
 
     for row in manifest["models"]:
-        path = args.checkpoint_root / row["relative_path"]
+        try:
+            path = safe_checkpoint_path(checkpoint_root, row["relative_path"])
+        except ValueError as error:
+            raise SystemExit(str(error)) from error
+        if row["model_id"] in seen_model_ids:
+            raise SystemExit(f"duplicate model ID: {row['model_id']}")
+        seen_model_ids.add(row["model_id"])
         if not path.is_file():
             missing.append(row["relative_path"])
             continue

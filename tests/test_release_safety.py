@@ -22,9 +22,9 @@ def test_no_packaged_research_data_or_weights():
  forbidden={'.mid','.midi','.wav','.flac','.mp3','.pt','.pth','.ckpt','.safetensors'}
  assert not [p for p in ROOT.rglob('*') if p.is_file() and p.suffix.lower() in forbidden]
 
-def test_readme_release_boundaries():
+def test_readme_has_primary_workflows():
  text=(ROOT/'README.md').read_text().lower()
- assert 'data are not distributed' in text
- assert 'reference relation, not a universal detector' in text
- assert 'checkpoints are not included' in text
- assert 'reproduce_public_results.py' in text
+ assert 'scripts/reproduce_all.sh' in text
+ assert 'scripts/verify_model_checkpoints.py' in text
+ assert 'releases/tag/v1.1.2' in text
+ assert 'docs/repository_guide.md' in text

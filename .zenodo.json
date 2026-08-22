@@ -1,10 +1,10 @@
 {
   "title": "LeakageBench-MIDI: Measuring and Mitigating Same-Work Family Leakage in Symbolic Music Generation",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "upload_type": "software",
   "access_right": "open",
   "license": "mit",
-  "description": "A public-safe release for measuring and mitigating same-work family leakage in symbolic music generation evaluation. It includes reusable code, anonymous analysis units, a provenance-labelled field audit, final tables and figures, and automated integrity checks. Of 232 numerical fields, 193 are recomputed from public rows and 39 are verified from frozen summaries. No original LMD or PDMX music data, token sequences, or model checkpoints are redistributed.",
+  "description": "Code and reproducibility materials for measuring and mitigating same-work leakage in symbolic music generation, including source reconstruction, the structural detector, analysis rows, final tables and figures, and automated integrity checks.",
   "keywords": [
     "symbolic music generation",
     "MIDI",
@@ -23,5 +23,5 @@
       "affiliation": "School of Intelligence Science and Technology, Beijing University of Civil Engineering and Architecture, Beijing 102616, China"
     }
   ],
-  "notes": "Frozen formal results and protocol are unchanged. The family graph is a reference known-family relation, not a universal detector."
+  "notes": "Version 1.2.0 adds full LMD source reconstruction, detector evaluation, and noisy-graph mitigation experiments."
 }

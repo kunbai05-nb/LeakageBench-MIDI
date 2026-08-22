@@ -3,7 +3,9 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22023100.svg)](https://doi.org/10.5281/zenodo.22023100)
 
 LeakageBench-MIDI measures same-work leakage in symbolic-music generation and
-provides family-aware dataset splitting.
+builds component-aware train/validation/test splits. It includes the paper
+statistics, the structural detector, formal model code, checkpoints, and
+reproduction scripts.
 
 ## Install
 
@@ -12,62 +14,88 @@ python -m venv .venv
 .venv/bin/pip install -e '.[test]'
 ```
 
-## Reproduce the paper results
+## Reproduce the paper statistics
 
 ```bash
 bash scripts/reproduce_all.sh ./reproduced
 ```
 
-This CPU-only command audits the paper statistics, verifies the released tables
-and figures, and runs the tests.
+This CPU workflow rebuilds the public statistics and checks every released
+table, figure, and test.
 
-For the synthetic demo:
+Detector and mitigation additions are in
+[`results/new_experiments`](results/new_experiments/README.md).
+
+## Reproduce from LMD
+
+Download `lmd_full.tar.gz` from the [Lakh MIDI Dataset](https://colinraffel.com/projects/lmd/), then run:
 
 ```bash
-bash scripts/run_synthetic_demo.sh ./demo
+python scripts/prepare_lmd.py /path/to/lmd_full.tar.gz ./prepared_lmd
 ```
 
-## Model checkpoints
+The command recreates the three formal training streams and evaluation windows.
+It verifies every MIDI file, token window, and final stream hash.
+
+Build the reference relation graph and rerun the noisy-graph split experiment:
+
+```bash
+python scripts/prepare_reference_graph.py \
+  /path/to/lmd_full.tar.gz ./reference_graph
+python scripts/simulate_imperfect_inference.py \
+  ./reference_graph ./imperfect_inference
+```
+
+Evaluate a released checkpoint:
+
+```bash
+python scripts/evaluate_checkpoint.py \
+  checkpoints/lmd/phase2_transformer_l/clean/seed_202608040.pt \
+  ./prepared_lmd ./evaluation/clean-202608040
+```
+
+Train a formal run from initialization:
+
+```bash
+python scripts/train_model.py \
+  transformer clean 202608040 ./prepared_lmd ./runs/transformer-clean-202608040
+```
+
+The same command supports `conditional_vae`, `neutral_encoder`, and
+`latent_diffusion`. Full training uses a CUDA GPU; preparation, statistics, and
+the detector run on CPU.
+
+## Same-work detector
+
+```bash
+python scripts/detect_same_work.py /path/to/midi ./detector_output --workers 8
+```
+
+The detector extracts 47 structural features, scores sparse candidate pairs,
+and returns a guarded component graph. The paper's family IDs are connected
+components of the reference relation. Its ASAP statistics reproduce from the
+released candidate-pair rows with `scripts/reproduce_detector_statistics.py`.
+
+## Checkpoints
 
 The [v1.1.2 release](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/tag/v1.1.2)
-contains 60 inference checkpoints covering Transformer, TCN, Conditional VAE,
-Latent Diffusion, and the diffusion neutral encoders.
-
-Downloads:
+contains 60 checkpoints.
 
 - [Phase-2 Transformer-L](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.1.2/phase2-transformer-l.tar.gz)
 - [Conditional VAE](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.1.2/conditional-vae.tar.gz)
-- [Latent Diffusion + neutral encoders](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.1.2/latent-diffusion-and-neutral-encoders.tar.gz)
-- [Transformer-S](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.1.2/lmd-transformer-s.tar.gz) · [Transformer-M](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.1.2/lmd-transformer-m.tar.gz) · [Transformer-L](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.1.2/lmd-transformer-l-legacy.tar.gz)
-- [TCN](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.1.2/lmd-tcn.tar.gz) · [PDMX Transformer-L](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.1.2/pdmx-transformer-l.tar.gz)
-- [Manifest and model card](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.1.2/model-release-metadata.tar.gz) · [SHA-256 checksums](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.1.2/SHA256SUMS)
-
-After extracting the metadata and model archives:
+- [Latent Diffusion and neutral encoders](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.1.2/latent-diffusion-and-neutral-encoders.tar.gz)
+- [Transformer-S](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.1.2/lmd-transformer-s.tar.gz), [Transformer-M](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.1.2/lmd-transformer-m.tar.gz), [Transformer-L](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.1.2/lmd-transformer-l-legacy.tar.gz)
+- [TCN](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.1.2/lmd-tcn.tar.gz) and [PDMX Transformer-L](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.1.2/pdmx-transformer-l.tar.gz)
+- [Checksums](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.1.2/SHA256SUMS)
 
 ```bash
-python scripts/verify_model_checkpoints.py /path/to/checkpoints
+python scripts/verify_model_checkpoints.py /path/to/checkpoint_bundle
 ```
 
-Load one checkpoint:
-
-```python
-from leakagebench_midi.models import load_checkpoint
-
-model, metadata = load_checkpoint("checkpoint.pt", map_location="cpu")
-```
-
-See [model_artifacts.md](docs/model_artifacts.md) for the archive list.
-
-## Documentation
-
-- [Methods](docs/METHODS_PUBLIC.md)
-- [Protocol](docs/PROTOCOL_V2.md)
-- [Reproduction guide](docs/REPRODUCIBILITY.md)
-- [Repository file guide](docs/REPOSITORY_GUIDE.md)
+See [Reproduction](docs/REPRODUCIBILITY.md), [Methods](docs/METHODS_PUBLIC.md),
+and the [repository guide](docs/REPOSITORY_GUIDE.md) for details.
 
 ## Citation
 
-See [CITATION.cff](CITATION.cff). Software DOI:
-[`10.5281/zenodo.22023100`](https://doi.org/10.5281/zenodo.22023100).
-
-Code is released under the [MIT License](LICENSE). Model weights are CC-BY-4.0.
+See [CITATION.cff](CITATION.cff). Code is MIT licensed; released model weights
+are CC BY 4.0.

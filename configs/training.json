@@ -1,0 +1,65 @@
+{
+  "conditions": [
+    "clean",
+    "unrelated_donor",
+    "same_family_donor"
+  ],
+  "seeds": [
+    202608040,
+    202608041,
+    202608042
+  ],
+  "steps": 20000,
+  "batch_size": 32,
+  "micro_batch_size": 8,
+  "warmup_steps": 1000,
+  "gradient_clip": 1.0,
+  "optimizer_betas": [0.9, 0.95],
+  "transformer": {
+    "experiment_id": "LEAKAGEBENCH_PHASE2_UNRELATED_DONOR_V1",
+    "learning_rate": 0.0002,
+    "weight_decay": 0.1,
+    "model": {
+      "vocab_size": 237,
+      "context_length": 1024,
+      "layers": 10,
+      "d_model": 384,
+      "heads": 6,
+      "ffn_dim": 1536,
+      "dropout": 0.1,
+      "rope_base": 10000.0,
+      "pre_layer_norm": true,
+      "gradient_checkpointing": true,
+      "weight_tying": true
+    }
+  },
+  "cross_paradigm": {
+    "experiment_id": "LEAKAGEBENCH_PHASE2_CROSS_PARADIGM_V1",
+    "weight_decay": 0.01,
+    "conditional_vae_learning_rate": 0.0003,
+    "latent_diffusion_learning_rate": 0.0005,
+    "evaluation_timesteps": [49, 199, 499, 799],
+    "noise_replicates_per_timestep": 8,
+    "evaluation_seed_offset": 20260818,
+    "conditional_vae": {
+      "vocab_size": 237,
+      "context_length": 1024,
+      "d_model": 128,
+      "encoder_layers": 2,
+      "decoder_layers": 3,
+      "heads": 4,
+      "ffn_dim": 512,
+      "latent_dim": 64,
+      "dropout": 0.1,
+      "beta": 0.01
+    },
+    "latent_diffusion": {
+      "latent_dim": 64,
+      "hidden_dim": 256,
+      "time_dim": 64,
+      "timesteps": 1000,
+      "beta_start": 0.0001,
+      "beta_end": 0.02
+    }
+  }
+}

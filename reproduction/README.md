@@ -1,12 +1,13 @@
-# Paper-statistics bundle
+# Reproduction data
 
 Run:
 
 ```bash
-python scripts/reproduce_paper_statistics.py --output ./statistics
+bash scripts/reproduce_all.sh ./reproduced
 ```
 
-`data/` contains anonymous analysis rows and simulations. `frozen/` contains
-the aggregate statistics needed for fields that cannot be recalculated from
-those rows. `PUBLIC_REPRODUCTION_MANIFEST.json` records every file size and
-SHA-256 hash. Column definitions are in [DATA_DICTIONARY.md](DATA_DICTIONARY.md).
+`data/` contains analysis rows, simulations, and detector candidates. `frozen/`
+contains the matching statistical summaries. `source_specs/` drives LMD
+reconstruction. File hashes are recorded in
+`PUBLIC_REPRODUCTION_MANIFEST.json`; columns are defined in
+[DATA_DICTIONARY.md](DATA_DICTIONARY.md).

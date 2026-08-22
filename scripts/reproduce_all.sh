@@ -14,6 +14,8 @@ fi
 
 "$python_bin" scripts/reproduce_paper_statistics.py \
   --output "${output_dir}/paper_statistics"
+"$python_bin" scripts/reproduce_detector_statistics.py \
+  --output "${output_dir}/detector_statistics.json" --verify
 "$python_bin" scripts/reproduce_public_results.py --verify
 "$python_bin" scripts/reproduce_public_results.py \
   --output "${output_dir}/typeset_artifacts"

@@ -1,0 +1,22 @@
+\begin{table*}[t]
+\caption{Component-aware splitting under incomplete relation inference (100 fixed simulation seeds).}
+\label{tab:fn-robustness}
+\centering
+\scriptsize
+\begin{tabular}{rrrrrr}
+\toprule
+Edge retention & Pair recall & Component recovery & Residual groups [95\% EI] & Test-file contamination & Largest comp. \\
+\midrule
+100.00 & 100.00 & 100.00 & 0.0 [0.0, 0.0] & 0.00 & 66.0 \\
+95.00 & 92.34 & 91.35 & 343.9 [311.4, 376.0] & 1.94 & 63.3 \\
+90.00 & 84.94 & 83.54 & 675.3 [635.5, 716.6] & 3.84 & 60.4 \\
+80.00 & 70.96 & 69.77 & 1288.9 [1228.5, 1342.0] & 7.44 & 54.0 \\
+70.00 & 58.12 & 57.84 & 1858.4 [1783.4, 1942.8] & 10.86 & 48.0 \\
+50.00 & 35.85 & 37.65 & 2880.0 [2799.8, 2948.2] & 17.21 & 35.6 \\
+\bottomrule
+\end{tabular}
+\vspace{2pt}
+\begin{minipage}{\textwidth}
+\footnotesize EI denotes the empirical 2.5--97.5\% interval across fixed simulation seeds. All leakage metrics are evaluated against the frozen reference relation graph.
+\end{minipage}
+\end{table*}

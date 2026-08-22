@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Verify a downloaded checkpoint bundle."""
+
 from __future__ import annotations
 
 import argparse
@@ -36,7 +37,11 @@ def signature(model, metadata: dict) -> dict:
             logits = result["logits"]
             return {
                 "loss": float(result["loss"]),
-                "logits": [float(logits[0, 0, 0]), float(logits[0, 3, 5]), float(logits[0, 7, 2])],
+                "logits": [
+                    float(logits[0, 0, 0]),
+                    float(logits[0, 3, 5]),
+                    float(logits[0, 7, 2]),
+                ],
                 "logits_mean": float(logits.mean()),
             }
         if architecture in {"conditional_vae", "neutral_encoder"}:
@@ -49,14 +54,22 @@ def signature(model, metadata: dict) -> dict:
             embedding = model.posterior_embedding(tokens, attention)
             return {
                 "prior_nll": float(nll),
-                "embedding": [float(embedding[0, 0]), float(embedding[0, 1]), float(embedding[1, -1])],
+                "embedding": [
+                    float(embedding[0, 0]),
+                    float(embedding[0, 1]),
+                    float(embedding[1, -1]),
+                ],
                 "embedding_mean": float(embedding.mean()),
             }
         if architecture == "latent_diffusion":
             latent_dim = metadata["model_config"]["latent_dim"]
             output = model.denoiser(torch.zeros(2, latent_dim), torch.tensor([49, 499]))
             return {
-                "denoiser": [float(output[0, 0]), float(output[0, 1]), float(output[1, -1])],
+                "denoiser": [
+                    float(output[0, 0]),
+                    float(output[0, 1]),
+                    float(output[1, -1]),
+                ],
                 "denoiser_mean": float(output.mean()),
             }
     raise ValueError(f"unsupported architecture: {architecture}")
@@ -69,11 +82,18 @@ def close(actual, expected, tolerance: float) -> bool:
 
 
 def safe_checkpoint_path(root: Path, relative_path: object) -> Path:
-    if not isinstance(relative_path, str) or not relative_path or Path(relative_path).is_absolute():
+    if (
+        not isinstance(relative_path, str)
+        or not relative_path
+        or Path(relative_path).is_absolute()
+    ):
         raise ValueError(f"invalid checkpoint path: {relative_path!r}")
     resolved_root = root.resolve()
     resolved_path = (resolved_root / relative_path).resolve()
-    if resolved_path.parent != resolved_root and resolved_root not in resolved_path.parents:
+    if (
+        resolved_path.parent != resolved_root
+        and resolved_root not in resolved_path.parents
+    ):
         raise ValueError(f"checkpoint path escapes bundle root: {relative_path}")
     return resolved_path
 
@@ -81,7 +101,11 @@ def safe_checkpoint_path(root: Path, relative_path: object) -> Path:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("checkpoint_root", type=Path)
-    parser.add_argument("--allow-partial", action="store_true", help="verify only model files present in a grouped download")
+    parser.add_argument(
+        "--allow-partial",
+        action="store_true",
+        help="verify only model files present in a grouped download",
+    )
     args = parser.parse_args()
 
     checkpoint_root = args.checkpoint_root.resolve()
@@ -105,7 +129,10 @@ def main() -> None:
         if not path.is_file():
             missing.append(row["relative_path"])
             continue
-        if path.stat().st_size != row["file_size_bytes"] or sha256(path) != row["sha256"]:
+        if (
+            path.stat().st_size != row["file_size_bytes"]
+            or sha256(path) != row["sha256"]
+        ):
             raise SystemExit(f"checkpoint integrity mismatch: {row['relative_path']}")
         model, metadata = load_checkpoint(path, map_location="cpu")
         if metadata["model_id"] != row["model_id"]:
@@ -115,7 +142,8 @@ def main() -> None:
         if reference:
             observed = signature(model, metadata)
             if set(observed) != set(reference["signature"]) or any(
-                not close(observed[key], reference["signature"][key], tolerance) for key in observed
+                not close(observed[key], reference["signature"][key], tolerance)
+                for key in observed
             ):
                 raise SystemExit(f"reference-output mismatch: {row['model_id']}")
             reference_passes += 1
@@ -123,14 +151,21 @@ def main() -> None:
     if not available:
         raise SystemExit("no checkpoint files found")
     if missing and not args.allow_partial:
-        raise SystemExit(f"full bundle is incomplete: {len(missing)} checkpoint files missing")
-    print(json.dumps({
-        "status": "PASS",
-        "verified_checkpoints": len(available),
-        "missing_checkpoints": len(missing),
-        "reference_output_passes": reference_passes,
-        "partial_bundle": bool(missing),
-    }, sort_keys=True))
+        raise SystemExit(
+            f"full bundle is incomplete: {len(missing)} checkpoint files missing"
+        )
+    print(
+        json.dumps(
+            {
+                "status": "PASS",
+                "verified_checkpoints": len(available),
+                "missing_checkpoints": len(missing),
+                "reference_output_passes": reference_passes,
+                "partial_bundle": bool(missing),
+            },
+            sort_keys=True,
+        )
+    )
 
 
 if __name__ == "__main__":

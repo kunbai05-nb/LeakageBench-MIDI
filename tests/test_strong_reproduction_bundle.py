@@ -9,7 +9,9 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def test_reproduction_manifest_integrity():
-    manifest = json.loads((ROOT / "reproduction/PUBLIC_REPRODUCTION_MANIFEST.json").read_text())
+    manifest = json.loads(
+        (ROOT / "reproduction/PUBLIC_REPRODUCTION_MANIFEST.json").read_text()
+    )
     assert manifest["contains_raw_midi"] is False
     assert manifest["contains_tokens"] is False
     assert manifest["contains_checkpoints"] is False
@@ -21,11 +23,17 @@ def test_reproduction_manifest_integrity():
 
 
 def test_public_family_ids_are_pseudonyms_not_original_hashes():
-    for name in ("phase2_nll_rows.csv", "musical_family_metrics.csv", "pdmx_nll_rows.csv"):
+    for name in (
+        "phase2_nll_rows.csv",
+        "musical_family_metrics.csv",
+        "pdmx_nll_rows.csv",
+    ):
         with (ROOT / "reproduction/data" / name).open(newline="") as handle:
             rows = list(csv.DictReader(handle))
         assert rows
-        assert all(re.fullmatch(r"family_[0-9a-f]{16}", row["family_id"]) for row in rows)
+        assert all(
+            re.fullmatch(r"family_[0-9a-f]{16}", row["family_id"]) for row in rows
+        )
 
 
 def test_no_token_sequence_columns():

@@ -12,5 +12,5 @@ The frozen census uses the 178,561-identity inventory. Its archive SHA-256 is
 The Monte Carlo result artifact SHA-256 is
 `9607daf226a6e51f281f6c52eb06c5a7c701309ca2f2e51b6febc61cfedfc84b`.
 
-The retained records do not provide a file-level mapping between the 176,581
-official count and the 178,561 frozen downstream identities.
+The official count and the archive-header inventory use different collection
+rules; all census calculations use the 178,561-file inventory.

@@ -1,24 +1,76 @@
 # Reproduction
 
-Run the complete CPU workflow from the repository root:
+## Public statistics
 
 ```bash
 bash scripts/reproduce_all.sh ./reproduced
 ```
 
-It audits all 232 numerical manuscript fields, verifies released tables and
-figures, and runs the test suite. Outputs include a field-level CSV identifying
-193 values recomputed from public rows and 39 checked against frozen summaries.
+This rebuilds the statistical summaries, verifies result artifacts, and runs the
+tests. Detector statistics are recomputed from 355,535 candidate-pair rows with
+the frozen 10,000-sample composition bootstrap.
 
-Useful individual commands:
+## LMD preparation
 
 ```bash
-bash scripts/run_synthetic_demo.sh ./demo
-python scripts/reproduce_paper_statistics.py --output ./statistics
-python scripts/reproduce_public_results.py --verify
-python scripts/verify_model_checkpoints.py /path/to/checkpoints
+python scripts/prepare_lmd.py /path/to/lmd_full.tar.gz ./prepared_lmd
 ```
 
-See [PROTOCOL_V2.md](PROTOCOL_V2.md) for the experiment settings and
-[`reproduction/DATA_DICTIONARY.md`](../reproduction/DATA_DICTIONARY.md) for the
-released analysis columns.
+Expected output:
+
+```text
+prepared_lmd/
+  midi/
+  streams/clean.tokens
+  streams/clean_index.npz
+  streams/unrelated_donor.tokens
+  streams/unrelated_donor_index.npz
+  streams/same_family_donor.tokens
+  streams/same_family_donor_index.npz
+  evaluation_windows.jsonl
+  PREPARATION_SUMMARY.json
+```
+
+`PREPARATION_SUMMARY.json` records the row count, token count, and identity hash
+of each stream.
+
+## Reference graph and split robustness
+
+```bash
+python scripts/prepare_reference_graph.py /path/to/lmd_full.tar.gz ./reference_graph
+python scripts/simulate_imperfect_inference.py \
+  ./reference_graph ./imperfect_inference --seeds 100
+```
+
+The first command rebuilds the 178,561-file reference graph. The second runs
+the false-negative, false-positive, and combined-noise split simulations.
+
+## Checkpoint evaluation
+
+```bash
+python scripts/evaluate_checkpoint.py CHECKPOINT PREPARED_DIR OUTPUT_DIR
+```
+
+For latent diffusion, add the seed-matched neutral encoder:
+
+```bash
+python scripts/evaluate_checkpoint.py DIFFUSION_CHECKPOINT PREPARED_DIR OUTPUT_DIR \
+  --encoder NEUTRAL_ENCODER_CHECKPOINT --device cuda
+```
+
+## Training
+
+```bash
+python scripts/train_model.py MODEL CONDITION SEED PREPARED_DIR OUTPUT_DIR
+```
+
+Models: `transformer`, `conditional_vae`, `neutral_encoder`, and
+`latent_diffusion`. Conditions: `clean`, `unrelated_donor`, and
+`same_family_donor`. Add `--resume` to continue from `last.pt`.
+
+## Detector
+
+```bash
+python scripts/detect_same_work.py MIDI_DIR OUTPUT_DIR --workers 8
+python scripts/reproduce_detector_statistics.py --verify
+```

@@ -3,14 +3,13 @@ __pycache__/
 .pytest_cache/
 .venv/
 
-# Third-party datasets and generated outputs are not public repository content.
 external/
 data_external/
+prepared_lmd/
 outputs/
 checkpoints/
-examples/synthetic_demo/generated/
+_reproduced_release/
 
-# Never stage raw media, model weights, archives, logs, or closed-test material.
 *.mid
 *.midi
 *.wav
@@ -22,6 +21,7 @@ examples/synthetic_demo/generated/
 *.pth
 *.ckpt
 *.bin
+*.tokens
 *.log
 *clean_test*
 !reproduction/data/clean_test_nll_rows.csv

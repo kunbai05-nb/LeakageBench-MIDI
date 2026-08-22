@@ -17,10 +17,21 @@
 | `imperfect_inference_runs.csv` | noise condition × seed | Mitigation under graph noise |
 | `lmd_family_size_distribution.csv` | family-size bin | Census reconstruction |
 | `lmd_monte_carlo_runs.json` | split protocol × seed | Random-split leakage reconstruction |
+| `detector/asap_candidate_pairs.csv.gz` | detector candidate pair | ASAP pair score and reference label |
+| `detector/asap_files.csv` | ASAP performance | Composition and predicted-component IDs |
+
+## Source reconstruction
+
+`source_specs/formal_windows.csv.gz` identifies each required LMD file and
+window by content hash, bar range, token count, and token-sequence hash. It does
+not contain token sequences. `phase2_slots.csv.gz` maps the 1,264 replacement
+slots across the three conditions. `probe_pieces.csv` lists the evaluation
+pieces used by `prepare_lmd.py`.
 
 ## Common fields
 
-- `family_id`: release-specific pseudonym used only for pairing.
+- `family_id`: release-specific pseudonym in analysis tables; source relation ID
+  in reconstruction specifications.
 - `family_order`: nonidentifying ordinal preserving the frozen estimator's
   deterministic family ordering.
 - `condition`: model-training exposure condition.
@@ -32,6 +43,4 @@
 ## Frozen sufficient-statistics tables
 
 Files under `frozen/` contain canonical multiplicity results, bootstrap
-registries, and nonidentifying split summaries. The field audit labels uses of
-these files explicitly; they are not silently substituted for recomputation
-from analysis units.
+registries, and split summaries used by the field audit.

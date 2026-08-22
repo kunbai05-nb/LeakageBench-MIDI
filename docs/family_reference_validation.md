@@ -15,4 +15,8 @@ The frozen family graph uses the CAugBERT 0.99 / CLaMP 0.99 conservative union.
 | Graph-noise simulation rows | 2,900 |
 
 The symbolic check used 10,000 paired-family bootstrap draws with seed 20260818.
-No completed independent human labels are included in the frozen study.
+
+The structural detector was evaluated on 1,067 ASAP performances. Direct-edge
+precision/recall were 0.9973/0.4407; guarded-component precision/recall were
+0.9961/0.7245. The released candidate rows reproduce these estimates and their
+composition-level bootstrap intervals.

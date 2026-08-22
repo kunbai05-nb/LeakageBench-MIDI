@@ -1,0 +1,130 @@
+{
+  "files": [
+    {
+      "bytes": 335,
+      "path": "README.md",
+      "sha256": "6f8325fbc26469e8dcc64c828185f2c760e383b67559b9241bb8d36768fbb855"
+    },
+    {
+      "bytes": 1412,
+      "path": "data/detector_evaluation.csv",
+      "sha256": "f1904964cfae5f9447bf5485fb2d90ead0375c661a76e9981664fa42649ca0df"
+    },
+    {
+      "bytes": 538,
+      "path": "data/detector_model_selection.csv",
+      "sha256": "36af4302b8b6e341976ecbbe5fa933085e2b6c227388ea804ca680b0b0b13e8e"
+    },
+    {
+      "bytes": 667,
+      "path": "data/false_negative_robustness.csv",
+      "sha256": "a6885ef5af0d74d5d999d13213939bceea243c0cd3d18a9194540d801b23c4f7"
+    },
+    {
+      "bytes": 1133,
+      "path": "data/false_positive_robustness.csv",
+      "sha256": "cafe430ee35469fc733f95d8e30b34a165137c0d6023a17863f875cd5d51d08a"
+    },
+    {
+      "bytes": 222,
+      "path": "data/formal_assignment_impact.csv",
+      "sha256": "c4db774c328d3179abe723b6d996985bd9c741cd2e3348287db061b889dd8716"
+    },
+    {
+      "bytes": 174,
+      "path": "data/lmd_graph_completion.csv",
+      "sha256": "fa8515f5acb8773c301368c835cda5ace8c3388ece56761b29456f3d32367f50"
+    },
+    {
+      "bytes": 1053,
+      "path": "data/primary_sensitivity.csv",
+      "sha256": "599fb56a6e68e8c021a841e242b4764c409a2e61a4fc25d5a77ad08373302efb"
+    },
+    {
+      "bytes": 349,
+      "path": "data/shs_mapping_error_audit.csv",
+      "sha256": "368693ab6be6f85dcb3a5a0e1693e01f18c84dea8096f3fc50b27b9a69f9bf77"
+    },
+    {
+      "bytes": 21214,
+      "path": "figures/fig_combined_noise_grid.pdf",
+      "sha256": "c46052e6b175965189ff31d367c42a02d637e80519af8411c1cffae123cf02af"
+    },
+    {
+      "bytes": 14923,
+      "path": "figures/fig_combined_noise_grid.svg",
+      "sha256": "b3b7e2b10558e1de9ce5e33924bfdb4bf60dffd690d6ef51fe838a3af497d578"
+    },
+    {
+      "bytes": 21957,
+      "path": "figures/fig_detector_evaluation.pdf",
+      "sha256": "f7488b3315b462aef91527fed9c15674fbebdfecdadab801282cf4f8e3a36838"
+    },
+    {
+      "bytes": 25373,
+      "path": "figures/fig_detector_evaluation.svg",
+      "sha256": "e43837699ddce45fc6062b973dfbae9dccd43a20cd810a53c0feef8b5e58772e"
+    },
+    {
+      "bytes": 29291,
+      "path": "figures/fig_imperfect_inference_tradeoffs.pdf",
+      "sha256": "916197ba0a72aef5cf2bc09f65041db17264184816870197fa1244b7ba4b960f"
+    },
+    {
+      "bytes": 47511,
+      "path": "figures/fig_imperfect_inference_tradeoffs.svg",
+      "sha256": "28d813e7ad60ce23dba7100e7e851eb569ca936c278f876d95a00574ff34db0e"
+    },
+    {
+      "bytes": 22960,
+      "path": "figures/fig_lmd_graph_completion.pdf",
+      "sha256": "d27880163773b21e0801900f2bf8457e30db5b1cf478cd9fb4533161c9a9cd32"
+    },
+    {
+      "bytes": 34950,
+      "path": "figures/fig_lmd_graph_completion.svg",
+      "sha256": "465c4ae43814bdf43f5ad7dafdfeef87788af2d6e163c1f8c104dd7cdd085710"
+    },
+    {
+      "bytes": 1384,
+      "path": "tables/table_detector_evaluation.tex",
+      "sha256": "d36aa92dff0a447cd0f88dd8636dd4cb8f1b343aa351f0467d27b329ffc71fd9"
+    },
+    {
+      "bytes": 845,
+      "path": "tables/table_detector_model_selection.tex",
+      "sha256": "c2a6cada56bc10d86703e9c649fb22138782f9875ead79deeccf3d0596fe4e40"
+    },
+    {
+      "bytes": 980,
+      "path": "tables/table_false_negative_robustness.tex",
+      "sha256": "578aac8e54bd4434943c30754f1216aedde31fcd19600c9251b827256db7ee8c"
+    },
+    {
+      "bytes": 1403,
+      "path": "tables/table_false_positive_robustness.tex",
+      "sha256": "f759196ccdeb5411816e75f344a4dcd686fe79dbb0dd92338b9f73646aed059a"
+    },
+    {
+      "bytes": 663,
+      "path": "tables/table_formal_assignment_impact.tex",
+      "sha256": "a4f590ee7dac44d490f112446450a1bf1473b4f1ea4a68095b439b14c55e61ee"
+    },
+    {
+      "bytes": 760,
+      "path": "tables/table_lmd_graph_completion.tex",
+      "sha256": "a73bac88ae5110cba880ec03e1a5a6340bf84efd72ca605fbb9874197d779a89"
+    },
+    {
+      "bytes": 1265,
+      "path": "tables/table_primary_sensitivity.tex",
+      "sha256": "3d425ce6b547b6807fde41a1f98bf1103525ce10286a8b3dee000851fa44cd02"
+    },
+    {
+      "bytes": 894,
+      "path": "tables/table_shs_mapping_error_audit.tex",
+      "sha256": "9d36a868c7859ae76f3734a1daf9aecd932d39bb4aab0a5da28b3f9b7e95b1c1"
+    }
+  ],
+  "schema_version": 1
+}

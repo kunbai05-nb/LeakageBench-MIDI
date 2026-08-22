@@ -2,17 +2,16 @@
   "contains_checkpoints": false,
   "contains_raw_midi": false,
   "contains_tokens": false,
-  "family_identifier_policy": "one-way release-specific pseudonyms; no original family/file hashes",
   "files": [
     {
-      "bytes": 2219,
+      "bytes": 2719,
       "path": "reproduction/DATA_DICTIONARY.md",
-      "sha256": "b791aeb8700a767dd3344e7f6ae9e5e738e91b773b9ba777b7b957ea581b4cc7"
+      "sha256": "56199b8d7a306044fea2e2d77f18d24ab22897eef9cbfce2bb9b2d4784e0f5bf"
     },
     {
-      "bytes": 424,
+      "bytes": 381,
       "path": "reproduction/README.md",
-      "sha256": "b5a2d96b95812d30c96dd275b0bca1f5c2755e88a5d7877d5b8194d708c38b12"
+      "sha256": "fccab99e9e31558a61ba251cd2f04526df6f90ecb1f090d089dba5008e05c74a"
     },
     {
       "bytes": 1413028,
@@ -28,6 +27,16 @@
       "bytes": 162910,
       "path": "reproduction/data/cross_paradigm_nll_rows.csv",
       "sha256": "384b52541246f41080ad60f67fec642a66ba828973ebe5eb50465ed0563df99e"
+    },
+    {
+      "bytes": 4524783,
+      "path": "reproduction/data/detector/asap_candidate_pairs.csv.gz",
+      "sha256": "0f9dc1ef312a8b5d4d864b0b0e293e82e2f8c99706298fa77b1ce6fdcfbdfec7"
+    },
+    {
+      "bytes": 13145,
+      "path": "reproduction/data/detector/asap_files.csv",
+      "sha256": "615be815d3791b223e7e347c5bbeb847acc4e6e4d894f86fbdae6adfd8b7620c"
     },
     {
       "bytes": 696071,
@@ -108,6 +117,11 @@
       "bytes": 1634,
       "path": "reproduction/frozen/cross_paradigm_summary.json",
       "sha256": "366db438606a67f4e1e4e0e15ef64205f195dccc70fe5ba16e29dab427bc9666"
+    },
+    {
+      "bytes": 2112,
+      "path": "reproduction/frozen/detector_asap_summary.json",
+      "sha256": "447700d8af3427801c918ea03c1a12687ae775306555cbc261d205c982851886"
     },
     {
       "bytes": 30326,
@@ -193,25 +207,52 @@
       "bytes": 4814,
       "path": "reproduction/frozen/transformer_scale_summary.json",
       "sha256": "6977a9dfb360c31d27b28d1f0241ff6ecdc7f1b9a4293bfc5a74819e31fc9300"
+    },
+    {
+      "bytes": 806,
+      "path": "reproduction/source_specs/formal_data.json",
+      "sha256": "7dcf11a2798ea3c84031a7b32a5db682a1035bdeb77e55b34b56afbeb75949a4"
+    },
+    {
+      "bytes": 4617769,
+      "path": "reproduction/source_specs/formal_windows.csv.gz",
+      "sha256": "a82d5deb8312842d37e6e7acd54c658cc5f0feebfd4d16f89e1b3d511bedf950"
+    },
+    {
+      "bytes": 189383,
+      "path": "reproduction/source_specs/phase2_slots.csv.gz",
+      "sha256": "30316f3cc3b853642e25d04805cab2edc7e5c9d197a80652e80682697742b7b9"
+    },
+    {
+      "bytes": 183961,
+      "path": "reproduction/source_specs/probe_pieces.csv",
+      "sha256": "6dd7089193a4d98715f79cf7781dcdc7bbee85847b54204505c0ab7afa9ac507"
     }
   ],
   "formal_protocol_changed": false,
   "formal_results_changed": false,
-  "release_scope": "public-safe analysis bundle for provenance-labelled paper-statistics auditing",
+  "release_scope": "paper statistics, detector evaluation, and formal LMD source reconstruction",
   "row_counts": {
     "capacity_nll_rows.csv": 16800,
     "clean_test_nll_rows.csv": 1158,
     "cross_paradigm_nll_rows.csv": 1800,
+    "detector/asap_candidate_pairs.csv.gz": 355535,
+    "detector/asap_files.csv": 1067,
     "generation_family_metrics.csv": 7200,
     "imperfect_inference_runs.csv": 2900,
     "legacy_nll_rows.csv": 8400,
+    "lmd_family_size_distribution.csv": 27,
     "musical_family_metrics.csv": 33000,
     "normalized_subset_rows.csv": 100,
     "pdmx_family_deltas.csv": 467,
     "pdmx_nll_rows.csv": 2802,
     "phase2_nll_rows.csv": 900,
     "relatedness_features.csv": 100,
+    "source_specs/formal_windows.csv.gz": 50218,
+    "source_specs/phase2_slots.csv.gz": 3792,
+    "source_specs/probe_pieces.csv": 700,
     "token_localization_family_rows.csv": 300
   },
-  "schema_version": 1
+  "schema_version": 2,
+  "source_identity_policy": "LMD content IDs for source reconstruction; release pseudonyms for analysis rows"
 }

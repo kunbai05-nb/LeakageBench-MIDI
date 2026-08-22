@@ -1,0 +1,28 @@
+{
+  "expected_streams": {
+    "clean": {
+      "rows": 38374,
+      "sha256": "2adca968222fcea7ac2f0dcf67c3f1ab67a5fad885532e5e339e29f005ac7040",
+      "token_count": 35553081
+    },
+    "same_family_donor": {
+      "rows": 38374,
+      "sha256": "40affaa5bacd64b602beec9abe9ad812387979c17ba0203bbba8ff1a8581d044",
+      "token_count": 35553063
+    },
+    "unrelated_donor": {
+      "rows": 38374,
+      "sha256": "2ea905323284cb5538673ff58bd884d1c21820622c267378cba4af4a770a7bd3",
+      "token_count": 35553063
+    }
+  },
+  "lmd_full_archive_sha256": "6fcfe2ac49ca08f3f214cec86ab138d4fc4dabcd7f27f491a838dae6db45a12b",
+  "rows": {
+    "clean": 38374,
+    "probe_pieces": 700,
+    "probe_windows": 9316,
+    "same_family_replacements": 1264,
+    "unrelated_replacements": 1264
+  },
+  "schema_version": 1
+}

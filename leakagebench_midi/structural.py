@@ -13,7 +13,9 @@ NORMALIZATION_VERSION = "normalized-midi-structure-v1"
 
 
 def _digest(value):
-    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":"), default=str).encode()).hexdigest()
+    return hashlib.sha256(
+        json.dumps(value, sort_keys=True, separators=(",", ":"), default=str).encode()
+    ).hexdigest()
 
 
 def midi_hashes(path):
@@ -50,7 +52,17 @@ def classify_pair(a, b):
         classification = "TRACK_ORDER_EQUIVALENT"
     else:
         classification = "STRUCTURALLY_NONEXACT"
-    return {"classification": classification, "a": x, "b": y, "frozen_hierarchy": ["BYTE_EXACT", "CANONICAL_EQUIVALENT", "TRACK_ORDER_EQUIVALENT", "STRUCTURALLY_NONEXACT"]}
+    return {
+        "classification": classification,
+        "a": x,
+        "b": y,
+        "frozen_hierarchy": [
+            "BYTE_EXACT",
+            "CANONICAL_EQUIVALENT",
+            "TRACK_ORDER_EQUIVALENT",
+            "STRUCTURALLY_NONEXACT",
+        ],
+    }
 
 
 def _fraction_pair(value):
@@ -77,21 +89,50 @@ def normalize_midi_structure(path):
             tick += message.time
             if message.type == "note_on" and message.velocity > 0:
                 active[message.channel, message.note].append((tick, message.velocity))
-            elif message.type == "note_off" or (message.type == "note_on" and message.velocity == 0):
+            elif message.type == "note_off" or (
+                message.type == "note_on" and message.velocity == 0
+            ):
                 key = (message.channel, message.note)
                 if active[key]:
                     onset, velocity = active[key].pop(0)
-                    notes.append((Fraction(onset, ppq), Fraction(tick - onset, ppq), int(message.note), int(velocity), message.channel == 9))
-        unclosed = [(channel, pitch, len(starts)) for (channel, pitch), starts in active.items() if starts]
+                    notes.append(
+                        (
+                            Fraction(onset, ppq),
+                            Fraction(tick - onset, ppq),
+                            int(message.note),
+                            int(velocity),
+                            message.channel == 9,
+                        )
+                    )
+        unclosed = [
+            (channel, pitch, len(starts))
+            for (channel, pitch), starts in active.items()
+            if starts
+        ]
         if unclosed:
             channel, pitch, count = sorted(unclosed)[0]
-            raise ValueError(f"unclosed active MIDI note: channel={channel} pitch={pitch} count={count}")
+            raise ValueError(
+                f"unclosed active MIDI note: channel={channel} pitch={pitch} count={count}"
+            )
     # Counter semantics make same-timestamp event order and track containers irrelevant.
     counter = Counter(notes)
     events = []
     for (onset, duration, pitch, velocity, is_drum), count in sorted(counter.items()):
-        events.append({"onset_beats": _fraction_pair(onset), "duration_beats": _fraction_pair(duration), "pitch": pitch, "velocity": velocity, "is_drum": is_drum, "multiplicity": count})
-    return {"normalization_version": NORMALIZATION_VERSION, "event_type": "note", "events": events}
+        events.append(
+            {
+                "onset_beats": _fraction_pair(onset),
+                "duration_beats": _fraction_pair(duration),
+                "pitch": pitch,
+                "velocity": velocity,
+                "is_drum": is_drum,
+                "multiplicity": count,
+            }
+        )
+    return {
+        "normalization_version": NORMALIZATION_VERSION,
+        "event_type": "note",
+        "events": events,
+    }
 
 
 def normalized_structural_hash(path):
@@ -101,7 +142,9 @@ def normalized_structural_hash(path):
 def classify_pair_normalized(a, b):
     a_hash, b_hash = normalized_structural_hash(a), normalized_structural_hash(b)
     return {
-        "classification": "NORMALIZED_STRUCTURAL_EXACT" if a_hash == b_hash else "NORMALIZED_STRUCTURAL_NONEXACT",
+        "classification": "NORMALIZED_STRUCTURAL_EXACT"
+        if a_hash == b_hash
+        else "NORMALIZED_STRUCTURAL_NONEXACT",
         "normalization_version": NORMALIZATION_VERSION,
         "a_normalized_sha256": a_hash,
         "b_normalized_sha256": b_hash,

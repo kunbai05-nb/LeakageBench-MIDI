@@ -1,0 +1,22 @@
+\begin{table}[t]
+\caption{Classifier comparison for the 47-feature structural detector on SHS development folds (percent).}
+\label{tab:detector-selection}
+\centering
+\scriptsize
+\begin{tabular}{lrrrr}
+\toprule
+Classifier & Features & Precision & Recall & F1 \\
+\midrule
+logistic & 47 & 95.02 & 9.56 & 17.37 \\
+hist\_gradient\_leaf20 & 47 & 95.02 & 21.02 & 34.43 \\
+extra\_trees\_leaf10 & 47 & 95.27 & 21.17 & 34.64 \\
+extra\_trees\_leaf2 & 47 & 95.07 & 21.22 & 34.70 \\
+extra\_trees\_leaf5 & 47 & 95.11 & 21.42 & 34.97 \\
+hist\_gradient\_leaf50 & 47 & 95.34 & 22.52 & 36.44 \\
+\bottomrule
+\end{tabular}
+\vspace{2pt}
+\begin{minipage}{\columnwidth}
+\footnotesize The operating point is selected at approximately 95\% precision. These development-fold results are model-selection evidence, not the independent ASAP test.
+\end{minipage}
+\end{table}

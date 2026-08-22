@@ -1,56 +1,50 @@
-# Public Methods
+# Methods
 
-## Scope
+## Same-work relations
 
-LeakageBench-MIDI studies same-work family leakage in symbolic-music generation evaluation. A file-level split is contaminated under the adopted relation when a training file and an evaluation file belong to the same connected reference family. The reference relation is deliberately treated as incomplete: it is an operational known-family graph, not a universal detector or exhaustive ground truth.
+MIDI files are nodes in an undirected graph. Same-work relations form edges and
+connected components form families. A split is contaminated when a reference
+family has members in both training and evaluation.
 
-The exact frozen model, training, generation, and statistical settings are in
-[PROTOCOL_V2.md](PROTOCOL_V2.md) and
-[`configs/protocol_v2.json`](../configs/protocol_v2.json). This page is the
-short conceptual overview.
+The learned detector starts from nine sparse retrieval signals: melody, bass,
+rhythm, harmony, motif, interval, duration, onset interval, and transposition-
+normalized chroma. Candidate pairs are represented by 47 structural and rank
+features. A gradient-boosted classifier scores each pair; the released threshold
+is 0.9910136. Predicted edges require support from at least three mutual signals,
+and component growth is capped at 20 files.
 
-## Family construction and audit
+## Dataset splitting
 
-Files are represented as graph nodes and inferred same-work relations as undirected edges. Connected components define operational families. Split audits report known cross-split family count, test-family contamination, and test-file contamination. Unknown relations are outside the estimand and remain an explicit limitation.
+The random baseline assigns files independently. The mitigation assigns whole
+components to train, validation, or test while minimizing split-ratio error. The
+80/10/10 split is the main setting. Leakage is measured by cross-split family
+count, contaminated test-family rate, and contaminated test-file rate.
 
-## Family-aware splitting
+The imperfect-inference experiment drops reference edges, injects cross-family
+edges, and combines both noise types. Each inferred graph is split without using
+the evaluation graph. Results are summarized across fixed seeds with means,
+medians, and empirical 95% intervals.
 
-Inferred connected components are assigned atomically to train, validation, or test. The splitter targets requested file or token ratios without deleting members. The bounded claim is zero known cross-split overlap under the adopted relation. When family inference is incomplete, residual known leakage is evaluated against the full frozen reference graph; false-positive simulations additionally track over-merging, largest-component growth, and ratio distortion.
+## Controlled training experiment
 
-For family size `k`, train probability `p_train`, test probability `p_test`,
-and all other splits combined as `p_other`, the random-file-split crossing
-probability is:
+Each treated family contributes a held-out receiver. The three training
+conditions are clean, an unrelated matched donor, and a same-work donor. All
+conditions use 38,374 windows and the same batch order within each seed. The
+formal matrix contains three seeds for Transformer-L, Conditional VAE, and
+Latent Diffusion. The diffusion model uses a seed-matched neutral encoder trained
+on the 37,110 windows shared by all conditions.
 
-```text
-P_cross(k) = 1 - (1-p_train)^k - (1-p_test)^k + p_other^k
-```
+Models are trained for 20,000 steps with batch size 32, micro-batch size 8,
+AdamW, 1,000 warmup steps, cosine decay, and gradient clipping at 1.0. The
+primary endpoint is receiver continuation NLL for sequence models and fixed-
+noise latent denoising MSE for diffusion.
 
-Conditioned on one designated test member, the probability that at least one
-sibling enters training is:
+## Statistical analysis
 
-```text
-P(train sibling | one test member, k) = 1 - (1-p_train)^(k-1)
-```
+Families receive equal weight. Condition differences are paired within family
+and averaged across the three seeds. Confidence intervals use 10,000 family-
+level bootstrap samples. Families, rather than windows or tokens, are the
+analysis units. Multiple musical-property comparisons use Holm correction.
 
-Both probabilities increase with family size. This motivates assigning whole
-connected components atomically rather than splitting files independently.
-
-## Controlled exposure design
-
-For each treated family, a receiver is held out and a designated same-family donor is either excluded or admitted to training. Clean and unrelated-donor conditions separate family-specific exposure from generic added-data effects. Receivers, controls, and validation families remain outside training. Token budgets are matched by deterministic, family-disjoint removal from the base pool.
-
-## Estimand and uncertainty
-
-Within each seed, family-level changes are computed between conditions. The primary controlled estimand subtracts control-family drift from treated-family drift. Families receive equal weight. Confidence intervals use family-cluster resampling; windows, notes, and tokens are not treated as independent statistical units. Simulation seeds describe robustness and are summarized with empirical intervals rather than interpreted as independent real-world datasets.
-
-## Structural and generation analyses
-
-Structural comparison distinguishes byte identity, canonical event equivalence, track-order-invariant equivalence, normalized structural equivalence, and structurally non-exact family relations. Generation analyses compare receiver alignment, surface statistics, and local shared-span behavior. Likelihood advantage and symbolic similarity are not equated with perceptual quality or plagiarism.
-
-## Public reproduction boundary
-
-This GitHub release contains no research MIDI, token-bearing manifest, training checkpoint, or private evaluation item. It supports data-free unit tests, a synthetic end-to-end demonstration, and a field-level audit of final public results. Of 232 numerical fields, 193 are recalculated from anonymous public analysis rows and 39 are verified against frozen nonidentifying summaries because their exact display-chain inputs are not public. Re-running restricted-data training requires separately obtained datasets and is outside this software archive. Inference-only final weights are distributed separately.
-
-## Result governance
-
-`results/manuscript_results_v2_public.json` is a public-safe projection of the frozen v2 result lock. Numerical fields are retained; internal registry references, server paths, and source-artifact provenance are removed. The source formal result files and protocol are not modified by release construction.
+Exact settings are available in [`configs/protocol_v2.json`](../configs/protocol_v2.json)
+and [`configs/training.json`](../configs/training.json).

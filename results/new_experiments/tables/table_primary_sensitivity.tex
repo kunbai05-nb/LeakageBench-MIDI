@@ -1,0 +1,23 @@
+\begin{table*}[t]
+\caption{Primary effects after excluding three newly connected receiver families.}
+\label{tab:shadow-sensitivity}
+\centering
+\scriptsize
+\begin{tabular}{lrrrrc}
+\toprule
+Model/design & Original & 97-family & 97-family 95\% CI & Point change & Conclusion \\
+\midrule
+Transformer-L confirmatory & -0.115317 & -0.116395 & [-0.134077, -0.100168] & -0.00108 & Preserved \\
+TCN-384 & -0.0317221 & -0.031984 & [-0.0382336, -0.0264873] & -0.000262 & Preserved \\
+Transformer-S & -0.0775931 & -0.0776646 & [-0.090174, -0.0661496] & -7.15e-05 & Preserved \\
+Transformer-M & -0.0857125 & -0.0862564 & [-0.0997313, -0.0736101] & -0.000544 & Preserved \\
+Transformer-L three-condition & -0.201993 & -0.203745 & [-0.23099, -0.17804] & -0.00175 & Preserved \\
+Conditional VAE & -0.00905303 & -0.00935809 & [-0.0146326, -0.00425694] & -0.000305 & Preserved \\
+Latent diffusion & -4.34393e-06 & -4.10092e-06 & [-1.72267e-05, 9.52602e-06] & +2.43e-07 & Preserved \\
+\bottomrule
+\end{tabular}
+\vspace{2pt}
+\begin{minipage}{\textwidth}
+\footnotesize The exclusion set is fixed from the relation-graph audit without using model outcomes. Intervals use family-equal bootstrap with 10,000 replicates. This is a post-hoc sensitivity analysis.
+\end{minipage}
+\end{table*}

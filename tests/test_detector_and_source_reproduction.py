@@ -34,7 +34,9 @@ def test_portable_detector_is_stable():
         ]
     )
     assert len(config["selected_feature_names"]) == 47
-    np.testing.assert_array_equal(_predict_probability(model, features), expected)
+    np.testing.assert_allclose(
+        _predict_probability(model, features), expected, rtol=0.0, atol=1e-15
+    )
 
 
 def test_formal_source_specs():

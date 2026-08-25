@@ -111,14 +111,14 @@
       "sha256": "465c4ae43814bdf43f5ad7dafdfeef87788af2d6e163c1f8c104dd7cdd085710"
     },
     {
-      "bytes": 540,
+      "bytes": 518,
       "path": "tables/table_cross_dataset_detector.csv",
-      "sha256": "4a8bd3727007fc9e144c211734ed53f54f6b30a9b3741d7024c5d739e386b75e"
+      "sha256": "e317d632bf2618e2e2590b2944a19d4343174285fb973cb2dd3d673c17bb90cd"
     },
     {
-      "bytes": 1319,
+      "bytes": 1454,
       "path": "tables/table_cross_dataset_detector.tex",
-      "sha256": "14ca88e440f5ca9fc0952786adb67a595126a0e9666fd0087a1999326137decf"
+      "sha256": "dc1a7112b610c4d7acf82ea936fa88fe1980fde7d6529d7b561de08e56117ff7"
     },
     {
       "bytes": 1384,

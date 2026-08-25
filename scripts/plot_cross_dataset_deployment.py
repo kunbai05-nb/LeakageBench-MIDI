@@ -173,28 +173,28 @@ def main() -> None:
     table_rows = [
         r"\begin{table*}[t]",
         r"\centering",
-        r"\caption{Full-dataset deployment of the frozen structural detector. Multi-file is the fraction assigned to inferred components of size at least two. Random exposure is the mean over 200 fixed 80/10/10 file splits; brackets show the empirical 95\% interval.}",
+        r"\caption{Cross-dataset deployment of the frozen structural detector. Random test exposure is averaged over 200 fixed 80/10/10 file splits; brackets give empirical 95\% intervals.}",
         r"\label{tab:cross-dataset-detector}",
-        r"\small",
-        r"\begin{tabular}{lrrrrrr}",
+        r"\footnotesize",
+        r"\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrrrcrr}",
         r"\toprule",
-        r"Dataset & Files & Valid & Inferred multi-file & Random test-file & Official & Runtime \\",
-        r" & & (\%) & (\%) & exposure (\%) & exposure (\%) & (min) \\",
+        r"Dataset & MIDI files & Valid MIDI & Multi-version files & Random test exposure & Official exposure & CPU time \\",
+        r" & & (\%) & (\%) & \% [95\% interval] & (\%) & (min) \\",
         r"\midrule",
     ]
-    for row in rows:
+    for row in reversed(rows):
         mean = 100 * float(row["detected_random_test_file_exposure_mean"])
         low = 100 * float(row["detected_random_test_file_exposure_q025"])
         high = 100 * float(row["detected_random_test_file_exposure_q975"])
         table_data.append(
             {
                 "Dataset": row["dataset"],
-                "Files": int(row["files"]),
-                "Valid (%)": round(100 * float(row["valid_file_rate"]), 1),
-                "Inferred multi-file (%)": round(100 * float(row["inferred_multi_member_file_rate"]), 1),
-                "Random test-file exposure (%)": f"{mean:.1f} [{low:.1f}, {high:.1f}]",
+                "MIDI files": f"{int(row['files']):,}",
+                "Valid MIDI (%)": f"{100 * float(row['valid_file_rate']):.1f}",
+                "Multi-version files (%)": f"{100 * float(row['inferred_multi_member_file_rate']):.1f}",
+                "Random test exposure, % [95% EI]": f"{mean:.1f} [{low:.1f}, {high:.1f}]",
                 "Official exposure (%)": percent(value(row, "official_test_file_exposure")),
-                "Runtime (min)": round(float(row["runtime_seconds"]) / 60, 1),
+                "CPU time (min)": f"{float(row['runtime_seconds']) / 60:.1f}",
             }
         )
         table_rows.append(
@@ -205,7 +205,15 @@ def main() -> None:
             f"{percent(value(row, 'official_test_file_exposure'))} & "
             f"{float(row['runtime_seconds']) / 60:.1f} \\\\"
         )
-    table_rows.extend([r"\bottomrule", r"\end{tabular}", r"\end{table*}"])
+    table_rows.extend(
+        [
+            r"\bottomrule",
+            r"\end{tabular*}",
+            r"\vspace{2pt}",
+            r"\parbox{\textwidth}{\footnotesize Multi-version files belong to inferred components containing at least two files. GigaMIDI's random exposure is 54.5\% when restricted to files with extractable non-drum notes. Official exposure is shown where an official split was evaluated. All runs are CPU-only.}",
+            r"\end{table*}",
+        ]
+    )
     (table_dir / "table_cross_dataset_detector.tex").write_text(
         "\n".join(table_rows) + "\n"
     )

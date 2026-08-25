@@ -5,7 +5,7 @@
 deployment on seven MIDI collections, imperfect-inference robustness, graph
 completion, and sensitivity analyses.
 
-Rebuild the cross-dataset figure and table with:
+Rebuild the cross-dataset table and optional overview figure with:
 
 ```bash
 pip install -e '.[figures]'

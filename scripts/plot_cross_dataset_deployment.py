@@ -220,7 +220,7 @@ def main() -> None:
     with (table_dir / "table_cross_dataset_detector.csv").open(
         "w", newline="", encoding="utf-8"
     ) as handle:
-        writer = csv.DictWriter(handle, fieldnames=list(table_data[0]))
+        writer = csv.DictWriter(handle, fieldnames=list(table_data[0]), lineterminator="\n")
         writer.writeheader()
         writer.writerows(table_data)
 

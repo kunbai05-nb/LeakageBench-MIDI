@@ -71,14 +71,14 @@
       "sha256": "b3b7e2b10558e1de9ce5e33924bfdb4bf60dffd690d6ef51fe838a3af497d578"
     },
     {
-      "bytes": 26785,
+      "bytes": 45685,
       "path": "figures/fig_cross_dataset_deployment.pdf",
-      "sha256": "c08e37558378e5a55909d63a3fefb3148b8ed4aa88c61ed85c4d325c8bb5c6bb"
+      "sha256": "6daa9275520715b5def16697907de627787430fe0c6013c5822f9841fb2121d6"
     },
     {
-      "bytes": 370189,
+      "bytes": 374486,
       "path": "figures/fig_cross_dataset_deployment.png",
-      "sha256": "31992e137633d0eac807ec91498da9665bf8618e5735e7ceee4f7ad6c61c9eb7"
+      "sha256": "357e3b283401fc70890f0377833609511db733b0313778c1a96cebb9f3b0b7ec"
     },
     {
       "bytes": 21957,
@@ -111,9 +111,9 @@
       "sha256": "465c4ae43814bdf43f5ad7dafdfeef87788af2d6e163c1f8c104dd7cdd085710"
     },
     {
-      "bytes": 525,
+      "bytes": 517,
       "path": "tables/table_cross_dataset_detector.csv",
-      "sha256": "86ed8f12334334ac5a75b6d6fe3c07d150f7ee90e1b46cfd5b563b47e50610ad"
+      "sha256": "24e827317d79c3e3ed33321adbbb72cabf7850991d89e7f6f1f08517c96c15e0"
     },
     {
       "bytes": 1322,

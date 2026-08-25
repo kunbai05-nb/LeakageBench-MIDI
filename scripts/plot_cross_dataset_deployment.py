@@ -178,8 +178,8 @@ def main() -> None:
         r"\footnotesize",
         r"\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrrrcrr}",
         r"\toprule",
-        r"Dataset & MIDI files & Valid MIDI & Multi-version files & Random test exposure & Official exposure & CPU time \\",
-        r" & & (\%) & (\%) & \% [95\% interval] & (\%) & (min) \\",
+        r"Dataset & MIDI files & Valid MIDI & Multi-version files & Random test exposure & Official exposure & Multi-version groups \\",
+        r" & & (\%) & (\%) & \% [95\% interval] & (\%) & \\",
         r"\midrule",
     ]
     for row in reversed(rows):
@@ -194,7 +194,7 @@ def main() -> None:
                 "Multi-version files (%)": f"{100 * float(row['inferred_multi_member_file_rate']):.1f}",
                 "Random test exposure, % [95% EI]": f"{mean:.1f} [{low:.1f}, {high:.1f}]",
                 "Official exposure (%)": percent(value(row, "official_test_file_exposure")),
-                "CPU time (min)": f"{float(row['runtime_seconds']) / 60:.1f}",
+                "Multi-version groups": f"{int(row['inferred_multi_member_components']):,}",
             }
         )
         table_rows.append(
@@ -203,14 +203,14 @@ def main() -> None:
             f"{100 * float(row['inferred_multi_member_file_rate']):.1f} & "
             f"{mean:.1f} [{low:.1f}, {high:.1f}] & "
             f"{percent(value(row, 'official_test_file_exposure'))} & "
-            f"{float(row['runtime_seconds']) / 60:.1f} \\\\"
+            f"{int(row['inferred_multi_member_components']):,} \\\\"
         )
     table_rows.extend(
         [
             r"\bottomrule",
             r"\end{tabular*}",
             r"\vspace{2pt}",
-            r"\parbox{\textwidth}{\footnotesize Multi-version files belong to inferred components containing at least two files. GigaMIDI's random exposure is 54.5\% when restricted to files with extractable non-drum notes. Official exposure is shown where an official split was evaluated. All runs are CPU-only.}",
+            r"\parbox{\textwidth}{\footnotesize Multi-version files and groups are inferred components containing at least two files. GigaMIDI's random exposure is 54.5\% when restricted to files with extractable non-drum notes. Official exposure is shown where an official split was evaluated.}",
             r"\end{table*}",
         ]
     )

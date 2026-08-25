@@ -5,6 +5,7 @@ import json
 import math
 from collections import Counter, defaultdict
 from concurrent.futures import ProcessPoolExecutor
+from multiprocessing import get_all_start_methods, get_context
 from pathlib import Path
 
 import mido
@@ -268,14 +269,83 @@ def extract_features(paths: list[Path], workers: int = 1, hash_width: int = 8192
     return bundle, failures
 
 
+def extract_count_features(
+    paths: list[Path], workers: int = 1, hash_width: int = 8192
+):
+    parsed = [None] * len(paths)
+    failures = []
+    tasks = [(index, str(path)) for index, path in enumerate(paths)]
+    if workers > 1:
+        with ProcessPoolExecutor(max_workers=workers) as executor:
+            outputs = executor.map(_parse_one, tasks, chunksize=4)
+            for index, item, error in outputs:
+                parsed[index] = item
+                if error:
+                    failures.append(
+                        {"index": index, "file": paths[index].name, "error": error}
+                    )
+    else:
+        for task in tasks:
+            index, item, error = _parse_one(task)
+            parsed[index] = item
+            if error:
+                failures.append(
+                    {"index": index, "file": paths[index].name, "error": error}
+                )
+
+    valid = np.asarray([item is not None for item in parsed])
+    bundle = {"valid": valid}
+    for name, width in (
+        ("chroma", 12),
+        ("interval_hist", 75),
+        ("duration_hist", 16),
+        ("ioi_hist", 16),
+        ("scalars", 10),
+    ):
+        values = np.zeros((len(paths), width), dtype=np.float32)
+        for index, item in enumerate(parsed):
+            if item is not None:
+                values[index] = item[name]
+        bundle[name] = values
+
+    hasher = FeatureHasher(
+        n_features=hash_width, input_type="dict", alternate_sign=False
+    )
+    for group in TOKEN_GROUPS:
+        bundle[group] = hasher.transform(
+            [item["tokens"][group] if item is not None else {} for item in parsed]
+        ).astype(np.float32).tocsr()
+    return bundle, failures
+
+
+def apply_tfidf(bundle: dict) -> dict:
+    output = {
+        name: bundle[name]
+        for name in (
+            "chroma",
+            "interval_hist",
+            "duration_hist",
+            "ioi_hist",
+            "scalars",
+            "valid",
+        )
+    }
+    for group in TOKEN_GROUPS:
+        output[group] = TfidfTransformer(
+            norm="l2", sublinear_tf=True
+        ).fit_transform(bundle[group]).astype(np.float32)
+    return output
+
+
+def canonical_chroma(values: np.ndarray) -> np.ndarray:
+    return np.stack(
+        [np.roll(row, -int(np.argmax(row))) if np.any(row) else row for row in values]
+    ).astype(np.float32)
+
+
 def candidate_ranks(bundle: dict, indices: np.ndarray, k: int) -> dict:
     matrices = {signal: bundle[signal] for signal in SIGNALS}
-    matrices["chroma"] = np.stack(
-        [
-            np.roll(row, -int(np.argmax(row))) if np.any(row) else row
-            for row in bundle["chroma"]
-        ]
-    ).astype(np.float32)
+    matrices["chroma"] = canonical_chroma(bundle["chroma"])
     batches = []
     for signal_index, signal in enumerate(SIGNALS):
         matrix = matrices[signal][indices]
@@ -308,6 +378,147 @@ def candidate_ranks(bundle: dict, indices: np.ndarray, k: int) -> dict:
             )
     pairs = np.column_stack((keys // len(bundle["valid"]), keys % len(bundle["valid"])))
     return {"pairs": pairs.astype(np.int32), "ranks": rank_values, "k": k}
+
+
+_FAISS_SIGNAL_STATE = None
+
+
+def _faiss_signal_job(item):
+    import faiss
+    from sklearn.random_projection import SparseRandomProjection
+
+    signal_index, signal = item
+    state = _FAISS_SIGNAL_STATE
+    indices = state["indices"]
+    k = state["k"]
+    matrix = state["matrices"][signal][indices]
+    if sparse.issparse(matrix):
+        width = min(state["projection_dim"], max(8, len(indices) - 1))
+        matrix = SparseRandomProjection(
+            n_components=width,
+            dense_output=True,
+            random_state=state["seed"] + signal_index,
+        ).fit_transform(matrix)
+    vectors = np.ascontiguousarray(matrix, dtype=np.float32)
+    faiss.omp_set_num_threads(state["threads"])
+    faiss.normalize_L2(vectors)
+    search = faiss.IndexHNSWFlat(
+        vectors.shape[1], state["hnsw_connections"], faiss.METRIC_INNER_PRODUCT
+    )
+    search.hnsw.efConstruction = state["ef_construction"]
+    search.hnsw.efSearch = state["ef_search"]
+    search.add(vectors)
+    _, neighbours = search.search(vectors, min(k + 1, len(indices)))
+
+    local_left = np.repeat(np.arange(len(indices), dtype=np.int64), neighbours.shape[1])
+    local_right = neighbours.ravel().astype(np.int64)
+    valid = (local_right >= 0) & (local_left != local_right)
+    ranks = np.cumsum(
+        (neighbours >= 0)
+        & (neighbours != np.arange(len(indices), dtype=np.int64)[:, None]),
+        axis=1,
+        dtype=np.int16,
+    ).ravel()[valid]
+    left, right = indices[local_left[valid]], indices[local_right[valid]]
+    low, high = np.minimum(left, right), np.maximum(left, right)
+    keys = low * state["universe_size"] + high
+    direction = left > right
+    unique_keys, positions = np.unique(keys, return_inverse=True)
+    low_to_high = np.full(len(unique_keys), k + 1, dtype=np.int16)
+    high_to_low = np.full(len(unique_keys), k + 1, dtype=np.int16)
+    np.minimum.at(low_to_high, positions[~direction], ranks[~direction])
+    np.minimum.at(high_to_low, positions[direction], ranks[direction])
+    mutual = (low_to_high <= k) & (high_to_low <= k)
+    result = (unique_keys, low_to_high, high_to_low, unique_keys[mutual])
+    row = {
+        "signal": signal,
+        "dimensions": int(vectors.shape[1]),
+        "mutual_pairs": int(mutual.sum()),
+    }
+    return signal_index, result, row
+
+
+def faiss_candidate_ranks(
+    bundle: dict,
+    indices: np.ndarray,
+    k: int,
+    minimum_mutual_signals: int = 3,
+    projection_dim: int = 256,
+    hnsw_connections: int = 32,
+    ef_construction: int = 160,
+    ef_search: int = 200,
+    threads: int = 1,
+    signal_workers: int = 1,
+    seed: int = 20260824,
+) -> tuple[dict, dict]:
+    try:
+        import faiss  # noqa: F401
+    except ImportError as error:
+        raise RuntimeError("install the 'scale' extra to use FAISS") from error
+
+    indices = np.asarray(indices, dtype=np.int64)
+    matrices = {signal: bundle[signal] for signal in SIGNALS}
+    matrices["chroma"] = canonical_chroma(bundle["chroma"])
+    universe_size = len(bundle["valid"])
+    global _FAISS_SIGNAL_STATE
+    _FAISS_SIGNAL_STATE = {
+        "matrices": matrices,
+        "indices": indices,
+        "k": k,
+        "projection_dim": projection_dim,
+        "hnsw_connections": hnsw_connections,
+        "ef_construction": ef_construction,
+        "ef_search": ef_search,
+        "threads": max(1, threads),
+        "seed": seed,
+        "universe_size": universe_size,
+    }
+    items = list(enumerate(SIGNALS))
+    if signal_workers > 1:
+        if "fork" not in get_all_start_methods():
+            raise RuntimeError("parallel signal search requires a fork-capable platform")
+        with ProcessPoolExecutor(
+            max_workers=min(signal_workers, len(items)),
+            mp_context=get_context("fork"),
+        ) as executor:
+            outputs = list(executor.map(_faiss_signal_job, items))
+    else:
+        outputs = [_faiss_signal_job(item) for item in items]
+    _FAISS_SIGNAL_STATE = None
+    outputs.sort(key=lambda item: item[0])
+    directional = [item[1] for item in outputs]
+    diagnostics = [item[2] for item in outputs]
+
+    mutual_keys = np.concatenate([item[3] for item in directional])
+    selected_keys, support = np.unique(mutual_keys, return_counts=True)
+    selected_keys = selected_keys[support >= minimum_mutual_signals]
+    rank_values = np.full(
+        (len(selected_keys), len(SIGNALS), 2), k + 1, dtype=np.int16
+    )
+    for signal_index, (keys, low_to_high, high_to_low, _) in enumerate(directional):
+        if not len(keys) or not len(selected_keys):
+            continue
+        positions = np.searchsorted(keys, selected_keys)
+        clipped = np.minimum(positions, len(keys) - 1)
+        found = (positions < len(keys)) & (keys[clipped] == selected_keys)
+        rank_values[found, signal_index, 0] = low_to_high[positions[found]]
+        rank_values[found, signal_index, 1] = high_to_low[positions[found]]
+
+    pairs = np.column_stack(
+        (selected_keys // universe_size, selected_keys % universe_size)
+    ).astype(np.int32)
+    return {"pairs": pairs, "ranks": rank_values, "k": k}, {
+        "backend": "faiss_hnsw",
+        "candidate_pairs": len(pairs),
+        "minimum_mutual_signals": minimum_mutual_signals,
+        "projection_dim": projection_dim,
+        "hnsw_connections": hnsw_connections,
+        "ef_construction": ef_construction,
+        "ef_search": ef_search,
+        "threads": max(1, threads),
+        "signal_workers": min(max(1, signal_workers), len(SIGNALS)),
+        "signals": diagnostics,
+    }
 
 
 def _sparse_cosine(

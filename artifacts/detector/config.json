@@ -1,5 +1,6 @@
 {
   "schema_version": 1,
+  "seed": 20260822,
   "candidate_k": 100,
   "threshold": 0.991013602401951,
   "minimum_mutual_structural_signals": 3,

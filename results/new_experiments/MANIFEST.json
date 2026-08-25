@@ -1,9 +1,19 @@
 {
   "files": [
     {
-      "bytes": 335,
+      "bytes": 543,
       "path": "README.md",
-      "sha256": "6f8325fbc26469e8dcc64c828185f2c760e383b67559b9241bb8d36768fbb855"
+      "sha256": "30989cbc8e62b1c463b90c08a0034c039bfc5df59e39e6cad99821813ebb75f3"
+    },
+    {
+      "bytes": 2922,
+      "path": "data/cross_dataset_detector_deployment.csv",
+      "sha256": "27a10de1e00372d680c5e365b057f2426eab4d34643ef4a8e107ef42d9afee60"
+    },
+    {
+      "bytes": 393,
+      "path": "data/cross_dataset_detector_validation.csv",
+      "sha256": "216d8b06e42e02e0915c29bc5f370825236aed6b9f3a481376d5d5d6f85ddfcf"
     },
     {
       "bytes": 1412,
@@ -36,6 +46,11 @@
       "sha256": "fa8515f5acb8773c301368c835cda5ace8c3388ece56761b29456f3d32367f50"
     },
     {
+      "bytes": 337,
+      "path": "data/pdmx_metadata_agreement.csv",
+      "sha256": "1d57321af3895b08cc62f876d7b1f3b82ed719ad1de6c30c2f2069ed23c8fef1"
+    },
+    {
       "bytes": 1053,
       "path": "data/primary_sensitivity.csv",
       "sha256": "599fb56a6e68e8c021a841e242b4764c409a2e61a4fc25d5a77ad08373302efb"
@@ -54,6 +69,16 @@
       "bytes": 14923,
       "path": "figures/fig_combined_noise_grid.svg",
       "sha256": "b3b7e2b10558e1de9ce5e33924bfdb4bf60dffd690d6ef51fe838a3af497d578"
+    },
+    {
+      "bytes": 45685,
+      "path": "figures/fig_cross_dataset_deployment.pdf",
+      "sha256": "6daa9275520715b5def16697907de627787430fe0c6013c5822f9841fb2121d6"
+    },
+    {
+      "bytes": 374486,
+      "path": "figures/fig_cross_dataset_deployment.png",
+      "sha256": "357e3b283401fc70890f0377833609511db733b0313778c1a96cebb9f3b0b7ec"
     },
     {
       "bytes": 21957,
@@ -84,6 +109,16 @@
       "bytes": 34950,
       "path": "figures/fig_lmd_graph_completion.svg",
       "sha256": "465c4ae43814bdf43f5ad7dafdfeef87788af2d6e163c1f8c104dd7cdd085710"
+    },
+    {
+      "bytes": 486,
+      "path": "tables/table_cross_dataset_detector.csv",
+      "sha256": "9ab4e6b0d674fde037ae182c40a1111c8f9f078000be2836f61410c6cb3cb71f"
+    },
+    {
+      "bytes": 1024,
+      "path": "tables/table_cross_dataset_detector.tex",
+      "sha256": "6c563c56834b34849faedb3bd5784d0fc2d13481c75d73e44a09f48986551af9"
     },
     {
       "bytes": 1384,

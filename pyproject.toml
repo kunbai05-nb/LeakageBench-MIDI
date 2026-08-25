@@ -16,6 +16,8 @@ Repository = "https://github.com/kunbai05-nb/LeakageBench-MIDI"
 
 [project.optional-dependencies]
 test = ["pytest>=7"]
+scale = ["faiss-cpu>=1.12,<2"]
+figures = ["matplotlib>=3.8,<4"]
 
 [tool.setuptools.packages.find]
 where = ["."]

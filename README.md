@@ -76,6 +76,19 @@ and returns a guarded component graph. The paper's family IDs are connected
 components of the reference relation. Its ASAP statistics reproduce from the
 released candidate-pair rows with `scripts/reproduce_detector_statistics.py`.
 
+For LMD- or PDMX-scale collections, install the CPU search backend and use the
+sharded runner:
+
+```bash
+pip install -e '.[scale]'
+python scripts/build_cross_dataset_manifest.py lmd /path/to/lmd ./lmd.jsonl
+python scripts/run_cross_dataset_detector.py \
+  ./lmd.jsonl /path/to/lmd ./lmd_results --cache ./lmd_cache
+```
+
+The matching POP909, ASAP, MAESTRO, PDMX, LMD, GigaMIDI, and Aria-MIDI results
+are in [`results/new_experiments`](results/new_experiments/README.md).
+
 ## Checkpoints
 
 The [v1.1.2 release](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/tag/v1.1.2)
@@ -92,8 +105,9 @@ contains 60 checkpoints.
 python scripts/verify_model_checkpoints.py /path/to/checkpoint_bundle
 ```
 
-See [Reproduction](docs/REPRODUCIBILITY.md), [Methods](docs/METHODS_PUBLIC.md),
-and the [repository guide](docs/REPOSITORY_GUIDE.md) for details.
+See [Reproduction](docs/REPRODUCIBILITY.md), [Datasets](docs/datasets.md),
+[Methods](docs/METHODS_PUBLIC.md), and the
+[repository guide](docs/REPOSITORY_GUIDE.md) for details.
 
 ## Citation
 

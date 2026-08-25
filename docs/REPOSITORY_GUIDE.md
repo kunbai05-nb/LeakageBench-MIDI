@@ -66,6 +66,10 @@ Each entry below states what the file contributes to reproduction.
 |---|---|
 | `scripts/analyze_family_effects.py` | Computes paired family effects and family-level bootstrap intervals. |
 | `scripts/audit_split.py` | Measures cross-split reference-family contamination. |
+| `scripts/audit_pdmx_metadata_agreement.py` | Compares PDMX detector edges with independent title and composer metadata. |
+| `scripts/build_cross_dataset_manifest.py` | Builds manifests for the seven cross-dataset detector runs. |
+| `scripts/compact_detector_result.py` | Summarizes parse failures without copying a large failure list. |
+| `scripts/plot_cross_dataset_deployment.py` | Rebuilds the cross-dataset figure and LaTeX table. |
 | `scripts/build_family_map.py` | Converts pairwise same-work edges into component IDs. |
 | `scripts/build_family_split.py` | Assigns complete components to train, validation, and test. |
 | `scripts/classify_pair_structure.py` | Compares two MIDI files after structural normalization. |
@@ -80,6 +84,8 @@ Each entry below states what the file contributes to reproduction.
 | `scripts/reproduce_paper_statistics.py` | Recomputes the paper result fields from released analysis rows. |
 | `scripts/reproduce_public_results.py` | Checks hashes and copies released tables and figures. |
 | `scripts/run_leakage_census.py` | Simulates leakage under random file-level splits. |
+| `scripts/run_cross_dataset_detector.py` | Runs sharded CPU detection and split simulations on large collections. |
+| `scripts/summarize_valid_detector_subset.py` | Reports detector prevalence among successfully parsed MIDI files. |
 | `scripts/run_synthetic_demo.sh` | Runs the data-free end-to-end graph and split example. |
 | `scripts/simulate_imperfect_inference.py` | Runs 2,900 noisy-reference-graph split simulations with 100 fixed seeds. |
 | `scripts/train_model.py` | Trains formal Transformer, conditional VAE, neutral encoder, and diffusion runs. |
@@ -158,6 +164,9 @@ Each entry below states what the file contributes to reproduction.
 | `results/new_experiments/README.md` | Indexes the detector and mitigation experiments added after the v2 result lock. |
 | `results/new_experiments/data/detector_evaluation.csv` | ASAP direct-edge and component-level detector results. |
 | `results/new_experiments/data/detector_model_selection.csv` | Detector shortlist and selected operating point. |
+| `results/new_experiments/data/cross_dataset_detector_validation.csv` | Detector precision and recall on ASAP and POP909. |
+| `results/new_experiments/data/cross_dataset_detector_deployment.csv` | Deployment results for seven MIDI collections. |
+| `results/new_experiments/data/pdmx_metadata_agreement.csv` | PDMX edge agreement and random-pair controls. |
 | `results/new_experiments/data/false_negative_robustness.csv` | Residual leakage as reference edges are dropped. |
 | `results/new_experiments/data/false_positive_robustness.csv` | Precision and component distortion under injected false edges. |
 | `results/new_experiments/data/formal_assignment_impact.csv` | Effect of new detector edges on the frozen formal assignments. |
@@ -174,6 +183,7 @@ Each entry below states what the file contributes to reproduction.
 | `results/new_experiments/figures/fig_lmd_graph_completion.svg` | Reference graph completion on full LMD. Vector source. |
 | `results/new_experiments/tables/table_detector_evaluation.tex` | LaTeX table for detector evaluation. |
 | `results/new_experiments/tables/table_detector_model_selection.tex` | LaTeX table for detector model selection. |
+| `results/new_experiments/tables/table_cross_dataset_detector.tex` | LaTeX table for cross-dataset validation and deployment. |
 | `results/new_experiments/tables/table_false_negative_robustness.tex` | LaTeX table for false-negative robustness. |
 | `results/new_experiments/tables/table_false_positive_robustness.tex` | LaTeX table for false-positive robustness. |
 | `results/new_experiments/tables/table_formal_assignment_impact.tex` | LaTeX table for formal assignment impact. |

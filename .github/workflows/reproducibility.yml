@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 jobs:
-  reproduce-and-test:
+  test:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
@@ -33,16 +33,5 @@ jobs:
           python -m pip install -r requirements-lock.txt
           python -m pip install --no-deps -e .
 
-      - name: Recompute paper statistics and verify release
-        run: bash scripts/reproduce_all.sh "${RUNNER_TEMP}/leakagebench-reproduced"
-
-      - name: Upload field-by-field reproduction audit
-        if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          name: leakagebench-reproduction-audit
-          path: |
-            ${{ runner.temp }}/leakagebench-reproduced/paper_statistics/REPRODUCED_FIELD_AUDIT.csv
-            ${{ runner.temp }}/leakagebench-reproduced/paper_statistics/REPRODUCTION_STATUS.json
-            ${{ runner.temp }}/leakagebench-reproduced/paper_statistics/REPRODUCED_RESULTS.md
-          if-no-files-found: warn
+      - name: Run tests
+        run: bash scripts/reproduce_all.sh

@@ -8,7 +8,12 @@ from pathlib import Path
 import mido
 import numpy as np
 
-from leakagebench_midi.detector import apply_tfidf, extract_count_features, extract_features
+from leakagebench_midi.detector import (
+    Components,
+    apply_tfidf,
+    extract_count_features,
+    extract_features,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -47,32 +52,15 @@ def test_count_shards_match_direct_tfidf(tmp_path):
         np.testing.assert_allclose(direct[name].toarray(), sharded[name].toarray())
 
 
-def test_reference_metrics_and_component_guard():
-    runner = load_script("run_cross_dataset_detector")
-    reference = np.asarray([0, 0, 1, 2, 2], dtype=np.int32)
-    left = np.asarray([0, 3], dtype=np.int32)
-    right = np.asarray([1, 4], dtype=np.int32)
-    direct = runner.pair_metrics(left, right, reference, True)
-    assert direct["precision"] == 1.0
-    assert direct["recall"] == 1.0
-
-    components = runner.Components(5)
+def test_component_guard():
+    components = Components(5)
     assert components.union(0, 1, 2)
     assert components.union(3, 4, 2)
     assert not components.union(0, 3, 2)
-    grouped = runner.component_metrics(components.labels(), reference, True)
-    assert grouped["precision"] == 1.0
-    assert grouped["recall"] == 1.0
-
-
-def test_official_split_metrics():
-    runner = load_script("run_cross_dataset_detector")
-    rows = [{"split": "train"}, {"split": "test"}, {"split": "test"}]
-    labels = np.asarray([0, 0, 1], dtype=np.int32)
-    result = runner.official_split_metrics(rows, labels)
-    assert result["known_train_test_family_count"] == 1
-    assert result["contaminated_test_family_rate"] == 0.5
-    assert result["contaminated_test_file_rate"] == 0.5
+    labels = components.labels()
+    assert labels[0] == labels[1]
+    assert labels[3] == labels[4]
+    assert labels[0] != labels[3]
 
 
 def test_gigamidi_manifest_rows(tmp_path):

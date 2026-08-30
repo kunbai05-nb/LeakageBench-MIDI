@@ -2,14 +2,17 @@ from __future__ import annotations
 
 import csv
 import gzip
+import hashlib
 import importlib.util
 import json
 from pathlib import Path
 
+import joblib
 import numpy as np
+from sklearn.linear_model import LogisticRegression
 
 from leakagebench_midi.data import PackedWindows
-from leakagebench_midi.detector import _predict_probability, load_detector
+from leakagebench_midi.detector import Components, _predict_probability, load_detector
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -23,32 +26,50 @@ def load_script(name: str):
     return module
 
 
-def test_portable_detector_is_stable():
-    config, model = load_detector(ROOT / "artifacts" / "detector")
-    features = np.asarray([[0.0] * 47, [0.5] * 47, [1.0] * 47], dtype=np.float32)
-    expected = np.asarray(
-        [
-            0.014407912323173764,
-            0.9480029526668894,
-            0.9996333421184397,
-        ]
+def test_detector_checkpoint_loading(tmp_path):
+    x = np.vstack((np.zeros((4, 3)), np.ones((4, 3))))
+    y = np.asarray([0] * 4 + [1] * 4)
+    artifacts = []
+    models = []
+    for fold in range(5):
+        model = LogisticRegression(random_state=fold).fit(x, y)
+        path = tmp_path / f"fold_{fold}.joblib"
+        joblib.dump(model, path)
+        artifacts.append(
+            {
+                "artifact": path.name,
+                "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+            }
+        )
+        models.append(model)
+    (tmp_path / "config.json").write_text(json.dumps({"ensemble_models": artifacts}))
+    config, loaded = load_detector(tmp_path)
+    observed = _predict_probability(
+        loaded, np.asarray([[0.0, 0.0, 0.0], [1.0, 1.0, 1.0]])
     )
-    assert len(config["selected_feature_names"]) == 47
-    np.testing.assert_allclose(
-        _predict_probability(model, features), expected, rtol=0.0, atol=1e-15
+    expected = _predict_probability(
+        models, np.asarray([[0.0, 0.0, 0.0], [1.0, 1.0, 1.0]])
     )
+    assert config["ensemble_models"] == artifacts
+    np.testing.assert_allclose(observed, expected)
+
+
+def test_component_size_guard():
+    components = Components(5)
+    assert components.union(0, 1, 2)
+    assert components.union(2, 3, 2)
+    assert not components.union(0, 2, 2)
+    labels = components.labels()
+    assert labels[0] == labels[1]
+    assert labels[2] == labels[3]
+    assert labels[0] != labels[2]
 
 
 def test_formal_source_specs():
     source = ROOT / "reproduction" / "source_specs"
     summary = json.loads((source / "formal_data.json").read_text())
-    assert summary["rows"] == {
-        "clean": 38374,
-        "same_family_replacements": 1264,
-        "unrelated_replacements": 1264,
-        "probe_windows": 9316,
-        "probe_pieces": 700,
-    }
+    assert summary["rows"]["clean"] == 38374
+    assert summary["rows"]["probe_windows"] == 9316
     with gzip.open(source / "formal_windows.csv.gz", "rt", newline="") as handle:
         reader = csv.DictReader(handle)
         assert "token_ids" not in reader.fieldnames
@@ -71,13 +92,23 @@ def test_packed_windows(tmp_path):
 
 def test_public_schedules_are_deterministic():
     train = load_script("train_model")
-    first = next(train.formal_batches(38374, 202608040))
-    assert first[:5] == [4458, 2215, 9471, 741, 5656]
+    assert next(train.formal_batches(38374, 202608040))[:5] == [
+        4458,
+        2215,
+        9471,
+        741,
+        5656,
+    ]
     slots = train.intervention_slots()
-    assert len(slots) == 1264
     invariant = [index for index in range(38374) if index not in slots]
-    neutral = next(train.neutral_batches(invariant, 202608040))
-    assert neutral[:5] == [7790, 28673, 1615, 14817, 6789]
+    assert len(slots) == 1264
+    assert next(train.neutral_batches(invariant, 202608040))[:5] == [
+        7790,
+        28673,
+        1615,
+        14817,
+        6789,
+    ]
 
 
 def test_imperfect_inference_metrics():

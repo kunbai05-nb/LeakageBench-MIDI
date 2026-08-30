@@ -1,4 +1,0 @@
-protocol,identities,families,test_family_contamination,test_file_contamination
-80/10/10 random file split,178561,140427,0.2765669342,0.297670108
-90/5/5 random file split,178561,140427,0.303,
-90/10 random file split,178561,140427,0.2934,

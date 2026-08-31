@@ -75,10 +75,10 @@ python scripts/simulate_imperfect_inference.py ./reference_graph ./split_simulat
 
 All weights are in the [v1.2.0 release](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/tag/v1.2.0):
 
-- [Phase-2 Transformer-L](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.0/phase2-transformer-l.tar.gz)
+- [LMD Transformer-L](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.0/lmd-transformer-l.tar.gz)
 - [Conditional VAE](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.0/conditional-vae.tar.gz)
 - [Latent Diffusion and neutral encoders](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.0/latent-diffusion-and-neutral-encoders.tar.gz)
-- [Transformer-S](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.0/lmd-transformer-s.tar.gz), [Transformer-M](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.0/lmd-transformer-m.tar.gz), and [Transformer-L](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.0/lmd-transformer-l-legacy.tar.gz)
+- [Transformer-S](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.0/lmd-transformer-s.tar.gz) and [Transformer-M](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.0/lmd-transformer-m.tar.gz)
 - [TCN](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.0/lmd-tcn.tar.gz)
 - [PDMX Transformer-L](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.0/pdmx-transformer-l.tar.gz)
 

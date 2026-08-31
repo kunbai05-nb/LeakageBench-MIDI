@@ -245,6 +245,6 @@ def test_model_manifest_loader_reference():
     if not manifest.exists():
         pytest.skip("external checkpoint bundle is not present")
     rows = json.loads(manifest.read_text())["models"]
-    assert len(rows) == 60 and all(
+    assert len(rows) == 54 and all(
         (x["public_loader"] == "leakagebench_midi.models.load_checkpoint" for x in rows)
     )

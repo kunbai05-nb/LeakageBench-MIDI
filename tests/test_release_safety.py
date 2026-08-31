@@ -60,3 +60,18 @@ def test_readme_has_primary_workflows():
         "/releases/tag/v1.2.0",
     )
     assert all(value in text for value in required)
+
+
+def test_no_obsolete_detector_implementation():
+    text = "\n".join(
+        path.read_text(encoding="utf-8", errors="ignore").lower()
+        for path in public_files()
+        if path.stat().st_size < 5_000_000
+    )
+    forbidden = (
+        "caug" + "bert",
+        "clamp" + "_cosine",
+        "shs" + "_structural_detector",
+        "historical " + "rc2",
+    )
+    assert not [value for value in forbidden if value in text]

@@ -14,7 +14,6 @@ from leakagebench_midi import (
     analyze_effect,
     build_family_map,
 )
-from leakagebench_midi import classify_pair
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -127,6 +126,3 @@ def test_synthetic_integration_and_structure(tmp_path):
         ]
         == 0
     )
-    cases = json.loads((out / "structural_cases.json").read_text())
-    for expected, (a, b) in cases.items():
-        assert classify_pair(out / a, out / b)["classification"] == expected

@@ -273,11 +273,21 @@ def sample_false_edges(
     bounded: bool,
     maximum: int,
 ) -> list[tuple[int, int]]:
+    family_sizes = np.bincount(family)
+    available = size * (size - 1) // 2 - int(
+        np.sum(family_sizes.astype(np.int64) * (family_sizes - 1) // 2)
+    )
+    target = min(count, available)
+    if target == 0:
+        return []
     rng = np.random.default_rng(stable_seed("fp", seed, bounded, count))
     dsu = DSU(size) if bounded else None
     output = []
     seen = set()
-    while len(output) < count:
+    attempts = 0
+    maximum_attempts = max(10_000, 100 * target)
+    while len(output) < target and attempts < maximum_attempts:
+        attempts += 1
         left, right = map(int, rng.integers(0, size, size=2))
         if left == right or family[left] == family[right]:
             continue

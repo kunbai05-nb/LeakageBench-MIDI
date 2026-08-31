@@ -64,10 +64,12 @@ python scripts/evaluate_checkpoint.py \
   /path/to/checkpoint.pt ./prepared_lmd ./evaluation
 ```
 
-Build the reference relation graph and rerun the imperfect-inference split simulation:
+Build a relation graph with the released detector and run the imperfect-inference split simulation:
 
 ```bash
-python scripts/prepare_reference_graph.py /path/to/lmd_full.tar.gz ./reference_graph
+python scripts/prepare_reference_graph.py \
+  /path/to/extracted_lmd ./detector_v1.2.0 ./reference_graph \
+  --workers 8 --backend faiss
 python scripts/simulate_imperfect_inference.py ./reference_graph ./split_simulation
 ```
 

@@ -7,7 +7,6 @@ from leakagebench_midi import (
     audit_split,
     build_contamination,
     family_aware_split,
-    classify_pair_normalized,
     normalize_midi_structure,
 )
 
@@ -227,10 +226,7 @@ def save(path, ppq, notes, meta=None, reverse=False, zero_off=False):
 
 
 def exact(a, b):
-    return (
-        classify_pair_normalized(a, b)["classification"]
-        == "NORMALIZED_STRUCTURAL_EXACT"
-    )
+    return normalize_midi_structure(a) == normalize_midi_structure(b)
 
 
 def simultaneous(path, order):

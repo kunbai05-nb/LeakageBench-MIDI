@@ -135,9 +135,8 @@ def main() -> None:
     )
     if failures:
         raise RuntimeError(f"failed to align {len(failures)} development MIDI files")
-    zero = np.zeros((len(rows), 1), dtype=np.float32)
     global_values, global_names, pairs = compact_pair_feature_matrix(
-        bundle, zero, zero, candidates, workers=args.workers
+        bundle, candidates, workers=args.workers
     )
     aligned, alignment_names = alignment_feature_matrix(
         sequences, pairs, AlignmentConfig(**template["alignment_config"]), args.workers

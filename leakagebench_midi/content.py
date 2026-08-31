@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 import math
-import zipfile
 from collections import Counter, defaultdict
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 from multiprocessing import get_all_start_methods, get_context
@@ -18,8 +17,6 @@ from sklearn.neighbors import NearestNeighbors
 
 TOKEN_GROUPS = ("melody", "bass", "rhythm", "harmony", "motif")
 CANDIDATE_SIGNALS = (
-    "caugbert",
-    "clamp",
     "melody",
     "bass",
     "rhythm",
@@ -30,42 +27,6 @@ CANDIDATE_SIGNALS = (
     "ioi_hist",
     "chroma",
 )
-
-
-def _unit_rows(values: np.ndarray) -> np.ndarray:
-    values = np.asarray(values, dtype=np.float32)
-    norms = np.linalg.norm(values, axis=1, keepdims=True)
-    return values / np.maximum(norms, np.finfo(np.float32).tiny)
-
-
-def load_embedding_subset(
-    directory: Path, identities: list[str]
-) -> tuple[np.ndarray, np.ndarray, dict]:
-    refs = (directory / "refs.txt").read_text().splitlines()
-    ref_ids = [value.split("__", 1)[-1] for value in refs]
-    positions = {value: index for index, value in enumerate(ref_ids)}
-    with zipfile.ZipFile(directory / "embeddings.pt") as archive:
-        names = [name for name in archive.namelist() if name.endswith("/data/0")]
-        if len(names) != 1:
-            raise ValueError(f"unexpected tensor archive: {directory}")
-        values = np.frombuffer(archive.read(names[0]), dtype="<f4")
-    if values.size % len(refs):
-        raise ValueError(f"tensor/ref mismatch: {directory}")
-    width = values.size // len(refs)
-    if width not in (512, 768):
-        raise ValueError(f"unexpected width {width}: {directory}")
-    storage = values.reshape(len(refs), width)
-    covered = np.asarray([identity in positions for identity in identities], dtype=bool)
-    matrix = np.zeros((len(identities), width), dtype=np.float32)
-    selected = np.flatnonzero(covered)
-    if len(selected):
-        matrix[selected] = storage[[positions[identities[index]] for index in selected]]
-    matrix = _unit_rows(matrix)
-    return (
-        matrix,
-        covered,
-        {"refs": len(refs), "width": width, "covered": int(covered.sum())},
-    )
 
 
 def _quantized(value: float, resolution: int = 12, limit: int = 192) -> int:
@@ -743,90 +704,6 @@ def _dense_pair_cosine(
     return result
 
 
-def pair_feature_matrix(
-    bundle: dict,
-    caugbert: np.ndarray,
-    clamp: np.ndarray,
-    pairs: list[tuple[int, int]],
-    ranks: dict,
-    k_max: int,
-) -> tuple[np.ndarray, list[str]]:
-    left = np.asarray([pair[0] for pair in pairs], dtype=np.int64)
-    right = np.asarray([pair[1] for pair in pairs], dtype=np.int64)
-    columns = []
-    names = []
-
-    def add(name: str, values: np.ndarray) -> None:
-        names.append(name)
-        columns.append(np.asarray(values, dtype=np.float32))
-
-    caug_score = _dense_pair_cosine(caugbert, left, right)
-    clamp_score = _dense_pair_cosine(clamp, left, right)
-    add("caugbert_cosine", caug_score)
-    add("clamp_cosine", clamp_score)
-    add("embedding_product", caug_score * clamp_score)
-    add("embedding_max", np.maximum(caug_score, clamp_score))
-    add("embedding_min", np.minimum(caug_score, clamp_score))
-    for group in TOKEN_GROUPS:
-        add(f"{group}_tfidf_cosine", _sparse_pair_cosine(bundle[group], left, right))
-    for group in ("interval_hist", "duration_hist", "ioi_hist"):
-        add(f"{group}_cosine", _dense_pair_cosine(bundle[group], left, right))
-
-    chroma_left, chroma_right = bundle["chroma"][left], bundle["chroma"][right]
-    chroma_scores = np.stack(
-        [
-            np.einsum("ij,ij->i", chroma_left, np.roll(chroma_right, shift, axis=1))
-            for shift in range(12)
-        ]
-    )
-    add("chroma_transposition_cosine", chroma_scores.max(axis=0))
-
-    scalars_left, scalars_right = bundle["scalars"][left], bundle["scalars"][right]
-    for index, name in enumerate(
-        (
-            "notes",
-            "onsets",
-            "beats",
-            "tracks",
-            "pitch_min",
-            "pitch_max",
-            "pitch_mean",
-            "pitch_sd",
-            "programs",
-            "half_beats",
-        )
-    ):
-        a, b = scalars_left[:, index], scalars_right[:, index]
-        if name in {"pitch_min", "pitch_max", "pitch_mean", "pitch_sd"}:
-            add(f"{name}_absolute_difference", np.abs(a - b))
-        else:
-            add(f"{name}_ratio", np.minimum(a, b) / np.maximum(np.maximum(a, b), 1e-6))
-
-    for signal in CANDIDATE_SIGNALS:
-        left_rank = np.asarray(
-            [ranks[pair].get(signal, (k_max + 1, k_max + 1))[0] for pair in pairs]
-        )
-        right_rank = np.asarray(
-            [ranks[pair].get(signal, (k_max + 1, k_max + 1))[1] for pair in pairs]
-        )
-        add(f"{signal}_reciprocal_best_rank", 1 / np.minimum(left_rank, right_rank))
-        add(
-            f"{signal}_mutual",
-            (np.maximum(left_rank, right_rank) <= k_max).astype(np.float32),
-        )
-    support = np.asarray(
-        [sum(min(value) <= k_max for value in ranks[pair].values()) for pair in pairs],
-        dtype=np.float32,
-    )
-    mutual_support = np.asarray(
-        [sum(max(value) <= k_max for value in ranks[pair].values()) for pair in pairs],
-        dtype=np.float32,
-    )
-    add("candidate_signal_support", support)
-    add("candidate_mutual_support", mutual_support)
-    return np.column_stack(columns), names
-
-
 def structural_pair_feature_matrix(
     bundle: dict, pairs: np.ndarray, block_size: int = 20_000
 ) -> tuple[np.ndarray, list[str]]:
@@ -905,8 +782,6 @@ def structural_pair_feature_matrix(
 
 def compact_pair_feature_matrix(
     bundle: dict,
-    caugbert: np.ndarray,
-    clamp: np.ndarray,
     compact: dict,
     selected: np.ndarray | None = None,
     block_size: int = 20_000,
@@ -919,14 +794,6 @@ def compact_pair_feature_matrix(
     rank_values = compact["ranks"][selected]
     left, right = pairs[:, 0].astype(np.int64), pairs[:, 1].astype(np.int64)
     names = [
-        "caugbert_cosine",
-        "clamp_cosine",
-        "embedding_product",
-        "embedding_max",
-        "embedding_min",
-        "embedding_absolute_difference",
-        "caugbert_squared",
-        "clamp_squared",
         *[
             name
             for group in TOKEN_GROUPS
@@ -976,16 +843,10 @@ def compact_pair_feature_matrix(
                 bundle[name], left, right, block_size
             )
             return cosine, jaccard, containment
-        matrix = (
-            caugbert
-            if name == "caugbert"
-            else clamp if name == "clamp" else bundle[name]
-        )
+        matrix = bundle[name]
         return (_dense_pair_cosine(matrix, left, right, block_size),)
 
     tasks = (
-        "caugbert",
-        "clamp",
         *TOKEN_GROUPS,
         "interval_hist",
         "duration_hist",
@@ -998,20 +859,6 @@ def compact_pair_feature_matrix(
     else:
         computed = {name: pair_values(name) for name in tasks}
 
-    caug_score = computed["caugbert"][0]
-    clamp_score = computed["clamp"][0]
-    for values in (
-        caug_score,
-        clamp_score,
-        caug_score * clamp_score,
-        np.maximum(caug_score, clamp_score),
-        np.minimum(caug_score, clamp_score),
-        np.abs(caug_score - clamp_score),
-        caug_score**2,
-        clamp_score**2,
-    ):
-        output[:, column] = values
-        column += 1
     for group in TOKEN_GROUPS:
         cosine, jaccard, containment = computed[group]
         output[:, column] = cosine

@@ -23,7 +23,7 @@ from .content import (
     tfidf_count_bundle,
 )
 
-SIGNALS = tuple(name for name in CANDIDATE_SIGNALS if name not in {"caugbert", "clamp"})
+SIGNALS = CANDIDATE_SIGNALS
 extract_features = extract_feature_bundle
 extract_count_features = extract_count_bundle
 apply_tfidf = tfidf_count_bundle
@@ -206,7 +206,6 @@ def detect(
     sequences = [None] * len(paths)
     for index, sequence in zip(needed, selected_sequences):
         sequences[int(index)] = sequence
-    zero = np.zeros((len(paths), 1), dtype=np.float32)
     scores = np.empty(len(pairs), dtype=np.float64)
     for start in range(0, len(pairs), chunk_size):
         end = min(start + chunk_size, len(pairs))
@@ -216,7 +215,7 @@ def detect(
             "ranks": compact["ranks"][start:end],
         }
         global_values, global_names, local_pairs = compact_pair_feature_matrix(
-            bundle, zero, zero, part, workers=workers
+            bundle, part, workers=workers
         )
         aligned, alignment_names = alignment_feature_matrix(
             sequences,

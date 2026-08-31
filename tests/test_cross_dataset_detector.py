@@ -10,6 +10,7 @@ import numpy as np
 
 from leakagebench_midi.detector import (
     Components,
+    SIGNALS,
     apply_tfidf,
     extract_count_features,
     extract_features,
@@ -17,6 +18,20 @@ from leakagebench_midi.detector import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def test_detector_uses_structural_signals_only():
+    assert SIGNALS == (
+        "melody",
+        "bass",
+        "rhythm",
+        "harmony",
+        "motif",
+        "interval_hist",
+        "duration_hist",
+        "ioi_hist",
+        "chroma",
+    )
 
 
 def load_script(name: str):

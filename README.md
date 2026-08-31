@@ -55,7 +55,11 @@ python scripts/train_model.py \
   transformer clean 202608040 ./prepared_lmd ./runs/transformer-clean-202608040
 ```
 
-`model` may be `transformer`, `conditional_vae`, `neutral_encoder`, or `latent_diffusion`; `condition` may be `clean`, `unrelated_donor`, or `same_family_donor`. Full training requires a CUDA GPU.
+Available models: `transformer`, `conditional_vae`, `neutral_encoder`, and `latent_diffusion`.
+
+Available training conditions: `clean`, `unrelated_donor`, and `same_family_donor`.
+
+Training the full 20,000-step experiment requires an NVIDIA GPU with CUDA. Released checkpoints can also be evaluated on CPU, although evaluation will be slower.
 
 Evaluate a released checkpoint:
 

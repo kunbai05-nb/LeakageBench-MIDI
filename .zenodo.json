@@ -1,10 +1,10 @@
 {
   "title": "LeakageBench-MIDI: Measuring and Mitigating Same-Work Family Leakage in Symbolic Music Generation",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "upload_type": "software",
   "access_right": "open",
   "license": "mit",
-  "description": "Code and reproducibility materials for measuring and mitigating same-work leakage in symbolic music generation, including source reconstruction, the structural detector, analysis rows, final tables and figures, and automated integrity checks.",
+  "description": "Source code and reproducibility materials for the final LeakageBench-MIDI same-work detector and symbolic-music generation experiments.",
   "keywords": [
     "symbolic music generation",
     "MIDI",
@@ -23,5 +23,5 @@
       "affiliation": "School of Intelligence Science and Technology, Beijing University of Civil Engineering and Architecture, Beijing 102616, China"
     }
   ],
-  "notes": "Version 1.2.0 adds full LMD source reconstruction, detector evaluation, and noisy-graph mitigation experiments."
+  "notes": "Version 1.2.1 removes obsolete detector implementations and retains the final detector workflow. Model weights are distributed through the GitHub Release."
 }

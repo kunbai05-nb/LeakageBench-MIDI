@@ -1,6 +1,6 @@
 # LeakageBench-MIDI
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22023100.svg)](https://zenodo.org/records/22177290)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22023100.svg)](https://zenodo.org/doi/10.5281/zenodo.22023100)
 
 LeakageBench-MIDI detects same-work MIDI files, measures train–test leakage, and builds component-aware dataset splits. The repository contains the detector, model implementations, experiment configurations, training and evaluation scripts, tests, and exact source specifications used by the paper.
 
@@ -14,7 +14,7 @@ pip install -e '.[test,scale]'
 
 ## Same-work detector
 
-Download [same-work-detector-v1.2.0.tar.gz](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.0/same-work-detector-v1.2.0.tar.gz), extract it, and run:
+Download [same-work-detector-v1.2.0.tar.gz](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.1/same-work-detector-v1.2.0.tar.gz), extract it, and run:
 
 ```bash
 python scripts/verify_detector_checkpoint.py ./detector_v1.2.0
@@ -75,15 +75,15 @@ python scripts/simulate_imperfect_inference.py ./reference_graph ./split_simulat
 
 ## Checkpoints
 
-All weights are in the [v1.2.0 release](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/tag/v1.2.0):
+All weights are in the [v1.2.1 release](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/tag/v1.2.1):
 
 The LMD Transformer and TCN bundles contain the final 20,000-step checkpoint for all three conditions and three seeds.
 
-- [LMD Transformer-S](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.0/lmd-transformer-s.tar.gz)/[LMD Transformer-M](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.0/lmd-transformer-m.tar.gz)/[LMD Transformer-L](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.0/lmd-transformer-l.tar.gz)
-- [Conditional VAE](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.0/conditional-vae.tar.gz)
-- [Latent Diffusion and neutral encoders](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.0/latent-diffusion-and-neutral-encoders.tar.gz)
-- [TCN](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.0/lmd-tcn.tar.gz)
-- [PDMX Transformer-L](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.0/pdmx-transformer-l.tar.gz)
+- [LMD Transformer-S](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.1/lmd-transformer-s.tar.gz)/[LMD Transformer-M](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.1/lmd-transformer-m.tar.gz)/[LMD Transformer-L](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.1/lmd-transformer-l.tar.gz)
+- [Conditional VAE](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.1/conditional-vae.tar.gz)
+- [Latent Diffusion and neutral encoders](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.1/latent-diffusion-and-neutral-encoders.tar.gz)
+- [TCN](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.1/lmd-tcn.tar.gz)
+- [PDMX Transformer-L](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.1/pdmx-transformer-l.tar.gz)
 
 Model bundles can be checked with:
 

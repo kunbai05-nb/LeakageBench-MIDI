@@ -57,7 +57,7 @@ def test_readme_has_primary_workflows():
         "scripts/train_model.py",
         "scripts/evaluate_checkpoint.py",
         "scripts/verify_model_checkpoints.py",
-        "/releases/tag/v1.2.0",
+        "/releases/tag/v1.2.1",
     )
     assert all(value in text for value in required)
 

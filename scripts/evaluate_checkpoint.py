@@ -23,6 +23,13 @@ def derive_seed(experiment: str, seed: int, domain: str) -> int:
     return int.from_bytes(hashlib.sha256(payload).digest()[:8], "big") % (2**32)
 
 
+def registered_seed(group: str, seed: int, domain: str) -> int:
+    registered = CONFIG["rng_seed_registry"].get(group, {}).get(str(seed), {})
+    if domain in registered:
+        return registered[domain]
+    return derive_seed(CONFIG[group]["experiment_id"], seed, domain)
+
+
 def sequence_metric(
     model, rows: list[dict], architecture: str, device, amp_dtype
 ) -> tuple[float, int]:
@@ -55,7 +62,7 @@ def diffusion_metric(
 ) -> float:
     generator = torch.Generator(device=device).manual_seed(
         (
-            derive_seed(CONFIG["cross_paradigm"]["experiment_id"], seed, "torch_cuda")
+            registered_seed("cross_paradigm", seed, "torch_cuda")
             + CONFIG["cross_paradigm"]["evaluation_seed_offset"]
         )
         % (2**32)

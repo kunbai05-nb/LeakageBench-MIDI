@@ -45,7 +45,7 @@ def read_specs() -> list[dict]:
 def read_slots() -> dict[str, dict[int, dict]]:
     output = defaultdict(dict)
     with gzip.open(
-        SPECS / "phase2_slots.csv.gz", "rt", newline="", encoding="utf-8"
+        SPECS / "condition_slots.csv.gz", "rt", newline="", encoding="utf-8"
     ) as handle:
         for row in csv.DictReader(handle):
             output[row["condition"]][int(row["slot_index"])] = row
@@ -146,11 +146,11 @@ def materialize_rows(
     return output
 
 
-def phase_fields(row: dict, assignment: dict) -> dict:
+def assignment_fields(row: dict, assignment: dict) -> dict:
     row = dict(row)
-    row["phase2_replacement_slot_id"] = assignment["slot_id"]
-    row["phase2_receiver_family_id"] = assignment["receiver_family_id"]
-    row["phase2_donor_id"] = assignment["donor_id"] or None
+    row["replacement_slot_id"] = assignment["slot_id"]
+    row["receiver_family_id"] = assignment["receiver_family_id"]
+    row["donor_id"] = assignment["donor_id"] or None
     return row
 
 
@@ -162,8 +162,8 @@ def stream_identity(index: int, row: dict) -> dict:
         "token_count": row["token_count"],
         "prompt_token_count": row["prompt_token_count"],
         "token_ids_sha256": canonical_hash(row["token_ids"]),
-        "replacement_slot_id": row.get("phase2_replacement_slot_id"),
-        "donor_id": row.get("phase2_donor_id"),
+        "replacement_slot_id": row.get("replacement_slot_id"),
+        "donor_id": row.get("donor_id"),
     }
 
 
@@ -178,7 +178,7 @@ def write_streams(
     unrelated = materialize_rows(
         [row for row in specs if row["role"] == "unrelated_replacement"],
         midi_root,
-        "phase2_unrelated_donor",
+        "unrelated_donor",
     )
     clean_specs = [row for row in specs if row["role"] == "clean"]
     paths = {condition: output / "streams" / condition for condition in expected}
@@ -232,7 +232,7 @@ def write_streams(
             }
             for condition, row in rows.items():
                 if index in slots[condition]:
-                    row = phase_fields(row, slots[condition][index])
+                    row = assignment_fields(row, slots[condition][index])
                 values = np.asarray(row["token_ids"], dtype=np.uint16)
                 handles[condition].write(values.tobytes())
                 packed[condition]["offsets"].append(

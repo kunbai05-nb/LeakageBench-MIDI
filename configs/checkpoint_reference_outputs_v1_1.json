@@ -31,8 +31,8 @@
         "embedding_mean": 0.008534468710422516
       }
     },
-    "lmd-phase2-transformer-l-clean-seed-202608040": {
-      "relative_path": "lmd/phase2_transformer_l/clean/seed_202608040.pt",
+    "lmd-transformer-l-clean-seed-202608040": {
+      "relative_path": "lmd/transformer_l/clean/seed_202608040.pt",
       "architecture": "transformer",
       "signature": {
         "loss": 5.355704307556152,
@@ -40,13 +40,13 @@
         "logits_mean": -0.9782711863517761
       }
     },
-    "lmd-tcn-clean-seed-202608070": {
-      "relative_path": "lmd/tcn/clean/seed_202608070.pt",
+    "lmd-tcn-clean-seed-202608040": {
+      "relative_path": "lmd/tcn/clean/seed_202608040.pt",
       "architecture": "tcn",
       "signature": {
-        "loss": 6.444218158721924,
-        "logits": [-3.610311269760132, -1.9834195375442505, 1.6320852041244507],
-        "logits_mean": -0.8531628847122192
+        "loss": 7.5485920906066895,
+        "logits": [-6.806179046630859, -0.5665704607963562, 11.95400333404541],
+        "logits_mean": -0.6299175024032593
       }
     }
   }

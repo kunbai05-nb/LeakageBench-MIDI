@@ -48,7 +48,7 @@ Download `lmd_full.tar.gz` from the [Lakh MIDI Dataset](https://colinraffel.com/
 python scripts/prepare_lmd.py /path/to/lmd_full.tar.gz ./prepared_lmd
 ```
 
-Train one of the three Phase-2 conditions:
+Train one of the three experimental conditions:
 
 ```bash
 python scripts/train_model.py \
@@ -74,6 +74,8 @@ python scripts/simulate_imperfect_inference.py ./reference_graph ./split_simulat
 ## Checkpoints
 
 All weights are in the [v1.2.0 release](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/tag/v1.2.0):
+
+The LMD Transformer and TCN bundles contain the final 20,000-step checkpoint for all three conditions and three seeds.
 
 - [LMD Transformer-S](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.0/lmd-transformer-s.tar.gz)/[LMD Transformer-M](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.0/lmd-transformer-m.tar.gz)/[LMD Transformer-L](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.0/lmd-transformer-l.tar.gz)
 - [Conditional VAE](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.0/conditional-vae.tar.gz)

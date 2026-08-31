@@ -136,7 +136,7 @@
     "primary_unit": "family",
     "seed_pooling": "average the three paired training seeds within each family before family resampling",
     "bootstrap_replicates": 10000,
-    "phase2_bootstrap_seed": 0,
+    "three_condition_bootstrap_seed": 0,
     "cross_paradigm_bootstrap_seed": 20260818,
     "cross_paradigm_sign_randomization_seed": 20260819,
     "generation_bootstrap_seed": 20260818,

@@ -9,6 +9,18 @@
     202608041,
     202608042
   ],
+  "rng_seed_registry": {
+    "transformer": {
+      "202608040": {"python": 4053519479, "numpy": 2235909129, "torch_cpu": 3996330425, "torch_cuda": 3198191892, "dataloader_shuffle": 2370938265},
+      "202608041": {"python": 2933819290, "numpy": 4031752402, "torch_cpu": 4275164039, "torch_cuda": 3431699385, "dataloader_shuffle": 4048081185},
+      "202608042": {"python": 4141411037, "numpy": 2242877211, "torch_cpu": 2687721875, "torch_cuda": 2687945721, "dataloader_shuffle": 1089373617}
+    },
+    "cross_paradigm": {
+      "202608040": {"python": 2052381157, "numpy": 3413754084, "torch_cpu": 2328916854, "torch_cuda": 507847675, "dataloader_shuffle": 2677863930},
+      "202608041": {"python": 428023294, "numpy": 3839847018, "torch_cpu": 2177786803, "torch_cuda": 254035928, "dataloader_shuffle": 698307852},
+      "202608042": {"python": 3366625912, "numpy": 415289613, "torch_cpu": 3369871857, "torch_cuda": 3670357493, "dataloader_shuffle": 3390471361}
+    }
+  },
   "steps": 20000,
   "batch_size": 32,
   "micro_batch_size": 8,
@@ -16,7 +28,7 @@
   "gradient_clip": 1.0,
   "optimizer_betas": [0.9, 0.95],
   "transformer": {
-    "experiment_id": "LEAKAGEBENCH_PHASE2_UNRELATED_DONOR_V1",
+    "experiment_id": "LEAKAGEBENCH_THREE_CONDITION_V1",
     "learning_rate": 0.0002,
     "weight_decay": 0.1,
     "model": {
@@ -34,7 +46,7 @@
     }
   },
   "cross_paradigm": {
-    "experiment_id": "LEAKAGEBENCH_PHASE2_CROSS_PARADIGM_V1",
+    "experiment_id": "LEAKAGEBENCH_CROSS_PARADIGM_V1",
     "weight_decay": 0.01,
     "conditional_vae_learning_rate": 0.0003,
     "latent_diffusion_learning_rate": 0.0005,

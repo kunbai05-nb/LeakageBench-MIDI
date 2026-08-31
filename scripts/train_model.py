@@ -32,20 +32,23 @@ def derive_seed(experiment: str, seed: int, domain: str) -> int:
     return int.from_bytes(hashlib.sha256(payload).digest()[:8], "big") % (2**32)
 
 
+def registered_seed(group: str, seed: int, domain: str) -> int:
+    registered = CONFIG["rng_seed_registry"].get(group, {}).get(str(seed), {})
+    if domain in registered:
+        return registered[domain]
+    return derive_seed(CONFIG[group]["experiment_id"], seed, domain)
+
+
 def initialize_rng(model_name: str, seed: int, device: torch.device) -> None:
     cross = model_name != "transformer"
-    experiment = (
-        CONFIG["cross_paradigm"]["experiment_id"]
-        if cross
-        else CONFIG["transformer"]["experiment_id"]
-    )
+    group = "cross_paradigm" if cross else "transformer"
     offset = (
         int.from_bytes(hashlib.sha256(model_name.encode()).digest()[:4], "big")
         if cross
         else 0
     )
     values = {
-        domain: (derive_seed(experiment, seed, domain) + offset) % (2**32)
+        domain: (registered_seed(group, seed, domain) + offset) % (2**32)
         for domain in ("python", "numpy", "torch_cpu", "torch_cuda")
     }
     random.seed(values["python"])
@@ -72,8 +75,7 @@ def formal_batches(size: int, seed: int):
 
 
 def neutral_batches(indices: list[int], seed: int):
-    experiment = CONFIG["cross_paradigm"]["experiment_id"]
-    rng = random.Random(derive_seed(experiment, seed, "dataloader_shuffle"))
+    rng = random.Random(registered_seed("cross_paradigm", seed, "dataloader_shuffle"))
     pool = []
     while True:
         while len(pool) < CONFIG["batch_size"]:
@@ -87,7 +89,7 @@ def neutral_batches(indices: list[int], seed: int):
 def intervention_slots() -> set[int]:
     import csv
 
-    path = ROOT / "reproduction" / "source_specs" / "phase2_slots.csv.gz"
+    path = ROOT / "reproduction" / "source_specs" / "condition_slots.csv.gz"
     with gzip.open(path, "rt", newline="", encoding="utf-8") as handle:
         return {
             int(row["slot_index"])

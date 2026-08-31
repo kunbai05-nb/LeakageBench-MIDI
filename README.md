@@ -1,6 +1,6 @@
 # LeakageBench-MIDI
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22023100.svg)](https://doi.org/10.5281/zenodo.22023100)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22023100.svg)](https://zenodo.org/records/22177290)
 
 LeakageBench-MIDI detects same-work MIDI files, measures train–test leakage, and builds component-aware dataset splits. The repository contains the detector, model implementations, experiment configurations, training and evaluation scripts, tests, and exact source specifications used by the paper.
 

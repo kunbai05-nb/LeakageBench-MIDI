@@ -57,14 +57,12 @@ Check a downloaded model bundle with `python scripts/verify_model_checkpoints.py
 
 ## Capacity and architecture checkpoints
 
-These checkpoints support the capacity and architecture comparisons:
+These checkpoints support the capacity and architecture comparisons and are in [v1.3.0](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/tag/v1.3.0):
 
-- Transformer-S/M/L: [S](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.1/lmd-transformer-s.tar.gz), [M](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.1/lmd-transformer-m.tar.gz), [L](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.1/lmd-transformer-l.tar.gz)
-- [TCN](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.1/lmd-tcn.tar.gz)
-- [Conditional VAE](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.1/conditional-vae.tar.gz)
-- [Latent Diffusion and neutral encoders](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.1/latent-diffusion-and-neutral-encoders.tar.gz)
-- [PDMX Transformer-L](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.1/pdmx-transformer-l.tar.gz)
-- [Release metadata](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.2.1/model-release-metadata.tar.gz)
+- Transformer-S/M/L: [S](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/lmd-transformer-s.tar.gz), [M](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/lmd-transformer-m.tar.gz), [L](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/lmd-transformer-l.tar.gz)
+- [TCN](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/lmd-tcn.tar.gz)
+- [Conditional VAE](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/conditional-vae.tar.gz)
+- [Latent Diffusion and neutral encoders](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/latent-diffusion-and-neutral-encoders.tar.gz)
 
 ## Other models
 

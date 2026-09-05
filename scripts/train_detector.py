@@ -2,9 +2,8 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
+import csv
 import json
-from collections import Counter
 from pathlib import Path
 
 import joblib
@@ -19,154 +18,199 @@ from leakagebench_midi.alignment import (
 from leakagebench_midi.content import (
     canonical_chroma,
     compact_candidate_ranks,
-    compact_pair_feature_matrix,
     extract_feature_bundle,
+    faiss_mutual_candidate_ranks,
+    structural_pair_feature_matrix,
 )
-from leakagebench_midi.detector import SIGNALS, _enrich, sha256
+from leakagebench_midi.local_evidence import (
+    EVIDENCE_NAMES,
+    SIGNALS,
+    LocalEvidenceConfig,
+    assemble_base_features,
+    evidence_feature_matrix,
+    select_candidates,
+)
+from leakagebench_midi.local_evidence_batch import sparse_local_candidates
+from leakagebench_midi.detector import sha256
 
 
-def fold_map(rows: list[dict], folds: int, seed: int) -> dict[int, int]:
-    works = sorted({int(row["work_id"]) for row in rows})
-    rng = np.random.default_rng(seed)
-    tie = {work: float(rng.random()) for work in works}
-    sizes = Counter(int(row["work_id"]) for row in rows)
-    works.sort(key=lambda work: (-sizes[work], tie[work]))
-    load = np.zeros(folds, dtype=int)
-    output = {}
-    for work in works:
-        fold = int(np.argmin(load))
-        output[work] = fold
-        load[fold] += sizes[work]
-    return output
-
-
-def sample(
-    features: np.ndarray,
-    labels: np.ndarray,
-    mask: np.ndarray,
-    names: list[str],
-    seed: int,
-) -> np.ndarray:
-    positive = np.flatnonzero(mask & (labels == 1))
-    negative = np.flatnonzero(mask & (labels == 0))
-    limit = min(len(negative), max(25_000, 60 * max(1, len(positive))))
-    if len(negative) <= limit:
-        return np.r_[positive, negative]
-    columns = [
-        names.index(name)
-        for name in (
-            "motif_set_containment",
-            "align_best_score_per_match",
-            "align_coverage_hmean",
-            "robust_alignment_agreement_min",
-        )
-    ]
-    hardness = np.max(features[negative][:, columns], axis=1)
-    hard_count = limit // 2
-    hard = negative[np.argpartition(hardness, -hard_count)[-hard_count:]]
-    remaining = np.setdiff1d(negative, hard, assume_unique=False)
-    random = np.random.default_rng(seed).choice(
-        remaining, limit - hard_count, replace=False
-    )
-    return np.r_[positive, hard, random]
-
-
-def select_threshold(scores: np.ndarray, labels: np.ndarray, folds: np.ndarray) -> dict:
-    order = np.argsort(scores, kind="mergesort")[::-1]
-    scores, labels, folds = scores[order], labels[order], folds[order]
-    true_positive = np.cumsum(labels)
-    best = None
-    boundaries = np.flatnonzero(np.r_[scores[1:] != scores[:-1], True])
-    for boundary in boundaries:
-        count = boundary + 1
-        tp = int(true_positive[boundary])
-        precision = tp / count
-        fold_precision = []
-        for fold in range(5):
-            local = folds[:count] == fold
-            if local.sum() >= 5:
-                fold_precision.append(float(labels[:count][local].mean()))
-        worst = min(fold_precision, default=0.0)
-        if precision < 0.95 or worst < 0.80 or count < 50:
-            continue
-        key = (tp, worst, precision)
-        if best is None or key > best[0]:
-            best = (
-                key,
-                {
-                    "threshold": float(scores[boundary]),
-                    "precision": precision,
-                    "true_positive_pairs": tp,
-                    "false_positive_pairs": count - tp,
-                    "predicted_pairs": count,
-                    "worst_fold_precision": worst,
-                },
-            )
-    if best is None:
-        raise RuntimeError("no threshold met the precision constraints")
-    return best[1]
-
-
-def main() -> None:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--manifest", type=Path, required=True)
-    parser.add_argument("--midi-root", type=Path, required=True)
-    parser.add_argument("--template", type=Path, required=True)
-    parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--workers", type=int, default=1)
-    args = parser.parse_args()
-
-    template = json.loads(args.template.read_text())
-    rows = [json.loads(line) for line in args.manifest.read_text().splitlines() if line]
-    rows = [row for row in rows if row["split"] != "test"]
-    paths = [args.midi_root / row["relative_path"] for row in rows]
-    bundle, failures = extract_feature_bundle(paths, workers=args.workers)
-    if failures:
-        raise RuntimeError(f"failed to parse {len(failures)} development MIDI files")
-    valid = np.arange(len(rows), dtype=np.int64)
-    matrices = {
-        "chroma": canonical_chroma(bundle["chroma"]),
-        **{name: bundle[name] for name in SIGNALS if name != "chroma"},
+def read_index(path: Path) -> list[dict]:
+    with path.open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+    required = {
+        "file_md5",
+        "work_group",
+        "recording_group",
+        "experiment_split",
     }
-    candidates = compact_candidate_ranks(matrices, valid, 240, workers=args.workers)
-    pairs = candidates["pairs"]
-    sequences, failures = extract_alignment_bundle(
-        paths, AlignmentConfig(**template["alignment_config"]), args.workers
+    if not rows or not required <= set(rows[0]):
+        raise ValueError("detector index has an unsupported schema")
+    if len({row["file_md5"] for row in rows}) != len(rows):
+        raise ValueError("detector index contains duplicate files")
+    return rows
+
+
+def midi_paths(rows: list[dict], root: Path) -> list[Path]:
+    paths = [root / row["file_md5"][0] / f"{row['file_md5']}.mid" for row in rows]
+    missing = [path for path in paths if not path.is_file()]
+    if missing:
+        raise FileNotFoundError(f"{len(missing)} indexed MIDI files are missing")
+    return paths
+
+
+def candidates(
+    bundle: dict,
+    sequences: list[dict | None],
+    valid: np.ndarray,
+    config: LocalEvidenceConfig,
+    workers: int,
+    backend: str,
+) -> tuple[np.ndarray, np.ndarray]:
+    matrices = {
+        name: canonical_chroma(bundle[name]) if name == "chroma" else bundle[name]
+        for name in SIGNALS
+    }
+    if backend == "faiss":
+        compact, _ = faiss_mutual_candidate_ranks(
+            matrices,
+            valid,
+            config.candidate_k,
+            minimum_mutual_signals=config.minimum_mutual_views,
+            threads=max(1, workers // len(SIGNALS)),
+            signal_workers=min(max(1, workers), len(SIGNALS)),
+        )
+    elif backend == "exact":
+        if len(valid) > 5000:
+            raise ValueError("exact backend is limited to 5,000 files")
+        compact = compact_candidate_ranks(
+            matrices, valid, config.candidate_k, workers=workers
+        )
+        support = (np.max(compact["ranks"], axis=2) <= config.candidate_k).sum(axis=1)
+        keep = support >= config.minimum_mutual_views
+        compact = {**compact, "pairs": compact["pairs"][keep], "ranks": compact["ranks"][keep]}
+    else:
+        raise ValueError(f"unknown backend: {backend}")
+
+    ranks = compact["ranks"][:, [compact["signals"].index(name) for name in SIGNALS]]
+    local_pairs, local_scores, _ = sparse_local_candidates(
+        sequences, config, workers=workers
     )
-    if failures:
-        raise RuntimeError(f"failed to align {len(failures)} development MIDI files")
-    global_values, global_names, pairs = compact_pair_feature_matrix(
-        bundle, candidates, workers=args.workers
+    chosen = select_candidates(
+        compact["pairs"], ranks, len(sequences), local_pairs, local_scores, config
+    )["proposed"]
+    lookup = {
+        int(left) * len(sequences) + int(right): rank
+        for (left, right), rank in zip(compact["pairs"], ranks)
+    }
+    fallback = np.full((len(SIGNALS), 2), config.candidate_k + 1, dtype=np.int16)
+    pair_ranks = np.asarray(
+        [lookup.get(int(left) * len(sequences) + int(right), fallback) for left, right in chosen],
+        dtype=np.int16,
+    ).reshape(-1, len(SIGNALS), 2)
+    return chosen, pair_ranks
+
+
+def pair_features(
+    paths: list[Path],
+    config: LocalEvidenceConfig,
+    alignment: AlignmentConfig,
+    workers: int,
+    backend: str,
+) -> tuple[np.ndarray, list[str], np.ndarray]:
+    bundle, failures = extract_feature_bundle(paths, workers=workers)
+    sequences, alignment_failures = extract_alignment_bundle(paths, alignment, workers)
+    if failures or alignment_failures:
+        raise RuntimeError("all indexed files must be parseable for detector training")
+    valid = np.flatnonzero(bundle["valid"])
+    pairs, ranks = candidates(bundle, sequences, valid, config, workers, backend)
+    structural, structural_names = structural_pair_feature_matrix(bundle, pairs)
+    aligned, alignment_names = alignment_feature_matrix(sequences, pairs, alignment, workers)
+    base, base_names = assemble_base_features(
+        structural, structural_names, ranks, aligned, config.candidate_k
     )
-    aligned, alignment_names = alignment_feature_matrix(
-        sequences, pairs, AlignmentConfig(**template["alignment_config"]), args.workers
-    )
-    features, names = _enrich(
-        np.column_stack((global_values, aligned)), global_names + alignment_names
-    )
-    columns = [names.index(name) for name in template["feature_names"]]
-    features = features[:, columns]
-    names = template["feature_names"]
-    labels = np.asarray(
+    extra = evidence_feature_matrix(sequences, pairs, config, workers)
+    return np.column_stack((base, extra)), base_names + list(EVIDENCE_NAMES), pairs
+
+
+def labels(rows: list[dict], pairs: np.ndarray) -> np.ndarray:
+    return np.asarray(
         [
-            rows[int(left)]["work_id"] == rows[int(right)]["work_id"]
-            and rows[int(left)]["track_id"] != rows[int(right)]["track_id"]
+            rows[int(left)]["work_group"] == rows[int(right)]["work_group"]
+            and rows[int(left)]["recording_group"] != rows[int(right)]["recording_group"]
             for left, right in pairs
         ],
         dtype=np.int8,
     )
-    mapping = fold_map(rows, 5, 20260827)
-    left_fold = np.asarray([mapping[int(rows[int(left)]["work_id"])] for left in pairs])
-    right_fold = np.asarray(
-        [mapping[int(rows[int(right)]["work_id"])] for right in pairs]
+
+
+def select_threshold(scores: np.ndarray, labels: np.ndarray, target: float) -> dict:
+    order = np.argsort(scores, kind="mergesort")[::-1]
+    ordered_scores = scores[order]
+    ordered_labels = labels[order]
+    boundaries = np.flatnonzero(np.r_[ordered_scores[1:] != ordered_scores[:-1], True])
+    valid = []
+    for boundary in boundaries:
+        count = int(boundary + 1)
+        precision = float(ordered_labels[:count].mean())
+        if count < 20 or precision < target:
+            continue
+        valid.append((count, float(ordered_scores[boundary]), precision))
+    if not valid:
+        raise RuntimeError("calibration set has no threshold at the requested precision")
+    count, threshold, precision = valid[-1]
+    return {
+        "threshold": threshold,
+        "target_precision": target,
+        "predicted_pairs": count,
+        "precision": precision,
+    }
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Train the released same-work detector.")
+    parser.add_argument("--midi-root", type=Path, required=True)
+    parser.add_argument("--index", type=Path, required=True)
+    parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--workers", type=int, default=1)
+    parser.add_argument("--backend", choices=("exact", "faiss"), default="exact")
+    parser.add_argument("--precision-target", type=float, default=0.95)
+    args = parser.parse_args()
+    if args.workers < 1 or not 0 < args.precision_target <= 1:
+        raise ValueError("invalid worker count or precision target")
+
+    rows = read_index(args.index)
+    config = LocalEvidenceConfig()
+    alignment = AlignmentConfig()
+    fit_rows = [row for row in rows if row["experiment_split"] == "fit"]
+    calibration_rows = [row for row in rows if row["experiment_split"] == "calibration"]
+    if len(fit_rows) < 4 or len(calibration_rows) < 4:
+        raise ValueError("fit and calibration splits are required")
+    fit_features, names, fit_pairs = pair_features(
+        midi_paths(fit_rows, args.midi_root), config, alignment, args.workers, args.backend
     )
+    calibration_features, calibration_names, calibration_pairs = pair_features(
+        midi_paths(calibration_rows, args.midi_root), config, alignment, args.workers, args.backend
+    )
+    if names != calibration_names:
+        raise RuntimeError("feature schemas differ between fit and calibration")
+    fit_labels = labels(fit_rows, fit_pairs)
+    calibration_labels = labels(calibration_rows, calibration_pairs)
+    if not fit_labels.any() or not calibration_labels.any():
+        raise RuntimeError("indexed candidates contain no positive family pairs")
 
     args.output.mkdir(parents=True, exist_ok=True)
-    scores, score_labels, score_folds, models = [], [], [], []
-    for fold in range(5):
-        fit = (left_fold != fold) & (right_fold != fold)
-        validation = np.flatnonzero((left_fold == fold) & (right_fold == fold))
-        selected = sample(features, labels, fit, names, 20261327 + fold)
+    model_dir = args.output / "MODEL"
+    model_dir.mkdir(exist_ok=True)
+    models = []
+    model_objects = []
+    for member in range(5):
+        positive = np.flatnonzero(fit_labels == 1)
+        negative = np.flatnonzero(fit_labels == 0)
+        limit = min(len(negative), max(1, int(0.8 * len(negative))))
+        selected_negative = np.random.default_rng(20260905 + member).choice(
+            negative, limit, replace=False
+        )
+        selected = np.r_[positive, selected_negative]
         model = HistGradientBoostingClassifier(
             max_iter=260,
             learning_rate=0.05,
@@ -174,40 +218,73 @@ def main() -> None:
             min_samples_leaf=80,
             l2_regularization=8.0,
             class_weight="balanced",
-            random_state=20261327 + fold,
+            early_stopping=False,
+            random_state=20260905 + member,
         )
-        model.fit(features[selected], labels[selected])
-        path = args.output / f"fold_{fold}.joblib"
+        model.fit(fit_features[selected], fit_labels[selected])
+        path = model_dir / f"local87_{member}.joblib"
         joblib.dump(model, path, compress=3)
-        models.append({"artifact": path.name, "sha256": sha256(path)})
-        scores.append(model.predict_proba(features[validation])[:, 1])
-        score_labels.append(labels[validation])
-        score_folds.append(np.full(len(validation), fold, dtype=np.int8))
-    threshold = select_threshold(
-        np.concatenate(scores),
-        np.concatenate(score_labels),
-        np.concatenate(score_folds),
+        models.append({"file": f"MODEL/{path.name}", "sha256": sha256(path), "seed": 20260905 + member})
+        model_objects.append(model)
+
+    calibration_scores = np.mean(
+        [model.predict_proba(calibration_features)[:, 1] for model in model_objects],
+        axis=0,
     )
-    config = {
-        **template,
+    threshold = select_threshold(
+        calibration_scores, calibration_labels, args.precision_target
+    )
+    metadata = {
+        "format_version": "1.3",
+        "detector_id": "same-work-detector-v1.3.0",
+        "feature_names": names,
+        "base_feature_names": names[:-len(EVIDENCE_NAMES)],
+        "method": {
+            "window_segments": list(config.window_segments),
+            "windows_per_file": config.windows_per_file,
+            "tokens_per_window": config.tokens_per_window,
+            "max_token_postings": config.max_token_postings,
+            "max_document_frequency": config.max_document_frequency,
+            "neighbours_per_file": config.neighbours_per_file,
+            "min_window_similarity": config.min_window_similarity,
+            "pairs_per_file": config.pairs_per_file,
+            "rescue_fraction": config.rescue_fraction,
+            "candidate_k": config.candidate_k,
+            "minimum_mutual_views": config.minimum_mutual_views,
+            "evidence_max_segments": config.evidence_max_segments,
+            "background_quantile": config.background_quantile,
+            "context_weight": config.context_weight,
+            "initial_shifts": config.initial_shifts,
+            "maximum_shifts": config.maximum_shifts,
+            "shift_boundary_margin": config.shift_boundary_margin,
+        },
+        "alignment_config": {
+            "segment_beats": alignment.segment_beats,
+            "onset_bins": alignment.onset_bins,
+            "max_segments": alignment.max_segments,
+            "max_paths": alignment.max_paths,
+            "min_path_matches": alignment.min_path_matches,
+            "transposition_candidates": alignment.transposition_candidates,
+            "match_baseline": alignment.match_baseline,
+            "gap_open": alignment.gap_open,
+            "gap_extend": alignment.gap_extend,
+        },
         "ensemble_models": models,
         "threshold": threshold["threshold"],
+        "calibration_status": "CALIBRATED",
+        "component_max_size": 50,
+        "candidate_seed": 20260824,
+        "training": {
+            "fit_files": len(fit_rows),
+            "fit_positive_pairs": int(fit_labels.sum()),
+            "fit_negative_pairs": int((fit_labels == 0).sum()),
+            "calibration_files": len(calibration_rows),
+            "calibration_positive_pairs": int(calibration_labels.sum()),
+            "precision_target": args.precision_target,
+        },
     }
-    (args.output / "config.json").write_text(json.dumps(config, indent=2) + "\n")
-    (args.output / "training_summary.json").write_text(
-        json.dumps(
-            {
-                "files": len(rows),
-                "pairs": len(pairs),
-                "positive_pairs": int(labels.sum()),
-                "features": len(names),
-                "threshold_selection": threshold,
-            },
-            indent=2,
-        )
-        + "\n"
-    )
-    print(json.dumps(threshold, indent=2))
+    (args.output / "MODEL_CONFIG.json").write_text(json.dumps(metadata, indent=2) + "\n")
+    print(json.dumps({"status": "COMPLETE", "models": 5, "features": len(names), **threshold}, indent=2))
 
 
 if __name__ == "__main__":

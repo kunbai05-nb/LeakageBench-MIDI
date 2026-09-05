@@ -13,6 +13,7 @@ from .cross_paradigm import (
     LatentDiffusionConfig,
     PromptConditionalSequenceVAE,
 )
+from .external_models import LSTMModel, MidiGPT
 from .tcn import CausalTCN, CausalTCNLM, TCNConfig, CausalTCNLMConfig
 from .tokenizer import MidiTokenizer, PilotTokenizer, TOKENIZER_CONFIG
 from .transformer import (
@@ -40,6 +41,8 @@ __all__ = [
     "ConditionalVAEConfig",
     "GaussianLatentDiffusion",
     "LatentDiffusionConfig",
+    "MidiGPT",
+    "LSTMModel",
     "MidiTokenizer",
     "PilotTokenizer",
     "TOKENIZER_CONFIG",

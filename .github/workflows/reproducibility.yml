@@ -27,7 +27,7 @@ jobs:
           cache: pip
           cache-dependency-path: requirements.txt
 
-      - name: Install locked environment
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r requirements.txt

@@ -233,7 +233,13 @@ def extract_feature_bundle(
     failures = []
     tasks = [(index, str(path)) for index, path in enumerate(paths)]
     if workers > 1:
-        with ProcessPoolExecutor(max_workers=workers) as executor:
+        executor_class = (
+            ProcessPoolExecutor if "fork" in get_all_start_methods() else ThreadPoolExecutor
+        )
+        kwargs = {"max_workers": workers}
+        if executor_class is ProcessPoolExecutor:
+            kwargs["mp_context"] = get_context("fork")
+        with executor_class(**kwargs) as executor:
             outputs = executor.map(_parse_one, tasks, chunksize=4)
             for index, item, failure in outputs:
                 parsed[index] = item
@@ -284,7 +290,13 @@ def extract_count_bundle(
     failures = []
     tasks = [(index, str(path)) for index, path in enumerate(paths)]
     if workers > 1:
-        with ProcessPoolExecutor(max_workers=workers) as executor:
+        executor_class = (
+            ProcessPoolExecutor if "fork" in get_all_start_methods() else ThreadPoolExecutor
+        )
+        kwargs = {"max_workers": workers}
+        if executor_class is ProcessPoolExecutor:
+            kwargs["mp_context"] = get_context("fork")
+        with executor_class(**kwargs) as executor:
             outputs = executor.map(_parse_one, tasks, chunksize=4)
             for index, item, failure in outputs:
                 parsed[index] = item
@@ -586,14 +598,13 @@ def faiss_mutual_candidate_ranks(
     }
     items = list(enumerate(signals))
     if signal_workers > 1:
-        if "fork" not in get_all_start_methods():
-            raise RuntimeError(
-                "parallel signal search requires a fork-capable platform"
-            )
-        with ProcessPoolExecutor(
-            max_workers=min(signal_workers, len(items)),
-            mp_context=get_context("fork"),
-        ) as executor:
+        executor_class = (
+            ProcessPoolExecutor if "fork" in get_all_start_methods() else ThreadPoolExecutor
+        )
+        kwargs = {"max_workers": min(signal_workers, len(items))}
+        if executor_class is ProcessPoolExecutor:
+            kwargs["mp_context"] = get_context("fork")
+        with executor_class(**kwargs) as executor:
             outputs = list(executor.map(_faiss_signal_job, items))
     else:
         outputs = [_faiss_signal_job(item) for item in items]

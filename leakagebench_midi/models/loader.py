@@ -13,6 +13,7 @@ from .cross_paradigm import (
     LatentDiffusionConfig,
     PromptConditionalSequenceVAE,
 )
+from .external_models import LSTMModel, MidiGPT
 from .transformer import CausalTransformer, TransformerConfig
 from .tcn import CausalTCN, TCNConfig
 
@@ -43,6 +44,7 @@ SUPPORTED_ARTIFACT_TYPES = {
 SUPPORTED_VERSION_TRIPLES = {
     ("1.0", "v1.0.0", "v1.0.0"),
     ("1.1", "v1.1.1", "v1.1.0"),
+    ("1.3", "v1.3.0", "v1.3.0"),
 }
 MAX_CHECKPOINT_BYTES = 512 * 1024 * 1024
 MAX_PARAMETERS = 100_000_000
@@ -84,6 +86,18 @@ MODEL_CONFIG_LIMITS = {
         "time_dim": 4_096,
         "timesteps": 100_000,
     },
+    "midigpt": {
+        **SEQUENCE_LIMITS,
+        "n_embd": 4_096,
+        "n_layer": 64,
+        "n_head": 128,
+    },
+    "lstm": {
+        **SEQUENCE_LIMITS,
+        "embedding_dim": 4_096,
+        "hidden_dim": 8_192,
+        "layers": 64,
+    },
 }
 
 
@@ -103,12 +117,22 @@ def build_latent_diffusion(config: dict[str, Any]) -> GaussianLatentDiffusion:
     return GaussianLatentDiffusion(LatentDiffusionConfig(**config))
 
 
+def build_midigpt(config: dict[str, Any]) -> MidiGPT:
+    return MidiGPT(config)
+
+
+def build_lstm(config: dict[str, Any]) -> LSTMModel:
+    return LSTMModel(config)
+
+
 MODEL_BUILDERS = {
     "transformer": build_transformer,
     "tcn": build_tcn,
     "conditional_vae": build_conditional_vae,
     "neutral_encoder": build_conditional_vae,
     "latent_diffusion": build_latent_diffusion,
+    "midigpt": build_midigpt,
+    "lstm": build_lstm,
 }
 
 
@@ -129,6 +153,8 @@ def _validate_model_config(architecture: str, config: dict[str, Any]) -> None:
         _bounded_integer(config, name, maximum)
     if "heads" in config and config["d_model"] % config["heads"]:
         raise ValueError("model_config.d_model must be divisible by heads")
+    if architecture == "midigpt" and config["n_embd"] % config["n_head"]:
+        raise ValueError("model_config.n_embd must be divisible by n_head")
     if architecture == "tcn":
         dilations = config.get("dilations")
         if not isinstance(dilations, list) or len(dilations) != config["blocks"]:

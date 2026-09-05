@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "experiment_id": "LEAKAGEBENCH_THREE_CONDITION_EXTERNAL_V1",
+  "dataset": "LMD",
+  "conditions": [
+    "clean",
+    "unrelated_donor",
+    "same_family_donor"
+  ],
+  "seeds": [
+    202608040,
+    202608041,
+    202608042
+  ],
+  "primary_contrast": "same_family_donor_minus_unrelated_donor",
+  "models": {
+    "midigpt": {
+      "label": "MIDI-GPT",
+      "architecture": {
+        "vocab_size": 237,
+        "context_length": 1024,
+        "n_embd": 512,
+        "n_layer": 6,
+        "n_head": 8
+      },
+      "parameter_count": 19682304
+    },
+    "lstm": {
+      "label": "LSTM",
+      "architecture": {
+        "vocab_size": 237,
+        "context_length": 1024,
+        "embedding_dim": 256,
+        "hidden_dim": 512,
+        "layers": 2,
+        "dropout": 0.1
+      },
+      "parameter_count": 3860461
+    }
+  },
+  "training": {
+    "total_steps": 20000,
+    "warmup_steps": 1000,
+    "effective_batch_size": 32,
+    "micro_batch_size": 8,
+    "context_length": 1024,
+    "gradient_clip": 1.0,
+    "optimizer": "AdamW",
+    "learning_rate": 0.0002,
+    "betas": [0.9, 0.95],
+    "weight_decay": 0.1,
+    "schedule": "linear_warmup_cosine_decay",
+    "deterministic_algorithms": true,
+    "amp": "bf16_if_supported_else_fp16_on_cuda"
+  },
+  "source_specs": {
+    "preparation_script": "scripts/prepare_lmd.py",
+    "batch_schedule_seed_0": {
+      "path": "reproduction/source_specs/batch_schedule_seed_0.jsonl",
+      "sha256": "2b59f2cd0ce0b98bd33afea90bddd2eb8ab4a92d731fa9c14d126baa137d356a"
+    },
+    "batch_schedule_seed_1": {
+      "path": "reproduction/source_specs/batch_schedule_seed_1.jsonl",
+      "sha256": "391304a04466712f811d2d73358b79eace12f48fcd78257d8b13ac5a71989dd2"
+    },
+    "batch_schedule_seed_2": {
+      "path": "reproduction/source_specs/batch_schedule_seed_2.jsonl",
+      "sha256": "675713492d53a1756d07950952ea6314153f25097880ba5ea16cfba809c6e908"
+    },
+    "training_stream_spec": "reproduction/source_specs/formal_data.json",
+    "training_stream_rows": 38374,
+    "training_stream_tokens": 35553081,
+    "evaluation_families": 100
+  },
+  "evaluation": {
+    "endpoint": "teacher_forced_receiver_continuation_nll",
+    "unit": "receiver_family",
+    "seed_pooling": "paired arithmetic mean across seeds",
+    "primary_effect": "100 * (same_family_donor - unrelated_donor) / unrelated_donor"
+  }
+}

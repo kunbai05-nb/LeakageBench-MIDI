@@ -53,11 +53,12 @@ def test_readme_has_primary_workflows():
     required = (
         "scripts/detect_same_work.py",
         "scripts/train_detector.py",
+        "scripts/train_external_models.py",
         "scripts/prepare_lmd.py",
         "scripts/train_model.py",
         "scripts/evaluate_checkpoint.py",
         "scripts/verify_model_checkpoints.py",
-        "/releases/tag/v1.2.1",
+        "/releases/tag/v1.3.0",
     )
     assert all(value in text for value in required)
 

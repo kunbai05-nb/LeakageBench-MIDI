@@ -98,6 +98,45 @@ def safe_checkpoint_path(root: Path, relative_path: object) -> Path:
     return resolved_path
 
 
+def verify_seed_bundle(checkpoint_root: Path) -> dict:
+    manifest_path = checkpoint_root / "MANIFEST.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    model_name = manifest.get("model")
+    condition = manifest.get("condition")
+    seeds = manifest.get("seeds")
+    if not isinstance(model_name, str) or not isinstance(condition, str):
+        raise ValueError("model bundle manifest has invalid model or condition")
+    if not isinstance(seeds, list) or not seeds:
+        raise ValueError("model bundle manifest has no seed entries")
+
+    verified = []
+    for row in seeds:
+        if not isinstance(row, dict) or not isinstance(row.get("file"), str):
+            raise ValueError("model bundle manifest has an invalid seed entry")
+        path = safe_checkpoint_path(checkpoint_root, row["file"])
+        if not path.is_file():
+            raise SystemExit(f"checkpoint file is missing: {row['file']}")
+        if sha256(path) != row.get("sha256"):
+            raise SystemExit(f"checkpoint integrity mismatch: {row['file']}")
+        _, metadata = load_checkpoint(path, map_location="cpu")
+        expected_id = f"{model_name}-{condition}-{row.get('seed')}"
+        if metadata["architecture"] != model_name:
+            raise SystemExit(f"architecture mismatch: {row['file']}")
+        if metadata["condition"] != condition or metadata["seed"] != row.get("seed"):
+            raise SystemExit(f"seed metadata mismatch: {row['file']}")
+        if metadata["model_id"] != expected_id:
+            raise SystemExit(f"model ID mismatch: {row['file']}")
+        verified.append(row["file"])
+    return {
+        "status": "PASS",
+        "bundle_type": "three_condition_model",
+        "model": model_name,
+        "condition": condition,
+        "verified_checkpoints": len(verified),
+        "missing_checkpoints": 0,
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("checkpoint_root", type=Path)
@@ -109,6 +148,11 @@ def main() -> None:
     args = parser.parse_args()
 
     checkpoint_root = args.checkpoint_root.resolve()
+    seed_manifest_path = checkpoint_root / "MANIFEST.json"
+    if seed_manifest_path.is_file():
+        print(json.dumps(verify_seed_bundle(checkpoint_root), sort_keys=True))
+        return
+
     manifest_path = checkpoint_root / "MODEL_MANIFEST.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     references = json.loads(REFERENCES.read_text(encoding="utf-8"))

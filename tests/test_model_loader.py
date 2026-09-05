@@ -12,6 +12,7 @@ from leakagebench_midi.models import (
     build_transformer,
     load_checkpoint,
 )
+from leakagebench_midi.models.external_models import build_model
 
 
 def transformer_config():
@@ -64,6 +65,18 @@ def diffusion_config():
         "beta_start": 0.0001,
         "beta_end": 0.02,
     }
+
+
+def test_external_model_parameter_counts_and_forward():
+    ids = torch.zeros((1, 8), dtype=torch.long)
+    attention = torch.ones_like(ids, dtype=torch.bool)
+    loss_mask = attention.clone()
+    loss_mask[:, :3] = False
+    for name, expected in (("midigpt", 19682304), ("lstm", 3860461)):
+        model = build_model(name).eval()
+        assert sum(parameter.numel() for parameter in model.parameters()) == expected
+        with torch.inference_mode():
+            assert torch.isfinite(model(ids, attention, loss_mask)["loss"])
 
 
 def artifact(model, architecture, config):

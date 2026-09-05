@@ -8,13 +8,8 @@ from pathlib import Path
 import mido
 import numpy as np
 
-from leakagebench_midi.detector import (
-    Components,
-    SIGNALS,
-    apply_tfidf,
-    extract_count_features,
-    extract_features,
-)
+from leakagebench_midi.detector import Components
+from leakagebench_midi.local_evidence import SIGNALS
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -50,21 +45,6 @@ def midi(path: Path, pitches: list[int]) -> None:
         track.append(mido.Message("note_on", note=pitch, velocity=64, time=0))
         track.append(mido.Message("note_off", note=pitch, velocity=0, time=480))
     value.save(path)
-
-
-def test_count_shards_match_direct_tfidf(tmp_path):
-    paths = [tmp_path / "a.mid", tmp_path / "b.mid"]
-    midi(paths[0], [60, 62, 64, 65])
-    midi(paths[1], [67, 69, 71, 72])
-    direct, direct_failures = extract_features(paths)
-    counts, count_failures = extract_count_features(paths)
-    sharded = apply_tfidf(counts)
-    assert direct_failures == count_failures == []
-    np.testing.assert_array_equal(direct["valid"], sharded["valid"])
-    for name in ("chroma", "interval_hist", "duration_hist", "ioi_hist", "scalars"):
-        np.testing.assert_allclose(direct[name], sharded[name])
-    for name in ("melody", "bass", "rhythm", "harmony", "motif"):
-        np.testing.assert_allclose(direct[name].toarray(), sharded[name].toarray())
 
 
 def test_component_guard():

@@ -13,9 +13,7 @@ def main() -> None:
     parser.add_argument("detector_dir", type=Path)
     args = parser.parse_args()
     config, models = load_detector(args.detector_dir)
-    maximum_component_size = config.get(
-        "component_max_size", config.get("maximum_component_size", 50)
-    )
+    maximum_component_size = config["component_max_size"]
     print(
         json.dumps(
             {

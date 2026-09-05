@@ -249,11 +249,7 @@ class LocalEvidenceDetector:
         selected = np.flatnonzero(self.classify(scores)).astype(np.int64)
         order = selected[np.argsort(scores[selected], kind="mergesort")[::-1]]
         components = Components(len(paths))
-        limit = int(
-            self.metadata.get(
-                "component_max_size", self.metadata.get("maximum_component_size", 50)
-            )
-        )
+        limit = int(self.metadata["component_max_size"])
         accepted, rejected = [], []
         for index in order:
             left, right = map(int, pairs[index])

@@ -7,20 +7,7 @@ from pathlib import Path
 import joblib
 import numpy as np
 
-from .content import CANDIDATE_SIGNALS
-from .content import (
-    compact_candidate_ranks,
-    extract_count_bundle,
-    extract_feature_bundle,
-    tfidf_count_bundle,
-)
 from .local_evidence_inference import Components, LocalEvidenceDetector
-
-
-SIGNALS = CANDIDATE_SIGNALS
-extract_features = extract_feature_bundle
-extract_count_features = extract_count_bundle
-apply_tfidf = tfidf_count_bundle
 
 
 def sha256(path: Path) -> str:
@@ -31,22 +18,15 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def _artifact_field(artifact: dict) -> str:
-    value = artifact.get("file", artifact.get("artifact"))
-    if not isinstance(value, str) or not value:
-        raise ValueError("detector artifact path is missing")
-    return value
-
-
 def load_detector(directory: str | Path) -> tuple[dict, list]:
     root = Path(directory).resolve()
     config_path = root / "MODEL_CONFIG.json"
     if not config_path.is_file():
-        config_path = root / "config.json"
+        raise FileNotFoundError(config_path)
     config = json.loads(config_path.read_text())
     models = []
     for artifact in config["ensemble_models"]:
-        path = (root / _artifact_field(artifact)).resolve()
+        path = (root / artifact["file"]).resolve()
         if not path.is_relative_to(root) or not path.is_file():
             raise ValueError("detector artifact must be inside the model directory")
         expected = artifact.get("sha256")
@@ -84,12 +64,7 @@ def detect(
 
 __all__ = [
     "Components",
-    "SIGNALS",
-    "apply_tfidf",
-    "compact_candidate_ranks",
     "detect",
-    "extract_count_features",
-    "extract_features",
     "load_detector",
     "sha256",
 ]

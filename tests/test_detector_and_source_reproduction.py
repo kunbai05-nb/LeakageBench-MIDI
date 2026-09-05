@@ -37,12 +37,12 @@ def test_detector_checkpoint_loading(tmp_path):
         joblib.dump(model, path)
         artifacts.append(
             {
-                "artifact": path.name,
+                "file": path.name,
                 "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
             }
         )
         models.append(model)
-    (tmp_path / "config.json").write_text(json.dumps({"ensemble_models": artifacts}))
+    (tmp_path / "MODEL_CONFIG.json").write_text(json.dumps({"ensemble_models": artifacts}))
     config, loaded = load_detector(tmp_path)
     observed = _predict_probability(
         loaded, np.asarray([[0.0, 0.0, 0.0], [1.0, 1.0, 1.0]])

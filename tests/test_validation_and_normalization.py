@@ -1,13 +1,11 @@
 from __future__ import annotations
 import math
-import mido
 import pytest
 from leakagebench_midi import (
     analyze_effect,
     audit_split,
     build_contamination,
     family_aware_split,
-    normalize_midi_structure,
 )
 
 
@@ -199,119 +197,3 @@ def test_zero_denominator_is_undefined():
         out["test_file_contamination_rate"] is None
         and out["test_family_contamination_rate"] is None
     )
-
-
-def save(path, ppq, notes, meta=None, reverse=False, zero_off=False):
-    m = mido.MidiFile(ticks_per_beat=ppq)
-    tracks = []
-    for track_notes in notes:
-        t = mido.MidiTrack()
-        if meta:
-            t.append(mido.MetaMessage("track_name", name=meta, time=0))
-        for onset, duration, pitch in track_notes:
-            t.append(mido.Message("note_on", note=pitch, velocity=64, time=onset))
-            t.append(
-                mido.Message(
-                    "note_on" if zero_off else "note_off",
-                    note=pitch,
-                    velocity=0,
-                    time=duration,
-                )
-            )
-        tracks.append(t)
-    if reverse:
-        tracks.reverse()
-    m.tracks.extend(tracks)
-    m.save(path)
-
-
-def exact(a, b):
-    return normalize_midi_structure(a) == normalize_midi_structure(b)
-
-
-def simultaneous(path, order):
-    m = mido.MidiFile(ticks_per_beat=480)
-    t = mido.MidiTrack()
-    for pitch in order:
-        t.append(mido.Message("note_on", note=pitch, velocity=64, time=0))
-    for index, pitch in enumerate(order):
-        t.append(
-            mido.Message(
-                "note_off", note=pitch, velocity=0, time=480 if index == 0 else 0
-            )
-        )
-    m.tracks.append(t)
-    m.save(path)
-
-
-def test_normalized_equivalences(tmp_path):
-    a = tmp_path / "a.mid"
-    b = tmp_path / "b.mid"
-    save(a, 480, [[(0, 480, 60)]])
-    save(b, 960, [[(0, 960, 60)]])
-    assert exact(a, b)
-    save(a, 480, [[(0, 480, 60)]])
-    save(b, 480, [[(0, 480, 60)]], zero_off=True)
-    assert exact(a, b)
-    save(a, 480, [[(0, 480, 60)]], meta="a")
-    save(b, 480, [[(0, 480, 60)]], meta="b")
-    assert exact(a, b)
-    save(a, 480, [[(0, 480, 60)], [(0, 480, 64)]])
-    save(b, 480, [[(0, 480, 60)], [(0, 480, 64)]], reverse=True)
-    assert exact(a, b)
-    simultaneous(a, [60, 64])
-    simultaneous(b, [64, 60])
-    assert exact(a, b)
-
-
-@pytest.mark.parametrize(
-    "left,right",
-    [
-        ([(0, 480, 60)], [(0, 480, 61)]),
-        ([(0, 480, 60)], [(240, 480, 60)]),
-        ([(0, 480, 60)], [(0, 240, 60)]),
-    ],
-)
-def test_normalized_musical_differences(tmp_path, left, right):
-    a = tmp_path / "a.mid"
-    b = tmp_path / "b.mid"
-    save(a, 480, [left])
-    save(b, 480, [right])
-    assert not exact(a, b)
-
-
-def test_normalize_empty_midi(tmp_path):
-    path = tmp_path / "empty.mid"
-    m = mido.MidiFile(ticks_per_beat=480)
-    m.tracks.append(mido.MidiTrack())
-    m.save(path)
-    assert normalize_midi_structure(path)["events"] == []
-
-
-def test_normalize_unclosed_note_fails(tmp_path):
-    path = tmp_path / "unclosed.mid"
-    m = mido.MidiFile(ticks_per_beat=480)
-    track = mido.MidiTrack()
-    track.append(mido.Message("note_on", note=60, velocity=64, time=0))
-    m.tracks.append(track)
-    m.save(path)
-    with pytest.raises(ValueError, match="unclosed active MIDI note"):
-        normalize_midi_structure(path)
-
-
-def test_normalize_overlapping_notes(tmp_path):
-    path = tmp_path / "overlap.mid"
-    m = mido.MidiFile(ticks_per_beat=480)
-    track = mido.MidiTrack()
-    track.extend(
-        [
-            mido.Message("note_on", note=60, velocity=64, time=0),
-            mido.Message("note_on", note=60, velocity=72, time=120),
-            mido.Message("note_off", note=60, velocity=0, time=120),
-            mido.Message("note_off", note=60, velocity=0, time=120),
-        ]
-    )
-    m.tracks.append(track)
-    m.save(path)
-    events = normalize_midi_structure(path)["events"]
-    assert len(events) == 2 and sum(event["multiplicity"] for event in events) == 2

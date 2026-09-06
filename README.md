@@ -74,6 +74,8 @@ These checkpoints support the capacity and architecture comparisons and are in [
 - [Conditional VAE](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/conditional-vae.tar.gz)
 - [Latent Diffusion and neutral encoders](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/latent-diffusion-and-neutral-encoders.tar.gz)
 
+The ATEPP label-blind mitigation experiment is available as [ATEPP final checkpoints](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/atepp-label-blind-mitigation-checkpoints.tar.gz); it contains final 20,000-step MIDI-GPT weights for three seeds in the uncorrected, detector, and label-reference conditions, while simple deduplication reuses the uncorrected stream.
+
 ## Other models
 
 The original Transformer, TCN, VAE, and diffusion implementations remain available through `scripts/train_model.py` and `scripts/evaluate_checkpoint.py`.

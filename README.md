@@ -31,6 +31,16 @@ To retrain it from the public index:
 python scripts/train_detector.py --midi-root /path/to/lmd_matched --index reproduction/source_specs/detector_training_index.csv --output ./detector_retrained --workers 8 --backend exact
 ```
 
+Reproduce the detector benchmark after downloading SHS/LMD, ASAP, and LMD-clean:
+
+```bash
+python scripts/reproduce_detector_benchmark.py shs /path/to/lmd_full ./same-work-detector-v1.3.0 ./benchmark/shs --workers 8
+python scripts/reproduce_detector_benchmark.py asap /path/to/asap-dataset ./same-work-detector-v1.3.0 ./benchmark/asap --workers 8
+python scripts/reproduce_detector_benchmark.py lmd-clean /path/to/lmd_clean ./same-work-detector-v1.3.0 ./benchmark/lmd-clean --workers 8
+```
+
+The frozen file order and reference groups are in `reproduction/detector_benchmark`.
+
 ## Three-condition models
 
 The released weights are in [v1.3.0](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/tag/v1.3.0):

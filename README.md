@@ -31,19 +31,21 @@ To retrain it from the public index:
 python scripts/train_detector.py --midi-root /path/to/lmd_matched --index reproduction/source_specs/detector_training_index.csv --output ./detector_retrained --workers 8 --backend exact
 ```
 
-Reproduce the detector benchmark after downloading SHS/LMD, ASAP, and LMD-clean:
+## Detector experiments
+
+The cross-dataset detector benchmark uses SHS/LMD, ASAP, and LMD-clean. Their frozen file order, checksums, work groups, and recording groups are in `reproduction/detector_benchmark`.
+
+Run all three datasets after downloading them:
 
 ```bash
-python scripts/reproduce_detector_benchmark.py shs /path/to/lmd_full ./same-work-detector-v1.3.0 ./benchmark/shs --workers 8
-python scripts/reproduce_detector_benchmark.py asap /path/to/asap-dataset ./same-work-detector-v1.3.0 ./benchmark/asap --workers 8
-python scripts/reproduce_detector_benchmark.py lmd-clean /path/to/lmd_clean ./same-work-detector-v1.3.0 ./benchmark/lmd-clean --workers 8
+bash scripts/reproduce_detector_benchmarks.sh \
+  /path/to/shs /path/to/asap /path/to/lmd_clean \
+  ./same-work-detector-v1.3.0 ./benchmark
 ```
 
-The frozen file order and reference groups are in `reproduction/detector_benchmark`.
+Each output directory contains `results.json` and `predicted_pairs.csv.gz`. The script verifies every input MIDI checksum before detection. SHS and ASAP use pair-micro precision/recall/F1; LMD-clean uses query-macro precision/recall/F1.
 
-Run all three benchmarks with `bash scripts/reproduce_detector_benchmarks.sh SHS_ROOT ASAP_ROOT LMD_CLEAN_ROOT DETECTOR_DIR OUTPUT_ROOT`.
-
-The three compressed manifests in `reproduction/detector_benchmark` freeze the file order, file checksums, work groups, and recording groups. Each output directory contains `results.json` and `predicted_pairs.csv.gz`; the script verifies every input MIDI checksum before detection. SHS and ASAP use pair-micro precision/recall/F1, while LMD-clean uses query-macro precision/recall/F1.
+The same detector is also used in the ATEPP label-blind mitigation experiment. The final 20,000-step MIDI-GPT checkpoints for three seeds are available in [atepp-label-blind-mitigation-checkpoints.tar.gz](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/atepp-label-blind-mitigation-checkpoints.tar.gz).
 
 ## Three-condition models
 
@@ -77,8 +79,6 @@ These checkpoints support the capacity and architecture comparisons and are in [
 - [TCN](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/lmd-tcn.tar.gz)
 - [Conditional VAE](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/conditional-vae.tar.gz)
 - [Latent Diffusion and neutral encoders](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/latent-diffusion-and-neutral-encoders.tar.gz)
-
-The ATEPP label-blind mitigation experiment is available as [ATEPP final checkpoints](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/atepp-label-blind-mitigation-checkpoints.tar.gz); it contains final 20,000-step MIDI-GPT weights for three seeds in the uncorrected, detector, and label-reference conditions, while simple deduplication reuses the uncorrected stream.
 
 ## Other models
 

@@ -43,6 +43,8 @@ The frozen file order and reference groups are in `reproduction/detector_benchma
 
 Run all three benchmarks with `bash scripts/reproduce_detector_benchmarks.sh SHS_ROOT ASAP_ROOT LMD_CLEAN_ROOT DETECTOR_DIR OUTPUT_ROOT`.
 
+The three compressed manifests in `reproduction/detector_benchmark` freeze the file order, file checksums, work groups, and recording groups. Each output directory contains `results.json` and `predicted_pairs.csv.gz`; the script verifies every input MIDI checksum before detection. SHS and ASAP use pair-micro precision/recall/F1, while LMD-clean uses query-macro precision/recall/F1.
+
 ## Three-condition models
 
 The released weights are in [v1.3.0](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/tag/v1.3.0):

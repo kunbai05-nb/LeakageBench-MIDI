@@ -41,6 +41,8 @@ python scripts/reproduce_detector_benchmark.py lmd-clean /path/to/lmd_clean ./sa
 
 The frozen file order and reference groups are in `reproduction/detector_benchmark`.
 
+Run all three benchmarks with `bash scripts/reproduce_detector_benchmarks.sh SHS_ROOT ASAP_ROOT LMD_CLEAN_ROOT DETECTOR_DIR OUTPUT_ROOT`.
+
 ## Three-condition models
 
 The released weights are in [v1.3.0](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/tag/v1.3.0):

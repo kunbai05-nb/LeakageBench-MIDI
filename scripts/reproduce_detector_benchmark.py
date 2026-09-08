@@ -117,7 +117,9 @@ def pair_micro(
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("dataset", choices=("shs", "asap", "lmd-clean"))
+    parser.add_argument(
+        "dataset", choices=("shs", "asap", "atepp", "maestro", "lmd-clean")
+    )
     parser.add_argument("midi_root", type=Path)
     parser.add_argument("detector_dir", type=Path)
     parser.add_argument("output_dir", type=Path)

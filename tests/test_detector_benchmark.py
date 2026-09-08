@@ -40,7 +40,13 @@ def test_query_macro_metrics():
 
 def test_public_benchmark_registries():
     benchmark = module()
-    expected = {"shs": (733, 515), "asap": (1067, 4988), "lmd-clean": (16788, 14083)}
+    expected = {
+        "shs": (733, 515),
+        "asap": (1067, 4988),
+        "atepp": (1527, 3339),
+        "maestro": (1276, 1085),
+        "lmd-clean": (16788, 14083),
+    }
     for dataset, counts in expected.items():
         records = benchmark.rows(
             ROOT / "reproduction" / "detector_benchmark" / f"{dataset}.csv.gz"

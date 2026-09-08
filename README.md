@@ -33,32 +33,18 @@ python scripts/train_detector.py --midi-root /path/to/lmd_matched --index reprod
 
 ## Detector experiments
 
-The detector comparison is one cross-dataset experiment: CAugBERT/CLaMP Union is compared with Ours on SHS, ASAP, ATEPP, MAESTRO, and LMD-clean using precision, recall, F1, and false negatives (FN).
+The detector comparison is one experiment evaluated on SHS, ASAP, ATEPP, MAESTRO, and LMD-clean. The five frozen registries in `reproduction/detector_benchmark` contain the exact file order, checksums, work groups, and recording groups.
 
-| Dataset | Method | Precision | Recall | F1 | FN |
-| --- | --- | ---: | ---: | ---: | ---: |
-| SHS | CAugBERT/CLaMP Union | 100.00 | 11.84 | 21.18 | 454 |
-| SHS | Ours | **98.86** | **67.57** | **80.28** | **167** |
-| ASAP | CAugBERT/CLaMP Union | 40.34 | 64.43 | 49.61 | 1,774 |
-| ASAP | Ours | **99.82** | **99.52** | **99.67** | **24** |
-| ATEPP | CAugBERT/CLaMP Union | 14.43 | 47.50 | 22.14 | 1,753 |
-| ATEPP | Ours | **99.17** | **93.53** | **96.27** | **216** |
-| MAESTRO | CAugBERT/CLaMP Union | — | 58.71 | — | 448 |
-| MAESTRO | Ours | — | **80.00** | — | **217** |
-| LMD-clean | CAugBERT/CLaMP Union | 89.83 | 39.31 | 54.68 | 18,574 |
-| LMD-clean | Ours | **90.28** | **60.41** | **72.38** | **12,030** |
-
-The frozen file order, checksums, work groups, and recording groups for the detector-side reruns are in `reproduction/detector_benchmark`. Run the reproducible SHS, ASAP, and LMD-clean rows after downloading those datasets:
+After downloading the five datasets, reproduce all Ours rows with one command:
 
 ```bash
 bash scripts/reproduce_detector_benchmarks.sh \
-  /path/to/shs /path/to/asap /path/to/lmd_clean \
+  /path/to/lmd_full /path/to/asap /path/to/ATEPP-1.2 \
+  /path/to/maestro-v3.0.0 /path/to/lmd_clean \
   ./same-work-detector-v1.3.0 ./benchmark
 ```
 
-Each output directory contains `results.json` and `predicted_pairs.csv.gz`. The script verifies every input MIDI checksum before detection. SHS and ASAP use pair-micro precision/recall/F1; LMD-clean uses query-macro precision/recall/F1. ATEPP and MAESTRO are included as the external-dataset rows of the same comparison experiment.
-
-The same detector is also used in the ATEPP label-blind mitigation experiment. The final 20,000-step MIDI-GPT checkpoints for three seeds are available in [atepp-label-blind-mitigation-checkpoints.tar.gz](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/atepp-label-blind-mitigation-checkpoints.tar.gz).
+Each dataset directory contains `results.json` and `predicted_pairs.csv.gz`. The runner verifies every MIDI checksum before detection. SHS, ASAP, ATEPP, and MAESTRO use pair-micro precision/recall/F1; LMD-clean uses query-macro precision/recall/F1.
 
 ## Three-condition models
 
@@ -83,6 +69,10 @@ python scripts/evaluate_checkpoint.py /path/to/final.pt ./prepared_lmd ./evaluat
 The exact conditions, seeds, batch schedules, and model settings are in `configs/three_condition_models.json`. Full training can use CUDA; released weights can be evaluated on CPU.
 
 Check a downloaded model bundle with `python scripts/verify_model_checkpoints.py /path/to/bundle`.
+
+## Label-blind mitigation
+
+The ATEPP mitigation experiment uses the released detector without work labels. Its final 20,000-step MIDI-GPT checkpoints for three seeds are available in [atepp-label-blind-mitigation-checkpoints.tar.gz](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/atepp-label-blind-mitigation-checkpoints.tar.gz).
 
 ## Capacity and architecture checkpoints
 

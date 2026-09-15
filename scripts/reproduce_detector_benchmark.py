@@ -11,14 +11,16 @@ from pathlib import Path
 
 import numpy as np
 
-from leakagebench_midi.detector import detect
+from leakagebench_midi.detector import detect, load_detector
 
 
 ROOT = Path(__file__).resolve().parents[1]
 SPECS = ROOT / "reproduction" / "detector_benchmark"
+DATASETS = ("shs", "asap", "atepp", "lmd-clean", "vienna4x22", "pianovam")
+GRID = np.round(np.arange(0.0, 1.001, 0.01), 2)
 
 
-def rows(path: Path) -> list[dict[str, str]]:
+def read_rows(path: Path) -> list[dict[str, str]]:
     with gzip.open(path, "rt", newline="", encoding="utf-8") as handle:
         return list(csv.DictReader(handle))
 
@@ -34,10 +36,6 @@ def verify_files(records: list[dict[str, str]], midi_root: Path) -> list[Path]:
     return paths
 
 
-def pair_set(pairs: np.ndarray) -> set[tuple[int, int]]:
-    return {tuple(map(int, pair)) for pair in np.asarray(pairs).reshape(-1, 2)}
-
-
 def reference_pairs(records: list[dict[str, str]]) -> set[tuple[int, int]]:
     groups: dict[str, list[int]] = defaultdict(list)
     for index, row in enumerate(records):
@@ -51,13 +49,29 @@ def reference_pairs(records: list[dict[str, str]]) -> set[tuple[int, int]]:
     }
 
 
-def eligible_predictions(
-    records: list[dict[str, str]], predicted: set[tuple[int, int]]
+def predictions(
+    pairs: np.ndarray, scores: np.ndarray, threshold: float
 ) -> set[tuple[int, int]]:
     return {
-        (left, right)
-        for left, right in predicted
-        if records[left]["recording_group"] != records[right]["recording_group"]
+        tuple(map(int, pair))
+        for pair, score in zip(pairs, scores)
+        if float(score) >= threshold
+    }
+
+
+def pair_micro(truth: set[tuple[int, int]], predicted: set[tuple[int, int]]) -> dict:
+    tp = len(truth & predicted)
+    fp = len(predicted - truth)
+    fn = len(truth - predicted)
+    precision = tp / (tp + fp) if tp + fp else 0.0
+    recall = tp / (tp + fn) if tp + fn else 0.0
+    return {
+        "precision": precision,
+        "recall": recall,
+        "f1": 2 * tp / (2 * tp + fp + fn) if 2 * tp + fp + fn else 0.0,
+        "tp": tp,
+        "fp": fp,
+        "fn": fn,
     }
 
 
@@ -74,15 +88,15 @@ def query_macro(
             target[right].add(left)
     precision, recall = [], []
     tp = fp = fn = 0
-    for index in relevant:
-        local_tp = len(relevant[index] & guesses[index])
-        local_predictions = len(guesses[index])
-        tp += local_tp
-        fp += local_predictions - local_tp
-        fn += len(relevant[index]) - local_tp
-        recall.append(local_tp / len(relevant[index]))
-        if local_predictions:
-            precision.append(local_tp / local_predictions)
+    for query, expected in relevant.items():
+        found = guesses[query]
+        hit = len(expected & found)
+        tp += hit
+        fp += len(found) - hit
+        fn += len(expected) - hit
+        recall.append(hit / len(expected))
+        if found:
+            precision.append(hit / len(found))
     p = float(np.mean(precision)) if precision else 0.0
     r = float(np.mean(recall)) if recall else 0.0
     return {
@@ -95,31 +109,11 @@ def query_macro(
     }
 
 
-def pair_micro(
-    truth: set[tuple[int, int]], predicted: set[tuple[int, int]]
-) -> dict:
-    tp = len(truth & predicted)
-    fp = len(predicted - truth)
-    fn = len(truth - predicted)
-    precision = tp / (tp + fp) if tp + fp else 0.0
-    recall = tp / (tp + fn) if tp + fn else 0.0
-    return {
-        "precision": precision,
-        "recall": recall,
-        "f1": 2 * precision * recall / (precision + recall)
-        if precision + recall
-        else 0.0,
-        "tp": tp,
-        "fp": fp,
-        "fn": fn,
-    }
-
-
 def main() -> None:
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "dataset", choices=("shs", "asap", "atepp", "maestro", "lmd-clean")
+    parser = argparse.ArgumentParser(
+        description="Reproduce fixed and optimal threshold results."
     )
+    parser.add_argument("dataset", choices=DATASETS)
     parser.add_argument("midi_root", type=Path)
     parser.add_argument("detector_dir", type=Path)
     parser.add_argument("output_dir", type=Path)
@@ -127,39 +121,38 @@ def main() -> None:
     parser.add_argument("--backend", choices=("exact", "faiss"), default="faiss")
     args = parser.parse_args()
 
-    records = rows(SPECS / f"{args.dataset}.csv.gz")
+    records = read_rows(SPECS / f"{args.dataset}.csv.gz")
     paths = verify_files(records, args.midi_root)
-    result = detect(paths, args.detector_dir, args.workers, args.backend)
+    result = detect(paths, args.detector_dir, args.workers, args.backend, threshold=0.0)
+    pairs, scores = result["pairs"], result["scores"]
     truth = reference_pairs(records)
-    predicted = eligible_predictions(
-        records, pair_set(result["pairs"][result["selected"]])
-    )
-    convention = "query_macro" if args.dataset == "lmd-clean" else "pair_micro"
-    metrics = (
-        query_macro(records, truth, predicted)
-        if convention == "query_macro"
-        else pair_micro(truth, predicted)
+    metric = query_macro if args.dataset == "lmd-clean" else None
+
+    def evaluate(threshold: float) -> dict:
+        predicted = predictions(pairs, scores, threshold)
+        values = (
+            metric(records, truth, predicted)
+            if metric
+            else pair_micro(truth, predicted)
+        )
+        return {"threshold": threshold, **values, "predicted_pairs": len(predicted)}
+
+    metadata, _ = load_detector(args.detector_dir)
+    fixed = evaluate(float(metadata["decision_threshold"]))
+    optimal = max(
+        (evaluate(float(threshold)) for threshold in GRID),
+        key=lambda row: (row["f1"], row["recall"], row["precision"], -row["threshold"]),
     )
     summary = {
         "dataset": args.dataset,
         "files": len(records),
         "reference_pairs": len(truth),
-        "metric_convention": convention,
-        **metrics,
+        "metric": "query_macro" if metric else "pair_micro",
+        "fixed": fixed,
+        "optimal": optimal,
     }
-
     args.output_dir.mkdir(parents=True, exist_ok=True)
-    with gzip.open(
-        args.output_dir / "predicted_pairs.csv.gz",
-        "wt",
-        newline="",
-        encoding="utf-8",
-    ) as handle:
-        writer = csv.writer(handle)
-        writer.writerow(("left", "right", "score"))
-        for index in result["selected"]:
-            left, right = result["pairs"][int(index)]
-            writer.writerow((int(left), int(right), f"{result['scores'][int(index)]:.9f}"))
+    np.savez_compressed(args.output_dir / "pair_scores.npz", pairs=pairs, scores=scores)
     (args.output_dir / "results.json").write_text(
         json.dumps(summary, indent=2) + "\n", encoding="utf-8"
     )

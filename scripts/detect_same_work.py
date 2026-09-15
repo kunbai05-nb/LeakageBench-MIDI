@@ -37,26 +37,18 @@ def main() -> None:
         for path, label in zip(paths, result["component_labels"]):
             writer.writerow((path.relative_to(args.midi_dir), int(label)))
 
-    accepted = set(map(int, result["accepted"]))
-    rejected = set(map(int, result["rejected_by_size"]))
     with (args.output_dir / "relation_edges.csv").open(
         "w", newline="", encoding="utf-8"
     ) as handle:
         writer = csv.writer(handle)
-        writer.writerow(("left", "right", "score", "decision"))
+        writer.writerow(("left", "right", "score"))
         for index in result["selected"]:
             left, right = result["pairs"][int(index)]
-            decision = (
-                "accepted"
-                if int(index) in accepted
-                else "size_guard" if int(index) in rejected else "transitive"
-            )
             writer.writerow(
                 (
                     paths[int(left)].relative_to(args.midi_dir),
                     paths[int(right)].relative_to(args.midi_dir),
                     f"{result['scores'][int(index)]:.9f}",
-                    decision,
                 )
             )
 
@@ -65,7 +57,6 @@ def main() -> None:
         "parsed_files": len(paths) - len(result["failures"]),
         "direct_edges": len(result["selected"]),
         "components": len(set(map(int, result["component_labels"]))),
-        "rejected_by_size": len(result["rejected_by_size"]),
         "candidate_backend": result["candidate_diagnostics"]["backend"],
         "parse_failures": result["failures"],
     }

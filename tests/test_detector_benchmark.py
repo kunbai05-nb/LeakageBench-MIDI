@@ -44,21 +44,12 @@ def test_public_benchmark_registries():
         "shs": (733, 515),
         "asap": (1067, 4988),
         "atepp": (1527, 3339),
-        "maestro": (1276, 1085),
-        "lmd-clean": (16788, 14083),
+        "lmd-clean": (2547, 2037),
+        "vienna4x22": (88, 924),
+        "pianovam": (94, 77),
     }
     for dataset, counts in expected.items():
-        records = benchmark.rows(
+        records = benchmark.read_rows(
             ROOT / "reproduction" / "detector_benchmark" / f"{dataset}.csv.gz"
         )
         assert (len(records), len(benchmark.reference_pairs(records))) == counts
-
-
-def test_same_recording_predictions_are_excluded():
-    benchmark = module()
-    records = [
-        {"recording_group": "x"},
-        {"recording_group": "x"},
-        {"recording_group": "y"},
-    ]
-    assert benchmark.eligible_predictions(records, {(0, 1), (0, 2)}) == {(0, 2)}

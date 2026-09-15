@@ -2,90 +2,68 @@
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22023100.svg)](https://doi.org/10.5281/zenodo.22023100)
 
-Code and frozen specifications for measuring same-work leakage in symbolic-music generation.
+Code and frozen specifications for the three-condition experiments and Same-Work Detector v1.7.
 
 ## Install
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
-pip install -e '.[test,scale]'
+pip install -r requirements.txt
+pip install -e '.[scale]'
 ```
 
-LMD is not distributed with this repository. Download it from the [Lakh MIDI Dataset](https://colinraffel.com/projects/lmd/) and provide the local archive or extracted directory to the preparation script.
+LMD is not distributed here. Download it from the [Lakh MIDI Dataset](https://colinraffel.com/projects/lmd/).
 
-## Detector
+## Three-condition experiments
 
-Download [same-work-detector-v1.3.0.tar.gz](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/same-work-detector-v1.3.0.tar.gz), extract it, and run:
-
-```bash
-python scripts/verify_detector_checkpoint.py ./same-work-detector-v1.3.0
-python scripts/detect_same_work.py /path/to/midi ./same-work-detector-v1.3.0 ./detector_output --workers 8 --backend faiss
-```
-
-The detector combines nine structural views, reciprocal top-100 retrieval, local ordered evidence, and a calibrated five-model ensemble. It returns relation edges and component labels. The released family graph is a reference relation for this study, not a universal detector.
-
-To retrain it from the public index:
-
-```bash
-python scripts/train_detector.py --midi-root /path/to/lmd_matched --index reproduction/source_specs/detector_training_index.csv --output ./detector_retrained --workers 8 --backend exact
-```
-
-## Detector experiments
-
-The detector comparison is one experiment evaluated on SHS, ASAP, ATEPP, MAESTRO, and LMD-clean. The five frozen registries in `reproduction/detector_benchmark` contain the exact file order, checksums, work groups, and recording groups.
-
-After downloading the five datasets, reproduce all Ours rows with one command:
-
-```bash
-bash scripts/reproduce_detector_benchmarks.sh \
-  /path/to/lmd_full /path/to/asap /path/to/ATEPP-1.2 \
-  /path/to/maestro-v3.0.0 /path/to/lmd_clean \
-  ./same-work-detector-v1.3.0 ./benchmark
-```
-
-Each dataset directory contains `results.json` and `predicted_pairs.csv.gz`. The runner verifies every MIDI checksum before detection. SHS, ASAP, ATEPP, and MAESTRO use pair-micro precision/recall/F1; LMD-clean uses query-macro precision/recall/F1.
-
-## Three-condition models
-
-The released weights are in [v1.3.0](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/tag/v1.3.0):
-
-- [MIDI-GPT clean](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/midigpt-clean.tar.gz), [unrelated donor](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/midigpt-unrelated_donor.tar.gz), [same-family donor](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/midigpt-same_family_donor.tar.gz)
-- [LSTM clean](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/lstm-clean.tar.gz), [unrelated donor](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/lstm-unrelated_donor.tar.gz), [same-family donor](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/lstm-same_family_donor.tar.gz)
-
-Prepare the frozen streams:
+Prepare the frozen LMD streams and train MIDI-GPT or LSTM:
 
 ```bash
 python scripts/prepare_lmd.py /path/to/lmd_full.tar.gz ./prepared_lmd
+python scripts/train_external_models.py midigpt clean 202608040 ./prepared_lmd ./runs/midigpt-clean-202608040
+python scripts/train_external_models.py lstm clean 202608040 ./prepared_lmd ./runs/lstm-clean-202608040
 ```
 
-Train or evaluate a run:
+`clean` may be replaced with `unrelated_donor` or `same_family_donor`. The conditions, seeds, schedules, and settings are frozen in [configs/three_condition_models.json](configs/three_condition_models.json).
+
+Released checkpoints can be verified and evaluated without retraining:
 
 ```bash
-python scripts/train_external_models.py midigpt clean 202608040 ./prepared_lmd ./runs/midigpt-clean-202608040
+python scripts/verify_model_checkpoints.py /path/to/checkpoint_bundle
 python scripts/evaluate_checkpoint.py /path/to/final.pt ./prepared_lmd ./evaluation --device cpu
 ```
 
-The exact conditions, seeds, batch schedules, and model settings are in `configs/three_condition_models.json`. Full training can use CUDA; released weights can be evaluated on CPU.
+MIDI-GPT, LSTM, Transformer-S/M/L, TCN, VAE, and diffusion checkpoints are available in the [v1.3.0 release](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/tag/v1.3.0). The original architectures can be retrained with `scripts/train_model.py`.
 
-Check a downloaded model bundle with `python scripts/verify_model_checkpoints.py /path/to/bundle`.
+## Same-Work Detector v1.7
 
-## Label-blind mitigation
+Download and extract [same-work-detector-v1.7.tar.gz](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.7.0/same-work-detector-v1.7.tar.gz), then run:
 
-The ATEPP mitigation experiment uses the released detector without work labels. Its final 20,000-step MIDI-GPT checkpoints for three seeds are available in [atepp-label-blind-mitigation-checkpoints.tar.gz](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/atepp-label-blind-mitigation-checkpoints.tar.gz).
+```bash
+python scripts/verify_detector_checkpoint.py ./same-work-detector-v1.7
+python scripts/detect_same_work.py /path/to/midi ./same-work-detector-v1.7 ./detector_output --workers 8 --backend faiss
+```
 
-## Capacity and architecture checkpoints
+Retrain the released classifier exactly from frozen features:
 
-These checkpoints support the capacity and architecture comparisons and are in [v1.3.0](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/tag/v1.3.0):
+```bash
+python scripts/train_detector.py reproduction/detector/training_features_v1_7.npz ./detector_retrained
+```
 
-- Transformer-S/M/L: [S](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/lmd-transformer-s.tar.gz), [M](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/lmd-transformer-m.tar.gz), [L](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/lmd-transformer-l.tar.gz)
-- [TCN](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/lmd-tcn.tar.gz)
-- [Conditional VAE](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/conditional-vae.tar.gz)
-- [Latent Diffusion and neutral encoders](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/latent-diffusion-and-neutral-encoders.tar.gz)
+To repeat feature extraction as well, provide the indexed LMD files:
 
-## Other models
+```bash
+python scripts/train_detector.py reproduction/source_specs/detector_training_index.csv ./detector_retrained --midi-root /path/to/lmd_matched --workers 8 --backend exact
+```
 
-The original Transformer, TCN, VAE, and diffusion implementations remain available through `scripts/train_model.py` and `scripts/evaluate_checkpoint.py`.
+The fixed-threshold and per-dataset optimal-threshold results use six frozen public registries. Run one dataset with:
+
+```bash
+python scripts/reproduce_detector_benchmark.py DATASET /path/to/dataset ./same-work-detector-v1.7 ./benchmark/DATASET --workers 8
+```
+
+`DATASET` may be `shs`, `asap`, `atepp`, `lmd-clean`, `vienna4x22`, or `pianovam`. Every MIDI checksum is verified before evaluation.
 
 ## Tests
 
@@ -93,4 +71,4 @@ The original Transformer, TCN, VAE, and diffusion implementations remain availab
 bash scripts/reproduce_all.sh
 ```
 
-See [CITATION.cff](CITATION.cff) for citation information. Code is MIT licensed; released model weights are CC BY 4.0.
+See [CITATION.cff](CITATION.cff). Code is MIT licensed; released weights are CC BY 4.0.

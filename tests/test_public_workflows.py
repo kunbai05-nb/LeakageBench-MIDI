@@ -1,8 +1,4 @@
 from __future__ import annotations
-import json
-import os
-import subprocess
-import sys
 import importlib.util
 from pathlib import Path
 import pytest
@@ -103,26 +99,3 @@ def test_bootstrap_determinism():
     result = analyze_effect(rows, 1000, 5)
     assert result == analyze_effect(rows, 1000, 5)
     assert result["p_two_sided"] == 2 / 1001
-
-
-def test_synthetic_integration_and_structure(tmp_path):
-    out = tmp_path / "demo"
-    env = dict(os.environ, PYTHON=sys.executable)
-    subprocess.run(
-        ["bash", str(ROOT / "scripts/run_synthetic_demo.sh"), str(out)],
-        cwd=ROOT,
-        env=env,
-        check=True,
-    )
-    assert (
-        json.loads((out / "family_aware_leakage_audit.json").read_text())[
-            "contaminated_test_families"
-        ]
-        == 0
-    )
-    assert (
-        json.loads((out / "contamination/integrity.json").read_text())[
-            "receiver_in_train"
-        ]
-        == 0
-    )

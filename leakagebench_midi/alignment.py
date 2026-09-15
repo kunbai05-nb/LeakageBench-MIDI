@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 import math
 import os
 from concurrent.futures import (
@@ -9,7 +8,7 @@ from concurrent.futures import (
     ThreadPoolExecutor,
     wait,
 )
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from multiprocessing import get_all_start_methods, get_context
 from pathlib import Path
 
@@ -58,6 +57,7 @@ class AlignmentConfig:
     max_paths: int = 3
     min_path_matches: int = 4
     transposition_candidates: int = 3
+    zero_shift: bool = True
     match_baseline: float = 0.525
     gap_open: float = 0.35
     gap_extend: float = 0.08
@@ -172,7 +172,9 @@ def extract_alignment_bundle(
     tasks = [(index, str(path), config) for index, path in enumerate(paths)]
     if workers > 1:
         executor_class = (
-            ProcessPoolExecutor if "fork" in get_all_start_methods() else ThreadPoolExecutor
+            ProcessPoolExecutor
+            if "fork" in get_all_start_methods()
+            else ThreadPoolExecutor
         )
         kwargs = {"max_workers": workers}
         if executor_class is ProcessPoolExecutor:
@@ -203,70 +205,6 @@ def extract_alignment_bundle(
             if failure:
                 failures.append(failure)
     return sequences, failures
-
-
-def save_alignment_bundle(
-    directory: Path,
-    identities: list[str],
-    sequences: list[dict | None],
-    failures: list[dict],
-    config: AlignmentConfig,
-) -> None:
-    directory.mkdir(parents=True, exist_ok=True)
-    lengths = np.asarray(
-        [0 if sequence is None else len(sequence["density"]) for sequence in sequences],
-        dtype=np.int32,
-    )
-    offsets = np.r_[0, np.cumsum(lengths, dtype=np.int64)]
-
-    def joined(name: str, width: int | None = None) -> np.ndarray:
-        valid = [sequence[name] for sequence in sequences if sequence is not None]
-        if valid:
-            return np.concatenate(valid, axis=0)
-        shape = (0,) if width is None else (0, width)
-        return np.empty(shape, dtype=np.float32)
-
-    np.savez_compressed(
-        directory / "alignment_sequences.npz",
-        offsets=offsets,
-        melody=joined("melody", config.onset_bins),
-        bass=joined("bass", config.onset_bins),
-        rhythm=joined("rhythm", config.onset_bins),
-        chroma=joined("chroma", 12),
-        density=joined("density"),
-    )
-    (directory / "identities.json").write_text(json.dumps(identities, indent=2) + "\n")
-    (directory / "parse_failures.json").write_text(
-        json.dumps(failures, indent=2) + "\n"
-    )
-    (directory / "alignment_config.json").write_text(
-        json.dumps(asdict(config), indent=2) + "\n"
-    )
-
-
-def load_alignment_bundle(
-    directory: Path,
-) -> tuple[list[str], list[dict | None], list[dict], AlignmentConfig]:
-    identities = json.loads((directory / "identities.json").read_text())
-    failures = json.loads((directory / "parse_failures.json").read_text())
-    config = AlignmentConfig(
-        **json.loads((directory / "alignment_config.json").read_text())
-    )
-    stored = np.load(directory / "alignment_sequences.npz")
-    offsets = stored["offsets"]
-    arrays = {
-        name: stored[name] for name in ("melody", "bass", "rhythm", "chroma", "density")
-    }
-    sequences = []
-    for index in range(len(identities)):
-        start, end = int(offsets[index]), int(offsets[index + 1])
-        if start == end:
-            sequences.append(None)
-            continue
-        sequences.append(
-            {name: values[start:end].copy() for name, values in arrays.items()}
-        )
-    return identities, sequences, failures, config
 
 
 def _pitch_similarity(left: np.ndarray, right: np.ndarray, shift: int) -> np.ndarray:
@@ -405,9 +343,14 @@ def alignment_pair_features(
     if left is None or right is None:
         return np.zeros(len(ALIGNMENT_FEATURE_NAMES), dtype=np.float32)
     transposition = _transposition_scores(left, right)
-    shift_order = np.argsort(transposition, kind="mergesort")[::-1]
+    shift_order = (
+        np.asarray([0], dtype=np.int64)
+        if config.zero_shift
+        else np.argsort(transposition, kind="mergesort")[::-1]
+    )
     candidates = []
-    for shift in shift_order[: config.transposition_candidates]:
+    limit = 1 if config.zero_shift else config.transposition_candidates
+    for shift in shift_order[:limit]:
         signed_shift = int(shift if shift <= 6 else shift - 12)
         views = _view_matrices(left, right, signed_shift)
         paths = _local_paths(views["combined"], config)

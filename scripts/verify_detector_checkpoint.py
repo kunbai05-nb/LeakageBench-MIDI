@@ -12,16 +12,15 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("detector_dir", type=Path)
     args = parser.parse_args()
-    config, models = load_detector(args.detector_dir)
-    maximum_component_size = config["component_max_size"]
+    config, model = load_detector(args.detector_dir)
     print(
         json.dumps(
             {
                 "status": "PASS",
-                "models": len(models),
-                "features": len(config["feature_names"]),
-                "threshold": config["threshold"],
-                "maximum_component_size": maximum_component_size,
+                "detector": config["detector_id"],
+                "model": type(model).__name__,
+                "features": config["feature_count"],
+                "threshold": config["decision_threshold"],
             },
             indent=2,
         )

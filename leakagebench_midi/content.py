@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 import math
 from collections import Counter, defaultdict
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
@@ -17,25 +16,16 @@ from sklearn.neighbors import NearestNeighbors
 
 TOKEN_GROUPS = ("melody", "bass", "rhythm", "harmony", "motif")
 CANDIDATE_SIGNALS = (
-    "melody",
     "bass",
-    "rhythm",
     "harmony",
     "motif",
     "interval_hist",
     "duration_hist",
-    "ioi_hist",
-    "chroma",
 )
 
 
 def _quantized(value: float, resolution: int = 12, limit: int = 192) -> int:
     return int(np.clip(round(value * resolution), 0, limit))
-
-
-def _ngrams(values: list[int], n: int):
-    for index in range(len(values) - n + 1):
-        yield tuple(values[index : index + n])
 
 
 def _sampled_ngrams(values: list[int], n: int, maximum: int = 2048):
@@ -234,7 +224,9 @@ def extract_feature_bundle(
     tasks = [(index, str(path)) for index, path in enumerate(paths)]
     if workers > 1:
         executor_class = (
-            ProcessPoolExecutor if "fork" in get_all_start_methods() else ThreadPoolExecutor
+            ProcessPoolExecutor
+            if "fork" in get_all_start_methods()
+            else ThreadPoolExecutor
         )
         kwargs = {"max_workers": workers}
         if executor_class is ProcessPoolExecutor:
@@ -282,77 +274,6 @@ def extract_feature_bundle(
     return {**dense, **hashed, "valid": valid}, failures
 
 
-def save_feature_bundle(
-    directory: Path, identities: list[str], bundle: dict, failures: list[dict]
-) -> None:
-    directory.mkdir(parents=True, exist_ok=True)
-    dense_names = (
-        "chroma",
-        "interval_hist",
-        "duration_hist",
-        "ioi_hist",
-        "scalars",
-        "valid",
-    )
-    np.savez_compressed(
-        directory / "dense_features.npz", **{name: bundle[name] for name in dense_names}
-    )
-    for group in TOKEN_GROUPS:
-        sparse.save_npz(directory / f"{group}_tfidf.npz", bundle[group])
-    (directory / "identities.json").write_text(json.dumps(identities, indent=2) + "\n")
-    (directory / "parse_failures.json").write_text(
-        json.dumps(failures, indent=2) + "\n"
-    )
-
-
-def load_feature_bundle(directory: Path) -> tuple[list[str], dict, list[dict]]:
-    identities = json.loads((directory / "identities.json").read_text())
-    dense = np.load(directory / "dense_features.npz")
-    bundle = {name: dense[name] for name in dense.files}
-    for group in TOKEN_GROUPS:
-        bundle[group] = sparse.load_npz(directory / f"{group}_tfidf.npz")
-    failures = json.loads((directory / "parse_failures.json").read_text())
-    return identities, bundle, failures
-
-
-def candidate_ranks(
-    matrices: dict[str, np.ndarray | sparse.spmatrix], indices: np.ndarray, k: int
-) -> dict[tuple[int, int], dict[str, tuple[int, int]]]:
-    result: dict[tuple[int, int], dict[str, list[int]]] = {}
-    for signal in (name for name in CANDIDATE_SIGNALS if name in matrices):
-        matrix = matrices[signal][indices]
-        neighbours = NearestNeighbors(
-            n_neighbors=min(k + 1, len(indices)),
-            metric="cosine",
-            algorithm="brute",
-            n_jobs=-1,
-        ).fit(matrix)
-        distances, positions = neighbours.kneighbors(matrix)
-        for local_left, (row_distances, row_positions) in enumerate(
-            zip(distances, positions)
-        ):
-            left = int(indices[local_left])
-            rank = 0
-            for distance, local_right in zip(row_distances, row_positions):
-                right = int(indices[int(local_right)])
-                if right == left:
-                    continue
-                rank += 1
-                if not np.isfinite(distance):
-                    continue
-                key = (min(left, right), max(left, right))
-                item = result.setdefault(key, {})
-                old = item.get(signal, (k + 1, k + 1))
-                if left < right:
-                    item[signal] = (min(old[0], rank), old[1])
-                else:
-                    item[signal] = (old[0], min(old[1], rank))
-    return {
-        key: {signal: tuple(value) for signal, value in item.items()}
-        for key, item in result.items()
-    }
-
-
 def compact_candidate_ranks(
     matrices: dict[str, np.ndarray | sparse.spmatrix],
     indices: np.ndarray,
@@ -396,12 +317,6 @@ def compact_candidate_ranks(
         (unique_keys // universe_size, unique_keys % universe_size)
     ).astype(np.int32)
     return {"pairs": pairs, "ranks": rank_values, "signals": signals, "k": k}
-
-
-def canonical_chroma(values: np.ndarray) -> np.ndarray:
-    return np.stack(
-        [np.roll(row, -int(np.argmax(row))) if np.any(row) else row for row in values]
-    ).astype(np.float32)
 
 
 _FAISS_SIGNAL_STATE = None
@@ -491,19 +406,19 @@ def _faiss_signal_job(item):
     return signal_index, result, row
 
 
-def faiss_mutual_candidate_ranks(
+def faiss_candidate_ranks(
     matrices: dict[str, np.ndarray | sparse.spmatrix],
     indices: np.ndarray,
     k: int,
-    minimum_mutual_signals: int = 3,
     projection_dim: int = 256,
     hnsw_connections: int = 32,
     ef_construction: int = 160,
     ef_search: int = 200,
     threads: int = 1,
     signal_workers: int = 1,
-    seed: int = 20260824,
+    seed: int = 20260911,
 ) -> tuple[dict, dict]:
+    """Return the union of directed HNSW top-k lists with both ranks retained."""
     indices = np.asarray(indices, dtype=np.int64)
     signals = tuple(name for name in CANDIDATE_SIGNALS if name in matrices)
     universe_size = next(iter(matrices.values())).shape[0]
@@ -523,7 +438,9 @@ def faiss_mutual_candidate_ranks(
     items = list(enumerate(signals))
     if signal_workers > 1:
         executor_class = (
-            ProcessPoolExecutor if "fork" in get_all_start_methods() else ThreadPoolExecutor
+            ProcessPoolExecutor
+            if "fork" in get_all_start_methods()
+            else ThreadPoolExecutor
         )
         kwargs = {"max_workers": min(signal_workers, len(items))}
         if executor_class is ProcessPoolExecutor:
@@ -535,14 +452,10 @@ def faiss_mutual_candidate_ranks(
     _FAISS_SIGNAL_STATE = None
     outputs.sort(key=lambda item: item[0])
     directional = [item[1] for item in outputs]
-    signal_rows = [item[2] for item in outputs]
-
-    mutual_keys = np.concatenate([item[3] for item in directional])
-    selected_keys, support = np.unique(mutual_keys, return_counts=True)
-    selected_keys = selected_keys[support >= minimum_mutual_signals]
+    selected_keys = np.unique(np.concatenate([item[0] for item in directional]))
     rank_values = np.full((len(selected_keys), len(signals), 2), k + 1, dtype=np.int16)
     for signal_index, (keys, low_to_high, high_to_low, _) in enumerate(directional):
-        if not len(keys) or not len(selected_keys):
+        if not len(keys):
             continue
         positions = np.searchsorted(keys, selected_keys)
         found = (positions < len(keys)) & (
@@ -553,33 +466,14 @@ def faiss_mutual_candidate_ranks(
     pairs = np.column_stack(
         (selected_keys // universe_size, selected_keys % universe_size)
     ).astype(np.int32)
-    compact = {"pairs": pairs, "ranks": rank_values, "signals": signals, "k": k}
-    diagnostics = {
-        "backend": "faiss_hnsw",
-        "minimum_mutual_signals": minimum_mutual_signals,
-        "projection_dim": projection_dim,
-        "hnsw_connections": hnsw_connections,
-        "ef_construction": ef_construction,
-        "ef_search": ef_search,
-        "threads": max(1, threads),
-        "signal_workers": min(max(1, signal_workers), len(signals)),
-        "candidate_pairs": len(pairs),
-        "signals": signal_rows,
-    }
-    return compact, diagnostics
-
-
-def compact_mask_at_k(compact: dict, k: int) -> np.ndarray:
-    return np.any(np.min(compact["ranks"], axis=2) <= k, axis=1)
-
-
-def pairs_at_k(
-    ranks: dict[tuple[int, int], dict[str, tuple[int, int]]], k: int
-) -> list[tuple[int, int]]:
-    return sorted(
-        pair
-        for pair, values in ranks.items()
-        if any(min(direction) <= k for direction in values.values())
+    return (
+        {"pairs": pairs, "ranks": rank_values, "signals": signals, "k": k},
+        {
+            "backend": "faiss_hnsw",
+            "candidate_pairs": len(pairs),
+            "top_k": k,
+            "signals": [item[2] for item in outputs],
+        },
     )
 
 
@@ -713,121 +607,3 @@ def structural_pair_feature_matrix(
             output[:, column] = np.minimum(a, b) / np.maximum(np.maximum(a, b), 1e-6)
         column += 1
     return output, names
-
-
-def compact_pair_feature_matrix(
-    bundle: dict,
-    compact: dict,
-    selected: np.ndarray | None = None,
-    block_size: int = 20_000,
-    workers: int = 1,
-) -> tuple[np.ndarray, list[str], np.ndarray]:
-    selected = (
-        np.ones(len(compact["pairs"]), dtype=bool) if selected is None else selected
-    )
-    pairs = compact["pairs"][selected]
-    rank_values = compact["ranks"][selected]
-    left, right = pairs[:, 0].astype(np.int64), pairs[:, 1].astype(np.int64)
-    names = [
-        *[
-            name
-            for group in TOKEN_GROUPS
-            for name in (
-                f"{group}_tfidf_cosine",
-                f"{group}_set_jaccard",
-                f"{group}_set_containment",
-            )
-        ],
-        "interval_hist_cosine",
-        "duration_hist_cosine",
-        "ioi_hist_cosine",
-        "chroma_transposition_cosine",
-    ]
-    scalar_names = (
-        "notes",
-        "onsets",
-        "beats",
-        "tracks",
-        "pitch_min",
-        "pitch_max",
-        "pitch_mean",
-        "pitch_sd",
-        "programs",
-        "half_beats",
-    )
-    names.extend(
-        [
-            (
-                f"{name}_absolute_difference"
-                if name in {"pitch_min", "pitch_max", "pitch_mean", "pitch_sd"}
-                else f"{name}_ratio"
-            )
-            for name in scalar_names
-        ]
-    )
-    for signal in compact["signals"]:
-        names.extend((f"{signal}_reciprocal_best_rank", f"{signal}_mutual"))
-    names.extend(("candidate_signal_support", "candidate_mutual_support"))
-    output = np.empty((len(pairs), len(names)), dtype=np.float32)
-    column = 0
-
-    def pair_values(name: str):
-        if name in TOKEN_GROUPS:
-            cosine = _sparse_pair_cosine(bundle[name], left, right, block_size)
-            jaccard, containment = _sparse_pair_set_overlap(
-                bundle[name], left, right, block_size
-            )
-            return cosine, jaccard, containment
-        matrix = bundle[name]
-        return (_dense_pair_cosine(matrix, left, right, block_size),)
-
-    tasks = (
-        *TOKEN_GROUPS,
-        "interval_hist",
-        "duration_hist",
-        "ioi_hist",
-    )
-    feature_workers = min(max(1, workers), len(tasks))
-    if feature_workers > 1:
-        with ThreadPoolExecutor(max_workers=feature_workers) as executor:
-            computed = dict(zip(tasks, executor.map(pair_values, tasks)))
-    else:
-        computed = {name: pair_values(name) for name in tasks}
-
-    for group in TOKEN_GROUPS:
-        cosine, jaccard, containment = computed[group]
-        output[:, column] = cosine
-        output[:, column + 1] = jaccard
-        output[:, column + 2] = containment
-        column += 3
-    for group in ("interval_hist", "duration_hist", "ioi_hist"):
-        output[:, column] = computed[group][0]
-        column += 1
-
-    for start in range(0, len(left), block_size):
-        end = min(len(left), start + block_size)
-        a, b = bundle["chroma"][left[start:end]], bundle["chroma"][right[start:end]]
-        output[start:end, column] = np.stack(
-            [np.einsum("ij,ij->i", a, np.roll(b, shift, axis=1)) for shift in range(12)]
-        ).max(axis=0)
-    column += 1
-
-    scalar_left, scalar_right = bundle["scalars"][left], bundle["scalars"][right]
-    for index, name in enumerate(scalar_names):
-        a, b = scalar_left[:, index], scalar_right[:, index]
-        if name in {"pitch_min", "pitch_max", "pitch_mean", "pitch_sd"}:
-            output[:, column] = np.abs(a - b)
-        else:
-            output[:, column] = np.minimum(a, b) / np.maximum(np.maximum(a, b), 1e-6)
-        column += 1
-    for signal_index in range(len(compact["signals"])):
-        left_rank, right_rank = (
-            rank_values[:, signal_index, 0],
-            rank_values[:, signal_index, 1],
-        )
-        output[:, column] = 1 / np.minimum(left_rank, right_rank)
-        output[:, column + 1] = np.maximum(left_rank, right_rank) <= compact["k"]
-        column += 2
-    output[:, column] = np.sum(np.min(rank_values, axis=2) <= compact["k"], axis=1)
-    output[:, column + 1] = np.sum(np.max(rank_values, axis=2) <= compact["k"], axis=1)
-    return output, names, pairs

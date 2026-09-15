@@ -1,5 +1,7 @@
 """Public, data-agnostic APIs for LeakageBench-MIDI."""
 
+__version__ = "1.7.0"
+
 from .core import (
     analyze_effect,
     audit_split,
@@ -14,6 +16,7 @@ from .core import (
     write_jsonl,
 )
 __all__ = [
+    "__version__",
     "analyze_effect",
     "audit_split",
     "build_contamination",

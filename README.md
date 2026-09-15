@@ -63,7 +63,7 @@ The fixed-threshold and per-dataset optimal-threshold results use six frozen pub
 python scripts/reproduce_detector_benchmark.py DATASET /path/to/dataset ./same-work-detector-v1.7 ./benchmark/DATASET --workers 8
 ```
 
-`DATASET` may be `shs`, `asap`, `atepp`, `lmd-clean`, `vienna4x22`, or `pianovam`. Every MIDI checksum is verified before evaluation.
+Supported dataset names are shs, asap, atepp, lmd-clean, vienna4x22, and pianovam. Every MIDI checksum is verified before evaluation.
 
 ## Tests
 

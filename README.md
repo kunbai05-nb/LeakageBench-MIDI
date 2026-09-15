@@ -25,7 +25,7 @@ python scripts/train_external_models.py midigpt clean 202608040 ./prepared_lmd .
 python scripts/train_external_models.py lstm clean 202608040 ./prepared_lmd ./runs/lstm-clean-202608040
 ```
 
-`clean` may be replaced with `unrelated_donor` or `same_family_donor`. The conditions, seeds, schedules, and settings are frozen in [configs/three_condition_models.json](configs/three_condition_models.json).
+Available conditions are clean, unrelated_donor, and same_family_donor. The conditions, seeds, schedules, and settings are frozen in [configs/three_condition_models.json](configs/three_condition_models.json).
 
 Released checkpoints can be verified and evaluated without retraining:
 

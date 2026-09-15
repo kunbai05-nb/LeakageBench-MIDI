@@ -1,6 +1,6 @@
 # LeakageBench-MIDI
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22023100.svg)](https://doi.org/10.5281/zenodo.22023100)
+[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.22023100-blue.svg)](https://doi.org/10.5281/zenodo.22023100)
 
 Code and frozen specifications for the three-condition experiments and Same-Work Detector v1.7.
 

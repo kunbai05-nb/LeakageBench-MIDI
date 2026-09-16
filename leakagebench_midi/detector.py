@@ -28,13 +28,19 @@ VERIFIER_RANK_VIEWS = ("bass", "harmony", "motif")
 @dataclass(frozen=True)
 class DetectorConfig:
     top_k: int = 100
+    minimum_mutual_views: int = 2
     seed: int = 20260911
+    component_soft_size: int = 8
+    minimum_bridge_edges: int = 3
+    component_max_size: int = 50
     alignment: AlignmentConfig = AlignmentConfig(zero_shift=True)
 
 
 class Components:
     def __init__(self, size: int):
         self.parent = np.arange(size, dtype=np.int32)
+        self.size = np.ones(size, dtype=np.int32)
+        self.members = [{index} for index in range(size)]
 
     def find(self, item: int) -> int:
         root = item
@@ -46,14 +52,91 @@ class Components:
             item = parent
         return root
 
-    def union(self, left: int, right: int) -> None:
+    def union(self, left: int, right: int, limit: int | None = None) -> bool:
         left, right = self.find(left), self.find(right)
-        if left != right:
-            self.parent[right] = left
+        if left == right:
+            return True
+        if limit is not None and self.size[left] + self.size[right] > limit:
+            return False
+        if self.size[left] < self.size[right]:
+            left, right = right, left
+        self.parent[right] = left
+        self.size[left] += self.size[right]
+        self.members[left].update(self.members[right])
+        self.members[right].clear()
+        return True
+
+    def cross_edges(
+        self, left: int, right: int, adjacency: list[set[int]]
+    ) -> int:
+        left, right = self.find(left), self.find(right)
+        if left == right:
+            return 0
+        if len(self.members[left]) > len(self.members[right]):
+            left, right = right, left
+        target = self.members[right]
+        return sum(
+            neighbor in target
+            for item in self.members[left]
+            for neighbor in adjacency[item]
+        )
 
     def labels(self) -> np.ndarray:
         roots = np.asarray([self.find(i) for i in range(len(self.parent))])
         return np.unique(roots, return_inverse=True)[1].astype(np.int32)
+
+
+def build_components(
+    pairs: np.ndarray,
+    scores: np.ndarray,
+    selected: np.ndarray,
+    file_count: int,
+    maximum_size: int = 50,
+    soft_size: int = 8,
+    minimum_bridge_edges: int = 3,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    """Build guarded components from score-ordered pair decisions."""
+    if maximum_size < 2:
+        raise ValueError("maximum component size must be at least two")
+    if not 2 <= soft_size <= maximum_size:
+        raise ValueError("soft component size must lie within [2, maximum_size]")
+    if minimum_bridge_edges < 2:
+        raise ValueError("minimum bridge-edge count must be at least two")
+    adjacency = [set() for _ in range(file_count)]
+    for index in selected:
+        left, right = map(int, pairs[int(index)])
+        adjacency[left].add(right)
+        adjacency[right].add(left)
+    order = selected[np.argsort(scores[selected], kind="mergesort")[::-1]]
+    components = Components(file_count)
+    accepted, rejected_by_size, rejected_by_bridge = [], [], []
+    for index in order:
+        left, right = map(int, pairs[int(index)])
+        left_root, right_root = components.find(left), components.find(right)
+        if left_root == right_root:
+            accepted.append(int(index))
+            continue
+        merged_size = int(
+            components.size[left_root] + components.size[right_root]
+        )
+        if merged_size > maximum_size:
+            rejected_by_size.append(int(index))
+            continue
+        if (
+            merged_size > soft_size
+            and components.cross_edges(left_root, right_root, adjacency)
+            < minimum_bridge_edges
+        ):
+            rejected_by_bridge.append(int(index))
+            continue
+        components.union(left_root, right_root)
+        accepted.append(int(index))
+    return (
+        np.asarray(accepted, dtype=np.int64),
+        np.asarray(rejected_by_size, dtype=np.int64),
+        np.asarray(rejected_by_bridge, dtype=np.int64),
+        components.labels(),
+    )
 
 
 def sha256(path: Path) -> str:
@@ -67,8 +150,8 @@ def sha256(path: Path) -> str:
 def load_detector(directory: str | Path) -> tuple[dict, object]:
     root = Path(directory).resolve()
     metadata = json.loads((root / "MODEL_CONFIG.json").read_text(encoding="utf-8"))
-    if metadata.get("detector_id") != "same-work-detector-v1.7":
-        raise ValueError("expected Same-Work Detector v1.7")
+    if metadata.get("detector_id") != "same-work-detector-v1.7.1":
+        raise ValueError("expected Same-Work Detector v1.7.1")
     model_path = (root / metadata["model_file"]).resolve()
     if not model_path.is_relative_to(root) or not model_path.is_file():
         raise ValueError("model file must be inside the detector directory")
@@ -144,6 +227,15 @@ def assemble_features(
     return features, names
 
 
+def candidate_gate_mask(
+    features: np.ndarray, feature_names: list[str], minimum_mutual_views: int
+) -> np.ndarray:
+    if not 1 <= minimum_mutual_views <= len(VERIFIER_RANK_VIEWS):
+        raise ValueError("invalid minimum mutual-view requirement")
+    support = features[:, feature_names.index("retrieval_mutual_support")]
+    return support >= minimum_mutual_views
+
+
 def extract_pair_features(
     paths: list[str | Path],
     workers: int = 1,
@@ -187,6 +279,16 @@ def extract_pair_features(
         alignment_names,
         config.top_k,
     )
+    retrieved_pairs = len(pairs)
+    keep = candidate_gate_mask(features, feature_names, config.minimum_mutual_views)
+    pairs = pairs[keep]
+    features = features[keep]
+    diagnostics = {
+        **diagnostics,
+        "retrieved_candidate_pairs": retrieved_pairs,
+        "candidate_pairs": len(pairs),
+        "minimum_mutual_views": config.minimum_mutual_views,
+    }
     return {
         "pairs": pairs,
         "features": features,
@@ -208,15 +310,27 @@ def detect(
     scores = model.predict_proba(extracted["features"])[:, 1]
     cutoff = float(metadata["decision_threshold"] if threshold is None else threshold)
     selected = np.flatnonzero(scores >= cutoff).astype(np.int64)
-    components = Components(len(paths))
-    for index in selected:
-        components.union(*map(int, extracted["pairs"][index]))
+    maximum_size = int(metadata.get("component_max_size", 50))
+    soft_size = int(metadata.get("component_soft_size", 8))
+    minimum_bridge_edges = int(metadata.get("minimum_bridge_edges", 3))
+    accepted, rejected_by_size, rejected_by_bridge, labels = build_components(
+        extracted["pairs"],
+        scores,
+        selected,
+        len(paths),
+        maximum_size,
+        soft_size,
+        minimum_bridge_edges,
+    )
     return {
         **extracted,
         "scores": scores,
         "threshold": cutoff,
         "selected": selected,
-        "component_labels": components.labels(),
+        "accepted": accepted,
+        "rejected_by_size": rejected_by_size,
+        "rejected_by_bridge": rejected_by_bridge,
+        "component_labels": labels,
     }
 
 
@@ -224,8 +338,8 @@ def model_config(
     model_file: str, model_hash: str, threshold: float, feature_names: list[str]
 ) -> dict:
     return {
-        "format_version": "1.7",
-        "detector_id": "same-work-detector-v1.7",
+        "format_version": "1.7.1",
+        "detector_id": "same-work-detector-v1.7.1",
         "model_type": "HistGradientBoostingClassifier",
         "model_file": model_file,
         "model_sha256": model_hash,
@@ -234,7 +348,11 @@ def model_config(
         "retrieval_views": list(RETRIEVAL_VIEWS),
         "verifier_rank_views": list(VERIFIER_RANK_VIEWS),
         "top_k": 100,
-        "candidate_gate": "one-way support in at least one retained view",
+        "candidate_gate": "reciprocal Top-100 support in at least two verifier views",
+        "minimum_mutual_views": 2,
+        "component_soft_size": 8,
+        "minimum_bridge_edges": 3,
+        "component_max_size": 50,
         "alignment": asdict(AlignmentConfig(zero_shift=True)),
         "decision_threshold": threshold,
         "seed": 20260911,
@@ -247,6 +365,8 @@ __all__ = [
     "RETRIEVAL_VIEWS",
     "VERIFIER_RANK_VIEWS",
     "assemble_features",
+    "build_components",
+    "candidate_gate_mask",
     "detect",
     "extract_pair_features",
     "load_detector",

@@ -11,7 +11,14 @@ import numpy as np
 from sklearn.ensemble import HistGradientBoostingClassifier
 
 from leakagebench_midi.data import PackedWindows
-from leakagebench_midi.detector import Components, load_detector, model_config, sha256
+from leakagebench_midi.detector import (
+    Components,
+    build_components,
+    candidate_gate_mask,
+    load_detector,
+    model_config,
+    sha256,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -21,14 +28,14 @@ def test_detector_checkpoint_loading(tmp_path):
     x = np.vstack((np.zeros((8, 57)), np.ones((8, 57))))
     y = np.asarray([0] * 8 + [1] * 8)
     model = HistGradientBoostingClassifier(min_samples_leaf=2, random_state=1).fit(x, y)
-    model_path = tmp_path / "same-work-detector-v1.7.joblib"
+    model_path = tmp_path / "same-work-detector-v1.7.1.joblib"
     joblib.dump(model, model_path)
     metadata = model_config(
         model_path.name, sha256(model_path), 0.5, [f"f{i}" for i in range(57)]
     )
     (tmp_path / "MODEL_CONFIG.json").write_text(json.dumps(metadata), encoding="utf-8")
     loaded_metadata, loaded_model = load_detector(tmp_path)
-    assert loaded_metadata["detector_id"] == "same-work-detector-v1.7"
+    assert loaded_metadata["detector_id"] == "same-work-detector-v1.7.1"
     np.testing.assert_allclose(loaded_model.predict_proba(x), model.predict_proba(x))
 
 
@@ -52,11 +59,57 @@ def test_detector_rejects_modified_checkpoint(tmp_path):
 
 def test_components():
     components = Components(4)
-    components.union(0, 1)
-    components.union(1, 2)
+    assert components.union(0, 1, 3)
+    assert components.union(1, 2, 3)
+    assert not components.union(2, 3, 3)
     labels = components.labels()
     assert labels[0] == labels[1] == labels[2]
     assert labels[3] != labels[0]
+
+
+def test_component_guard_prioritizes_high_scores():
+    pairs = np.asarray([[0, 1], [1, 2], [2, 3]], dtype=np.int64)
+    scores = np.asarray([0.8, 0.9, 0.7])
+    selected = np.arange(3, dtype=np.int64)
+    accepted, rejected_by_size, rejected_by_bridge, labels = build_components(
+        pairs,
+        scores,
+        selected,
+        file_count=4,
+        maximum_size=3,
+        soft_size=3,
+    )
+    assert accepted.tolist() == [1, 0]
+    assert rejected_by_size.tolist() == [2]
+    assert rejected_by_bridge.tolist() == []
+    assert labels[0] == labels[1] == labels[2]
+    assert labels[3] != labels[0]
+
+
+def test_component_bridge_guard_requires_independent_edges():
+    pairs = np.asarray([[0, 1], [1, 2], [2, 3]], dtype=np.int64)
+    scores = np.asarray([0.9, 0.8, 0.7])
+    selected = np.arange(3, dtype=np.int64)
+    accepted, rejected_by_size, rejected_by_bridge, labels = build_components(
+        pairs,
+        scores,
+        selected,
+        file_count=4,
+        maximum_size=10,
+        soft_size=3,
+        minimum_bridge_edges=2,
+    )
+    assert accepted.tolist() == [0, 1]
+    assert rejected_by_size.tolist() == []
+    assert rejected_by_bridge.tolist() == [2]
+    assert labels[0] == labels[1] == labels[2]
+    assert labels[3] != labels[0]
+
+
+def test_candidate_gate_requires_two_reciprocal_views():
+    names = ["retrieval_mutual_support"]
+    features = np.asarray([[0.0], [1.0], [2.0], [3.0]], dtype=np.float32)
+    assert candidate_gate_mask(features, names, 2).tolist() == [False, False, True, True]
 
 
 def test_formal_source_specs():

@@ -83,7 +83,7 @@ def frozen_features(path: Path) -> dict:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Train Same-Work Detector v1.7.")
+    parser = argparse.ArgumentParser(description="Train Same-Work Detector v1.7.1.")
     parser.add_argument(
         "source", type=Path, help="Frozen .npz features or detector index CSV"
     )
@@ -120,7 +120,7 @@ def main() -> None:
     threshold = choose_threshold(calibration_scores, data["calibration_labels"])
 
     args.output.mkdir(parents=True, exist_ok=True)
-    model_path = args.output / "same-work-detector-v1.7.joblib"
+    model_path = args.output / "same-work-detector-v1.7.1.joblib"
     joblib.dump(model, model_path, compress=3)
     metadata = model_config(
         model_path.name, sha256(model_path), threshold, data["feature_names"]

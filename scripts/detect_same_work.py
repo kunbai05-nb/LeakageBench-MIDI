@@ -41,14 +41,24 @@ def main() -> None:
         "w", newline="", encoding="utf-8"
     ) as handle:
         writer = csv.writer(handle)
-        writer.writerow(("left", "right", "score"))
+        writer.writerow(("left", "right", "score", "decision"))
+        accepted = set(map(int, result["accepted"]))
+        rejected_by_size = set(map(int, result["rejected_by_size"]))
         for index in result["selected"]:
             left, right = result["pairs"][int(index)]
+            decision = (
+                "accepted"
+                if int(index) in accepted
+                else "size_guard"
+                if int(index) in rejected_by_size
+                else "bridge_guard"
+            )
             writer.writerow(
                 (
                     paths[int(left)].relative_to(args.midi_dir),
                     paths[int(right)].relative_to(args.midi_dir),
                     f"{result['scores'][int(index)]:.9f}",
+                    decision,
                 )
             )
 
@@ -56,6 +66,9 @@ def main() -> None:
         "files": len(paths),
         "parsed_files": len(paths) - len(result["failures"]),
         "direct_edges": len(result["selected"]),
+        "accepted_edges": len(result["accepted"]),
+        "rejected_by_size": len(result["rejected_by_size"]),
+        "rejected_by_bridge": len(result["rejected_by_bridge"]),
         "components": len(set(map(int, result["component_labels"]))),
         "candidate_backend": result["candidate_diagnostics"]["backend"],
         "parse_failures": result["failures"],

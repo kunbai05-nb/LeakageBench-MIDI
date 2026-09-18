@@ -25,12 +25,21 @@ def read_rows(path: Path) -> list[dict[str, str]]:
         return list(csv.DictReader(handle))
 
 
-def verify_files(records: list[dict[str, str]], midi_root: Path) -> list[Path]:
+def file_identity(path: Path, dataset: str) -> str:
+    data = path.read_bytes()
+    if dataset == "asap":
+        return hashlib.sha256(data).hexdigest()[:32]
+    return hashlib.md5(data).hexdigest()
+
+
+def verify_files(
+    records: list[dict[str, str]], midi_root: Path, dataset: str
+) -> list[Path]:
     paths = [midi_root / row["relative_path"] for row in records]
     for path, row in zip(paths, records):
         if not path.is_file():
             raise FileNotFoundError(path)
-        digest = hashlib.md5(path.read_bytes()).hexdigest()
+        digest = file_identity(path, dataset)
         if digest != row["file_md5"]:
             raise ValueError(f"MIDI checksum mismatch: {row['relative_path']}")
     return paths
@@ -122,7 +131,7 @@ def main() -> None:
     args = parser.parse_args()
 
     records = read_rows(SPECS / f"{args.dataset}.csv.gz")
-    paths = verify_files(records, args.midi_root)
+    paths = verify_files(records, args.midi_root, args.dataset)
     result = detect(paths, args.detector_dir, args.workers, args.backend, threshold=0.0)
     if result["failures"]:
         raise RuntimeError(
@@ -155,6 +164,7 @@ def main() -> None:
         "backend": args.backend,
         "detector": metadata["detector_id"],
         "feature_failures": 0,
+        "file_identity": "sha256-prefix-32" if args.dataset == "asap" else "md5",
         "candidate_diagnostics": result["candidate_diagnostics"],
         "fixed": fixed,
         "optimal": optimal,

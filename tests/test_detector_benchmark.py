@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import hashlib
 from pathlib import Path
 
 
@@ -53,3 +54,11 @@ def test_public_benchmark_registries():
             ROOT / "reproduction" / "detector_benchmark" / f"{dataset}.csv.gz"
         )
         assert (len(records), len(benchmark.reference_pairs(records))) == counts
+
+
+def test_dataset_specific_file_identity(tmp_path):
+    benchmark = module()
+    path = tmp_path / "example.mid"
+    path.write_bytes(b"MThd")
+    assert benchmark.file_identity(path, "asap") == hashlib.sha256(b"MThd").hexdigest()[:32]
+    assert benchmark.file_identity(path, "shs") == hashlib.md5(b"MThd").hexdigest()

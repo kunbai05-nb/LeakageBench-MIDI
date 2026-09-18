@@ -76,10 +76,16 @@ The released final checkpoints reproduce the five-condition ATEPP comparison wit
 
 ```bash
 pip install -r requirements.txt
-python evaluate_saved_checkpoint.py detector 202608040
+for condition in uncorrected random_removal detector label_reference; do
+  for seed in 202608040 202608041 202608042; do
+    python evaluate_saved_checkpoint.py "$condition" "$seed" \
+      --output "runs/$condition/seed_$seed/test_evaluation.json"
+  done
+done
+python analyze.py
 ```
 
-The bundle contains the 12 physical checkpoints for three seeds, the fixed test set, server evaluation outputs, expected aggregate results, and the unchanged server evaluation code. Simple deduplication uses the same checkpoints as the uncorrected condition because it removes no additional training windows under the frozen split.
+This generates `RESULTS.csv`, `RESULTS.json`, `PER_WORK_RESULTS.json`, and `RESULTS_CN.md`. The bundle contains the 12 physical checkpoints for three seeds, the fixed test set, frozen audit data, and the unchanged server evaluation and analysis code. Simple deduplication uses the same checkpoints as the uncorrected condition because it removes no additional training windows under the frozen split.
 
 ## Tests
 

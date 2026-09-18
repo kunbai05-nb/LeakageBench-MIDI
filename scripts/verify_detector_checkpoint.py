@@ -12,13 +12,14 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("detector_dir", type=Path)
     args = parser.parse_args()
-    config, model = load_detector(args.detector_dir)
+    config, models = load_detector(args.detector_dir)
     print(
         json.dumps(
             {
                 "status": "PASS",
                 "detector": config["detector_id"],
-                "model": type(model).__name__,
+                "models": [type(model).__name__ for model in models],
+                "ensemble_size": len(models),
                 "features": config["feature_count"],
                 "threshold": config["decision_threshold"],
             },

@@ -2,7 +2,7 @@
 
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.22023100-blue.svg)](https://doi.org/10.5281/zenodo.22023100)
 
-Code and frozen specifications for the three-condition experiments and Same-Work Detector v1.7.1.
+Code and frozen specifications for the three-condition experiments and Same-Work Detector v1.8.
 
 ## Install
 
@@ -36,39 +36,40 @@ python scripts/evaluate_checkpoint.py /path/to/final.pt ./prepared_lmd ./evaluat
 
 MIDI-GPT, LSTM, Transformer-S/M/L, TCN, VAE, and diffusion checkpoints are available in the [v1.3.0 release](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/tag/v1.3.0). The original architectures can be retrained with `scripts/train_model.py`.
 
-## Same-Work Detector v1.7.1
+## Same-Work Detector v1.8
 
-v1.7.1 reuses the v1.7 classifier weights and fixes deployment clustering: a
-candidate must have reciprocal Top-100 support in at least two verifier views.
-Components of up to eight files grow normally; larger merges require at least
-three independent cross-component edges, with 50 retained only as a safety cap.
+v1.8 retrieves the one-way Top-50 union of five complementary views. Three
+independently seeded 57-feature classifiers are averaged. Components of
+up to eight files grow normally; larger merges require at least three
+independent cross-component edges, with 50 retained as a safety cap.
 
-Download and extract [same-work-detector-v1.7.1.tar.gz](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.7.1/same-work-detector-v1.7.1.tar.gz), then run:
+Download and extract [same-work-detector-v1.8.tar.gz](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.8/same-work-detector-v1.8.tar.gz), then run:
 
 ```bash
-python scripts/verify_detector_checkpoint.py ./same-work-detector-v1.7.1
-python scripts/detect_same_work.py /path/to/midi ./same-work-detector-v1.7.1 ./detector_output --workers 8 --backend faiss
+python scripts/verify_detector_checkpoint.py ./same-work-detector-v1.8
+python scripts/detect_same_work.py /path/to/midi ./same-work-detector-v1.8 ./detector_output --workers 8 --backend faiss
 ```
 
 Retrain the released classifier exactly from frozen features:
 
 ```bash
-python scripts/train_detector.py reproduction/detector/training_features_v1_7.npz ./detector_retrained
-```
-
-To repeat feature extraction as well, provide the indexed LMD files:
-
-```bash
-python scripts/train_detector.py reproduction/source_specs/detector_training_index.csv ./detector_retrained --midi-root /path/to/lmd_matched --workers 8 --backend exact
+python scripts/train_detector.py reproduction/detector/training_features_v1_8.npz ./detector_retrained
 ```
 
 The fixed-threshold and per-dataset optimal-threshold results use six frozen public registries. Run one dataset with:
 
 ```bash
-python scripts/reproduce_detector_benchmark.py DATASET /path/to/dataset ./same-work-detector-v1.7.1 ./benchmark/DATASET --workers 8
+python scripts/reproduce_detector_benchmark.py shs /path/to/shs ./same-work-detector-v1.8 ./benchmark/shs --workers 8
+python scripts/reproduce_detector_benchmark.py asap /path/to/asap ./same-work-detector-v1.8 ./benchmark/asap --workers 8
+python scripts/reproduce_detector_benchmark.py atepp /path/to/atepp ./same-work-detector-v1.8 ./benchmark/atepp --workers 8
+python scripts/reproduce_detector_benchmark.py lmd-clean /path/to/lmd_clean ./same-work-detector-v1.8 ./benchmark/lmd-clean --workers 8
+python scripts/reproduce_detector_benchmark.py vienna4x22 /path/to/vienna4x22 ./same-work-detector-v1.8 ./benchmark/vienna4x22 --workers 8
+python scripts/reproduce_detector_benchmark.py pianovam /path/to/pianovam ./same-work-detector-v1.8 ./benchmark/pianovam --workers 8
 ```
 
-Supported dataset names are shs, asap, atepp, lmd-clean, vienna4x22, and pianovam. Every MIDI checksum is verified before evaluation.
+Each command writes `results.json` containing both the released fixed-threshold
+result and the dataset-specific optimal-threshold result. Every MIDI checksum is
+verified before evaluation.
 
 ## ATEPP mitigation experiment
 

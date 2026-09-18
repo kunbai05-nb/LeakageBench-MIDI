@@ -14,7 +14,7 @@ from leakagebench_midi.data import PackedWindows
 from leakagebench_midi.detector import (
     Components,
     build_components,
-    candidate_gate_mask,
+    candidate_union_mask,
     load_detector,
     model_config,
     sha256,
@@ -28,23 +28,32 @@ def test_detector_checkpoint_loading(tmp_path):
     x = np.vstack((np.zeros((8, 57)), np.ones((8, 57))))
     y = np.asarray([0] * 8 + [1] * 8)
     model = HistGradientBoostingClassifier(min_samples_leaf=2, random_state=1).fit(x, y)
-    model_path = tmp_path / "same-work-detector-v1.7.1.joblib"
-    joblib.dump(model, model_path)
+    model_paths = [
+        tmp_path / f"same-work-detector-v1.8-seed-{seed}.joblib"
+        for seed in range(3)
+    ]
+    for model_path in model_paths:
+        joblib.dump(model, model_path)
     metadata = model_config(
-        model_path.name, sha256(model_path), 0.5, [f"f{i}" for i in range(57)]
+        [path.name for path in model_paths],
+        [sha256(path) for path in model_paths],
+        0.5,
+        [f"f{i}" for i in range(57)],
     )
     (tmp_path / "MODEL_CONFIG.json").write_text(json.dumps(metadata), encoding="utf-8")
-    loaded_metadata, loaded_model = load_detector(tmp_path)
-    assert loaded_metadata["detector_id"] == "same-work-detector-v1.7.1"
-    np.testing.assert_allclose(loaded_model.predict_proba(x), model.predict_proba(x))
+    loaded_metadata, loaded_models = load_detector(tmp_path)
+    assert loaded_metadata["detector_id"] == "same-work-detector-v1.8"
+    assert len(loaded_models) == 3
+    for loaded_model in loaded_models:
+        np.testing.assert_allclose(loaded_model.predict_proba(x), model.predict_proba(x))
 
 
 def test_detector_rejects_modified_checkpoint(tmp_path):
     model_path = tmp_path / "model.joblib"
     model_path.write_bytes(b"not a model")
     metadata = model_config(
-        model_path.name,
-        hashlib.sha256(b"different").hexdigest(),
+        [model_path.name] * 3,
+        [hashlib.sha256(b"different").hexdigest()] * 3,
         0.5,
         [f"f{i}" for i in range(57)],
     )
@@ -106,10 +115,16 @@ def test_component_bridge_guard_requires_independent_edges():
     assert labels[3] != labels[0]
 
 
-def test_candidate_gate_requires_two_reciprocal_views():
-    names = ["retrieval_mutual_support"]
-    features = np.asarray([[0.0], [1.0], [2.0], [3.0]], dtype=np.float32)
-    assert candidate_gate_mask(features, names, 2).tolist() == [False, False, True, True]
+def test_candidate_pool_is_one_way_top_50_union():
+    ranks = np.asarray(
+        [
+            [[51, 51], [50, 51]],
+            [[51, 51], [51, 51]],
+            [[12, 51], [51, 51]],
+        ],
+        dtype=np.int16,
+    )
+    assert candidate_union_mask(ranks, 50).tolist() == [True, False, True]
 
 
 def test_formal_source_specs():
@@ -124,7 +139,7 @@ def test_formal_source_specs():
 
 
 def test_frozen_detector_training_features():
-    path = ROOT / "reproduction" / "detector" / "training_features_v1_7.npz"
+    path = ROOT / "reproduction" / "detector" / "training_features_v1_8.npz"
     with np.load(path, allow_pickle=False) as stored:
         assert stored["fit_features"].shape[1] == 57
         assert stored["calibration_features"].shape[1] == 57

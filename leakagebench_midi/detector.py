@@ -27,8 +27,8 @@ VERIFIER_RANK_VIEWS = ("bass", "harmony", "motif")
 
 @dataclass(frozen=True)
 class DetectorConfig:
-    top_k: int = 100
-    minimum_mutual_views: int = 2
+    top_k: int = 50
+    rank_k: int = 100
     seed: int = 20260911
     component_soft_size: int = 8
     minimum_bridge_edges: int = 3
@@ -147,20 +147,29 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def load_detector(directory: str | Path) -> tuple[dict, object]:
+def load_detector(directory: str | Path) -> tuple[dict, list[object]]:
     root = Path(directory).resolve()
     metadata = json.loads((root / "MODEL_CONFIG.json").read_text(encoding="utf-8"))
-    if metadata.get("detector_id") != "same-work-detector-v1.7.1":
-        raise ValueError("expected Same-Work Detector v1.7.1")
-    model_path = (root / metadata["model_file"]).resolve()
-    if not model_path.is_relative_to(root) or not model_path.is_file():
-        raise ValueError("model file must be inside the detector directory")
-    if sha256(model_path) != metadata["model_sha256"]:
-        raise ValueError("model checksum mismatch")
-    model = joblib.load(model_path)
-    if getattr(model, "n_features_in_", None) != 57:
-        raise ValueError("detector feature dimension mismatch")
-    return metadata, model
+    if metadata.get("detector_id") != "same-work-detector-v1.8":
+        raise ValueError("expected Same-Work Detector v1.8")
+    files = metadata.get("model_files")
+    hashes = metadata.get("model_sha256")
+    if not isinstance(files, list) or not isinstance(hashes, list):
+        raise ValueError("detector ensemble metadata is invalid")
+    if len(files) != 3 or len(hashes) != len(files):
+        raise ValueError("Same-Work Detector v1.8 requires three classifiers")
+    models = []
+    for filename, expected_hash in zip(files, hashes):
+        model_path = (root / filename).resolve()
+        if not model_path.is_relative_to(root) or not model_path.is_file():
+            raise ValueError("model file must be inside the detector directory")
+        if sha256(model_path) != expected_hash:
+            raise ValueError("model checksum mismatch")
+        model = joblib.load(model_path)
+        if getattr(model, "n_features_in_", None) != 57:
+            raise ValueError("detector feature dimension mismatch")
+        models.append(model)
+    return metadata, models
 
 
 def _rank_features(
@@ -227,13 +236,10 @@ def assemble_features(
     return features, names
 
 
-def candidate_gate_mask(
-    features: np.ndarray, feature_names: list[str], minimum_mutual_views: int
-) -> np.ndarray:
-    if not 1 <= minimum_mutual_views <= len(VERIFIER_RANK_VIEWS):
-        raise ValueError("invalid minimum mutual-view requirement")
-    support = features[:, feature_names.index("retrieval_mutual_support")]
-    return support >= minimum_mutual_views
+def candidate_union_mask(ranks: np.ndarray, k: int) -> np.ndarray:
+    if ranks.ndim != 3 or ranks.shape[2] != 2:
+        raise ValueError("candidate ranks must have shape (pairs, views, directions)")
+    return np.min(ranks, axis=(1, 2)) <= k
 
 
 def extract_pair_features(
@@ -251,21 +257,23 @@ def extract_pair_features(
     matrices = {name: bundle[name] for name in RETRIEVAL_VIEWS}
     if backend == "exact":
         compact = compact_candidate_ranks(
-            matrices, valid, config.top_k, workers=workers
+            matrices, valid, config.rank_k, workers=workers
         )
         diagnostics = {"backend": "exact", "candidate_pairs": len(compact["pairs"])}
     elif backend == "faiss":
         compact, diagnostics = faiss_candidate_ranks(
             matrices,
             valid,
-            config.top_k,
+            config.rank_k,
             threads=max(1, workers // len(RETRIEVAL_VIEWS)),
             signal_workers=min(max(1, workers), len(RETRIEVAL_VIEWS)),
             seed=config.seed,
         )
     else:
         raise ValueError(f"unknown candidate backend: {backend}")
-    pairs = compact["pairs"].astype(np.int64)
+    candidate_mask = candidate_union_mask(compact["ranks"], config.top_k)
+    pairs = compact["pairs"][candidate_mask].astype(np.int64)
+    ranks = compact["ranks"][candidate_mask]
     structural, structural_names = structural_pair_feature_matrix(bundle, pairs)
     aligned, alignment_names = alignment_feature_matrix(
         sequences, pairs, config.alignment, workers
@@ -273,21 +281,18 @@ def extract_pair_features(
     features, feature_names = assemble_features(
         structural,
         structural_names,
-        compact["ranks"],
+        ranks,
         tuple(compact["signals"]),
         aligned,
         alignment_names,
-        config.top_k,
+        config.rank_k,
     )
-    retrieved_pairs = len(pairs)
-    keep = candidate_gate_mask(features, feature_names, config.minimum_mutual_views)
-    pairs = pairs[keep]
-    features = features[keep]
     diagnostics = {
         **diagnostics,
-        "retrieved_candidate_pairs": retrieved_pairs,
         "candidate_pairs": len(pairs),
-        "minimum_mutual_views": config.minimum_mutual_views,
+        "candidate_top_k": config.top_k,
+        "rank_feature_top_k": config.rank_k,
+        "candidate_rule": "one-way union across five views",
     }
     return {
         "pairs": pairs,
@@ -305,9 +310,21 @@ def detect(
     backend: str = "faiss",
     threshold: float | None = None,
 ) -> dict:
-    metadata, model = load_detector(detector_dir)
-    extracted = extract_pair_features(paths, workers, backend)
-    scores = model.predict_proba(extracted["features"])[:, 1]
+    metadata, models = load_detector(detector_dir)
+    config = DetectorConfig(
+        top_k=int(metadata["top_k"]),
+        rank_k=int(metadata["rank_k"]),
+        seed=int(metadata["seeds"][0]),
+        component_soft_size=int(metadata["component_soft_size"]),
+        minimum_bridge_edges=int(metadata["minimum_bridge_edges"]),
+        component_max_size=int(metadata["component_max_size"]),
+        alignment=AlignmentConfig(**metadata["alignment"]),
+    )
+    extracted = extract_pair_features(paths, workers, backend, config)
+    scores = np.mean(
+        [model.predict_proba(extracted["features"])[:, 1] for model in models],
+        axis=0,
+    )
     cutoff = float(metadata["decision_threshold"] if threshold is None else threshold)
     selected = np.flatnonzero(scores >= cutoff).astype(np.int64)
     maximum_size = int(metadata.get("component_max_size", 50))
@@ -335,27 +352,32 @@ def detect(
 
 
 def model_config(
-    model_file: str, model_hash: str, threshold: float, feature_names: list[str]
+    model_files: list[str],
+    model_hashes: list[str],
+    threshold: float,
+    feature_names: list[str],
 ) -> dict:
     return {
-        "format_version": "1.7.1",
-        "detector_id": "same-work-detector-v1.7.1",
-        "model_type": "HistGradientBoostingClassifier",
-        "model_file": model_file,
-        "model_sha256": model_hash,
+        "format_version": "1.8",
+        "detector_id": "same-work-detector-v1.8",
+        "model_type": "mean ensemble of HistGradientBoostingClassifier",
+        "model_files": model_files,
+        "model_sha256": model_hashes,
+        "ensemble_size": 3,
         "feature_count": 57,
         "feature_names": feature_names,
         "retrieval_views": list(RETRIEVAL_VIEWS),
         "verifier_rank_views": list(VERIFIER_RANK_VIEWS),
-        "top_k": 100,
-        "candidate_gate": "reciprocal Top-100 support in at least two verifier views",
-        "minimum_mutual_views": 2,
+        "top_k": 50,
+        "rank_k": 100,
+        "candidate_gate": "one-way Top-50 union across five retrieval views",
+        "minimum_supporting_views": 1,
         "component_soft_size": 8,
         "minimum_bridge_edges": 3,
         "component_max_size": 50,
         "alignment": asdict(AlignmentConfig(zero_shift=True)),
         "decision_threshold": threshold,
-        "seed": 20260911,
+        "seeds": [20260911, 20260912, 20260913],
     }
 
 
@@ -366,7 +388,7 @@ __all__ = [
     "VERIFIER_RANK_VIEWS",
     "assemble_features",
     "build_components",
-    "candidate_gate_mask",
+    "candidate_union_mask",
     "detect",
     "extract_pair_features",
     "load_detector",

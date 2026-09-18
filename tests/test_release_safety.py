@@ -59,7 +59,7 @@ def test_readme_has_primary_workflows():
         "scripts/evaluate_checkpoint.py",
         "scripts/verify_model_checkpoints.py",
         "/releases/tag/v1.3.0",
-        "/releases/download/v1.7.1/same-work-detector-v1.7.1.tar.gz",
+        "/releases/download/v1.8/same-work-detector-v1.8.tar.gz",
     )
     assert all(value in text for value in required)
 

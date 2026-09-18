@@ -118,12 +118,16 @@ def main() -> None:
     parser.add_argument("detector_dir", type=Path)
     parser.add_argument("output_dir", type=Path)
     parser.add_argument("--workers", type=int, default=1)
-    parser.add_argument("--backend", choices=("exact", "faiss"), default="faiss")
+    parser.add_argument("--backend", choices=("exact", "faiss"), default="exact")
     args = parser.parse_args()
 
     records = read_rows(SPECS / f"{args.dataset}.csv.gz")
     paths = verify_files(records, args.midi_root)
     result = detect(paths, args.detector_dir, args.workers, args.backend, threshold=0.0)
+    if result["failures"]:
+        raise RuntimeError(
+            f"{len(result['failures'])} feature extractions failed; refusing partial evaluation"
+        )
     pairs, scores = result["pairs"], result["scores"]
     truth = reference_pairs(records)
     metric = query_macro if args.dataset == "lmd-clean" else None
@@ -148,6 +152,10 @@ def main() -> None:
         "files": len(records),
         "reference_pairs": len(truth),
         "metric": "query_macro" if metric else "pair_micro",
+        "backend": args.backend,
+        "detector": metadata["detector_id"],
+        "feature_failures": 0,
+        "candidate_diagnostics": result["candidate_diagnostics"],
         "fixed": fixed,
         "optimal": optimal,
     }

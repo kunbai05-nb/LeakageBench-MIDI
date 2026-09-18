@@ -59,17 +59,19 @@ python scripts/train_detector.py reproduction/detector/training_features_v1_8.np
 The fixed-threshold and per-dataset optimal-threshold results use six frozen public registries. Run one dataset with:
 
 ```bash
-python scripts/reproduce_detector_benchmark.py shs /path/to/shs ./same-work-detector-v1.8 ./benchmark/shs --workers 8
-python scripts/reproduce_detector_benchmark.py asap /path/to/asap ./same-work-detector-v1.8 ./benchmark/asap --workers 8
-python scripts/reproduce_detector_benchmark.py atepp /path/to/atepp ./same-work-detector-v1.8 ./benchmark/atepp --workers 8
-python scripts/reproduce_detector_benchmark.py lmd-clean /path/to/lmd_clean ./same-work-detector-v1.8 ./benchmark/lmd-clean --workers 8
-python scripts/reproduce_detector_benchmark.py vienna4x22 /path/to/vienna4x22 ./same-work-detector-v1.8 ./benchmark/vienna4x22 --workers 8
-python scripts/reproduce_detector_benchmark.py pianovam /path/to/pianovam ./same-work-detector-v1.8 ./benchmark/pianovam --workers 8
+python scripts/reproduce_detector_benchmark.py shs /path/to/shs ./same-work-detector-v1.8 ./benchmark/shs --workers 8 --backend exact
+python scripts/reproduce_detector_benchmark.py asap /path/to/asap ./same-work-detector-v1.8 ./benchmark/asap --workers 8 --backend exact
+python scripts/reproduce_detector_benchmark.py atepp /path/to/atepp ./same-work-detector-v1.8 ./benchmark/atepp --workers 8 --backend exact
+python scripts/reproduce_detector_benchmark.py lmd-clean /path/to/lmd_clean ./same-work-detector-v1.8 ./benchmark/lmd-clean --workers 8 --backend exact
+python scripts/reproduce_detector_benchmark.py vienna4x22 /path/to/vienna4x22 ./same-work-detector-v1.8 ./benchmark/vienna4x22 --workers 8 --backend exact
+python scripts/reproduce_detector_benchmark.py pianovam /path/to/pianovam ./same-work-detector-v1.8 ./benchmark/pianovam --workers 8 --backend exact
 ```
 
 Each command writes `results.json` containing both the released fixed-threshold
 result and the dataset-specific optimal-threshold result. Every MIDI checksum is
 verified before evaluation.
+The benchmark defaults to exact retrieval and stops on any feature-extraction
+failure; FAISS remains available only for non-reference deployment runs.
 
 ## ATEPP mitigation experiment
 

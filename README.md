@@ -70,6 +70,18 @@ python scripts/reproduce_detector_benchmark.py DATASET /path/to/dataset ./same-w
 
 Supported dataset names are shs, asap, atepp, lmd-clean, vienna4x22, and pianovam. Every MIDI checksum is verified before evaluation.
 
+## ATEPP mitigation experiment
+
+The released final checkpoints reproduce the five-condition ATEPP comparison without retraining. Download and extract [atepp-v1.7.1-checkpoint-reproduction.tar.gz](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.7.1/atepp-v1.7.1-checkpoint-reproduction.tar.gz), then run:
+
+```bash
+pip install -r requirements.txt
+python reproduce.py --verify-only
+python reproduce.py --device cuda
+```
+
+The bundle contains the 12 physical checkpoints for three seeds, the fixed test set, evaluation labels, expected results, and the evaluation script. Simple deduplication uses the same checkpoints as the uncorrected condition because it removes no additional training windows under the frozen split.
+
 ## Tests
 
 ```bash

@@ -294,11 +294,17 @@ def extract_pair_features(
         "rank_feature_top_k": config.rank_k,
         "candidate_rule": "one-way union across five views",
     }
+    all_failures = content_failures + alignment_failures
+    unsupported = [
+        item for item in all_failures if item["error"].startswith("TruncatedMidiError:")
+    ]
+    failures = [item for item in all_failures if item not in unsupported]
     return {
         "pairs": pairs,
         "features": features,
         "feature_names": feature_names,
-        "failures": content_failures + alignment_failures,
+        "failures": failures,
+        "unsupported": unsupported,
         "candidate_diagnostics": diagnostics,
     }
 

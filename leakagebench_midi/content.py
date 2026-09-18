@@ -6,12 +6,13 @@ from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 from multiprocessing import get_all_start_methods, get_context
 from pathlib import Path
 
-import mido
 import numpy as np
 from scipy import sparse
 from sklearn.feature_extraction import FeatureHasher
 from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.neighbors import NearestNeighbors
+
+from .midi_io import load_midi
 
 
 TOKEN_GROUPS = ("melody", "bass", "rhythm", "harmony", "motif")
@@ -61,35 +62,38 @@ def _cosine_hist(values: np.ndarray) -> np.ndarray:
 
 
 def parse_midi(path: Path) -> dict:
-    midi = mido.MidiFile(path, clip=True)
+    midi = load_midi(path)
     ticks_per_beat = max(1, midi.ticks_per_beat)
     notes = []
+    drum_notes = []
     melodic_tracks = 0
+    drum_tracks = 0
     for track_index, track in enumerate(midi.tracks):
         tick = 0
         programs = defaultdict(int)
         active: dict[tuple[int, int], list[tuple[int, int, int]]] = defaultdict(list)
         track_notes = 0
+        track_drum_notes = 0
         for message in track:
             tick += int(message.time)
             if message.type == "program_change":
                 programs[int(message.channel)] = int(message.program)
             elif message.type == "note_on" and message.velocity > 0:
                 channel = int(message.channel)
-                if channel == 9:
-                    continue
                 key = (channel, int(message.note))
                 active[key].append((tick, int(message.velocity), programs[channel]))
-                track_notes += 1
+                if channel == 9:
+                    track_drum_notes += 1
+                else:
+                    track_notes += 1
             elif message.type in {"note_off", "note_on"}:
                 channel = int(message.channel)
-                if channel == 9:
-                    continue
                 key = (channel, int(message.note))
                 if active[key]:
                     onset, velocity, program = active[key].pop(0)
                     duration = max(1, tick - onset)
-                    notes.append(
+                    target = drum_notes if channel == 9 else notes
+                    target.append(
                         (
                             onset / ticks_per_beat,
                             duration / ticks_per_beat,
@@ -101,9 +105,12 @@ def parse_midi(path: Path) -> dict:
                     )
         if track_notes:
             melodic_tracks += 1
+        if track_drum_notes:
+            drum_tracks += 1
         for (channel, pitch), pending in active.items():
             for onset, velocity, program in pending:
-                notes.append(
+                target = drum_notes if channel == 9 else notes
+                target.append(
                     (
                         onset / ticks_per_beat,
                         0.25,
@@ -113,9 +120,12 @@ def parse_midi(path: Path) -> dict:
                         track_index,
                     )
                 )
+    if not notes:
+        notes = drum_notes
+        melodic_tracks = drum_tracks
     notes.sort(key=lambda item: (item[0], item[2], item[5]))
     if not notes:
-        raise ValueError("no non-drum notes")
+        raise ValueError("no notes")
 
     grouped: dict[int, list[tuple]] = defaultdict(list)
     for note in notes:

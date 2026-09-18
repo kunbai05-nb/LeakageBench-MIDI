@@ -12,8 +12,9 @@ from dataclasses import dataclass
 from multiprocessing import get_all_start_methods, get_context
 from pathlib import Path
 
-import mido
 import numpy as np
+
+from .midi_io import load_midi
 
 try:
     from numba import njit
@@ -71,27 +72,25 @@ def _unit_rows(values: np.ndarray) -> np.ndarray:
 def extract_alignment_sequence(
     path: Path, config: AlignmentConfig = AlignmentConfig()
 ) -> dict:
-    midi = mido.MidiFile(path, clip=True)
+    midi = load_midi(path)
     ticks_per_beat = max(1, midi.ticks_per_beat)
     notes = []
+    drum_notes = []
     for track in midi.tracks:
         tick = 0
         active: dict[tuple[int, int], list[tuple[int, int]]] = {}
         for message in track:
             tick += int(message.time)
-            if (
-                message.type == "note_on"
-                and message.velocity > 0
-                and int(message.channel) != 9
-            ):
+            if message.type == "note_on" and message.velocity > 0:
                 key = (int(message.channel), int(message.note))
                 active.setdefault(key, []).append((tick, int(message.velocity)))
-            elif message.type in {"note_off", "note_on"} and int(message.channel) != 9:
+            elif message.type in {"note_off", "note_on"}:
                 key = (int(message.channel), int(message.note))
                 pending = active.get(key)
                 if pending:
                     onset, velocity = pending.pop(0)
-                    notes.append(
+                    target = drum_notes if int(message.channel) == 9 else notes
+                    target.append(
                         (
                             onset / ticks_per_beat,
                             max(1, tick - onset) / ticks_per_beat,
@@ -99,11 +98,14 @@ def extract_alignment_sequence(
                             velocity,
                         )
                     )
-        for (_, pitch), pending in active.items():
+        for (channel, pitch), pending in active.items():
             for onset, velocity in pending:
-                notes.append((onset / ticks_per_beat, 0.25, pitch, velocity))
+                target = drum_notes if channel == 9 else notes
+                target.append((onset / ticks_per_beat, 0.25, pitch, velocity))
     if not notes:
-        raise ValueError("no non-drum notes")
+        notes = drum_notes
+    if not notes:
+        raise ValueError("no notes")
 
     notes.sort(key=lambda item: (item[0], item[2]))
     origin = notes[0][0]

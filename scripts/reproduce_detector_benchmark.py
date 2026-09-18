@@ -58,6 +58,16 @@ def reference_pairs(records: list[dict[str, str]]) -> set[tuple[int, int]]:
     }
 
 
+def eligible_predictions(
+    records: list[dict[str, str]], predicted: set[tuple[int, int]]
+) -> set[tuple[int, int]]:
+    return {
+        (left, right)
+        for left, right in predicted
+        if records[left]["recording_group"] != records[right]["recording_group"]
+    }
+
+
 def predictions(
     pairs: np.ndarray, scores: np.ndarray, threshold: float
 ) -> set[tuple[int, int]]:
@@ -142,7 +152,9 @@ def main() -> None:
     metric = query_macro if args.dataset == "lmd-clean" else None
 
     def evaluate(threshold: float) -> dict:
-        predicted = predictions(pairs, scores, threshold)
+        predicted = eligible_predictions(
+            records, predictions(pairs, scores, threshold)
+        )
         values = (
             metric(records, truth, predicted)
             if metric
@@ -164,6 +176,9 @@ def main() -> None:
         "backend": args.backend,
         "detector": metadata["detector_id"],
         "feature_failures": 0,
+        "unsupported_files": len(
+            {item["index"] for item in result.get("unsupported", [])}
+        ),
         "file_identity": "sha256-prefix-32" if args.dataset == "asap" else "md5",
         "candidate_diagnostics": result["candidate_diagnostics"],
         "fixed": fixed,

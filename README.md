@@ -72,15 +72,14 @@ Supported dataset names are shs, asap, atepp, lmd-clean, vienna4x22, and pianova
 
 ## ATEPP mitigation experiment
 
-The released final checkpoints reproduce the five-condition ATEPP comparison without retraining. Download and extract [atepp-v1.7.1-checkpoint-reproduction.tar.gz](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.7.1/atepp-v1.7.1-checkpoint-reproduction.tar.gz), then run:
+The released final checkpoints reproduce the five-condition ATEPP comparison without retraining. Download and extract [atepp-v1.7.1-checkpoint-reproduction.tar.gz](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.7.1/atepp-v1.7.1-checkpoint-reproduction.tar.gz), then run the original server evaluation entry point:
 
 ```bash
 pip install -r requirements.txt
-python reproduce.py --verify-only
-python reproduce.py --device cuda
+python evaluate_saved_checkpoint.py detector 202608040
 ```
 
-The bundle contains the 12 physical checkpoints for three seeds, the fixed test set, evaluation labels, expected results, and the evaluation script. Simple deduplication uses the same checkpoints as the uncorrected condition because it removes no additional training windows under the frozen split.
+The bundle contains the 12 physical checkpoints for three seeds, the fixed test set, server evaluation outputs, expected aggregate results, and the unchanged server evaluation code. Simple deduplication uses the same checkpoints as the uncorrected condition because it removes no additional training windows under the frozen split.
 
 ## Tests
 

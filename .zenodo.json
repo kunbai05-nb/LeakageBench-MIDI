@@ -1,6 +1,6 @@
 {
   "title": "LeakageBench-MIDI: Measuring and Mitigating Same-Work Family Leakage in Symbolic Music Generation",
-  "version": "1.7.0",
+  "version": "1.9.0",
   "upload_type": "software",
   "access_right": "open",
   "license": "mit",
@@ -23,5 +23,5 @@
       "affiliation": "School of Intelligence Science and Technology, Beijing University of Civil Engineering and Architecture, Beijing 102616, China"
     }
   ],
-  "notes": "Same-Work Detector v1.7 and reproducibility materials."
+  "notes": "Same-Work Detector v1.9 checkpoint and full reproducibility materials."
 }

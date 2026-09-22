@@ -2,7 +2,7 @@
 
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.22023100-blue.svg)](https://doi.org/10.5281/zenodo.22023100)
 
-Code and frozen specifications for the three-condition experiments and Same-Work Detector v1.8.
+Code and frozen specifications for the three-condition experiments and Same-Work Detector v1.9.
 
 ## Install
 
@@ -36,42 +36,38 @@ python scripts/evaluate_checkpoint.py /path/to/final.pt ./prepared_lmd ./evaluat
 
 MIDI-GPT, LSTM, Transformer-S/M/L, TCN, VAE, and diffusion checkpoints are available in the [v1.3.0 release](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/tag/v1.3.0). The original architectures can be retrained with `scripts/train_model.py`.
 
-## Same-Work Detector v1.8
+## Same-Work Detector v1.9
 
-v1.8 retrieves the one-way Top-50 union of five complementary views. Three
-independently seeded 57-feature classifiers are averaged. Components of
-up to eight files grow normally; larger merges require at least three
-independent cross-component edges, with 50 retained as a safety cap.
+v1.9 retrieves the one-way Top-50 union of five complementary views and averages three independently seeded 57-feature classifiers. Scores are calibrated on a work-disjoint calibration split. Components of up to eight files grow normally; larger merges require at least three independent cross-component edges, with 50 retained as a safety cap.
 
-Download and extract [same-work-detector-v1.8.tar.gz](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.8/same-work-detector-v1.8.tar.gz), then run:
+The released checkpoint is included in this repository. Verify it and detect same-work families with:
 
 ```bash
-python scripts/verify_detector_checkpoint.py ./same-work-detector-v1.8
-python scripts/detect_same_work.py /path/to/midi ./same-work-detector-v1.8 ./detector_output --workers 8 --backend faiss
+python scripts/verify_detector_checkpoint.py checkpoints/same-work-detector-v1.9
+python scripts/detect_same_work.py /path/to/midi checkpoints/same-work-detector-v1.9 ./detector_output --workers 8 --backend faiss
 ```
 
-Retrain the released classifier exactly from frozen features:
+To reproduce training from the original MIDI files, use the frozen work-disjoint manifests:
 
 ```bash
-python scripts/train_detector.py reproduction/detector/training_features_v1_8.npz ./detector_retrained
+python scripts/reproduce_detector_training.py \
+  --repo . \
+  --spec-dir reproduction/detector_training \
+  --midi-root /path/to/lmd_matched \
+  --output ./detector_retrained \
+  --parallel 4 --workers-per-job 8
 ```
 
-The fixed-threshold and per-dataset optimal-threshold results use six frozen public registries. Run one dataset with:
+The six-dataset benchmark uses frozen registries and verifies every MIDI checksum. Run all six datasets with:
 
 ```bash
-python scripts/reproduce_detector_benchmark.py shs /path/to/shs ./same-work-detector-v1.8 ./benchmark/shs --workers 8 --backend exact
-python scripts/reproduce_detector_benchmark.py asap /path/to/asap ./same-work-detector-v1.8 ./benchmark/asap --workers 8 --backend exact
-python scripts/reproduce_detector_benchmark.py atepp /path/to/atepp ./same-work-detector-v1.8 ./benchmark/atepp --workers 8 --backend exact
-python scripts/reproduce_detector_benchmark.py lmd-clean /path/to/lmd_clean ./same-work-detector-v1.8 ./benchmark/lmd-clean --workers 8 --backend exact
-python scripts/reproduce_detector_benchmark.py vienna4x22 /path/to/vienna4x22 ./same-work-detector-v1.8 ./benchmark/vienna4x22 --workers 8 --backend exact
-python scripts/reproduce_detector_benchmark.py pianovam /path/to/pianovam ./same-work-detector-v1.8 ./benchmark/pianovam --workers 8 --backend exact
+bash scripts/reproduce_detector_benchmarks.sh \
+  /path/to/shs /path/to/asap /path/to/atepp /path/to/lmd_clean \
+  /path/to/vienna4x22 /path/to/pianovam \
+  checkpoints/same-work-detector-v1.9 ./benchmark 8
 ```
 
-Each command writes `results.json` containing both the released fixed-threshold
-result and the dataset-specific optimal-threshold result. Every MIDI checksum is
-verified before evaluation.
-The benchmark defaults to exact retrieval and stops on any feature-extraction
-failure; FAISS remains available only for non-reference deployment runs.
+Each dataset writes one `results.json` containing the fixed-threshold result and the target-label oracle optimum. The fixed threshold is the deployment result; the optimum is an analysis-only upper bound. Reference reproduction uses exact retrieval and stops on any checksum or feature-extraction failure.
 
 ## ATEPP mitigation experiment
 

@@ -29,7 +29,7 @@ def test_detector_checkpoint_loading(tmp_path):
     y = np.asarray([0] * 8 + [1] * 8)
     model = HistGradientBoostingClassifier(min_samples_leaf=2, random_state=1).fit(x, y)
     model_paths = [
-        tmp_path / f"same-work-detector-v1.8-seed-{seed}.joblib"
+        tmp_path / f"same-work-detector-v1.9-seed-{seed}.joblib"
         for seed in range(3)
     ]
     for model_path in model_paths:
@@ -39,10 +39,11 @@ def test_detector_checkpoint_loading(tmp_path):
         [sha256(path) for path in model_paths],
         0.5,
         [f"f{i}" for i in range(57)],
+        version="1.9",
     )
     (tmp_path / "MODEL_CONFIG.json").write_text(json.dumps(metadata), encoding="utf-8")
     loaded_metadata, loaded_models = load_detector(tmp_path)
-    assert loaded_metadata["detector_id"] == "same-work-detector-v1.8"
+    assert loaded_metadata["detector_id"] == "same-work-detector-v1.9"
     assert len(loaded_models) == 3
     for loaded_model in loaded_models:
         np.testing.assert_allclose(loaded_model.predict_proba(x), model.predict_proba(x))
@@ -138,12 +139,24 @@ def test_formal_source_specs():
         assert sum(1 for _ in reader) == 50218
 
 
-def test_frozen_detector_training_features():
-    path = ROOT / "reproduction" / "detector" / "training_features_v1_8.npz"
-    with np.load(path, allow_pickle=False) as stored:
-        assert stored["fit_features"].shape[1] == 57
-        assert stored["calibration_features"].shape[1] == 57
-        assert len(stored["feature_names"]) == 57
+def test_frozen_detector_training_manifests():
+    root = ROOT / "reproduction" / "detector_training"
+    summary = json.loads((root / "MANIFEST.json").read_text(encoding="utf-8"))
+    expected = {
+        "fit_00_14",
+        "fit_14_28",
+        "fit_28_42",
+        "fit_42_56",
+        "fit_56_70",
+        "calibration_70_85",
+        "test_85_100",
+    }
+    assert expected.issubset({path.stem.replace(".csv", "") for path in root.glob("*.csv.gz")})
+    assert summary["work_disjoint"] is True
+    for path in root.glob("*.csv.gz"):
+        with gzip.open(path, "rt", newline="", encoding="utf-8") as handle:
+            fields = set(csv.DictReader(handle).fieldnames or [])
+        assert {"relative_path", "file_md5", "work_group", "recording_group"}.issubset(fields)
 
 
 def test_packed_windows(tmp_path):

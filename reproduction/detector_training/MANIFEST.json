@@ -1,0 +1,70 @@
+{
+  "status": "PREPARED",
+  "split_key": "first 8 hex digits of SHA-256(work_id) modulo 100",
+  "work_disjoint": true,
+  "parts": {
+    "fit_00_14": {
+      "bucket": [
+        0,
+        14
+      ],
+      "files": 2401,
+      "works": 1407,
+      "sha256": "80288a8b437d4e0414fd90509c1fbca97cede015faa696610b733334a839a75e"
+    },
+    "fit_14_28": {
+      "bucket": [
+        14,
+        28
+      ],
+      "files": 2395,
+      "works": 1424,
+      "sha256": "a86ef42b2060fb51e581dc667a4e0ee93c96f6fe5fb7ebcb7b9c1e4f2d29e2cd"
+    },
+    "fit_28_42": {
+      "bucket": [
+        28,
+        42
+      ],
+      "files": 2414,
+      "works": 1463,
+      "sha256": "b36ba562987d31ca8b70ca971d516dfc35574326deb7ef7e4c4d435acb207e60"
+    },
+    "fit_42_56": {
+      "bucket": [
+        42,
+        56
+      ],
+      "files": 2298,
+      "works": 1366,
+      "sha256": "e1c634470cb795ebe5926240dafbf3ac19715400cdd0cfdc028477abe5c2f0bc"
+    },
+    "fit_56_70": {
+      "bucket": [
+        56,
+        70
+      ],
+      "files": 2232,
+      "works": 1389,
+      "sha256": "f19bd8e0d125a566f61c878eff78425983a4f262433851f1b8eb342015a7903e"
+    },
+    "calibration_70_85": {
+      "bucket": [
+        70,
+        85
+      ],
+      "files": 2501,
+      "works": 1500,
+      "sha256": "cfac5b762c91d2540f7da87ec5eef654c21c8d814127e61631b2a842403ee5f1"
+    },
+    "test_85_100": {
+      "bucket": [
+        85,
+        100
+      ],
+      "files": 2547,
+      "works": 1549,
+      "sha256": "be0e2f02cd93082ea2eb734891de7364b4625379d432bda1f4041c92be47fcc1"
+    }
+  }
+}

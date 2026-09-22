@@ -35,14 +35,24 @@ def test_query_macro_metrics():
     result = benchmark.query_macro(records, truth, predicted)
     assert result["tp"] == 2
     assert result["fn"] == 2
-    assert result["precision"] == 1.0
+    assert result["precision"] == 2 / 3
     assert result["recall"] == 0.5
+    assert result["query_coverage"] == 2 / 3
+
+
+def test_query_macro_zero_prediction_queries_count_as_zero_precision():
+    benchmark = module()
+    records = [{"work_group": "a"}] * 2
+    result = benchmark.query_macro(records, {(0, 1)}, set())
+    assert result["precision"] == 0.0
+    assert result["recall"] == 0.0
+    assert result["query_coverage"] == 0.0
 
 
 def test_public_benchmark_registries():
     benchmark = module()
     expected = {
-        "shs": (733, 515),
+        "shs": (306, 80),
         "asap": (1067, 4988),
         "atepp": (1527, 3339),
         "lmd-clean": (2547, 2037),

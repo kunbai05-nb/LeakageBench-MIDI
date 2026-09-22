@@ -8,6 +8,10 @@ data_external/
 prepared_lmd/
 outputs/
 checkpoints/
+!checkpoints/
+checkpoints/*
+!checkpoints/same-work-detector-v1.9/
+!checkpoints/same-work-detector-v1.9/**
 _reproduced_release/
 
 *.mid

@@ -52,14 +52,14 @@ def test_readme_has_primary_workflows():
     text = (ROOT / "README.md").read_text()
     required = (
         "scripts/detect_same_work.py",
-        "scripts/train_detector.py",
         "scripts/train_external_models.py",
         "scripts/prepare_lmd.py",
         "scripts/train_model.py",
         "scripts/evaluate_checkpoint.py",
         "scripts/verify_model_checkpoints.py",
         "/releases/tag/v1.3.0",
-        "/releases/download/v1.8/same-work-detector-v1.8.tar.gz",
+        "checkpoints/same-work-detector-v1.9",
+        "scripts/reproduce_detector_training.py",
     )
     assert all(value in text for value in required)
 

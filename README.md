@@ -58,7 +58,7 @@ python scripts/reproduce_detector_training.py \
   --parallel 4 --workers-per-job 8
 ```
 
-The six-dataset benchmark uses frozen registries and verifies every MIDI checksum. Run all six datasets with:
+The six-dataset benchmark uses frozen registries and verifies every MIDI checksum. For the reported fixed-threshold benchmark, the released checkpoint and decision threshold are held constant across all target datasets; target-dataset labels are not used for model retraining or threshold recalibration. Run all six datasets with:
 
 ```bash
 bash scripts/reproduce_detector_benchmarks.sh \

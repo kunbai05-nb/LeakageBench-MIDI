@@ -4,6 +4,37 @@
 
 Code and frozen specifications for the three-condition experiments and Same-Work Detector v1.9.
 
+## Reproduce the paper tables
+
+This is the recommended path. It downloads and verifies the released checkpoints, evaluates them on the frozen test sets, and writes the two paper tables automatically.
+
+Requirements: Ubuntu/Linux, Python 3.10, about 10 GB of free disk space, the original `lmd_full.tar.gz`, and an NVIDIA GPU with BF16 support.
+
+```bash
+git clone https://github.com/kunbai05-nb/LeakageBench-MIDI.git
+cd LeakageBench-MIDI
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt && pip install -e '.[scale]'
+bash scripts/reproduce_paper_tables.sh /path/to/lmd_full.tar.gz
+```
+
+Interrupted downloads and completed checkpoint evaluations are reused. The final files are:
+
+```text
+reproduced/tables/three_condition_results.csv
+reproduced/tables/three_condition_results.md
+reproduced/tables/atepp_mitigation_results.csv
+reproduced/tables/atepp_mitigation_results.json
+```
+
+Before a long run, check the environment with:
+
+```bash
+bash scripts/reproduce_paper_tables.sh --check-only
+```
+
+The ATEPP table is reproduced from its frozen public checkpoint bundle, whose protocol records Same-Work Detector v1.7.1. Ablation and six-dataset detector benchmarks are intentionally not included in this entry point.
+
 ## Install
 
 ```bash
@@ -58,18 +89,7 @@ python scripts/reproduce_detector_training.py \
   --parallel 4 --workers-per-job 8
 ```
 
-The six-dataset benchmark uses frozen registries and verifies every MIDI checksum. For the reported fixed-threshold benchmark, the released checkpoint and decision threshold are held constant across all target datasets; target-dataset labels are not used for model retraining or threshold recalibration. Run all six datasets with:
-
-```bash
-bash scripts/reproduce_detector_benchmarks.sh \
-  /path/to/shs /path/to/asap /path/to/atepp /path/to/lmd_clean \
-  /path/to/vienna4x22 /path/to/pianovam \
-  checkpoints/same-work-detector-v1.9 ./benchmark 8
-```
-
-Each dataset writes one `results.json` containing the fixed-threshold result and the target-label oracle optimum. The fixed threshold is the deployment result; the optimum is an analysis-only upper bound. Reference reproduction uses exact retrieval and stops on any checksum or feature-extraction failure.
-
-## ATEPP mitigation experiment
+## ATEPP mitigation experiment (manual)
 
 The released final checkpoints reproduce the five-condition ATEPP comparison without retraining. Download and extract [atepp-v1.7.1-checkpoint-reproduction.tar.gz](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.7.1/atepp-v1.7.1-checkpoint-reproduction.tar.gz), then run the original server evaluation entry point:
 

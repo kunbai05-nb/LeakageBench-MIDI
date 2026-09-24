@@ -6,7 +6,7 @@ Code and frozen specifications for the three-condition experiments and Same-Work
 
 ## Reproduce the paper tables
 
-This is the recommended path. It downloads and verifies the released checkpoints, evaluates them on the frozen test sets, and writes the two paper tables automatically.
+This is the recommended path for the multi-model three-condition and ATEPP mitigation tables. It downloads and verifies the released checkpoints, evaluates them on the frozen test sets, and writes both tables automatically.
 
 Requirements: Ubuntu/Linux, Python 3.10, about 10 GB of free disk space, the original `lmd_full.tar.gz`, and an NVIDIA GPU with BF16 support.
 
@@ -33,7 +33,31 @@ Before a long run, check the environment with:
 bash scripts/reproduce_paper_tables.sh --check-only
 ```
 
-The ATEPP table is reproduced from its frozen public checkpoint bundle, whose protocol records Same-Work Detector v1.7.1. Ablation and six-dataset detector benchmarks are intentionally not included in this entry point.
+The ATEPP table is reproduced from its frozen public checkpoint bundle, whose protocol records Same-Work Detector v1.7.1. The detector ablation is not included yet.
+
+### Six-dataset detector benchmark
+
+Prepare the six evaluation corpora, then supply their MIDI directories in the order shown below. One command verifies the detector checkpoint and every MIDI checksum, reproduces the Ours v1.9 rows under both the fixed and oracle-optimal thresholds, computes 95% confidence intervals, and creates the combined table:
+
+```bash
+bash scripts/reproduce_six_dataset_table.sh \
+  /path/to/SHS \
+  /path/to/ASAP \
+  /path/to/ATEPP \
+  /path/to/LMD-clean \
+  /path/to/Vienna4x22 \
+  /path/to/PianoVAM
+```
+
+The final files are:
+
+```text
+reproduced/six_dataset/tables/six_dataset_results.csv
+reproduced/six_dataset/tables/six_dataset_results.md
+reproduced/six_dataset/tables/six_dataset_results.json
+```
+
+The fixed result uses the released decision threshold unchanged on all six datasets. The optimal result is a target-label oracle upper bound and is not used for deployment.
 
 ## Install
 

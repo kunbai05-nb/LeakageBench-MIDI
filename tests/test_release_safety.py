@@ -57,6 +57,8 @@ def test_readme_has_primary_workflows():
         "scripts/train_model.py",
         "scripts/evaluate_checkpoint.py",
         "scripts/verify_model_checkpoints.py",
+        "scripts/reproduce_paper_tables.sh",
+        "scripts/reproduce_six_dataset_table.sh",
         "/releases/tag/v1.3.0",
         "checkpoints/same-work-detector-v1.9",
         "scripts/reproduce_detector_training.py",

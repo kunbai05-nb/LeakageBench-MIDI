@@ -24,6 +24,7 @@ check_environment() {
 if [[ ${1:-} == "--check-only" ]]; then
   check_environment
   python -m py_compile "$ROOT/scripts/reproduce_three_condition_table.py"
+  python -m py_compile "$ROOT/scripts/summarize_detector_benchmarks.py"
   python "$ROOT/scripts/prepare_lmd.py" --help >/dev/null
   python "$ROOT/scripts/evaluate_checkpoint.py" --help >/dev/null
   echo "Environment and reproduction entry points are ready."

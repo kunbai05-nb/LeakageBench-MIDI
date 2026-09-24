@@ -2,23 +2,40 @@
 
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.22023100-blue.svg)](https://doi.org/10.5281/zenodo.22023100)
 
-Code and frozen specifications for the three-condition experiments and Same-Work Detector v1.9.
+Code, checkpoints, and frozen specifications for the three-condition experiments and Same-Work Detector v1.9.
 
-## Reproduce the paper tables
+## 1. Setup
 
-This is the recommended path for the multi-model three-condition and ATEPP mitigation tables. It downloads and verifies the released checkpoints, evaluates them on the frozen test sets, and writes both tables automatically.
-
-Requirements: Ubuntu/Linux, Python 3.10, about 10 GB of free disk space, the original `lmd_full.tar.gz`, and an NVIDIA GPU with BF16 support.
+Requirements: Ubuntu/Linux, Python 3.10, and about 10 GB of free disk space. Checkpoint evaluation requires an NVIDIA GPU with BF16 support.
 
 ```bash
 git clone https://github.com/kunbai05-nb/LeakageBench-MIDI.git
 cd LeakageBench-MIDI
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt && pip install -e '.[scale]'
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+pip install -e '.[scale]'
+```
+
+LMD is not distributed here. Download `lmd_full.tar.gz` from the [Lakh MIDI Dataset](https://colinraffel.com/projects/lmd/).
+
+## 2. Reproduce the paper tables
+
+### Multi-model three-condition and ATEPP mitigation experiments
+
+The following command downloads and verifies all released checkpoints, evaluates them on the frozen test sets, and creates both tables:
+
+```bash
 bash scripts/reproduce_paper_tables.sh /path/to/lmd_full.tar.gz
 ```
 
-Interrupted downloads and completed checkpoint evaluations are reused. The final files are:
+Interrupted downloads and completed three-condition evaluations are reused. Before a long run, check the environment with:
+
+```bash
+bash scripts/reproduce_paper_tables.sh --check-only
+```
+
+Outputs:
 
 ```text
 reproduced/tables/three_condition_results.csv
@@ -27,17 +44,11 @@ reproduced/tables/atepp_mitigation_results.csv
 reproduced/tables/atepp_mitigation_results.json
 ```
 
-Before a long run, check the environment with:
-
-```bash
-bash scripts/reproduce_paper_tables.sh --check-only
-```
-
-The ATEPP table is reproduced from its frozen public checkpoint bundle, whose protocol records Same-Work Detector v1.7.1. The detector ablation is not included yet.
+The reported ATEPP numeric table comes from the frozen public v1.7.1 checkpoint bundle; the one-command workflow preserves that original protocol.
 
 ### Six-dataset detector benchmark
 
-Prepare the six evaluation corpora, then supply their MIDI directories in the order shown below. One command verifies the detector checkpoint and every MIDI checksum, reproduces the Ours v1.9 rows under both the fixed and oracle-optimal thresholds, computes 95% confidence intervals, and creates the combined table:
+Supply the six prepared MIDI directories in the order shown below. The command verifies the detector checkpoint and every MIDI checksum, reproduces the Ours v1.9 rows under both the fixed and oracle-optimal thresholds, computes 95% confidence intervals, and creates the combined table:
 
 ```bash
 bash scripts/reproduce_six_dataset_table.sh \
@@ -49,7 +60,7 @@ bash scripts/reproduce_six_dataset_table.sh \
   /path/to/PianoVAM
 ```
 
-The final files are:
+Outputs:
 
 ```text
 reproduced/six_dataset/tables/six_dataset_results.csv
@@ -57,52 +68,39 @@ reproduced/six_dataset/tables/six_dataset_results.md
 reproduced/six_dataset/tables/six_dataset_results.json
 ```
 
-The fixed result uses the released decision threshold unchanged on all six datasets. The optimal result is a target-label oracle upper bound and is not used for deployment.
+The fixed result uses the released decision threshold unchanged on all six datasets. The optimal result is a target-label oracle upper bound and is not used for deployment. Detector ablation reproduction will be added separately.
 
-## Install
+## 3. Use the detector on another MIDI dataset
+
+v1.9 retrieves the one-way Top-50 union of five complementary views and averages three independently seeded 57-feature classifiers. Scores are calibrated on a work-disjoint calibration split.
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-pip install -e '.[scale]'
+python scripts/verify_detector_checkpoint.py checkpoints/same-work-detector-v1.9
+python scripts/detect_same_work.py \
+  /path/to/midi \
+  checkpoints/same-work-detector-v1.9 \
+  ./detector_output \
+  --workers 8 --backend faiss
 ```
 
-LMD is not distributed here. Download it from the [Lakh MIDI Dataset](https://colinraffel.com/projects/lmd/).
+## 4. Optional: retrain from scratch
 
-## Three-condition experiments
-
-Prepare the frozen LMD streams and train MIDI-GPT or LSTM:
+Three-condition settings, seeds, and schedules are frozen in [configs/three_condition_models.json](configs/three_condition_models.json). For example:
 
 ```bash
 python scripts/prepare_lmd.py /path/to/lmd_full.tar.gz ./prepared_lmd
 python scripts/train_external_models.py midigpt clean 202608040 ./prepared_lmd ./runs/midigpt-clean-202608040
-python scripts/train_external_models.py lstm clean 202608040 ./prepared_lmd ./runs/lstm-clean-202608040
+python scripts/train_model.py --help
 ```
 
-Available conditions are clean, unrelated_donor, and same_family_donor. The conditions, seeds, schedules, and settings are frozen in [configs/three_condition_models.json](configs/three_condition_models.json).
-
-Released checkpoints can be verified and evaluated without retraining:
+Released model bundles from the [v1.3.0 release](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/tag/v1.3.0) can also be checked or evaluated individually:
 
 ```bash
 python scripts/verify_model_checkpoints.py /path/to/checkpoint_bundle
-python scripts/evaluate_checkpoint.py /path/to/final.pt ./prepared_lmd ./evaluation --device cpu
+python scripts/evaluate_checkpoint.py /path/to/final.pt ./prepared_lmd ./evaluation --device cuda
 ```
 
-MIDI-GPT, LSTM, Transformer-S/M/L, TCN, VAE, and diffusion checkpoints are available in the [v1.3.0 release](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/tag/v1.3.0). The original architectures can be retrained with `scripts/train_model.py`.
-
-## Same-Work Detector v1.9
-
-v1.9 retrieves the one-way Top-50 union of five complementary views and averages three independently seeded 57-feature classifiers. Scores are calibrated on a work-disjoint calibration split. Components of up to eight files grow normally; larger merges require at least three independent cross-component edges, with 50 retained as a safety cap.
-
-The released checkpoint is included in this repository. Verify it and detect same-work families with:
-
-```bash
-python scripts/verify_detector_checkpoint.py checkpoints/same-work-detector-v1.9
-python scripts/detect_same_work.py /path/to/midi checkpoints/same-work-detector-v1.9 ./detector_output --workers 8 --backend faiss
-```
-
-To reproduce training from the original MIDI files, use the frozen work-disjoint manifests:
+To retrain Same-Work Detector v1.9 from the frozen work-disjoint manifests:
 
 ```bash
 python scripts/reproduce_detector_training.py \
@@ -113,24 +111,7 @@ python scripts/reproduce_detector_training.py \
   --parallel 4 --workers-per-job 8
 ```
 
-## ATEPP mitigation experiment (manual)
-
-The released final checkpoints reproduce the five-condition ATEPP comparison without retraining. Download and extract [atepp-v1.7.1-checkpoint-reproduction.tar.gz](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.7.1/atepp-v1.7.1-checkpoint-reproduction.tar.gz), then run the original server evaluation entry point:
-
-```bash
-pip install -r requirements.txt
-for condition in uncorrected random_removal detector label_reference; do
-  for seed in 202608040 202608041 202608042; do
-    python evaluate_saved_checkpoint.py "$condition" "$seed" \
-      --output "runs/$condition/seed_$seed/test_evaluation.json"
-  done
-done
-python analyze.py
-```
-
-This generates RESULTS.csv, RESULTS.json, PER_WORK_RESULTS.json, and RESULTS_CN.md. The bundle contains the 12 physical checkpoints for three seeds, the fixed test set, frozen audit data, and the unchanged server evaluation and analysis code. Simple deduplication uses the same checkpoints as the uncorrected condition because it removes no additional training windows under the frozen split.
-
-## Tests
+## 5. Tests and citation
 
 ```bash
 bash scripts/reproduce_all.sh

@@ -1,0 +1,37 @@
+{
+  "detector": "Same-Work Detector v1.9",
+  "scope": {
+    "datasets": ["lmd-clean", "atepp", "shs", "asap"],
+    "selection_set": "MAESTRO-validation",
+    "precision_target": 0.97,
+    "excluded_table": "family-merging safety guard"
+  },
+  "table1_view_count": {
+    "5": {"lmd-clean": 88.61, "atepp": 99.79, "shs": 88.75, "asap": 100.00, "macro_recall": 94.29, "candidates_per_file": 266.4},
+    "4": {"lmd-clean": 87.43, "atepp": 99.76, "shs": 88.75, "asap": 100.00, "macro_recall": 93.99, "candidates_per_file": 226.7},
+    "3": {"lmd-clean": 83.26, "atepp": 99.73, "shs": 86.25, "asap": 100.00, "macro_recall": 92.31, "candidates_per_file": 185.4},
+    "2": {"lmd-clean": 78.15, "atepp": 99.73, "shs": 80.00, "asap": 99.98, "macro_recall": 89.47, "candidates_per_file": 126.7},
+    "1": {"lmd-clean": 59.55, "atepp": 99.04, "shs": 63.75, "asap": 99.88, "macro_recall": 80.55, "candidates_per_file": 65.6}
+  },
+  "table2_pairwise_verifier": {
+    "full": {"dimensions": "57", "precision": 96.35, "recall": 79.46, "f1": 85.99, "auprc": 91.07},
+    "without_structural": {"dimensions": "28", "precision": 98.09, "recall": 74.79, "f1": 82.97, "auprc": 90.45},
+    "without_retrieval": {"dimensions": "49", "precision": 95.63, "recall": 76.15, "f1": 83.02, "auprc": 90.64},
+    "without_local_alignment": {"dimensions": "37", "precision": 95.61, "recall": 68.74, "f1": 77.09, "auprc": 86.22},
+    "rule_based_verifier": {"dimensions": "-", "precision": 33.35, "recall": 78.84, "f1": 44.63, "auprc": 58.30}
+  },
+  "table4_top_k": {
+    "10": {"lmd-clean": 81.84, "atepp": 99.67, "shs": 76.25, "asap": 95.63, "macro_recall": 88.35, "candidates_per_file": 51.8, "relative_cost": 0.19},
+    "25": {"lmd-clean": 85.57, "atepp": 99.76, "shs": 87.50, "asap": 99.98, "macro_recall": 93.20, "candidates_per_file": 138.8, "relative_cost": 0.52},
+    "50": {"lmd-clean": 88.61, "atepp": 99.79, "shs": 88.75, "asap": 100.00, "macro_recall": 94.29, "candidates_per_file": 266.4, "relative_cost": 1.00},
+    "75": {"lmd-clean": 91.07, "atepp": 99.85, "shs": 90.00, "asap": 100.00, "macro_recall": 95.23, "candidates_per_file": 375.2, "relative_cost": 1.41},
+    "100": {"lmd-clean": 92.49, "atepp": 99.85, "shs": 90.00, "asap": 100.00, "macro_recall": 95.58, "candidates_per_file": 469.2, "relative_cost": 1.76}
+  },
+  "table5_classifier_count": {
+    "1": {"precision": [96.09, 0.28], "recall": [79.30, 0.76], "f1": [85.78, 0.55], "auprc": [91.12, 0.14], "threshold": [0.5942, 0.0011]},
+    "2": {"precision": [96.07, 0.24], "recall": [79.50, 0.84], "f1": [85.90, 0.58], "auprc": [91.16, 0.11], "threshold": [0.5956, 0.0018]},
+    "3": {"precision": [96.08, 0.29], "recall": [79.69, 0.20], "f1": [86.05, 0.06], "auprc": [91.18, 0.09], "threshold": [0.5978, 0.0060]},
+    "4": {"precision": [96.10, 0.29], "recall": [79.70, 0.14], "f1": [86.07, 0.03], "auprc": [91.18, 0.07], "threshold": [0.5964, 0.0006]},
+    "5": {"precision": [96.26, 0.00], "recall": [79.72, 0.00], "f1": [86.12, 0.00], "auprc": [91.18, 0.00], "threshold": [0.5966, 0.0000]}
+  }
+}

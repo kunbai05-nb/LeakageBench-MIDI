@@ -68,7 +68,37 @@ reproduced/six_dataset/tables/six_dataset_results.md
 reproduced/six_dataset/tables/six_dataset_results.json
 ```
 
-The fixed result uses the released decision threshold unchanged on all six datasets. The optimal result is a target-label oracle upper bound and is not used for deployment. Detector ablation reproduction will be added separately.
+The fixed result uses the released decision threshold unchanged on all six datasets. The optimal result is a target-label oracle upper bound and is not used for deployment.
+
+### Detector ablation and sensitivity experiments
+
+For the quickest reviewer check, one command downloads the checksum-verified frozen experiment outputs, regenerates Tables 1, 2, 4, and 5, and fails if any reported value differs from the paper:
+
+```bash
+bash scripts/reproduce_detector_ablation.sh
+```
+
+Outputs:
+
+```text
+reproduced/detector_ablation/tables/table1_view_count.csv
+reproduced/detector_ablation/tables/table2_pairwise_verifier.csv
+reproduced/detector_ablation/tables/table4_top_k.csv
+reproduced/detector_ablation/tables/table5_classifier_count.csv
+reproduced/detector_ablation/tables/verification.json
+```
+
+`verification.json` reports `PASS` only when every generated paper value matches the frozen specification. No dataset download is required for this check. To rerun feature extraction, model fitting, and evaluation from the checksum-verified source MIDI files, run:
+
+```bash
+bash scripts/reproduce_detector_ablation_from_midi.sh \
+  /path/to/LMD-clean \
+  /path/to/ATEPP \
+  /path/to/SHS \
+  /path/to/ASAP
+```
+
+The public ablation workflow covers the reported retrieval-view count, pairwise-verifier, Top-K, and classifier-count experiments. The frozen bundle contains numeric experiment outputs only, not the paper tables or MIDI files. Family-merging safety guards are implementation safeguards and are not included as a reported ablation table.
 
 ## 3. Use the detector on another MIDI dataset
 

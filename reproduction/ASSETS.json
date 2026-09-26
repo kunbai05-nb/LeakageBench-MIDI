@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "assets": {
+    "three-condition-source-specs": {
+      "description": "Frozen stream, intervention-slot, and batch-schedule specifications for the three-condition experiments.",
+      "url": "https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.9.0/three-condition-source-specs.tar.gz",
+      "sha256": "3069ac8e5ad078b9848e527f3cb41837214ffa7032578eb09ee43dfebc4c4b8b",
+      "archive_prefix": "three-condition-source-specs/",
+      "required_paths": [
+        "reproduction/source_specs/batch_schedule_seed_0.jsonl",
+        "reproduction/source_specs/batch_schedule_seed_1.jsonl",
+        "reproduction/source_specs/batch_schedule_seed_2.jsonl",
+        "reproduction/source_specs/condition_slots.csv.gz",
+        "reproduction/source_specs/formal_data.json",
+        "reproduction/source_specs/formal_windows.csv.gz"
+      ]
+    }
+  }
+}

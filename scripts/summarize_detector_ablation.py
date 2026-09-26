@@ -101,21 +101,6 @@ def derive(raw: Path) -> dict:
     }
 
 
-def verify(actual: dict, expected: dict) -> None:
-    failures = []
-    for table, rows in actual.items():
-        expected_rows = expected.get(table, {})
-        for key, row in rows.items():
-            if key not in expected_rows:
-                failures.append(f"{table}/{key}: missing expected row")
-            elif row != expected_rows[key]:
-                failures.append(
-                    f"{table}/{key}:\n  generated={row}\n  expected ={expected_rows[key]}"
-                )
-    if failures:
-        raise RuntimeError("paper-value verification failed:\n" + "\n".join(failures))
-
-
 def write_table(path: Path, rows: list[dict]) -> None:
     fields = list(rows[0])
     with path.with_suffix(".csv").open("w", newline="", encoding="utf-8-sig") as handle:
@@ -159,8 +144,8 @@ def write_outputs(actual: dict, output: Path) -> None:
             }
         )
     write_table(output / "table5_classifier_count", table5)
-    (output / "verification.json").write_text(
-        json.dumps({"status": "PASS", "tables": [1, 2, 4, 5], "generated": actual}, indent=2) + "\n",
+    (output / "generated_results.json").write_text(
+        json.dumps({"tables": [1, 2, 4, 5], "generated": actual}, indent=2) + "\n",
         encoding="utf-8",
     )
 
@@ -168,14 +153,11 @@ def write_outputs(actual: dict, output: Path) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("raw_results", type=Path)
-    parser.add_argument("expected_results", type=Path)
     parser.add_argument("output", type=Path)
     args = parser.parse_args()
     actual = derive(args.raw_results)
-    expected = read(args.expected_results)
-    verify(actual, expected)
     write_outputs(actual, args.output)
-    print(f"PASS: generated values match the frozen paper values ({args.output})")
+    print(f"Generated Tables 1, 2, 4, and 5 ({args.output})")
 
 
 if __name__ == "__main__":

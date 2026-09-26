@@ -21,30 +21,27 @@ LMD is not distributed here. Download `lmd_full.tar.gz` from the [Lakh MIDI Data
 
 ## 2. Reproduce the paper tables
 
-### Multi-model three-condition and ATEPP mitigation experiments
+### Multi-model three-condition experiment
 
-The following command downloads and verifies all released checkpoints, evaluates them on the frozen test sets, and creates both tables:
+The following command downloads and verifies the released checkpoints and source specifications, evaluates all models on the frozen test set, and creates the reported table:
 
 ```bash
-bash scripts/reproduce_paper_tables.sh /path/to/lmd_full.tar.gz
+bash scripts/reproduce_three_condition.sh /path/to/lmd_full.tar.gz
 ```
 
 Interrupted downloads and completed three-condition evaluations are reused. Before a long run, check the environment with:
 
 ```bash
-bash scripts/reproduce_paper_tables.sh --check-only
+bash scripts/reproduce_three_condition.sh --check-only
 ```
 
 Outputs:
 
 ```text
-reproduced/tables/three_condition_results.csv
-reproduced/tables/three_condition_results.md
-reproduced/tables/atepp_mitigation_results.csv
-reproduced/tables/atepp_mitigation_results.json
+reproduced/three_condition/tables/three_condition_results.csv
+reproduced/three_condition/tables/three_condition_results.md
+reproduced/three_condition/tables/three_condition_results.json
 ```
-
-The reported ATEPP numeric table comes from the frozen public v1.7.1 checkpoint bundle; the one-command workflow preserves that original protocol.
 
 ### Six-dataset detector benchmark
 
@@ -72,23 +69,7 @@ The fixed result uses the released decision threshold unchanged on all six datas
 
 ### Detector ablation and sensitivity experiments
 
-For the quickest reviewer check, one command downloads the checksum-verified frozen experiment outputs, regenerates Tables 1, 2, 4, and 5, and fails if any reported value differs from the paper:
-
-```bash
-bash scripts/reproduce_detector_ablation.sh
-```
-
-Outputs:
-
-```text
-reproduced/detector_ablation/tables/table1_view_count.csv
-reproduced/detector_ablation/tables/table2_pairwise_verifier.csv
-reproduced/detector_ablation/tables/table4_top_k.csv
-reproduced/detector_ablation/tables/table5_classifier_count.csv
-reproduced/detector_ablation/tables/verification.json
-```
-
-`verification.json` reports `PASS` only when every generated paper value matches the frozen specification. No dataset download is required for this check. To rerun feature extraction, model fitting, and evaluation from the checksum-verified source MIDI files, run:
+To rerun feature extraction, model fitting, evaluation, and table generation from the checksum-verified source MIDI files, run:
 
 ```bash
 bash scripts/reproduce_detector_ablation_from_midi.sh \
@@ -98,7 +79,7 @@ bash scripts/reproduce_detector_ablation_from_midi.sh \
   /path/to/ASAP
 ```
 
-The public ablation workflow covers the reported retrieval-view count, pairwise-verifier, Top-K, and classifier-count experiments. The frozen bundle contains numeric experiment outputs only, not the paper tables or MIDI files. Family-merging safety guards are implementation safeguards and are not included as a reported ablation table.
+The workflow generates the reported retrieval-view count, pairwise-verifier, Top-K, and classifier-count tables. No frozen result table or MIDI file is stored in this repository.
 
 ## 3. Use the detector on another MIDI dataset
 
@@ -118,6 +99,7 @@ python scripts/detect_same_work.py \
 Three-condition settings, seeds, and schedules are frozen in [configs/three_condition_models.json](configs/three_condition_models.json). For example:
 
 ```bash
+python scripts/fetch_reproduction_assets.py three-condition-source-specs
 python scripts/prepare_lmd.py /path/to/lmd_full.tar.gz ./prepared_lmd
 python scripts/train_external_models.py midigpt clean 202608040 ./prepared_lmd ./runs/midigpt-clean-202608040
 python scripts/train_model.py --help

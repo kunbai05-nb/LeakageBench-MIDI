@@ -6,8 +6,8 @@ RELEASE_BASE="https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download
 export PYTHONPATH="$ROOT${PYTHONPATH:+:$PYTHONPATH}"
 
 usage() {
-  echo "Usage: bash scripts/reproduce_paper_tables.sh /path/to/lmd_full.tar.gz [output_dir]"
-  echo "       bash scripts/reproduce_paper_tables.sh --check-only"
+  echo "Usage: bash scripts/reproduce_three_condition.sh /path/to/lmd_full.tar.gz [output_dir]"
+  echo "       bash scripts/reproduce_three_condition.sh --check-only"
 }
 
 check_environment() {
@@ -38,10 +38,12 @@ fi
 
 check_environment
 LMD_SOURCE=$(realpath "$1")
-OUTPUT=$(realpath -m "${2:-$ROOT/reproduced}")
+OUTPUT=$(realpath -m "${2:-$ROOT/reproduced/three_condition}")
 [[ -e "$LMD_SOURCE" ]] || { echo "ERROR: LMD source not found: $LMD_SOURCE" >&2; exit 1; }
 python -c "import torch; assert torch.cuda.is_available() and torch.cuda.is_bf16_supported(), 'A BF16-capable CUDA GPU is required'"
 mkdir -p "$OUTPUT/downloads" "$OUTPUT/checkpoints" "$OUTPUT/tables"
+
+python "$ROOT/scripts/fetch_reproduction_assets.py" three-condition-source-specs
 
 download() {
   local tag=$1 name=$2 expected=$3 target="$OUTPUT/downloads/$2"
@@ -103,31 +105,5 @@ cp "$OUTPUT/three_condition/tables/three_condition_results.csv" "$OUTPUT/tables/
 cp "$OUTPUT/three_condition/tables/three_condition_results.md" "$OUTPUT/tables/"
 cp "$OUTPUT/three_condition/tables/three_condition_results.json" "$OUTPUT/tables/"
 
-ATEPP_NAME="atepp-v1.7.1-checkpoint-reproduction.tar.gz"
-ATEPP_SHA="ecc41ef80b7939ea1679947e5905fa182290a5eea7350c60008fe470d2421f63"
-download v1.7.1 "$ATEPP_NAME" "$ATEPP_SHA"
-ATEPP_ROOT="$OUTPUT/atepp/atepp-v1.7.1-checkpoint-reproduction"
-if [[ ! -f "$ATEPP_ROOT/analyze.py" ]]; then
-  mkdir -p "$OUTPUT/atepp"
-  tar -xzf "$OUTPUT/downloads/$ATEPP_NAME" -C "$OUTPUT/atepp"
-fi
-
-echo "Reproducing the ATEPP mitigation table"
-for condition in uncorrected random_removal detector label_reference; do
-  for seed in 202608040 202608041 202608042; do
-    (
-      cd "$ATEPP_ROOT"
-      python evaluate_saved_checkpoint.py "$condition" "$seed" \
-        --output "runs/$condition/seed_$seed/test_evaluation.json"
-    )
-  done
-done
-(
-  cd "$ATEPP_ROOT"
-  python analyze.py
-)
-cp "$ATEPP_ROOT/RESULTS.csv" "$OUTPUT/tables/atepp_mitigation_results.csv"
-cp "$ATEPP_ROOT/RESULTS.json" "$OUTPUT/tables/atepp_mitigation_results.json"
-
 echo
-echo "Done. Paper tables are in: $OUTPUT/tables"
+echo "Done. The three-condition table is in: $OUTPUT/tables"

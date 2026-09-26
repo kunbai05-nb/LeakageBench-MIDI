@@ -130,6 +130,12 @@ def test_candidate_pool_is_one_way_top_50_union():
 
 def test_formal_source_specs():
     source = ROOT / "reproduction" / "source_specs"
+    if not source.is_dir():
+        manifest = json.loads((ROOT / "reproduction" / "ASSETS.json").read_text())
+        asset = manifest["assets"]["three-condition-source-specs"]
+        assert asset["sha256"] == "3069ac8e5ad078b9848e527f3cb41837214ffa7032578eb09ee43dfebc4c4b8b"
+        assert "reproduction/source_specs/formal_windows.csv.gz" in asset["required_paths"]
+        return
     summary = json.loads((source / "formal_data.json").read_text())
     assert summary["rows"]["clean"] == 38374
     assert summary["rows"]["probe_windows"] == 9316

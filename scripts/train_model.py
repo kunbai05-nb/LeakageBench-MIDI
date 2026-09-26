@@ -90,6 +90,11 @@ def intervention_slots() -> set[int]:
     import csv
 
     path = ROOT / "reproduction" / "source_specs" / "condition_slots.csv.gz"
+    if not path.is_file():
+        raise FileNotFoundError(
+            "three-condition source specifications are missing; run "
+            "`python scripts/fetch_reproduction_assets.py three-condition-source-specs`"
+        )
     with gzip.open(path, "rt", newline="", encoding="utf-8") as handle:
         return {
             int(row["slot_index"])

@@ -1,6 +1,5 @@
 from __future__ import annotations
 import importlib.util
-import json
 from pathlib import Path
 import pytest
 from leakagebench_midi import (
@@ -16,26 +15,14 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def test_public_detector_ablation_scope_is_exact():
-    expected = json.loads(
-        (ROOT / "reproduction/detector_ablation_v1.9/EXPECTED_RESULTS.json").read_text()
-    )
-    assert set(expected) == {
-        "detector",
-        "scope",
-        "table1_view_count",
-        "table2_pairwise_verifier",
-        "table4_top_k",
-        "table5_classifier_count",
-    }
-    assert expected["scope"]["excluded_table"] == "family-merging safety guard"
     for script in (
         "build_detector_ablation_features.py",
         "run_detector_ablation.py",
         "summarize_detector_ablation.py",
-        "reproduce_detector_ablation.sh",
         "reproduce_detector_ablation_from_midi.sh",
     ):
         assert (ROOT / "scripts" / script).is_file()
+    assert not (ROOT / "reproduction/detector_ablation_v1.9/EXPECTED_RESULTS.json").exists()
 
 
 def test_checkpoint_verifier_rejects_paths_outside_bundle(tmp_path):

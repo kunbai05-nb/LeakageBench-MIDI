@@ -20,6 +20,14 @@ ROOT = Path(__file__).resolve().parents[1]
 SPECS = ROOT / "reproduction" / "source_specs"
 
 
+def require_specs() -> None:
+    if not (SPECS / "formal_data.json").is_file():
+        raise FileNotFoundError(
+            "three-condition source specifications are missing; run "
+            "`python scripts/fetch_reproduction_assets.py three-condition-source-specs`"
+        )
+
+
 def sha256(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as handle:
@@ -301,6 +309,7 @@ def write_probes(specs: list[dict], midi_root: Path, output: Path) -> int:
 
 
 def main() -> None:
+    require_specs()
     parser = argparse.ArgumentParser(
         description="Build the formal token streams from LMD-full."
     )

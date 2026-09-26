@@ -43,6 +43,11 @@ def learning_rate(step: int) -> float:
 def schedule_rows(seed: int) -> list[dict]:
     position = CONFIG["seeds"].index(seed)
     path = ROOT / "reproduction" / "source_specs" / f"batch_schedule_seed_{position}.jsonl"
+    if not path.is_file():
+        raise FileNotFoundError(
+            "three-condition source specifications are missing; run "
+            "`python scripts/fetch_reproduction_assets.py three-condition-source-specs`"
+        )
     rows = read_jsonl(path)
     expected = CONFIG["training"]["total_steps"]
     if len(rows) != expected or any(int(row["step"]) != i + 1 for i, row in enumerate(rows)):

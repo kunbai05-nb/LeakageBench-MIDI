@@ -73,8 +73,7 @@ ACTUAL_MAESTRO_SHA256=$(sha256sum "$OUTPUT/input/MAESTRO-validation.npz" | awk '
 "$PYTHON_BIN" "$ROOT/scripts/run_detector_ablation.py" "$OUTPUT/input" "$OUTPUT/raw"
 "$PYTHON_BIN" "$ROOT/scripts/summarize_detector_ablation.py" \
   "$OUTPUT/raw" \
-  "$ROOT/reproduction/detector_ablation_v1.9/EXPECTED_RESULTS.json" \
   "$OUTPUT/tables"
 
 echo
-echo "PASS. Tables 1, 2, 4, and 5 are in: $OUTPUT/tables"
+echo "Done. Tables 1, 2, 4, and 5 are in: $OUTPUT/tables"

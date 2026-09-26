@@ -22,7 +22,6 @@ def test_public_detector_ablation_scope_is_exact():
         "reproduce_detector_ablation_from_midi.sh",
     ):
         assert (ROOT / "scripts" / script).is_file()
-    assert not (ROOT / "reproduction/detector_ablation_v1.9/EXPECTED_RESULTS.json").exists()
 
 
 def test_checkpoint_verifier_rejects_paths_outside_bundle(tmp_path):

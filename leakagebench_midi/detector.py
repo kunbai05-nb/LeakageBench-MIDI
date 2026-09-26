@@ -151,8 +151,8 @@ def load_detector(directory: str | Path) -> tuple[dict, list[object]]:
     root = Path(directory).resolve()
     metadata = json.loads((root / "MODEL_CONFIG.json").read_text(encoding="utf-8"))
     detector_id = metadata.get("detector_id")
-    if detector_id not in {"same-work-detector-v1.8", "same-work-detector-v1.9"}:
-        raise ValueError("expected Same-Work Detector v1.8 or v1.9")
+    if detector_id != "same-work-detector-v1.9":
+        raise ValueError("expected Same-Work Detector v1.9")
     files = metadata.get("model_files")
     hashes = metadata.get("model_sha256")
     if not isinstance(files, list) or not isinstance(hashes, list):
@@ -372,9 +372,9 @@ def model_config(
     model_hashes: list[str],
     threshold: float,
     feature_names: list[str],
-    version: str = "1.8",
+    version: str = "1.9",
 ) -> dict:
-    if version not in {"1.8", "1.9"}:
+    if version != "1.9":
         raise ValueError("unsupported detector version")
     return {
         "format_version": version,

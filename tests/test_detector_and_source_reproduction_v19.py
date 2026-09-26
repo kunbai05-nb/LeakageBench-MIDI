@@ -67,6 +67,18 @@ def test_detector_rejects_modified_checkpoint(tmp_path):
         raise AssertionError("modified checkpoint was accepted")
 
 
+def test_detector_rejects_obsolete_version(tmp_path):
+    (tmp_path / "MODEL_CONFIG.json").write_text(
+        json.dumps({"detector_id": "same-work-detector-obsolete"}), encoding="utf-8"
+    )
+    try:
+        load_detector(tmp_path)
+    except ValueError as error:
+        assert "v1.9" in str(error)
+    else:
+        raise AssertionError("obsolete detector version was accepted")
+
+
 def test_components():
     components = Components(4)
     assert components.union(0, 1, 3)

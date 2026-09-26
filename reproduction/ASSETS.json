@@ -5,7 +5,7 @@
       "description": "Final checkpoints and frozen test windows for fresh inference of the five-condition, three-seed ATEPP mitigation experiment using Same-Work Detector v1.9.",
       "url": "https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.9.0/atepp-mitigation-v1.9.tar.gz",
       "sha256": "9375ea3b17b0ac9e82c33bfdc4348837d843af0a83201f293ceb117fc220f83a",
-      "archive_prefix": "atepp-mitigation-v1.9/",
+      "archive_prefix": "",
       "required_paths": [
         "reproduction/atepp_mitigation_v1.9/SHA256SUMS",
         "reproduction/atepp_mitigation_v1.9/checkpoint_manifest.json",

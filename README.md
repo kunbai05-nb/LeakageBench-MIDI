@@ -91,7 +91,7 @@ This workflow downloads the frozen component assignments, replays all 200 random
 
 ### ATEPP mitigation experiment
 
-The following command downloads checksum-verified v1.9 checkpoint-evaluation records, verifies the frozen cohort and paired training protocol, and regenerates the five-condition, three-seed ATEPP mitigation table:
+The following command downloads the 12 checksum-verified final v1.9 model checkpoints and the frozen test windows, runs fresh BF16 inference for all five conditions and three seeds, and then regenerates the ATEPP mitigation table:
 
 ```bash
 bash scripts/reproduce_atepp_mitigation.sh
@@ -100,12 +100,11 @@ bash scripts/reproduce_atepp_mitigation.sh
 Outputs:
 
 ```text
-reproduced/atepp_mitigation/atepp_mitigation_results.csv
-reproduced/atepp_mitigation/atepp_mitigation_results.md
-reproduced/atepp_mitigation/atepp_mitigation_results.json
+reproduction/atepp_mitigation_v1.9/reproduced_results/RESULTS.csv
+reproduction/atepp_mitigation_v1.9/reproduced_results/RESULTS.json
 ```
 
-The current experiment uses Same-Work Detector v1.9 and a detector-size, label-safe reference. All five conditions share the same held-out set and scored-token distribution; detector isolation, random removal, and the label reference each use 484 training files.
+The current experiment uses Same-Work Detector v1.9 and a detector-size, label-safe reference. All five conditions share the same held-out set and scored-token distribution; detector isolation, random removal, and the label reference each use 484 training files. A BF16-capable CUDA GPU is required; the released package contains no precomputed test-evaluation records or result table.
 
 ### Detector ablation and sensitivity experiments
 

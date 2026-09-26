@@ -21,32 +21,20 @@
       ]
     },
     "fast-vs-v19-fixed": {
-      "description": "Checksum-verified manifests and frozen detector outputs for the three-dataset Fast Detector versus v1.9 fixed-threshold comparison.",
+      "description": "Fast Detector and v1.9 checkpoints, candidate features, and manifests for fresh inference of the three-dataset fixed-threshold comparison.",
       "url": "https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.9.0/fast-vs-v19-fixed.tar.gz",
-      "sha256": "6854b7575c127c75b506a6001dc39f3f43764e7d7ca5f47864275f7b4c65934a",
+      "sha256": "4366f64b545003c85da5b27d7e368500608a92ad44f3350856c5efeed0ce4fb6",
       "archive_prefix": "fast-vs-v19-fixed/",
       "required_paths": [
         "reproduction/fast_vs_v19_fixed/SHA256SUMS",
+        "reproduction/fast_vs_v19_fixed/checkpoints/fast/FROZEN_CONFIG.json",
+        "reproduction/fast_vs_v19_fixed/checkpoints/fast/MODEL/fold_0.joblib",
+        "reproduction/fast_vs_v19_fixed/checkpoints/v1.9/MODEL_CONFIG.json",
+        "reproduction/fast_vs_v19_fixed/features/fast/atepp.npz",
+        "reproduction/fast_vs_v19_fixed/features/v1.9/atepp.npz",
         "reproduction/fast_vs_v19_fixed/manifests/atepp.jsonl",
         "reproduction/fast_vs_v19_fixed/manifests/lmd-clean.jsonl",
         "reproduction/fast_vs_v19_fixed/manifests/asap.jsonl"
-      ]
-    },
-    "multidataset-deployment": {
-      "description": "Component assignments and audit records for reproducing the seven-dataset deployment table without redistributing source MIDI files.",
-      "url": "https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.9.0/multidataset-deployment.tar.gz",
-      "sha256": "eb40d9748a31c18b333dea3c9de756061efde23f7e7af273f20852952677e149",
-      "archive_prefix": "multidataset-deployment/",
-      "required_paths": [
-        "reproduction/multidataset_deployment/SHA256SUMS",
-        "reproduction/multidataset_deployment/baseline_summary.json",
-        "reproduction/multidataset_deployment/pop909/component_labels.npz",
-        "reproduction/multidataset_deployment/asap/component_labels.npz",
-        "reproduction/multidataset_deployment/pdmx/component_labels.npz",
-        "reproduction/multidataset_deployment/gigamidi/component_labels.npz",
-        "reproduction/multidataset_deployment/maestro/component_labels.npz",
-        "reproduction/multidataset_deployment/lmd/component_labels.npz",
-        "reproduction/multidataset_deployment/aria/component_labels.npz"
       ]
     },
     "three-condition-source-specs": {

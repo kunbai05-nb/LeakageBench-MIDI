@@ -71,23 +71,13 @@ The SHS cohort contains the final 733 checksum-verified MIDI files, 213 works, a
 
 ### Fast Detector versus v1.9
 
-The following command downloads checksum-verified manifests and detector outputs, recomputes the labels and evaluation metrics, and generates the fixed-threshold comparison on ATEPP, LMD-clean, and ASAP:
+The following command downloads checksum-verified candidate features and both released detector checkpoints, runs fresh checkpoint inference, and generates the fixed-threshold comparison on ATEPP, LMD-clean, and ASAP:
 
 ```bash
 bash scripts/reproduce_fast_vs_v19.sh
 ```
 
-The generated CSV, Markdown, and JSON files are written to `reproduced/fast_vs_v19/`. The release asset contains no preformatted result table.
-
-### Seven-dataset deployment audit
-
-The large-scale deployment table can be regenerated without redistributing the source MIDI collections:
-
-```bash
-bash scripts/reproduce_multidataset_deployment.sh
-```
-
-This workflow downloads the frozen component assignments, replays all 200 random train/validation/test splits, verifies the reported intervals, and writes the seven-dataset table to `reproduced/multidataset_deployment/`. The source manifests are identified by their frozen SHA-256 hashes.
+The generated CSV, Markdown, and JSON files are written to `reproduced/fast_vs_v19/`. The release asset contains checkpoints, candidate features, and manifests, but no predicted scores or preformatted result table.
 
 ### ATEPP mitigation experiment
 

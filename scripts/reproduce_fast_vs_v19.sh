@@ -7,6 +7,6 @@ OUTPUT=${1:-$ROOT/reproduced/fast_vs_v19}
 
 cd "$ROOT"
 "$PYTHON_BIN" scripts/fetch_reproduction_assets.py fast-vs-v19-fixed
-"$PYTHON_BIN" scripts/summarize_fast_vs_v19.py \
+"$PYTHON_BIN" scripts/reproduce_fast_vs_v19_from_checkpoints.py \
   reproduction/fast_vs_v19_fixed "$OUTPUT"
 echo "Done. The comparison table is in: $OUTPUT"

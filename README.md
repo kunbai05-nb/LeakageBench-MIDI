@@ -67,6 +67,24 @@ reproduced/six_dataset/tables/six_dataset_results.json
 
 The fixed result uses the released decision threshold unchanged on all six datasets. The optimal result is a target-label oracle upper bound and is not used for deployment.
 
+### ATEPP mitigation experiment
+
+The following command downloads checksum-verified v1.9 checkpoint-evaluation records, verifies the frozen cohort and paired training protocol, and regenerates the five-condition, three-seed ATEPP mitigation table:
+
+```bash
+bash scripts/reproduce_atepp_mitigation.sh
+```
+
+Outputs:
+
+```text
+reproduced/atepp_mitigation/atepp_mitigation_results.csv
+reproduced/atepp_mitigation/atepp_mitigation_results.md
+reproduced/atepp_mitigation/atepp_mitigation_results.json
+```
+
+The current experiment uses Same-Work Detector v1.9 and a detector-size, label-safe reference. All five conditions share the same held-out set and scored-token distribution; detector isolation, random removal, and the label reference each use 484 training files.
+
 ### Detector ablation and sensitivity experiments
 
 To rerun feature extraction, model fitting, evaluation, and table generation from the checksum-verified source MIDI files, run:

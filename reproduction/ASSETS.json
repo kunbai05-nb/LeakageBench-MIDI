@@ -1,6 +1,19 @@
 {
   "schema_version": 1,
   "assets": {
+    "atepp-mitigation-v1.9": {
+      "description": "Frozen checkpoint-evaluation records for the five-condition, three-seed ATEPP mitigation experiment using Same-Work Detector v1.9.",
+      "url": "https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.9.0/atepp-mitigation-v1.9.tar.gz",
+      "sha256": "d95d31d7546331253ab81c96cb6b227002130fb75717139b1f95c23609f9fac8",
+      "archive_prefix": "atepp-mitigation-v1.9/",
+      "required_paths": [
+        "reproduction/atepp_mitigation_v1.9/SHA256SUMS",
+        "reproduction/atepp_mitigation_v1.9/protocol.json",
+        "reproduction/atepp_mitigation_v1.9/fixed_split.json",
+        "reproduction/atepp_mitigation_v1.9/evaluation_labels.json",
+        "reproduction/atepp_mitigation_v1.9/PREPARATION_AUDIT.json"
+      ]
+    },
     "three-condition-source-specs": {
       "description": "Frozen stream, intervention-slot, and batch-schedule specifications for the three-condition experiments.",
       "url": "https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.9.0/three-condition-source-specs.tar.gz",

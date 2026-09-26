@@ -67,6 +67,28 @@ reproduced/six_dataset/tables/six_dataset_results.json
 
 The fixed result uses the released decision threshold unchanged on all six datasets. The optimal result is a target-label oracle upper bound and is not used for deployment.
 
+The SHS cohort contains the final 733 checksum-verified MIDI files, 213 works, and 515 eligible reference pairs. No target dataset is used to retrain the detector or recalibrate the fixed threshold.
+
+### Fast Detector versus v1.9
+
+The following command downloads checksum-verified manifests and detector outputs, recomputes the labels and evaluation metrics, and generates the fixed-threshold comparison on ATEPP, LMD-clean, and ASAP:
+
+```bash
+bash scripts/reproduce_fast_vs_v19.sh
+```
+
+The generated CSV, Markdown, and JSON files are written to `reproduced/fast_vs_v19/`. The release asset contains no preformatted result table.
+
+### Seven-dataset deployment audit
+
+The large-scale deployment table can be regenerated without redistributing the source MIDI collections:
+
+```bash
+bash scripts/reproduce_multidataset_deployment.sh
+```
+
+This workflow downloads the frozen component assignments, replays all 200 random train/validation/test splits, verifies the reported intervals, and writes the seven-dataset table to `reproduced/multidataset_deployment/`. The source manifests are identified by their frozen SHA-256 hashes.
+
 ### ATEPP mitigation experiment
 
 The following command downloads checksum-verified v1.9 checkpoint-evaluation records, verifies the frozen cohort and paired training protocol, and regenerates the five-condition, three-seed ATEPP mitigation table:

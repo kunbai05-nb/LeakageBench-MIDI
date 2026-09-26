@@ -14,6 +14,35 @@
         "reproduction/atepp_mitigation_v1.9/PREPARATION_AUDIT.json"
       ]
     },
+    "fast-vs-v19-fixed": {
+      "description": "Checksum-verified manifests and frozen detector outputs for the three-dataset Fast Detector versus v1.9 fixed-threshold comparison.",
+      "url": "https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.9.0/fast-vs-v19-fixed.tar.gz",
+      "sha256": "6854b7575c127c75b506a6001dc39f3f43764e7d7ca5f47864275f7b4c65934a",
+      "archive_prefix": "fast-vs-v19-fixed/",
+      "required_paths": [
+        "reproduction/fast_vs_v19_fixed/SHA256SUMS",
+        "reproduction/fast_vs_v19_fixed/manifests/atepp.jsonl",
+        "reproduction/fast_vs_v19_fixed/manifests/lmd-clean.jsonl",
+        "reproduction/fast_vs_v19_fixed/manifests/asap.jsonl"
+      ]
+    },
+    "multidataset-deployment": {
+      "description": "Component assignments and audit records for reproducing the seven-dataset deployment table without redistributing source MIDI files.",
+      "url": "https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.9.0/multidataset-deployment.tar.gz",
+      "sha256": "eb40d9748a31c18b333dea3c9de756061efde23f7e7af273f20852952677e149",
+      "archive_prefix": "multidataset-deployment/",
+      "required_paths": [
+        "reproduction/multidataset_deployment/SHA256SUMS",
+        "reproduction/multidataset_deployment/baseline_summary.json",
+        "reproduction/multidataset_deployment/pop909/component_labels.npz",
+        "reproduction/multidataset_deployment/asap/component_labels.npz",
+        "reproduction/multidataset_deployment/pdmx/component_labels.npz",
+        "reproduction/multidataset_deployment/gigamidi/component_labels.npz",
+        "reproduction/multidataset_deployment/maestro/component_labels.npz",
+        "reproduction/multidataset_deployment/lmd/component_labels.npz",
+        "reproduction/multidataset_deployment/aria/component_labels.npz"
+      ]
+    },
     "three-condition-source-specs": {
       "description": "Frozen stream, intervention-slot, and batch-schedule specifications for the three-condition experiments.",
       "url": "https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.9.0/three-condition-source-specs.tar.gz",

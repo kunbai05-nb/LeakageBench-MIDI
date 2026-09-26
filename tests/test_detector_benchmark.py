@@ -52,7 +52,7 @@ def test_query_macro_zero_prediction_queries_count_as_zero_precision():
 def test_public_benchmark_registries():
     benchmark = module()
     expected = {
-        "shs": (306, 80),
+        "shs": (733, 515),
         "asap": (1067, 4988),
         "atepp": (1527, 3339),
         "lmd-clean": (2547, 2037),

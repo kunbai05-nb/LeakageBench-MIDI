@@ -19,6 +19,8 @@ pip install -e '.[scale]'
 
 LMD is not distributed here. Download `lmd_full.tar.gz` from the [Lakh MIDI Dataset](https://colinraffel.com/projects/lmd/).
 
+While this repository is private, authorized collaborators should run `gh auth login` before downloading release assets. This is not required after a public release.
+
 ## 2. Reproduce the paper tables
 
 ### Multi-model three-condition experiment

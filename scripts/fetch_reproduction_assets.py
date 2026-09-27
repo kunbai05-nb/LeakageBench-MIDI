@@ -4,15 +4,21 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import shutil
+import subprocess
 import tarfile
 import tempfile
+import urllib.error
 import urllib.request
 from pathlib import Path, PurePosixPath
 
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "reproduction" / "ASSETS.json"
+GITHUB_RELEASE = re.compile(
+    r"https://github\.com/([^/]+)/([^/]+)/releases/download/([^/]+)/([^/]+)"
+)
 
 
 def sha256(path: Path) -> str:
@@ -35,6 +41,39 @@ def safe_relative_path(name: str, prefix: str) -> Path | None:
     return Path(*relative.parts)
 
 
+def download(url: str, destination: Path) -> None:
+    try:
+        with urllib.request.urlopen(url) as response, destination.open("wb") as output:
+            shutil.copyfileobj(response, output)
+        return
+    except urllib.error.HTTPError as error:
+        match = GITHUB_RELEASE.fullmatch(url)
+        gh = shutil.which("gh")
+        if error.code not in (403, 404) or match is None or gh is None:
+            raise
+
+    owner, repository, tag, asset = match.groups()
+    subprocess.run(
+        [
+            gh,
+            "release",
+            "download",
+            tag,
+            "--repo",
+            f"{owner}/{repository}",
+            "--pattern",
+            asset,
+            "--dir",
+            str(destination.parent),
+        ],
+        check=True,
+    )
+    downloaded = destination.parent / asset
+    if not downloaded.is_file():
+        raise FileNotFoundError(downloaded)
+    downloaded.replace(destination)
+
+
 def fetch(name: str, force: bool = False) -> None:
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
     try:
@@ -51,8 +90,7 @@ def fetch(name: str, force: bool = False) -> None:
     with tempfile.TemporaryDirectory(prefix="leakagebench-assets-") as directory:
         archive_path = Path(directory) / "asset.tar.gz"
         print(f"Downloading {name} ...")
-        with urllib.request.urlopen(spec["url"]) as response, archive_path.open("wb") as output:
-            shutil.copyfileobj(response, output)
+        download(spec["url"], archive_path)
         actual = sha256(archive_path)
         if actual != spec["sha256"]:
             raise ValueError(

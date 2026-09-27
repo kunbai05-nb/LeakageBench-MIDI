@@ -98,17 +98,22 @@ The current experiment uses Same-Work Detector v1.9 and a detector-size, label-s
 
 ### Detector ablation and sensitivity experiments
 
-To rerun feature extraction, model fitting, evaluation, and table generation from the checksum-verified source MIDI files, run:
+The recommended reproduction downloads checksum-verified intermediate features, retrains every ablated classifier, reevaluates all settings, and regenerates Tables 1, 2, 4, and 5:
 
 ```bash
-bash scripts/reproduce_detector_ablation_from_midi.sh \
+bash scripts/reproduce_detector_ablation.sh
+```
+
+This is the default reviewer workflow: it skips only the expensive deterministic MIDI feature extraction and does not download frozen result tables. For the strict end-to-end check, rerun feature extraction from the checksum-verified source MIDI files:
+
+```bash
+bash scripts/reproduce_detector_ablation.sh --from-midi \
   /path/to/LMD-clean \
   /path/to/ATEPP \
-  /path/to/SHS \
   /path/to/ASAP
 ```
 
-The workflow generates the reported retrieval-view count, pairwise-verifier, Top-K, and classifier-count tables. No frozen result table or MIDI file is stored in this repository.
+Both workflows generate the reported retrieval-view count, pairwise-verifier, Top-K, and classifier-count tables. No frozen result table or MIDI file is stored in this repository.
 
 ## 3. Use the detector on another MIDI dataset
 

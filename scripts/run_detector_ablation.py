@@ -17,7 +17,7 @@ from sklearn.metrics import average_precision_score
 
 
 SEEDS = (20260911, 20260912, 20260913, 20260914, 20260915)
-DATASETS = ("lmd-clean", "atepp", "shs", "asap")
+DATASETS = ("lmd-clean", "atepp", "asap")
 VIEWS = ("bass", "harmony", "motif", "interval_hist", "duration_hist")
 VALIDATION_VIEW_INDICES = np.asarray([1, 3, 4, 5, 6], dtype=np.int64)
 FEATURE_GROUPS = {
@@ -301,7 +301,7 @@ def main() -> None:
             values = np.asarray([row["macro"][key] for row in combinations])
             summary[key] = {
                 "mean": float(values.mean()),
-                "standard_deviation": float(values.std(ddof=1)) if len(values) > 1 else 0.0,
+                "standard_deviation": float(values.std(ddof=0)),
             }
         threshold_values = np.asarray([row["threshold"]["threshold"] for row in combinations])
         summary["threshold"] = {

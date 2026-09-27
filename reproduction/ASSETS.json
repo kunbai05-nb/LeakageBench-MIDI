@@ -37,6 +37,26 @@
         "reproduction/fast_vs_v19_fixed/manifests/asap.jsonl"
       ]
     },
+    "detector-ablation-features-v1.9": {
+      "description": "Checksum-verified candidate features for retraining and reevaluating the v1.9 detector ablations and sensitivity analyses without repeating MIDI feature extraction.",
+      "url": "https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.9.0/detector-ablation-features-v1.9.tar.gz",
+      "sha256": "8e2449ce97b8e24d72f2da22b2bafc62a72b631bb5aa88be5128e1d756dad494",
+      "archive_prefix": "detector-ablation-features-v1.9/",
+      "required_paths": [
+        "reproduction/detector_ablation_features/SHA256SUMS",
+        "reproduction/detector_ablation_features/input/MAESTRO-validation.npz",
+        "reproduction/detector_ablation_features/input/calibration_70_85.csv.gz",
+        "reproduction/detector_ablation_features/input/train/fit_00_14.npz",
+        "reproduction/detector_ablation_features/input/train/fit_14_28.npz",
+        "reproduction/detector_ablation_features/input/train/fit_28_42.npz",
+        "reproduction/detector_ablation_features/input/train/fit_42_56.npz",
+        "reproduction/detector_ablation_features/input/train/fit_56_70.npz",
+        "reproduction/detector_ablation_features/input/train/calibration_70_85.npz",
+        "reproduction/detector_ablation_features/input/test/lmd-clean.npz",
+        "reproduction/detector_ablation_features/input/test/atepp.npz",
+        "reproduction/detector_ablation_features/input/test/asap.npz"
+      ]
+    },
     "three-condition-source-specs": {
       "description": "Frozen stream, intervention-slot, and batch-schedule specifications for the three-condition experiments.",
       "url": "https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.9.0/three-condition-source-specs.tar.gz",

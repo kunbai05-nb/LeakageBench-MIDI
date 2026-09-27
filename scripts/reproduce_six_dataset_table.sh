@@ -30,10 +30,13 @@ WORKERS=${8:-8}
 DETECTOR="$ROOT/checkpoints/same-work-detector-v1.9"
 
 python "$ROOT/scripts/verify_detector_checkpoint.py" "$DETECTOR"
-bash "$ROOT/scripts/reproduce_detector_benchmarks.sh" \
-  "${DATASET_ROOTS[0]}" "${DATASET_ROOTS[1]}" "${DATASET_ROOTS[2]}" \
-  "${DATASET_ROOTS[3]}" "${DATASET_ROOTS[4]}" "${DATASET_ROOTS[5]}" \
-  "$DETECTOR" "$OUTPUT/raw" "$WORKERS"
+DATASETS=(shs asap atepp lmd-clean vienna4x22 pianovam)
+for index in "${!DATASETS[@]}"; do
+  dataset=${DATASETS[$index]}
+  python "$ROOT/scripts/reproduce_detector_benchmark.py" \
+    "$dataset" "${DATASET_ROOTS[$index]}" "$DETECTOR" "$OUTPUT/raw/$dataset" \
+    --workers "$WORKERS"
+done
 python "$ROOT/scripts/summarize_detector_benchmarks.py" "$OUTPUT/raw" "$OUTPUT/tables"
 
 echo

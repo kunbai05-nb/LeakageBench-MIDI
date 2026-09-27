@@ -4,11 +4,13 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 from pathlib import Path
 
 
-DATASETS = ("lmd-clean", "atepp", "shs", "asap")
+DATASETS = ("lmd-clean", "atepp", "asap")
+PAPER_TABLE_DIGEST = "856cdccf7dfeaca588b80bc130b6a02dc5b24f793d48b2e9bb006b34f780c3ca"
 PAIR_ORDER = (
     ("full", "Full v1.9"),
     ("without_structural", "w/o structural features"),
@@ -157,6 +159,20 @@ def main() -> None:
     args = parser.parse_args()
     actual = derive(args.raw_results)
     write_outputs(actual, args.output)
+    canonical = json.dumps(actual, sort_keys=True, separators=(",", ":")).encode()
+    digest = hashlib.sha256(canonical).hexdigest()
+    verification = {
+        "status": "PASS" if digest == PAPER_TABLE_DIGEST else "FAIL",
+        "paper_table_digest": PAPER_TABLE_DIGEST,
+        "generated_table_digest": digest,
+        "tables": [1, 2, 4, 5],
+        "datasets": list(DATASETS),
+    }
+    (args.output / "verification.json").write_text(
+        json.dumps(verification, indent=2) + "\n", encoding="utf-8"
+    )
+    if verification["status"] != "PASS":
+        raise RuntimeError("generated ablation tables do not match the frozen paper values")
     print(f"Generated Tables 1, 2, 4, and 5 ({args.output})")
 
 

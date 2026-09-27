@@ -1,5 +1,6 @@
 from __future__ import annotations
 import importlib.util
+import json
 from pathlib import Path
 import pytest
 from leakagebench_midi import (
@@ -16,12 +17,34 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def test_public_detector_ablation_scope_is_exact():
     for script in (
-        "build_detector_ablation_features.py",
+        "build_detector_candidate_features.py",
         "run_detector_ablation.py",
         "summarize_detector_ablation.py",
-        "reproduce_detector_ablation_from_midi.sh",
+        "reproduce_detector_ablation.sh",
     ):
         assert (ROOT / "scripts" / script).is_file()
+
+    entry = (ROOT / "scripts" / "reproduce_detector_ablation.sh").read_text()
+    assert "--from-midi" in entry
+    for obsolete in (
+        "build_detector_ablation_features.py",
+        "reproduce_detector_ablation_from_midi.sh",
+        "reproduce_detector_benchmarks.sh",
+    ):
+        assert not (ROOT / "scripts" / obsolete).exists()
+
+
+def test_public_checkpoint_comparison_workflow_exists():
+    for script in (
+        "reproduce_fast_vs_v19.sh",
+        "reproduce_fast_vs_v19_from_checkpoints.py",
+    ):
+        assert (ROOT / "scripts" / script).is_file()
+
+    assets = json.loads((ROOT / "reproduction" / "ASSETS.json").read_text())
+    assert "fast-vs-v19-fixed" in assets["assets"]
+    assert "detector-ablation-features-v1.9" in assets["assets"]
+    assert "multidataset-deployment" not in assets["assets"]
 
 
 def test_checkpoint_verifier_rejects_paths_outside_bundle(tmp_path):

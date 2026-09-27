@@ -60,6 +60,7 @@ def test_readme_has_primary_workflows():
         "scripts/verify_model_checkpoints.py",
         "scripts/reproduce_three_condition.sh",
         "scripts/reproduce_fast_vs_v19.sh",
+        "scripts/reproduce_multidataset_deployment.sh",
         "scripts/reproduce_detector_ablation.sh",
         "scripts/reproduce_six_dataset_table.sh",
         "/releases/tag/v1.3.0",

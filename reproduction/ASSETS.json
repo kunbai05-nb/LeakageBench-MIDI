@@ -57,6 +57,26 @@
         "reproduction/detector_ablation_features/input/test/asap.npz"
       ]
     },
+    "multidataset-deployment": {
+      "description": "Frozen family assignments and audit metadata for replaying 200 file-level splits and regenerating the seven-dataset deployment table.",
+      "url": "https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.9.0/multidataset-deployment.tar.gz",
+      "sha256": "cb7832638fa89b8ca44cbf9cedd9b1909e9ae13c0a4adac538e1be4fde1108e2",
+      "archive_prefix": "multidataset-deployment/",
+      "required_paths": [
+        "reproduction/multidataset_deployment/SHA256SUMS",
+        "reproduction/multidataset_deployment/FROZEN_CONFIG.json",
+        "reproduction/multidataset_deployment/EXPERIMENT_PROTOCOL.md",
+        "reproduction/multidataset_deployment/baseline_summary.json",
+        "reproduction/multidataset_deployment/pop909/RESULTS.json",
+        "reproduction/multidataset_deployment/pop909/component_labels.npz",
+        "reproduction/multidataset_deployment/asap/component_labels.npz",
+        "reproduction/multidataset_deployment/pdmx/component_labels.npz",
+        "reproduction/multidataset_deployment/gigamidi/component_labels.npz",
+        "reproduction/multidataset_deployment/maestro/component_labels.npz",
+        "reproduction/multidataset_deployment/lmd/component_labels.npz",
+        "reproduction/multidataset_deployment/aria/component_labels.npz"
+      ]
+    },
     "three-condition-source-specs": {
       "description": "Frozen stream, intervention-slot, and batch-schedule specifications for the three-condition experiments.",
       "url": "https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.9.0/three-condition-source-specs.tar.gz",

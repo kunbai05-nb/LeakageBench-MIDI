@@ -38,13 +38,15 @@ def test_public_checkpoint_comparison_workflow_exists():
     for script in (
         "reproduce_fast_vs_v19.sh",
         "reproduce_fast_vs_v19_from_checkpoints.py",
+        "reproduce_multidataset_deployment.sh",
+        "summarize_multidataset_deployment.py",
     ):
         assert (ROOT / "scripts" / script).is_file()
 
     assets = json.loads((ROOT / "reproduction" / "ASSETS.json").read_text())
     assert "fast-vs-v19-fixed" in assets["assets"]
     assert "detector-ablation-features-v1.9" in assets["assets"]
-    assert "multidataset-deployment" not in assets["assets"]
+    assert "multidataset-deployment" in assets["assets"]
 
 
 def test_checkpoint_verifier_rejects_paths_outside_bundle(tmp_path):

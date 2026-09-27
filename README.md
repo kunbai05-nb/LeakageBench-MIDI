@@ -81,6 +81,16 @@ bash scripts/reproduce_fast_vs_v19.sh
 
 The generated CSV, Markdown, and JSON files are written to `reproduced/fast_vs_v19/`. The release asset contains checkpoints, candidate features, and manifests, but no predicted scores or preformatted result table.
 
+### Seven-dataset deployment audit
+
+The following command downloads the frozen family assignments, replays all 200 file-level splits, recomputes the empirical intervals, and regenerates the seven-dataset deployment table:
+
+```bash
+bash scripts/reproduce_multidataset_deployment.sh
+```
+
+This is a downstream deployment audit, not an end-to-end detector rerun. The valid-MIDI and multi-version prevalence columns follow the frozen deployment census; exposure estimates are recomputed from the final frozen family assignments. The workflow verifies all internal checksums and the generated paper-table digest.
+
 ### ATEPP mitigation experiment
 
 The following command downloads the 12 checksum-verified final v1.9 model checkpoints and the frozen test windows, runs fresh BF16 inference for all five conditions and three seeds, and then regenerates the ATEPP mitigation table:

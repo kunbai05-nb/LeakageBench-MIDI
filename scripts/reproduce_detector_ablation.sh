@@ -3,7 +3,9 @@ set -euo pipefail
 
 ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 export PYTHONPATH="$ROOT${PYTHONPATH:+:$PYTHONPATH}"
-export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 NUMEXPR_NUM_THREADS=1
+THREADS=${LEAKAGEBENCH_THREADS:-4}
+export OMP_NUM_THREADS="$THREADS" OPENBLAS_NUM_THREADS="$THREADS" \
+  MKL_NUM_THREADS="$THREADS" NUMEXPR_NUM_THREADS="$THREADS"
 
 PYTHON_BIN=$(command -v python || command -v python3 || true)
 [[ -n "$PYTHON_BIN" ]] || { echo "ERROR: Python is not installed." >&2; exit 1; }

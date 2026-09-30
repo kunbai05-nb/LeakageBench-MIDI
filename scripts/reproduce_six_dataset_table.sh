@@ -29,6 +29,7 @@ WORKERS=${8:-8}
 [[ "$WORKERS" =~ ^[1-9][0-9]*$ ]] || { echo "ERROR: WORKERS must be a positive integer." >&2; exit 1; }
 DETECTOR="$ROOT/checkpoints/same-work-detector-v1.9"
 
+python "$ROOT/scripts/summarize_detector_benchmarks.py" --check-manifests
 python "$ROOT/scripts/verify_detector_checkpoint.py" "$DETECTOR"
 DATASETS=(shs asap atepp lmd-clean vienna4x22 pianovam)
 for index in "${!DATASETS[@]}"; do

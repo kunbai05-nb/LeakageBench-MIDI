@@ -4,7 +4,10 @@ from __future__ import annotations
 
 import argparse
 import csv
+import gzip
+import hashlib
 import json
+from collections import defaultdict
 from pathlib import Path
 
 
@@ -17,6 +20,42 @@ EXPECTED_SCOPE = {
     "vienna4x22": (88, 924),
     "pianovam": (94, 77),
 }
+MANIFEST_DIR = Path(__file__).resolve().parents[1] / "reproduction" / "detector_benchmark"
+MANIFEST_SHA256 = {
+    "shs": "a1390f92470e402cdfd9eb42d1204359bc9656f89333cdbff77bfbe951f086d4",
+    "asap": "46d9eb87d7a17d62426c0980883cd9f223e08cb47244e3fc86ea4411692bee1e",
+    "atepp": "8b701bab16bcb9c85cce015aa6cc51c2cadb725ef812e56803408224d0fb1f9c",
+    "lmd-clean": "2ae9eec55a7b326e9c7279c62fa0088157216012a5243289ae16718161866920",
+    "vienna4x22": "09f48bab4b2d8bc88c0e440e0aae770487bf098505dbc79aff3632dc9069da57",
+    "pianovam": "3cf8a58daa44f45574e5716abaa62c213dbf4007fa1435a285da557893f03026",
+}
+
+
+def check_manifests() -> None:
+    """Fail before detector inference if a registry differs from the paper cohort."""
+    for dataset in DATASETS:
+        path = MANIFEST_DIR / f"{dataset}.csv.gz"
+        if hashlib.sha256(path.read_bytes()).hexdigest() != MANIFEST_SHA256[dataset]:
+            raise ValueError(f"frozen registry checksum mismatch: {path}")
+        with gzip.open(path, "rt", newline="", encoding="utf-8") as handle:
+            rows = list(csv.DictReader(handle))
+        if len({row["relative_path"] for row in rows}) != len(rows):
+            raise ValueError(f"duplicate MIDI paths in {path}")
+        groups: dict[str, list[str]] = defaultdict(list)
+        for row in rows:
+            if not row["file_md5"] or not row["work_group"] or not row["recording_group"]:
+                raise ValueError(f"incomplete registry row in {path}")
+            groups[row["work_group"]].append(row["recording_group"])
+        pairs = sum(
+            left != right
+            for recordings in groups.values()
+            for position, left in enumerate(recordings)
+            for right in recordings[position + 1 :]
+        )
+        scope = (len(rows), pairs)
+        if scope != EXPECTED_SCOPE[dataset]:
+            raise ValueError(f"registry scope mismatch in {path}: {scope} != {EXPECTED_SCOPE[dataset]}")
+        print(f"{dataset}: {scope[0]} MIDI files, {scope[1]} reference pairs")
 
 
 def percent(value: float) -> str:
@@ -45,6 +84,8 @@ def load_results(input_dir: Path) -> list[dict]:
             raise ValueError(
                 f"evaluation scope mismatch in {path}: {scope} != {EXPECTED_SCOPE[dataset]}"
             )
+        if value.get("evaluation_manifest_sha256") != MANIFEST_SHA256[dataset]:
+            raise ValueError(f"evaluation registry checksum mismatch in {path}")
         output.append(value)
     return output
 
@@ -100,9 +141,15 @@ def write_tables(results: list[dict], output_dir: Path) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Build the six-dataset result table.")
-    parser.add_argument("input_dir", type=Path)
-    parser.add_argument("output_dir", type=Path)
+    parser.add_argument("input_dir", type=Path, nargs="?")
+    parser.add_argument("output_dir", type=Path, nargs="?")
+    parser.add_argument("--check-manifests", action="store_true", help="Verify frozen cohort sizes before inference.")
     args = parser.parse_args()
+    if args.check_manifests:
+        check_manifests()
+        return
+    if args.input_dir is None or args.output_dir is None:
+        parser.error("input_dir and output_dir are required unless --check-manifests is used")
     results = load_results(args.input_dir)
     write_tables(results, args.output_dir)
     print(args.output_dir / "six_dataset_results.csv")

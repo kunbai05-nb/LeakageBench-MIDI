@@ -115,6 +115,7 @@ def test_six_dataset_table_output(tmp_path):
                     "dataset": dataset,
                     "files": files,
                     "reference_pairs": reference_pairs,
+                    "evaluation_manifest_sha256": module.MANIFEST_SHA256[dataset],
                 }
             ),
             encoding="utf-8",

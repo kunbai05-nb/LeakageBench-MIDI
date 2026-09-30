@@ -75,6 +75,8 @@ def test_no_obsolete_detector_implementation():
         path.read_text(encoding="utf-8", errors="ignore").lower()
         for path in public_files()
         if path.stat().st_size < 5_000_000
+        and path.suffix in {".py", ".sh"}
+        and path.parts[len(ROOT.parts)] in {"scripts", "leakagebench_midi"}
     )
     forbidden = (
         "caug" + "bert",

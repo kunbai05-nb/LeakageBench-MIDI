@@ -47,7 +47,7 @@ reproduced/three_condition/tables/three_condition_results.json
 
 ### Six-dataset detector benchmark
 
-Supply the six prepared MIDI directories in the order shown below. The command verifies the detector checkpoint and every MIDI checksum, reproduces the Ours v1.9 rows under both the fixed and oracle-optimal thresholds, computes 95% confidence intervals, and creates the combined table:
+Supply the six prepared MIDI directories in the order shown below. The command checks the frozen evaluation cohorts before inference, verifies the detector checkpoint and every MIDI checksum, reproduces the Ours v1.9 rows under both the fixed and oracle-optimal thresholds, computes 95% confidence intervals, and creates the detector-results table:
 
 ```bash
 bash scripts/reproduce_six_dataset_table.sh \
@@ -69,7 +69,7 @@ reproduced/six_dataset/tables/six_dataset_results.json
 
 The fixed result uses the released decision threshold unchanged on all six datasets. The optimal result is a target-label oracle upper bound and is not used for deployment.
 
-The SHS cohort contains the final 733 checksum-verified MIDI files, 213 works, and 515 eligible reference pairs. No target dataset is used to retrain the detector or recalibrate the fixed threshold.
+The paper's family-disjoint SHS evaluation cohort contains 306 checksum-verified MIDI files and 80 eligible reference pairs. The CAugBERT/CLaMP comparison rows are not recalculated by this command; they remain the separately frozen baseline results. This benchmark performs no detector retraining or threshold recalibration on the evaluation cohorts.
 
 ### Fast Detector versus v1.9
 

@@ -47,25 +47,34 @@ python "$ROOT/scripts/fetch_reproduction_assets.py" three-condition-source-specs
 
 download() {
   local tag=$1 name=$2 expected=$3 target="$OUTPUT/downloads/$2"
-  if [[ ! -f "$target" ]]; then
-    echo "Downloading $name"
-    curl -fL --retry 5 --retry-delay 3 -C - \
-      "$RELEASE_BASE/$tag/$name" -o "$target"
+  local url="$RELEASE_BASE/$tag/$name" staging
+  if [[ -f "$target" ]] && echo "$expected  $target" | sha256sum --check --status; then
+    return
   fi
-  if ! echo "$expected  $target" | sha256sum --check --status; then
+  if [[ -f "$target" ]]; then
     echo "Resuming incomplete download: $name"
-    curl -fL --retry 5 --retry-delay 3 -C - \
-      "$RELEASE_BASE/$tag/$name" -o "$target" || true
-    if ! echo "$expected  $target" | sha256sum --check --status; then
-      mv "$target" "$target.invalid"
-      curl -fL --retry 5 --retry-delay 3 \
-        "$RELEASE_BASE/$tag/$name" -o "$target"
+    if curl -fL --retry 5 --retry-delay 3 -C - "$url" -o "$target" &&
+       echo "$expected  $target" | sha256sum --check --status; then
+      return
     fi
   fi
-  echo "$expected  $target" | sha256sum --check --status || {
-    echo "ERROR: checksum mismatch after download: $target" >&2
+
+  # The shared downloader falls back to authenticated `gh release download`
+  # when a private GitHub release returns 404 to an anonymous request.
+  staging=$(mktemp -d "$OUTPUT/downloads/.${name}.XXXXXX")
+  echo "Downloading $name"
+  if ! python -c 'from pathlib import Path; from scripts.fetch_reproduction_assets import download; import sys; download(sys.argv[1], Path(sys.argv[2]))' \
+      "$url" "$staging/archive"; then
+    rmdir "$staging" 2>/dev/null || true
+    echo "ERROR: download failed. For a private repository, install GitHub CLI and run: gh auth login" >&2
     exit 1
-  }
+  fi
+  if ! echo "$expected  $staging/archive" | sha256sum --check --status; then
+    echo "ERROR: checksum mismatch after download: $name" >&2
+    exit 1
+  fi
+  mv -f "$staging/archive" "$target"
+  rmdir "$staging"
 }
 
 MODEL_ASSETS=(

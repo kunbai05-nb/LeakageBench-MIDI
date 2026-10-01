@@ -7,6 +7,10 @@
       "sha256": "9375ea3b17b0ac9e82c33bfdc4348837d843af0a83201f293ceb117fc220f83a",
       "archive_prefix": "",
       "required_paths": [
+        "reproduction/atepp_mitigation_v1.9/reproduce.sh",
+        "reproduction/atepp_mitigation_v1.9/evaluate_checkpoint.py",
+        "reproduction/atepp_mitigation_v1.9/build_table.py",
+        "reproduction/atepp_mitigation_v1.9/source/external_models.py",
         "reproduction/atepp_mitigation_v1.9/SHA256SUMS",
         "reproduction/atepp_mitigation_v1.9/checkpoint_manifest.json",
         "reproduction/atepp_mitigation_v1.9/runs/detector/seed_202608040/model.pt",
@@ -19,6 +23,26 @@
         "reproduction/atepp_mitigation_v1.9/prepared/evaluation_labels.json",
         "reproduction/atepp_mitigation_v1.9/prepared/PREPARATION_AUDIT.json"
       ]
+    },
+    "atepp-mitigation-v1.9-protocol-fix": {
+      "description": "Metadata-only correction of the five reported ATEPP conditions; original frozen training provenance preserved; no checkpoints or test arrays.",
+      "url": "https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.9.0/atepp-mitigation-v1.9-protocol-fix.tar.gz",
+      "sha256": "0e3683743c975c0282361e93a66123f2ad451f6faa194c46353277ec25b39772",
+      "archive_prefix": "",
+      "required_paths": [
+        "reproduction/atepp_mitigation_v1.9/protocol.json",
+        "reproduction/atepp_mitigation_v1.9/training_protocol.json",
+        "reproduction/atepp_mitigation_v1.9/prepared/PREPARATION_AUDIT.json",
+        "reproduction/atepp_mitigation_v1.9/SHA256SUMS",
+        "reproduction/atepp_mitigation_v1.9/PROTOCOL_REVISION.json"
+      ],
+      "file_sha256": {
+        "reproduction/atepp_mitigation_v1.9/protocol.json": "92c68ab94cc485f5c9650409f8084bac2fed92a7a06349d14553b24104050665",
+        "reproduction/atepp_mitigation_v1.9/training_protocol.json": "dfadb26e4b507f72cc1c366d18a3b5bc1108e15d01490788a703c4fca4d9b9f8",
+        "reproduction/atepp_mitigation_v1.9/prepared/PREPARATION_AUDIT.json": "5d9eb675c915a88c8c9aa678559d70404b732d9e63dc478cc020bfa444960dab",
+        "reproduction/atepp_mitigation_v1.9/SHA256SUMS": "258931cc65849a858e0ea1ea959b407053a25001edcf14efa7889f9df62036f5",
+        "reproduction/atepp_mitigation_v1.9/PROTOCOL_REVISION.json": "1b6cb14c14f9675ae719fee61eb1e7e932def5667dcc4dcd7188f6cb98fb2a4d"
+      }
     },
     "fast-vs-v19-fixed": {
       "description": "Fast Detector and v1.9 checkpoints, candidate features, and manifests for fresh inference of the three-dataset fixed-threshold comparison.",

@@ -2,11 +2,13 @@
 set -euo pipefail
 
 ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+DATA_ROOT=${LEAKAGEBENCH_DATA_DIR:-$ROOT/data}
 RELEASE_BASE="https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download"
 export PYTHONPATH="$ROOT${PYTHONPATH:+:$PYTHONPATH}"
 
 usage() {
-  echo "Usage: bash scripts/reproduce_three_condition.sh /path/to/lmd_full.tar.gz [output_dir]"
+  echo "Usage: bash scripts/reproduce_three_condition.sh [LMD_SOURCE] [OUTPUT_DIR]"
+  echo "Default LMD source: $DATA_ROOT/lmd_full.tar.gz"
   echo "       bash scripts/reproduce_three_condition.sh --check-only"
 }
 
@@ -31,15 +33,24 @@ if [[ ${1:-} == "--check-only" ]]; then
   exit 0
 fi
 
-if [[ $# -lt 1 || $# -gt 2 ]]; then
+if [[ ${1:-} == "--help" || ${1:-} == "-h" ]]; then
+  usage
+  exit 0
+fi
+
+if [[ $# -gt 2 ]]; then
   usage >&2
   exit 2
 fi
 
 check_environment
-LMD_SOURCE=$(realpath "$1")
+LMD_SOURCE=$(realpath -m "${1:-$DATA_ROOT/lmd_full.tar.gz}")
 OUTPUT=$(realpath -m "${2:-$ROOT/reproduced/three_condition}")
-[[ -e "$LMD_SOURCE" ]] || { echo "ERROR: LMD source not found: $LMD_SOURCE" >&2; exit 1; }
+[[ -e "$LMD_SOURCE" ]] || {
+  echo "ERROR: LMD source not found: $LMD_SOURCE" >&2
+  echo "Download lmd_full.tar.gz from https://colinraffel.com/projects/lmd/ into $DATA_ROOT, or supply an existing archive/directory as the first argument." >&2
+  exit 1
+}
 python -c "import torch; assert torch.cuda.is_available() and torch.cuda.is_bf16_supported(), 'A BF16-capable CUDA GPU is required'"
 mkdir -p "$OUTPUT/downloads" "$OUTPUT/checkpoints" "$OUTPUT/tables"
 
@@ -104,7 +115,7 @@ done
 
 if [[ ! -f "$OUTPUT/prepared_lmd/PREPARATION_SUMMARY.json" ]]; then
   echo "Preparing frozen LMD streams"
-  python "$ROOT/scripts/prepare_lmd.py" "$LMD_SOURCE" "$OUTPUT/prepared_lmd"
+  python "$ROOT/scripts/prepare_lmd.py" "$LMD_SOURCE" "$OUTPUT/prepared_lmd" --evaluation-only
 fi
 
 echo "Reproducing the multi-model three-condition table"

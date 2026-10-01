@@ -2,6 +2,11 @@
 set -euo pipefail
 
 ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+if [[ ${1:-} == "--help" || ${1:-} == "-h" ]]; then
+  echo "Usage: bash scripts/reproduce_detector_ablation.sh [OUTPUT_DIR]"
+  echo "   or: bash scripts/reproduce_detector_ablation.sh --from-midi [LMD_ROOT ATEPP_ROOT ASAP_ROOT [OUTPUT_DIR] [WORKERS]]"
+  exit 0
+fi
 export PYTHONPATH="$ROOT${PYTHONPATH:+:$PYTHONPATH}"
 THREADS=${LEAKAGEBENCH_THREADS:-4}
 export OMP_NUM_THREADS="$THREADS" OPENBLAS_NUM_THREADS="$THREADS" \
@@ -25,6 +30,10 @@ if [[ "${1:-}" != "--from-midi" ]]; then
   "$PYTHON_BIN" "$ROOT/scripts/fetch_reproduction_assets.py" detector-ablation-features-v1.9
 else
   shift
+  if [[ $# -eq 0 ]]; then
+    DATA_ROOT=${LEAKAGEBENCH_DATA_DIR:-$ROOT/data}
+    set -- "$DATA_ROOT/lmd-clean" "$DATA_ROOT/atepp" "$DATA_ROOT/asap"
+  fi
   if [[ $# -lt 3 || $# -gt 5 ]]; then
     echo "Usage: bash scripts/reproduce_detector_ablation.sh --from-midi LMD_ROOT ATEPP_ROOT ASAP_ROOT [OUTPUT_DIR] [WORKERS]" >&2
     exit 2
@@ -70,9 +79,9 @@ else
   cp "$TRAIN_SPEC/calibration_70_85.csv.gz" "$INPUT/calibration_70_85.csv.gz"
   if [[ ! -f "$INPUT/MAESTRO-validation.npz" ]]; then
     echo "Downloading the frozen MAESTRO view-selection input..."
-    curl -L --fail --retry 3 \
-      -o "$INPUT/MAESTRO-validation.npz" \
-      "https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.9.0/MAESTRO-validation.npz"
+    "$PYTHON_BIN" -c 'from pathlib import Path; from scripts.fetch_reproduction_assets import download; import sys; download(sys.argv[1], Path(sys.argv[2]))' \
+      "https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.9.0/MAESTRO-validation.npz" \
+      "$INPUT/MAESTRO-validation.npz"
   fi
   MAESTRO_SHA256="3ad63246fd8614826e5ac13ffc14df9fe2e5d1ee8f17d8e61670e9efd3b4316a"
   ACTUAL_MAESTRO_SHA256=$(sha256sum "$INPUT/MAESTRO-validation.npz" | awk '{print $1}')
@@ -82,6 +91,9 @@ else
   }
 fi
 
+if [[ -f "$ROOT/reproduction/detector_ablation_features/SHA256SUMS" && "${INPUT}" == "$ROOT/reproduction/detector_ablation_features/input" ]]; then
+  (cd "$ROOT/reproduction/detector_ablation_features" && sha256sum -c SHA256SUMS)
+fi
 mkdir -p "$OUTPUT/raw" "$OUTPUT/tables"
 "$PYTHON_BIN" "$ROOT/scripts/run_detector_ablation.py" "$INPUT" "$OUTPUT/raw"
 "$PYTHON_BIN" "$ROOT/scripts/summarize_detector_ablation.py" "$OUTPUT/raw" "$OUTPUT/tables"

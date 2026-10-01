@@ -309,16 +309,19 @@ def write_probes(specs: list[dict], midi_root: Path, output: Path) -> int:
 
 
 def main() -> None:
-    require_specs()
     parser = argparse.ArgumentParser(
         description="Build the formal token streams from LMD-full."
     )
     parser.add_argument("lmd_source", type=Path)
     parser.add_argument("output_dir", type=Path)
+    parser.add_argument("--evaluation-only", action="store_true", help="Build only the frozen evaluation windows; omit training streams.")
     args = parser.parse_args()
+    require_specs()
 
     config = json.loads((SPECS / "formal_data.json").read_text())
     specs = read_specs()
+    if args.evaluation_only:
+        specs = [row for row in specs if row["role"] == "probe"]
     required = {}
     for row in specs:
         previous = required.setdefault(row["md5"], row["piece_sha256"])
@@ -331,11 +334,12 @@ def main() -> None:
         required,
         config["lmd_full_archive_sha256"],
     )
-    streams = write_streams(
+    streams = {} if args.evaluation_only else write_streams(
         specs, read_slots(), midi_root, args.output_dir, config["expected_streams"]
     )
     probe_windows = write_probes(specs, midi_root, args.output_dir)
     result = {
+        "mode": "evaluation_only" if args.evaluation_only else "training_and_evaluation",
         "midi_files": len(required),
         "probe_windows": probe_windows,
         "streams": streams,

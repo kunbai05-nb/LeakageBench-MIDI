@@ -6,29 +6,50 @@ Code, checkpoints, and frozen specifications for the three-condition experiments
 
 ## 1. Setup
 
-Requirements: Ubuntu/Linux, Python 3.10, and about 10 GB of free disk space. Checkpoint evaluation requires an NVIDIA GPU with BF16 support.
+Requirements: Ubuntu/Linux and Python 3.10. Checkpoint evaluation requires an NVIDIA GPU with BF16 support. The pinned inference environment uses PyTorch 2.8.0 and scikit-learn 1.7.2. Disk usage depends on the selected experiments and the original datasets; reserve additional space for both downloaded archives and extracted checkpoints rather than assuming a fixed 10 GB total.
+
+While the repository is private, authorized collaborators must authenticate before cloning or downloading release assets:
+
+```bash
+gh auth login
+gh auth setup-git
+```
+
+Authentication is not required after a public release.
 
 ```bash
 git clone https://github.com/kunbai05-nb/LeakageBench-MIDI.git
 cd LeakageBench-MIDI
 python -m venv .venv
 source .venv/bin/activate
+python -m pip install --upgrade pip
 pip install -r requirements.txt
 pip install -e '.[scale]'
 ```
 
-LMD is not distributed here. Download `lmd_full.tar.gz` from the [Lakh MIDI Dataset](https://colinraffel.com/projects/lmd/).
+Raw MIDI datasets are not distributed here. Download `lmd_full.tar.gz` from the [Lakh MIDI Dataset](https://colinraffel.com/projects/lmd/) and save it as `data/lmd_full.tar.gz`. All commands below are run from the repository root with the virtual environment activated. Release bundles download automatically to `reproduction/` (three-condition weights to `reproduced/three_condition/`). No manual checkpoint paths are needed.
 
-While this repository is private, authorized collaborators should run `gh auth login` before downloading release assets. This is not required after a public release.
+For the six-dataset benchmark, place the original datasets in the following default directories. Each directory must contain the relative paths in its corresponding `reproduction/detector_benchmark/*.csv.gz` manifest, not merely any collection of MIDI files:
+
+| Dataset | Default directory | Example path within that directory |
+| --- | --- | --- |
+| SHS (subset of LMD-full) | `data/shs` | `0/0207f2cc938c3691b3af6d8e359bedfd.mid` |
+| ASAP | `data/asap` | `Bach/Fugue/bwv_846/Shi05M.mid` |
+| ATEPP | `data/atepp` | `Sergei_Rachmaninoff/13_Preludes,_Op._32/No._10_in_B_Minor:_Lento/00046.mid` |
+| LMD-clean | `data/lmd-clean` | `clean_midi/2 Brothers on the 4th Floor/Dreams.1.mid` |
+| Vienna4x22 | `data/vienna4x22` | `Chopin_op10_no3_p01.mid` |
+| PianoVAM | `data/pianovam` | `MIDI/2024-02-14_19-10-09.mid` |
+
+Existing data can be linked into these directories instead of copied. Alternatively, set `LEAKAGEBENCH_DATA_DIR` once to a data directory with the same layout, or keep using the explicit-path forms shown by each script's `--help`. The scripts do not download licensed datasets automatically.
 
 ## 2. Reproduce the paper tables
 
 ### Multi-model three-condition experiment
 
-The following command downloads and verifies the released checkpoints and source specifications, evaluates all models on the frozen test set, and creates the reported table:
+The following command downloads and verifies the released checkpoints and source specifications, rebuilds only the frozen evaluation windows from MIDI (not the unused training streams), evaluates all models on the frozen test set, and creates the reported table:
 
 ```bash
-bash scripts/reproduce_three_condition.sh /path/to/lmd_full.tar.gz
+bash scripts/reproduce_three_condition.sh
 ```
 
 Interrupted downloads and completed three-condition evaluations are reused. Before a long run, check the environment with:
@@ -47,16 +68,11 @@ reproduced/three_condition/tables/three_condition_results.json
 
 ### Six-dataset detector benchmark
 
-Supply the six prepared MIDI directories in the order shown below. The command checks the frozen evaluation cohorts before inference, verifies the detector checkpoint and every MIDI checksum, reproduces the Ours v1.9 rows under both the fixed and oracle-optimal thresholds, computes 95% confidence intervals, and creates the detector-results table:
+With the default data layout above, first validate all six inputs without running inference, then reproduce the table. The command checks the frozen evaluation cohorts before inference, verifies the detector checkpoint and every MIDI checksum, reproduces the Ours v1.9 rows under both the fixed and oracle-optimal thresholds, computes 95% confidence intervals, and creates the detector-results table:
 
 ```bash
-bash scripts/reproduce_six_dataset_table.sh \
-  /path/to/SHS \
-  /path/to/ASAP \
-  /path/to/ATEPP \
-  /path/to/LMD-clean \
-  /path/to/Vienna4x22 \
-  /path/to/PianoVAM
+bash scripts/reproduce_six_dataset_table.sh --check-only
+bash scripts/reproduce_six_dataset_table.sh
 ```
 
 Outputs:
@@ -108,6 +124,10 @@ reproduction/atepp_mitigation_v1.9/reproduced_results/RESULTS.json
 
 The current experiment uses Same-Work Detector v1.9 and a detector-size, label-safe reference. All five conditions share the same held-out set and scored-token distribution; detector isolation, random removal, and the label reference each use 484 training files. A BF16-capable CUDA GPU is required; the released package contains no precomputed test-evaluation records or result table.
 
+Simple deduplication and the uncorrected condition have identical frozen training streams, as verified by their matching SHA-256 digests. They therefore share three checkpoints: the five-condition table evaluates 15 condition/seed combinations from 12 distinct checkpoints.
+
+The command automatically applies a small checksum-verified protocol correction after downloading the original checkpoint bundle. The scoring protocol lists the five reported conditions; the original frozen training protocol is retained separately. No duplicate checkpoint bundle is needed.
+
 ### Detector ablation and sensitivity experiments
 
 The recommended reproduction downloads checksum-verified intermediate features, retrains every ablated classifier, reevaluates all settings, and regenerates Tables 1, 2, 4, and 5:
@@ -119,13 +139,12 @@ bash scripts/reproduce_detector_ablation.sh
 This is the default reviewer workflow: it skips only the expensive deterministic MIDI feature extraction and does not download frozen result tables. For the strict end-to-end check, rerun feature extraction from the checksum-verified source MIDI files:
 
 ```bash
-bash scripts/reproduce_detector_ablation.sh --from-midi \
-  /path/to/LMD-clean \
-  /path/to/ATEPP \
-  /path/to/ASAP
+bash scripts/reproduce_detector_ablation.sh --from-midi
 ```
 
 Both workflows generate the reported retrieval-view count, pairwise-verifier, Top-K, and classifier-count tables. No frozen result table or MIDI file is stored in this repository.
+
+`verification.json` reports table generation separately from equality to the frozen paper values. `PASS` means an exact match of the reported values; `DIFFERENT` means new tables were generated but require comparison. Differences remain visible and are not treated as successful matching or automatically blamed on floating-point rounding. For a strict equality check, rerun `scripts/summarize_detector_ablation.py` with `--strict-match`.
 
 ## 3. Use the detector on another MIDI dataset
 

@@ -295,6 +295,7 @@ def main() -> None:
     parser.add_argument("detector_dir", type=Path)
     parser.add_argument("output_dir", type=Path)
     parser.add_argument("--workers", type=int, default=1)
+    parser.add_argument("--check-only", action="store_true", help="Verify all MIDI files and the checkpoint without running inference.")
     parser.add_argument("--backend", choices=("exact", "faiss"), default="exact")
     parser.add_argument(
         "--manifest",
@@ -306,6 +307,10 @@ def main() -> None:
     manifest = args.manifest or (SPECS / f"{args.dataset}.csv.gz")
     records = read_rows(manifest)
     paths = verify_files(records, args.midi_root, args.dataset)
+    if args.check_only:
+        load_detector(args.detector_dir)
+        print(json.dumps({"dataset": args.dataset, "files": len(paths), "reference_pairs": len(reference_pairs(records)), "status": "INPUTS_VERIFIED"}))
+        return
     result = detect(paths, args.detector_dir, args.workers, args.backend, threshold=0.0)
     if result["failures"]:
         raise RuntimeError(

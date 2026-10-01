@@ -63,7 +63,15 @@ def checkpoint_identity(path: Path) -> tuple[str, str, int] | None:
     model = classify_checkpoint(path)
     if model is None:
         return None
-    condition = next((value for value in CONDITIONS if value in path.parts), None)
+    normalized_parts = tuple(part.lower().replace("-", "_") for part in path.parts)
+    condition = next(
+        (
+            value
+            for value in CONDITIONS
+            if any(part == value or part.endswith("_" + value) for part in normalized_parts)
+        ),
+        None,
+    )
     match = re.search(r"seed[_-](\d+)", path.name)
     if condition is None or match is None:
         return None

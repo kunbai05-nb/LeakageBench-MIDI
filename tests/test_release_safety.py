@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re
+import subprocess
 from pathlib import Path
 
 
@@ -8,6 +9,11 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def public_files():
+    # Audit distributed source, not the downloaded checkpoints and generated
+    # outputs that the README instructs users to create in this checkout.
+    if (ROOT / ".git").exists():
+        tracked = subprocess.check_output(["git", "ls-files", "-z"], cwd=ROOT)
+        return [ROOT / name for name in tracked.decode().split("\0") if name and (ROOT / name).is_file()]
     ignored = {".git", "__pycache__", ".pytest_cache", ".venv"}
     return [
         path

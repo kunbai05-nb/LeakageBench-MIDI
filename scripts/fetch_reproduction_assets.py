@@ -83,7 +83,9 @@ def fetch(name: str, force: bool = False) -> None:
         raise ValueError(f"unknown asset {name!r}; choose from: {choices}") from error
 
     required = [ROOT / path for path in spec["required_paths"]]
-    if not force and all(path.is_file() for path in required):
+    file_hashes = spec.get("file_sha256", {})
+    hashes_match = all((ROOT / path).is_file() and sha256(ROOT / path) == expected for path, expected in file_hashes.items())
+    if not force and all(path.is_file() for path in required) and hashes_match:
         print(f"{name}: already available")
         return
 
@@ -115,6 +117,9 @@ def fetch(name: str, force: bool = False) -> None:
     missing = [str(path.relative_to(ROOT)) for path in required if not path.is_file()]
     if missing:
         raise FileNotFoundError(f"asset is incomplete; missing: {', '.join(missing)}")
+    for path, expected in file_hashes.items():
+        if sha256(ROOT / path) != expected:
+            raise ValueError(f"installed asset file checksum mismatch: {path}")
     print(f"{name}: downloaded and verified")
 
 

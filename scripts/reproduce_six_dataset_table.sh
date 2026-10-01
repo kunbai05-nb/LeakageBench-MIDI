@@ -3,6 +3,21 @@ set -euo pipefail
 
 ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 export PYTHONPATH="$ROOT${PYTHONPATH:+:$PYTHONPATH}"
+DATA_ROOT=${LEAKAGEBENCH_DATA_DIR:-$ROOT/data}
+CHECK_ONLY=0
+if [[ ${1:-} == "--help" || ${1:-} == "-h" ]]; then
+  echo "Usage: bash scripts/reproduce_six_dataset_table.sh [--check-only] [SHS_ROOT ASAP_ROOT ATEPP_ROOT LMD_CLEAN_ROOT VIENNA4X22_ROOT PIANOVAM_ROOT [OUTPUT_DIR] [WORKERS]]"
+  echo "Default dataset directories: $DATA_ROOT/{shs,asap,atepp,lmd-clean,vienna4x22,pianovam}"
+  exit 0
+fi
+if [[ ${1:-} == "--check-only" ]]; then
+  CHECK_ONLY=1
+  shift
+fi
+if [[ $# -eq 0 ]]; then
+  set -- "$DATA_ROOT/shs" "$DATA_ROOT/asap" "$DATA_ROOT/atepp" \
+    "$DATA_ROOT/lmd-clean" "$DATA_ROOT/vienna4x22" "$DATA_ROOT/pianovam"
+fi
 
 if [[ $# -lt 6 || $# -gt 8 ]]; then
   echo "Usage: bash scripts/reproduce_six_dataset_table.sh SHS_ROOT ASAP_ROOT ATEPP_ROOT LMD_CLEAN_ROOT VIENNA4X22_ROOT PIANOVAM_ROOT [OUTPUT_DIR] [WORKERS]" >&2
@@ -32,6 +47,16 @@ DETECTOR="$ROOT/checkpoints/same-work-detector-v1.9"
 python "$ROOT/scripts/summarize_detector_benchmarks.py" --check-manifests
 python "$ROOT/scripts/verify_detector_checkpoint.py" "$DETECTOR"
 DATASETS=(shs asap atepp lmd-clean vienna4x22 pianovam)
+# Validate all inputs before spending time on the first detector run.
+for index in "${!DATASETS[@]}"; do
+  python "$ROOT/scripts/reproduce_detector_benchmark.py" \
+    "${DATASETS[$index]}" "${DATASET_ROOTS[$index]}" "$DETECTOR" "$OUTPUT/raw/${DATASETS[$index]}" \
+    --check-only
+done
+if [[ "$CHECK_ONLY" -eq 1 ]]; then
+  echo "All six dataset cohorts and detector checkpoint are ready. No inference was run."
+  exit 0
+fi
 for index in "${!DATASETS[@]}"; do
   dataset=${DATASETS[$index]}
   python "$ROOT/scripts/reproduce_detector_benchmark.py" \

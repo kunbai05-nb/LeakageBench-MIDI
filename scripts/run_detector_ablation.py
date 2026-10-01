@@ -232,6 +232,7 @@ def main() -> None:
     models_by_variant, calibrators, thresholds = {}, {}, {}
     pair_datasets = {name: {} for name in DATASETS}
     for variant, columns in FEATURE_GROUPS.items():
+        print(f"Retraining verifier variant: {variant} ({len(columns)} features)", flush=True)
         models = [
             classifier(seed).fit(x[selected_by_seed[seed]][:, columns], y[selected_by_seed[seed]])
             for seed in SEEDS[:3]
@@ -271,6 +272,7 @@ def main() -> None:
     ]
     classifier_rows = {}
     for count in range(1, 6):
+        print(f"Evaluating all {count}-classifier combinations", flush=True)
         combinations = []
         for indices in itertools.combinations(range(5), count):
             models = [all_models[index] for index in indices]
@@ -314,6 +316,7 @@ def main() -> None:
             "combinations": combinations,
         }
 
+    print("Generating view-count and Top-K retrieval tables", flush=True)
     table1, table4 = retrieval_tables(test, args.input_root / "MAESTRO-validation.npz")
     outputs = {
         "TABLE1_VIEW_COUNT.json": table1,

@@ -6,7 +6,7 @@ Code, checkpoints, and frozen specifications for the three-condition experiments
 
 ## 1. Setup
 
-Requirements: Ubuntu/Linux and Python 3.10. Checkpoint evaluation requires an NVIDIA GPU with BF16 support. The pinned inference environment uses PyTorch 2.8.0 and scikit-learn 1.7.2. Disk usage depends on the selected experiments and the original datasets; reserve additional space for both downloaded archives and extracted checkpoints rather than assuming a fixed 10 GB total.
+Requirements: Ubuntu/Linux and Python 3.10. Generation-model checkpoint evaluation (three-condition and ATEPP mitigation experiments) requires an NVIDIA GPU with BF16 support. Detector benchmarks, ablations, and deployment audit replay run on CPU. The pinned inference environment uses PyTorch 2.8.0 and scikit-learn 1.7.2. Reserve space for both the downloaded bundles and their extracted contents.
 
 While the repository is private, authorized collaborators must authenticate before cloning or downloading release assets:
 
@@ -27,7 +27,9 @@ pip install -r requirements.txt
 pip install -e '.[scale]'
 ```
 
-Raw MIDI datasets are not distributed here. Download `lmd_full.tar.gz` from the [Lakh MIDI Dataset](https://colinraffel.com/projects/lmd/) and save it as `data/lmd_full.tar.gz`. All commands below are run from the repository root with the virtual environment activated. Release bundles download automatically to `reproduction/` (three-condition weights to `reproduced/three_condition/`). No manual checkpoint paths are needed.
+All commands below are run from the repository root with the virtual environment activated. Release bundles download automatically to `reproduction/` (three-condition weights to `reproduced/three_condition/`). No manual checkpoint paths are needed.
+
+The Fast-versus-v1.9 comparison, seven-dataset audit replay, ATEPP mitigation, and default ablation commands do not require original MIDI downloads. The three-condition command requires `lmd_full.tar.gz`: download it from the [Lakh MIDI Dataset](https://colinraffel.com/projects/lmd/) and save it as `data/lmd_full.tar.gz`. The six-dataset benchmark and optional full-MIDI workflows require the original datasets, which are not distributed here.
 
 For the six-dataset benchmark, place the original datasets in the following default directories. Each directory must contain the relative paths in its corresponding `reproduction/detector_benchmark/*.csv.gz` manifest, not merely any collection of MIDI files:
 
@@ -105,7 +107,16 @@ The following command downloads frozen candidate features and the Precision-Firs
 bash scripts/reproduce_multidataset_deployment.sh
 ```
 
-No manual data paths are needed. Outputs are `reproduced/multidataset_deployment/multidataset_deployment.csv`, `.md`, per-dataset JSON results, and `multidataset_verification.json`. A CPU is sufficient. This fixed auditor checkpoint is independent of the v1.9 benchmark detector. Family/file exposure uses all test families/files as denominators; 95% EI denotes empirical quantiles across 200 splits.
+No manual data paths are needed. A CPU is sufficient. Outputs:
+
+```text
+reproduced/multidataset_deployment/multidataset_deployment.csv
+reproduced/multidataset_deployment/multidataset_deployment.md
+reproduced/multidataset_deployment/<dataset>_results.json
+reproduced/multidataset_deployment/multidataset_verification.json
+```
+
+This fixed auditor checkpoint is independent of the v1.9 benchmark detector. Family/file exposure uses all test families/files as denominators; 95% EI denotes empirical quantiles across 200 splits.
 
 The quick entry starts after retrieval and cheap-gate filtering. It recomputes classifier scores, decisions, families and exposure rather than loading frozen families. Valid-MIDI counts are the recorded parsing census; multi-version prevalence is recomputed from the rebuilt graph. The optional full-MIDI source and frozen file/hash manifests are included in the same asset under `source/` and `midi_hashes/` (see its `FULL_MIDI.md`).
 

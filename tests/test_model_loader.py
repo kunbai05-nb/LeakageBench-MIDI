@@ -13,6 +13,7 @@ from leakagebench_midi.models import (
     load_checkpoint,
 )
 from leakagebench_midi.models.external_models import build_model
+from leakagebench_midi.models.gpt2 import Conv1D
 
 
 def transformer_config():
@@ -65,6 +66,26 @@ def diffusion_config():
         "beta_start": 0.0001,
         "beta_end": 0.02,
     }
+
+
+def test_gpt2_projection_initializes_allocated_weights(monkeypatch):
+    # Untouched allocator memory must never become a fresh model's weights.
+    original_empty = torch.empty
+
+    def poisoned_empty(*args, **kwargs):
+        return original_empty(*args, **kwargs).fill_(float("nan"))
+
+    monkeypatch.setattr(torch, "empty", poisoned_empty)
+    layer = Conv1D(8, 12)
+    assert torch.isfinite(layer.weight).all()
+    assert torch.isfinite(layer(torch.ones(1, 3, 8))).all()
+
+    # Loading a checkpoint replaces the initialization without changing values.
+    state = {"weight": torch.full_like(layer.weight, 0.125),
+             "bias": torch.full_like(layer.bias, 0.25)}
+    layer.load_state_dict(state)
+    assert torch.equal(layer.weight, state["weight"])
+    assert torch.equal(layer.bias, state["bias"])
 
 
 def test_external_model_parameter_counts_and_forward():

@@ -61,6 +61,7 @@ class Conv1D(nn.Module):
         super().__init__()
         self.weight = nn.Parameter(torch.empty(nx, nf))
         self.bias = nn.Parameter(torch.zeros(nf))
+        nn.init.normal_(self.weight, mean=0.0, std=0.02)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         return torch.addmm(self.bias, x.reshape(-1, x.shape[-1]), self.weight).view(

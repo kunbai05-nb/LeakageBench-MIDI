@@ -99,13 +99,15 @@ The generated CSV, Markdown, and JSON files are written to `reproduced/fast_vs_v
 
 ### Seven-dataset deployment audit
 
-The following command downloads the frozen family assignments, replays all 200 file-level splits, recomputes the empirical intervals, and regenerates the seven-dataset deployment table:
+The following command downloads frozen candidate features and the Precision-First Same-Work Auditor checkpoint, runs fresh pairwise inference, rebuilds protected families, replays all 200 splits, and generates the seven-dataset audit table:
 
 ```bash
 bash scripts/reproduce_multidataset_deployment.sh
 ```
 
-This is a downstream deployment audit, not an end-to-end detector rerun. The valid-MIDI and multi-version prevalence columns follow the frozen deployment census; exposure estimates are recomputed from the final frozen family assignments. The workflow verifies all internal checksums and the generated paper-table digest.
+No manual data paths are needed. Outputs are `reproduced/multidataset_deployment/multidataset_deployment.csv`, `.md`, per-dataset JSON results, and `multidataset_verification.json`. A CPU is sufficient. This fixed auditor checkpoint is independent of the v1.9 benchmark detector. Family/file exposure uses all test families/files as denominators; 95% EI denotes empirical quantiles across 200 splits.
+
+The quick entry starts after retrieval and cheap-gate filtering. It recomputes classifier scores, decisions, families and exposure rather than loading frozen families. Valid-MIDI counts are the recorded parsing census; multi-version prevalence is recomputed from the rebuilt graph. The optional full-MIDI source and frozen file/hash manifests are included in the same asset under `source/` and `midi_hashes/` (see its `FULL_MIDI.md`).
 
 ### ATEPP mitigation experiment
 

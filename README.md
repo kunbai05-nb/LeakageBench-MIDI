@@ -59,7 +59,13 @@ bash scripts/reproduce_three_condition.sh
 
 The first command checks the environment and entry points; it does not evaluate models or validate the MIDI archive. The second downloads the released model checkpoints, rebuilds the frozen evaluation windows, and evaluates the clean, unrelated-donor, and same-work-donor conditions. It does not retrain the models. Interrupted downloads and completed evaluations are reused.
 
-**Result:** `reproduced/three_condition/tables/three_condition_results.csv`, with Markdown and JSON versions in the same folder.
+**Result:**
+
+```text
+reproduced/three_condition/tables/three_condition_results.csv
+reproduced/three_condition/tables/three_condition_results.md
+reproduced/three_condition/tables/three_condition_results.json
+```
 
 ### Six-dataset detector benchmark
 
@@ -77,7 +83,15 @@ The first command verifies the frozen cohorts, MIDI checksums, and detector chec
 - **Fixed:** the released threshold is applied unchanged to every dataset.
 - **Optimal:** the threshold maximizes F1 using that dataset's evaluation labels. This is an oracle comparison, not the deployment setting.
 
-**Result:** `reproduced/six_dataset/tables/six_dataset_results.csv`, with Markdown and JSON versions in the same folder. Per-dataset inference outputs are in `reproduced/six_dataset/raw/`.
+**Result:**
+
+```text
+reproduced/six_dataset/tables/six_dataset_results.csv
+reproduced/six_dataset/tables/six_dataset_results.md
+reproduced/six_dataset/tables/six_dataset_results.json
+```
+
+Per-dataset inference outputs are saved in the raw subdirectory alongside the tables directory.
 
 This command reproduces the v1.9 rows only; it does not rerun CAugBERT/CLaMP. The SHS cohort contains 306 MIDI files and 80 eligible reference pairs. There is no detector retraining or deployment-threshold recalibration on these evaluation cohorts.
 
@@ -93,7 +107,13 @@ bash scripts/reproduce_fast_vs_v19.sh
 
 The script downloads candidate features, manifests, and both detector checkpoints. It recomputes scores and fixed-threshold metrics on ATEPP, LMD-clean, and ASAP. It does not repeat MIDI feature extraction or candidate retrieval.
 
-**Result:** `reproduced/fast_vs_v19/fast_vs_v19.csv`, `fast_vs_v19.md`, and `fast_vs_v19_results.json`.
+**Result:**
+
+```text
+reproduced/fast_vs_v19/fast_vs_v19.csv
+reproduced/fast_vs_v19/fast_vs_v19.md
+reproduced/fast_vs_v19/fast_vs_v19_results.json
+```
 
 ### Seven-dataset deployment audit
 
@@ -157,7 +177,13 @@ bash scripts/reproduce_detector_ablation.sh
 
 The script downloads intermediate features, trains and calibrates the classifier variants, evaluates all settings, and generates four tables: view count (Table 1), pairwise-verifier ablation (Table 2), Top-K (Table 4), and classifier count (Table 5). The expensive MIDI feature-extraction stage is skipped; training and evaluation are rerun.
 
-**Result:** CSV and Markdown tables in `reproduced/detector_ablation/tables/`, plus `generated_results.json` and `verification.json`. `PASS` means the reported values match the frozen paper values; `DIFFERENT` means the newly generated values differ and should be inspected.
+**Result:** CSV and Markdown tables, generated_results.json, and verification.json are saved in:
+
+```text
+reproduced/detector_ablation/tables/
+```
+
+In verification.json, PASS means the reported values match the frozen paper values; DIFFERENT means the newly generated values differ and should be inspected.
 
 To rebuild features from MIDI as well, prepare LMD-clean, ATEPP, and ASAP using the layout below, then run:
 
@@ -203,7 +229,15 @@ python scripts/detect_same_work.py \
   --workers 8 --backend faiss
 ```
 
-The output folder contains `components.csv` (file-to-family assignments), `relation_edges.csv` (scored relations and merge decisions), and `summary.json` (counts and parsing failures).
+**Result:**
+
+```text
+detector_output/components.csv
+detector_output/relation_edges.csv
+detector_output/summary.json
+```
+
+These files contain file-to-family assignments, scored relations and merge decisions, and counts and parsing failures, respectively.
 
 v1.9 uses five views, a one-way Top-50 candidate union, and three seeded classifiers with 57 pair features. The scores are calibrated on a work-disjoint calibration split. `--backend faiss` uses HNSW for retrieval; use `--backend exact` for the exact-search setting used by the six-dataset benchmark.
 
@@ -221,7 +255,26 @@ python scripts/prepare_lmd.py ./data/lmd_full.tar.gz ./prepared_lmd
 python scripts/train_external_models.py midigpt clean 202608040 ./prepared_lmd ./runs/midigpt-clean-202608040
 ```
 
-Use `unrelated_donor` or `same_family_donor` instead of `clean` for the other conditions. Run `python scripts/train_model.py --help` for the built-in generation-model training options. Released checkpoints are available in the [v1.3.0 release](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/tag/v1.3.0); `scripts/verify_model_checkpoints.py` checks a downloaded model bundle and `scripts/evaluate_checkpoint.py` evaluates an individual checkpoint.
+The condition argument is one of:
+
+```text
+clean
+unrelated_donor
+same_family_donor
+```
+
+For the built-in generation-model training options, run:
+
+```bash
+python scripts/train_model.py --help
+```
+
+Released checkpoints are available in the [v1.3.0 release](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/tag/v1.3.0). The following scripts check a downloaded model bundle and evaluate an individual checkpoint, respectively; use their help messages for the required arguments:
+
+```bash
+python scripts/verify_model_checkpoints.py --help
+python scripts/evaluate_checkpoint.py --help
+```
 
 ### Same-Work Detector v1.9
 

@@ -1,12 +1,46 @@
-# LeakageBench-MIDI
+<div align="center">
 
-[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.22023100-blue.svg)](https://doi.org/10.5281/zenodo.22023100)
+<h1>🎼 LeakageBench-MIDI</h1>
+<h3>Work-Level Exposure in Symbolic Music Generation</h3>
+
+<p>Measure evaluation bias · Identify same-work versions · Audit datasets · Isolate works</p>
+
+<a href="https://doi.org/10.5281/zenodo.22023100"><img src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.22023100-2563eb?style=flat-square" alt="DOI: Zenodo software archive"></a>
+<a href="#reproduce-result-tables"><img src="https://img.shields.io/badge/Experiments-Reproduce-16a34a?style=flat-square" alt="Reproduce experiments"></a>
+<a href="https://github.com/kunbai05-nb/LeakageBench-MIDI/releases"><img src="https://img.shields.io/badge/Downloads-Checkpoints-f59e0b?style=flat-square" alt="Download checkpoints and reproduction assets"></a>
+<a href="LICENSE"><img src="https://img.shields.io/badge/Code-MIT-64748b?style=flat-square" alt="Code license: MIT"></a>
+
+<p>
+<a href="#overview">Overview</a> ·
+<a href="#choose-an-experiment">Experiments</a> ·
+<a href="#setup">Quick Start</a> ·
+<a href="#detect-same-work-relations-in-your-own-dataset">Use the Detector</a> ·
+<a href="#tests-and-citation">Citation</a>
+</p>
+
+</div>
+
+---
+
+<a id="overview"></a>
+
+## 🔎 Overview
 
 Code and checkpoints for studying work-level exposure in symbolic music generation: its effect on evaluation, same-work detection, cross-dataset auditing, and work-level isolation.
 
-## Choose an experiment
+Different MIDI performances or arrangements of the same work can cross a file-level train/test split. This repository connects four parts of that evaluation problem:
 
-Each experiment has a command that generates result tables. Start with the setup section, then run the command for the experiment you want.
+| Measure | Identify | Audit | Mitigate |
+| :--- | :--- | :--- | :--- |
+| Compare controlled exposure conditions | Detect same-work MIDI versions | Measure exposure across datasets | Evaluate models after work-level isolation |
+
+**Start here:** [set up the environment](#setup), then choose an experiment below. Each entry includes its inputs, a copyable command, and the generated result paths.
+
+<a id="choose-an-experiment"></a>
+
+## 🧭 Choose an Experiment
+
+Choose the experiment you want to reproduce. After the one-time setup, run its command from the repository root.
 
 | Experiment | Starting point | Original MIDI needed? | Hardware |
 | --- | --- | --- | --- |
@@ -17,11 +51,16 @@ Each experiment has a command that generates result tables. Start with the setup
 | [ATEPP mitigation](#atepp-mitigation) | Generation-model checkpoints and frozen test windows | No | BF16-capable NVIDIA GPU |
 | [Detector ablation and sensitivity](#detector-ablation-and-sensitivity) | Intermediate features; classifiers retrained | No for the default command | CPU |
 
-The feature-based workflows run new inference or training. They do not merely display saved result tables. Their starting points differ, as listed above.
+**Reproduction starting points:** the feature-based workflows run new inference or training. The table above identifies which stages are rerun and which inputs are frozen.
 
-## Setup
+<a id="setup"></a>
+
+## 🚀 Quick Start
 
 Use Ubuntu/Linux with Python 3.10. You need Git, `curl`, `tar`, and `sha256sum`. The pinned environment uses PyTorch 2.8.0 and scikit-learn 1.7.2.
+
+<details>
+<summary><b>Private repository? Authenticate once before cloning.</b></summary>
 
 **Private repository access:** authorized users must install GitHub CLI (`gh`) and sign in before cloning or downloading release assets:
 
@@ -31,6 +70,10 @@ gh auth setup-git
 ```
 
 Skip this authentication step when the repository is public.
+
+</details>
+
+### Install
 
 ```bash
 git clone https://github.com/kunbai05-nb/LeakageBench-MIDI.git
@@ -44,9 +87,13 @@ python -m pip install -e '.[scale]'
 
 Run all remaining commands from this directory with the virtual environment activated. The scripts download and verify their release bundles automatically. Leave room for both the archives and their extracted files. No manual checkpoint paths are needed for the table-reproduction commands.
 
-## Reproduce result tables
+<a id="reproduce-result-tables"></a>
 
-### Three-condition experiment
+## 📊 Reproduce Result Tables
+
+<a id="three-condition-experiment"></a>
+
+### 1. Three-Condition Experiment
 
 **Prepare:** download `lmd_full.tar.gz` from the [Lakh MIDI Dataset](https://colinraffel.com/projects/lmd/) and save it as `data/lmd_full.tar.gz`. Keep it compressed; the script reads the archive.
 
@@ -67,7 +114,9 @@ reproduced/three_condition/tables/three_condition_results.md
 reproduced/three_condition/tables/three_condition_results.json
 ```
 
-### Six-dataset detector benchmark
+<a id="six-dataset-detector-benchmark"></a>
+
+### 2. Six-Dataset Detector Benchmark
 
 **Prepare:** place the six datasets in the directories listed under [Original MIDI layout](#original-midi-layout).
 
@@ -95,7 +144,9 @@ Per-dataset inference outputs are saved in the raw subdirectory alongside the ta
 
 This command reproduces the v1.9 rows only; it does not rerun CAugBERT/CLaMP. The SHS cohort contains 306 MIDI files and 80 eligible reference pairs. There is no detector retraining or deployment-threshold recalibration on these evaluation cohorts.
 
-### Fast versus v1.9
+<a id="fast-versus-v19"></a>
+
+### 3. Fast versus v1.9
 
 **Prepare:** no MIDI download is needed.
 
@@ -115,7 +166,9 @@ reproduced/fast_vs_v19/fast_vs_v19.md
 reproduced/fast_vs_v19/fast_vs_v19_results.json
 ```
 
-### Seven-dataset deployment audit
+<a id="seven-dataset-deployment-audit"></a>
+
+### 4. Seven-Dataset Deployment Audit
 
 **Prepare:** no MIDI download is needed.
 
@@ -142,7 +195,9 @@ Family-level and file-level exposure use all test families and all test files, r
 
 For the full-MIDI workflow, the downloaded bundle also includes source code in `source/`, file/hash manifests in `midi_hashes/`, and instructions in `FULL_MIDI.md`.
 
-### ATEPP mitigation
+<a id="atepp-mitigation"></a>
+
+### 5. ATEPP Mitigation
 
 **Prepare:** no MIDI download is needed. Use a CUDA GPU with BF16 support.
 
@@ -165,7 +220,9 @@ All conditions use the same held-out evaluation windows and scored-token distrib
 
 The script automatically applies the checksum-verified scoring-protocol update. It does not change model weights or require a second checkpoint bundle.
 
-### Detector ablation and sensitivity
+<a id="detector-ablation-and-sensitivity"></a>
+
+### 6. Detector Ablation and Sensitivity
 
 **Prepare:** no MIDI download is needed for the recommended workflow.
 
@@ -193,7 +250,9 @@ bash scripts/reproduce_detector_ablation.sh --from-midi
 
 This alternative writes to `reproduced/detector_ablation_from_midi/`. The frozen MAESTRO view-selection input is downloaded automatically.
 
-## Original MIDI layout
+<a id="original-midi-layout"></a>
+
+## 📁 Original MIDI Layout
 
 Only the three-condition, six-dataset, and optional full-MIDI workflows require original datasets. These datasets are not bundled with the repository or downloaded automatically.
 
@@ -216,7 +275,9 @@ export LEAKAGEBENCH_DATA_DIR="$PWD/data"
 
 The three-condition script expects `lmd_full.tar.gz` directly inside this data directory. Use a script's `--help` for explicit input and output paths.
 
-## Detect same-work relations in your own dataset
+<a id="detect-same-work-relations-in-your-own-dataset"></a>
+
+## 🎹 Use the Detector on Your Own Dataset
 
 Place your MIDI files in `data/my-midi/`, including subdirectories if needed, then run:
 
@@ -241,9 +302,14 @@ These files contain file-to-family assignments, scored relations and merge decis
 
 v1.9 uses five views, a one-way Top-50 candidate union, and three seeded classifiers with 57 pair features. The scores are calibrated on a work-disjoint calibration split. `--backend faiss` uses HNSW for retrieval; use `--backend exact` for the exact-search setting used by the six-dataset benchmark.
 
-## Optional: train from scratch
+<a id="optional-train-from-scratch"></a>
+
+## 🛠️ Optional: Train from Scratch
 
 Checkpoint reproduction above does not require these training commands.
+
+<details>
+<summary><b>Generation models: data preparation and training</b></summary>
 
 ### Generation models
 
@@ -276,6 +342,11 @@ python scripts/verify_model_checkpoints.py --help
 python scripts/evaluate_checkpoint.py --help
 ```
 
+</details>
+
+<details>
+<summary><b>Same-Work Detector v1.9: rebuild features and train</b></summary>
+
 ### Same-Work Detector v1.9
 
 With the MIDI paths required by `reproduction/detector_training/` available under `data/lmd-clean/`, run:
@@ -291,7 +362,11 @@ python scripts/reproduce_detector_training.py \
 
 This rebuilds the training/calibration features and trains a new detector. It does not overwrite the released checkpoint.
 
-## Tests and citation
+</details>
+
+<a id="tests-and-citation"></a>
+
+## 📖 Tests and Citation
 
 To run the automated code tests:
 
@@ -301,4 +376,12 @@ bash scripts/reproduce_all.sh
 
 Despite its filename, this command runs tests, not all paper experiments. Use the individual commands above to generate the experiment tables.
 
-See [CITATION.cff](CITATION.cff) for citation details. Code is MIT licensed; released weights are CC BY 4.0.
+### Citation and License
+
+Use [CITATION.cff](CITATION.cff) for citation details. The software archive is available on [Zenodo](https://doi.org/10.5281/zenodo.22023100).
+
+- **Code:** [MIT License](LICENSE).
+- **Released weights:** CC BY 4.0.
+- **Third-party materials:** see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
+<p align="right"><a href="#overview">↑ Back to overview</a></p>

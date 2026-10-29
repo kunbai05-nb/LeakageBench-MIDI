@@ -48,7 +48,7 @@ Choose the experiment you want to reproduce. After the one-time setup, run its c
 | [Six-dataset detector benchmark](#six-dataset-detector-benchmark) | v1.9 checkpoint and frozen MIDI cohorts | Yes: six datasets | CPU |
 | [Fast versus v1.9](#fast-versus-v19) | Candidate features and detector checkpoints | No | CPU |
 | [Seven-dataset deployment audit](#seven-dataset-deployment-audit) | Candidate features and auditor checkpoint | No | CPU |
-| [ATEPP mitigation](#atepp-mitigation) | Generation-model checkpoints and frozen test windows | No | BF16-capable NVIDIA GPU |
+| [Five-condition cleaning study](#cleaning-mitigation) | 60 generation-model checkpoints and frozen test windows | No | BF16-capable NVIDIA GPU |
 | [Detector ablation and sensitivity](#detector-ablation-and-sensitivity) | Intermediate features; classifiers retrained | No for the default command | CPU |
 
 **Reproduction starting points:** the feature-based workflows run new inference or training. The table above identifies which stages are rerun and which inputs are frozen.
@@ -57,7 +57,7 @@ Choose the experiment you want to reproduce. After the one-time setup, run its c
 
 ## 🚀 Quick Start
 
-Use Ubuntu/Linux with Python 3.10. You need Git, `curl`, `tar`, and `sha256sum`. The pinned environment uses PyTorch 2.8.0 and scikit-learn 1.7.2.
+Use Ubuntu/Linux with Python 3.10. You need Git, GitHub CLI (`gh`), `curl`, `tar`, and `sha256sum`. The pinned environment uses PyTorch 2.8.0 and scikit-learn 1.7.2.
 
 <details>
 <summary><b>Private repository? Authenticate once before cloning.</b></summary>
@@ -196,29 +196,49 @@ Family-level and file-level exposure use all test families and all test files, r
 For the full-MIDI workflow, the downloaded bundle also includes source code in `source/`, file/hash manifests in `midi_hashes/`, and instructions in `FULL_MIDI.md`.
 
 <a id="atepp-mitigation"></a>
+<a id="cleaning-mitigation"></a>
 
-### 5. ATEPP Mitigation
+### 5. Five-Condition Cleaning Study
 
-**Prepare:** no MIDI download is needed. Use a CUDA GPU with BF16 support.
+**Scope:** ATEPP and LMD-clean × MIDI-GPT and Transformer × five conditions × three paired seeds: **60 final checkpoints**. This is the current cleaning study, replacing the earlier ATEPP-only experiment.
 
-**Run:**
+**Prepare:** no MIDI download is needed. Use a BF16-capable CUDA GPU. The first run downloads approximately **4.4 GB** of checkpoints plus a small evaluation bundle; allow **10 GB of free disk space** for the downloaded and extracted files. The download archives are removed after extraction.
+
+**Run all four result tables:**
 
 ```bash
-bash scripts/reproduce_atepp_mitigation.sh
+bash scripts/reproduce_cleaning_mitigation.sh
 ```
 
-The script downloads the generation-model checkpoints trained under the v1.9 isolation protocol and the frozen test windows. It runs new BF16 evaluation for five conditions and three seeds: untreated, simple deduplication, detector isolation, equal-count random removal, and label-based reference.
+The script automatically downloads and verifies the frozen checkpoints and evaluation arrays, runs fresh BF16 inference on the original test set and the independent clean test set, and generates the tables. It reuses completed, checksum-verified evaluations after interruption. It does not retrain models or rerun the upstream cleaning decisions.
 
-**Result:**
+**Five training conditions:** untreated, matched random removal, MVA-SWI isolation, CAugBERT+CLaMP joint baseline, and label-isolation reference. All models were trained for **3,000 updates and 49,152,000 scored tokens** with paired seeds `202608040`, `202608041`, and `202608042`. Each condition retains its natural training pool; training file and window counts are reported rather than forced to match. Within each dataset, all conditions and both models use identical evaluation arrays and scoring masks.
+
+**Result:** one combined file containing the four dataset/model tables, plus fresh per-file evaluations and a numerical verification report:
 
 ```text
-reproduction/atepp_mitigation_v1.9/reproduced_results/RESULTS.csv
-reproduction/atepp_mitigation_v1.9/reproduced_results/RESULTS.json
+reproduced/cleaning_mitigation/tables/cleaning_results.csv
+reproduced/cleaning_mitigation/tables/cleaning_results.md
+reproduced/cleaning_mitigation/tables/cleaning_results.json
+reproduced/cleaning_mitigation/verification.json
+reproduced/cleaning_mitigation/raw/
 ```
 
-All conditions use the same held-out evaluation windows and scored-token distribution. Detector isolation, random removal, and the label-based reference each retain 484 training files. Simple deduplication and the untreated condition have identical frozen training streams and share their three checkpoints. Thus, 12 distinct checkpoints cover the 15 condition/seed evaluations.
+Training-pool counts, label-checked exposure and clean-token retention come from the frozen preparation audit; the NLL values are recomputed from checkpoints. The tables report training-file counts, label-checked exposure, clean-token retention, work-macro NLL, seed standard deviations, signed and absolute relative deviations from label isolation, and independent-clean-set NLL. NLL is token-weighted within each file and file-averaged within each work. Three seeds are averaged within each work **before** the relative deviations are calculated; works receive equal weight. LMD-clean uses the frozen reference IDs.
 
-The script automatically applies the checksum-verified scoring-protocol update. It does not change model weights or require a second checkpoint bundle.
+`verification.json` reports whether the newly computed values agree with the frozen evaluations within the documented numerical tolerances. It compares fresh predictions, not saved table files. Scored-token and window counts must match exactly; per-file numerical differences are recorded separately. The final-table tolerances are 0.0001 NLL and 0.01 percentage points. `PASS` means all comparisons meet those tolerances; `DIFFERENT` preserves the newly computed values and lists the differences. Result generation and numerical agreement are reported separately. Add `--strict-match` to treat a numerical difference as an execution error.
+
+<details>
+<summary><b>Run one dataset/model, or adjust evaluation memory use</b></summary>
+
+```bash
+bash scripts/reproduce_cleaning_mitigation.sh --dataset atepp --model gpt
+bash scripts/reproduce_cleaning_mitigation.sh --dataset lmd --model transformer
+```
+
+The default evaluation micro-batch is 16, matching the frozen runs. If GPU memory is insufficient, add `--micro-batch 4`; the scoring masks and statistical aggregation stay the same, and any numerical differences remain subject to verification. Add `--force-evaluate` to recompute completed evaluations.
+
+</details>
 
 <a id="detector-ablation-and-sensitivity"></a>
 

@@ -36,8 +36,8 @@ def test_three_condition_environment_check():
     assert "entry points are ready" in result.stdout
 
 
-def test_three_condition_defaults_report_missing_source(tmp_path):
-    result = shell("reproduce_three_condition.sh", data_root=tmp_path)
+def test_full_midi_three_condition_reports_missing_source(tmp_path):
+    result = shell("reproduce_three_condition_from_midi.sh", data_root=tmp_path)
     assert result.returncode == 1
     assert str(tmp_path / "lmd_full.tar.gz") in result.stderr
     assert "Download lmd_full.tar.gz" in result.stderr

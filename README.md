@@ -44,7 +44,7 @@ Choose the experiment you want to reproduce. After the one-time setup, run its c
 
 | Experiment | Starting point | Original MIDI needed? | Hardware |
 | --- | --- | --- | --- |
-| [Three-condition experiment](#three-condition-experiment) | Generation-model checkpoints; evaluation windows rebuilt from MIDI | Yes: LMD-full | BF16-capable NVIDIA GPU |
+| [Four-condition controlled exposure](#four-condition-experiment) | 72 generation-model checkpoints and frozen receiver windows | No | BF16-capable NVIDIA GPU |
 | [Six-dataset detector benchmark](#six-dataset-detector-benchmark) | v1.9 checkpoint and frozen MIDI cohorts | Yes: six datasets | CPU |
 | [Fast versus v1.9](#fast-versus-v19) | Candidate features and detector checkpoints | No | CPU |
 | [Seven-dataset deployment audit](#seven-dataset-deployment-audit) | Candidate features and auditor checkpoint | No | CPU |
@@ -92,27 +92,62 @@ Run all remaining commands from this directory with the virtual environment acti
 ## 📊 Reproduce Result Tables
 
 <a id="three-condition-experiment"></a>
+<a id="four-condition-experiment"></a>
 
-### 1. Three-Condition Experiment
+### 1. Four-Condition Controlled Exposure
 
-**Prepare:** download `lmd_full.tar.gz` from the [Lakh MIDI Dataset](https://colinraffel.com/projects/lmd/) and save it as `data/lmd_full.tar.gz`. Keep it compressed; the script reads the archive.
+**Scope:** six autoregressive models × four training conditions × three paired seeds: **72 final checkpoints**. Models are Transformer-S/M/L, MIDI-GPT, LSTM, and TCN-384.
+
+| Condition | Content at the frozen replacement positions |
+| --- | --- |
+| Clean | Original unrelated training content |
+| Unrelated donor | Versions of new unrelated works |
+| Repeated unrelated | Repeated content from unrelated works already represented in training |
+| Same-work donor | Another natural version of each target test work |
+
+**Prepare:** no MIDI download is needed. Use a BF16-capable CUDA GPU and complete the one-time setup above. The scripts reuse the existing checkpoint releases and download the small frozen evaluation bundle automatically. A fresh run downloads about **2.6 GB**; allow **8 GB of free space** for the checkpoint files and extraction.
 
 **Run:**
 
 ```bash
-bash scripts/reproduce_three_condition.sh --check-only
-bash scripts/reproduce_three_condition.sh
+bash scripts/reproduce_four_condition.sh
 ```
 
-The first command checks the environment and entry points; it does not evaluate models or validate the MIDI archive. The second downloads the released model checkpoints, rebuilds the frozen evaluation windows, and evaluates the clean, unrelated-donor, and same-work-donor conditions. It does not retrain the models. Interrupted downloads and completed evaluations are reused.
+The command runs fresh checkpoint inference on the **same 100 intervention groups** used by the original three-condition study. The frozen **1,299 receiver windows**, prompts and scoring masks are unchanged. Each model/condition has three fixed-final **20,000-step** checkpoints with paired seeds `202608040`, `202608041`, and `202608042`. The fourth condition uses the frozen 1,264 replacement positions within the original 38,374-window training stream.
 
 **Result:**
 
 ```text
-reproduced/three_condition/tables/three_condition_results.csv
-reproduced/three_condition/tables/three_condition_results.md
-reproduced/three_condition/tables/three_condition_results.json
+reproduced/four_condition/tables/four_condition_results.csv
+reproduced/four_condition/tables/four_condition_results.md
+reproduced/four_condition/tables/four_condition_results.json
+reproduced/four_condition/raw/
+reproduced/four_condition/verification.json
 ```
+
+NLL is token-weighted within each receiver and averaged equally across the 100 groups. The tables report condition NLL means and seed SDs, same-work versus unrelated-donor effects, same-work versus repeated-unrelated effects with paired group-bootstrap intervals, and same-work PPL. Relative reductions average seed NLL within each group before computing group-relative differences. Confidence intervals resample groups and are conditional on the three fitted training seeds.
+
+The verification report separates successful result generation from numerical agreement with the frozen evaluations; fresh values are preserved if they differ. Add `--strict-match` to require the documented numerical tolerances. Completed, hash-verified evaluations are reused; `--force-evaluate` recomputes them.
+
+<details>
+<summary><b>Single-model checks, control groups, and the earlier three-condition workflow</b></summary>
+
+```bash
+bash scripts/reproduce_four_condition.sh --model midigpt
+bash scripts/reproduce_four_condition.sh --include-control
+```
+
+`--include-control` also evaluates the original **300 control groups**. This is the frozen control cohort, not a newly assembled external clean test set. Earlier conditions reuse the existing released inference exports; the added condition uses weight-preserving final exports. Original checkpoint dtypes are retained and BF16 scoring is used throughout; numerical differences are recorded. One recorded execution detail is retained: LSTM seed `202608041` in the repeated-unrelated condition used the FP32 training repair; its BF16 evaluation and 20,000-step endpoint are unchanged.
+
+The earlier `bash scripts/reproduce_three_condition.sh` name now forwards to this four-condition entry point. To reproduce the original three-condition table from the LMD MIDI archive, including the VAE and diffusion supplement, prepare `data/lmd_full.tar.gz` and run:
+
+```bash
+bash scripts/reproduce_three_condition_from_midi.sh
+```
+
+VAE and diffusion have no repeated-unrelated checkpoints and are not presented as four-condition experiments.
+
+</details>
 
 <a id="six-dataset-detector-benchmark"></a>
 
@@ -274,7 +309,7 @@ This alternative writes to `reproduced/detector_ablation_from_midi/`. The frozen
 
 ## 📁 Original MIDI Layout
 
-Only the three-condition, six-dataset, and optional full-MIDI workflows require original datasets. These datasets are not bundled with the repository or downloaded automatically.
+Only the six-dataset benchmark and optional full-MIDI workflows require original datasets. The four-condition checkpoint workflow includes frozen evaluation windows. These datasets are not bundled with the repository or downloaded automatically.
 
 For the six-dataset benchmark, each directory must preserve the relative paths in its corresponding manifest under `reproduction/detector_benchmark/`:
 
@@ -293,7 +328,7 @@ You can use symbolic links instead of copying existing datasets. To use another 
 export LEAKAGEBENCH_DATA_DIR="$PWD/data"
 ```
 
-The three-condition script expects `lmd_full.tar.gz` directly inside this data directory. Use a script's `--help` for explicit input and output paths.
+The optional `reproduce_three_condition_from_midi.sh` script expects `lmd_full.tar.gz` directly inside this data directory. Use a script's `--help` for explicit input and output paths.
 
 <a id="detect-same-work-relations-in-your-own-dataset"></a>
 
@@ -333,7 +368,7 @@ Checkpoint reproduction above does not require these training commands.
 
 ### Generation models
 
-The conditions, seeds, and training schedules are specified in [configs/three_condition_models.json](configs/three_condition_models.json). After placing the LMD archive in `data/`, this example prepares the data and trains one MIDI-GPT condition:
+The original three-condition model settings, seeds, and training schedules are specified in [configs/three_condition_models.json](configs/three_condition_models.json). These training commands cover the original conditions; the fourth-condition checkpoint workflow uses the frozen construction metadata included in its evaluation bundle. After placing the LMD archive in `data/`, this example prepares the data and trains one MIDI-GPT condition:
 
 ```bash
 python scripts/fetch_reproduction_assets.py three-condition-source-specs

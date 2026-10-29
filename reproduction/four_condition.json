@@ -1,0 +1,197 @@
+{
+  "inputs": {
+    "name": "four-condition-evaluation-inputs.tar.gz",
+    "sha256": "9393e21f05ef0da57a9c6142cc0efeeec95afe59432ef61b6e6b7cc07a40523b",
+    "size": 2348894,
+    "url": "https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.9-four-condition-20261029/four-condition-evaluation-inputs.tar.gz"
+  },
+  "original_assets": [
+    {
+      "name": "lmd-transformer-s.tar.gz",
+      "sha256": "4b62a1a573490a9b69f6a888eb68de2c016b5cc6179d6b1b49ca87e822192af8",
+      "url": "https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/lmd-transformer-s.tar.gz",
+      "models": [
+        "transformer_s"
+      ],
+      "file_sha256": {
+        "LeakageBench-MIDI-Model-Checkpoints-v1.2.0/lmd/transformer_s/same_family_donor/seed_202608040.pt": "c1e4e7f018eddfe6290b026322b10e9cdede306bf11c7bf32c8a1ca8bd3050fb",
+        "LeakageBench-MIDI-Model-Checkpoints-v1.2.0/lmd/transformer_s/same_family_donor/seed_202608042.pt": "5b90e68e364cb4a9579a8789f9d70c7a98c14ff4a96809578b8ee37051db9215",
+        "LeakageBench-MIDI-Model-Checkpoints-v1.2.0/lmd/transformer_s/same_family_donor/seed_202608041.pt": "24cc957cb6b84f2693f6758ec99f3be9eed356de959daabafe0a13a0fd856e57",
+        "LeakageBench-MIDI-Model-Checkpoints-v1.2.0/lmd/transformer_s/unrelated_donor/seed_202608040.pt": "9b781a95c5bfcb335a0b0e69fe571d4a0e224b641f72f8d3b36df5662c835262",
+        "LeakageBench-MIDI-Model-Checkpoints-v1.2.0/lmd/transformer_s/unrelated_donor/seed_202608042.pt": "fa08e9af6657b48d2b4e1f85e30c6e7c3631d6a6f276ab5516fcfa22f29c088e",
+        "LeakageBench-MIDI-Model-Checkpoints-v1.2.0/lmd/transformer_s/unrelated_donor/seed_202608041.pt": "c92d9bbf7d17cb3a5f842b8c4a3f8a1ef1fc5fcf421d229cc5ff6fdfe417c6ad",
+        "LeakageBench-MIDI-Model-Checkpoints-v1.2.0/lmd/transformer_s/clean/seed_202608040.pt": "565dfdfee705c0459a7aa54323c31387d9843524872deafd5d8574c08d117591",
+        "LeakageBench-MIDI-Model-Checkpoints-v1.2.0/lmd/transformer_s/clean/seed_202608042.pt": "74c53a5dfe4259ff1e017ceb7589d8a09b95177d2cdf651443c2f74c200bc7aa",
+        "LeakageBench-MIDI-Model-Checkpoints-v1.2.0/lmd/transformer_s/clean/seed_202608041.pt": "32352342797e29ab065d1f090b96661472248ca572a37a7472c674c7af1cec6b"
+      }
+    },
+    {
+      "name": "lmd-transformer-m.tar.gz",
+      "sha256": "3bd39c2feeaa9dd78d4f6df8a14388ca2340750a211a339c63298dd6864db710",
+      "url": "https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/lmd-transformer-m.tar.gz",
+      "models": [
+        "transformer_m"
+      ],
+      "file_sha256": {
+        "LeakageBench-MIDI-Model-Checkpoints-v1.2.0/lmd/transformer_m/same_family_donor/seed_202608040.pt": "476c3386d5cb976dced8ee7025db460c16e9e2d1b9dd0a84bed8a758fc8cd0fb",
+        "LeakageBench-MIDI-Model-Checkpoints-v1.2.0/lmd/transformer_m/same_family_donor/seed_202608042.pt": "265563d0c35fa89966171cd4f15361f802db19e6a81d52d50ade58c6feed1b51",
+        "LeakageBench-MIDI-Model-Checkpoints-v1.2.0/lmd/transformer_m/same_family_donor/seed_202608041.pt": "83d59201a83c9d75a3dc4c54502716a6d595d6254c5d363aaa946818e971fe61",
+        "LeakageBench-MIDI-Model-Checkpoints-v1.2.0/lmd/transformer_m/unrelated_donor/seed_202608040.pt": "3542308e705a88c9f3ff26d178612c9445d0407e064321270e645e889573c0bf",
+        "LeakageBench-MIDI-Model-Checkpoints-v1.2.0/lmd/transformer_m/unrelated_donor/seed_202608042.pt": "03c3012e58988e9906a2b843305d4015fa41dcd710197808ebedd0d9c064deb6",
+        "LeakageBench-MIDI-Model-Checkpoints-v1.2.0/lmd/transformer_m/unrelated_donor/seed_202608041.pt": "be039b800777ec701059178b72e23b24e54f8f9f636bd4d17abc5f0bf75b17ff",
+        "LeakageBench-MIDI-Model-Checkpoints-v1.2.0/lmd/transformer_m/clean/seed_202608040.pt": "460cb7866c75e622a4da197769d0fb4514233afcdd2c84aa663dac5bbc7790c3",
+        "LeakageBench-MIDI-Model-Checkpoints-v1.2.0/lmd/transformer_m/clean/seed_202608042.pt": "b440cfa0e1d08b3d5dd736d7026be82e97fae02f0ba56870f0de66ac7ab18300",
+        "LeakageBench-MIDI-Model-Checkpoints-v1.2.0/lmd/transformer_m/clean/seed_202608041.pt": "210103860d7d1fdbb12df6fcb13829d5cb1d3e88dd48fa7561fd58149414ce4a"
+      }
+    },
+    {
+      "name": "lmd-transformer-l.tar.gz",
+      "sha256": "6a315de785004a50ff8022e80fbe71c28d38c2a5ad532d3a1aae6e8d04027042",
+      "url": "https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/lmd-transformer-l.tar.gz",
+      "models": [
+        "transformer_l"
+      ],
+      "file_sha256": {
+        "LeakageBench-MIDI-Model-Checkpoints-v1.2.0/lmd/transformer_l/same_family_donor/seed_202608040.pt": "99fd647cad4011185ce402faf479b3558a2830ccaad279750231c19c98762526",
+        "LeakageBench-MIDI-Model-Checkpoints-v1.2.0/lmd/transformer_l/same_family_donor/seed_202608042.pt": "df97b27a8c1149d2717d2cf867d6fba6010324d0938dbad4a20c3cb9e4f074c8",
+        "LeakageBench-MIDI-Model-Checkpoints-v1.2.0/lmd/transformer_l/same_family_donor/seed_202608041.pt": "da286ed08cc9dc82c2fdf3b6e9d346bf5a99cf9365a6e61e8b1e0698fa502100",
+        "LeakageBench-MIDI-Model-Checkpoints-v1.2.0/lmd/transformer_l/unrelated_donor/seed_202608040.pt": "e1676731cc692436e85d274cea6f583b89e6c7dba006ce5c65a3602e96f605f6",
+        "LeakageBench-MIDI-Model-Checkpoints-v1.2.0/lmd/transformer_l/unrelated_donor/seed_202608042.pt": "cc842e626e6bb10565c128b81aae609fd320f92dc72d9fba4ead9b0c08da7f7e",
+        "LeakageBench-MIDI-Model-Checkpoints-v1.2.0/lmd/transformer_l/unrelated_donor/seed_202608041.pt": "09b278423de353ee100320f5f0f6d1cfb33b49527b6a275c23deb3f89050f7e3",
+        "LeakageBench-MIDI-Model-Checkpoints-v1.2.0/lmd/transformer_l/clean/seed_202608040.pt": "7eb54510c747db36e7200c2eef83a65f18907d5f47dc04fd2b12fc4a675f1cb9",
+        "LeakageBench-MIDI-Model-Checkpoints-v1.2.0/lmd/transformer_l/clean/seed_202608042.pt": "e7a6c75b15cd04f23dfba441dfb1226250153527e02fd7f1c6ae114ba92cb019",
+        "LeakageBench-MIDI-Model-Checkpoints-v1.2.0/lmd/transformer_l/clean/seed_202608041.pt": "f09409fa5fb9fd17c0b72f75ae6f63e82eb1f65e4994d97d009ca14055993f20"
+      }
+    },
+    {
+      "name": "lmd-tcn.tar.gz",
+      "sha256": "a1a846b38471c4fa3805c75f51e3931d0700e6ace3ea3d6ccbe00118d5b1474a",
+      "url": "https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/lmd-tcn.tar.gz",
+      "models": [
+        "tcn_384"
+      ],
+      "file_sha256": {
+        "LeakageBench-MIDI-Model-Checkpoints-v1.2.0/lmd/tcn/same_family_donor/seed_202608040.pt": "0d02d072a3c6c52f6d4592ac6f86128c50334a278683f05aad66023a9a07d45a",
+        "LeakageBench-MIDI-Model-Checkpoints-v1.2.0/lmd/tcn/same_family_donor/seed_202608042.pt": "4db73b4d2a00db4d92d7491358b553fc06d2826f395ce08aa9bea9c7a319cbb2",
+        "LeakageBench-MIDI-Model-Checkpoints-v1.2.0/lmd/tcn/same_family_donor/seed_202608041.pt": "092830cd485d2c3571e8dd2c849e23ee7d6f3e4db118ae6210155195183607ac",
+        "LeakageBench-MIDI-Model-Checkpoints-v1.2.0/lmd/tcn/unrelated_donor/seed_202608040.pt": "38a056214870188fef5f0847fe59f614955fd173eb9b644576d1321208ed8e04",
+        "LeakageBench-MIDI-Model-Checkpoints-v1.2.0/lmd/tcn/unrelated_donor/seed_202608042.pt": "de23eca49f1ac7a23636af696329c7073eae9f0a00dc95eeb7705eb131609b2b",
+        "LeakageBench-MIDI-Model-Checkpoints-v1.2.0/lmd/tcn/unrelated_donor/seed_202608041.pt": "03c4877098db5d287ee1dc3d6bbaaa6487f14ba626543ffd8715e515a874b5f9",
+        "LeakageBench-MIDI-Model-Checkpoints-v1.2.0/lmd/tcn/clean/seed_202608040.pt": "61ba459e0870d31ffbfba621d7e80fd1ec310b949cda37dafec35eea2ab2a726",
+        "LeakageBench-MIDI-Model-Checkpoints-v1.2.0/lmd/tcn/clean/seed_202608042.pt": "16d92a9c94e42e6a89bfa290fa9dc5c94f73611277dd2395aeddaaef80460f5c",
+        "LeakageBench-MIDI-Model-Checkpoints-v1.2.0/lmd/tcn/clean/seed_202608041.pt": "e8a2b62bdb80407002890175d29f34b753ba1aeefb0e063ff421bb2565a2c990"
+      }
+    },
+    {
+      "name": "midigpt-clean.tar.gz",
+      "sha256": "a25aa9aaa39c1b0de519c37d9b0c1b9a90ba1fc12fcc8ae285180adf9cefbf5e",
+      "url": "https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/midigpt-clean.tar.gz",
+      "models": [
+        "midigpt"
+      ],
+      "file_sha256": {
+        "midigpt-clean/seed_202608040.pt": "4d236c689fa3d61a802ac1b265599432adf2b241b8c03d77c9fd6fa86c4dcf8c",
+        "midigpt-clean/seed_202608042.pt": "32ab1eb172e047cd094e49be885905e505d1e4271cf5a53a4cbd11357ecdac52",
+        "midigpt-clean/seed_202608041.pt": "f9deee9e3a95d571cfc23fbf48f0393a5e928acd80977f4602e0b4a58e994491"
+      }
+    },
+    {
+      "name": "midigpt-unrelated_donor.tar.gz",
+      "sha256": "8fee29b5f3e107ae83f187c85e0a616a610207a0869b7f864f0b7cd6b42dbd92",
+      "url": "https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/midigpt-unrelated_donor.tar.gz",
+      "models": [
+        "midigpt"
+      ],
+      "file_sha256": {
+        "midigpt-unrelated_donor/seed_202608040.pt": "275fb6e152d715d71e66bdcff5a7ab8eda49639051a36cdb1296b99c4f0520d9",
+        "midigpt-unrelated_donor/seed_202608042.pt": "dd55530ccf247e7f80e3b22e8f577cab53e67e029acad0da39fd6f5b9f0eabe4",
+        "midigpt-unrelated_donor/seed_202608041.pt": "989e1111afadffdd9210bad095f5a3b5d4e8a2fed5e3de4e2af13ebcb1f672b2"
+      }
+    },
+    {
+      "name": "midigpt-same_family_donor.tar.gz",
+      "sha256": "6db187f5ffdfdcc6bd58b9ef6830e9c0f3fe99cc336d544872703d5622f1575c",
+      "url": "https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/midigpt-same_family_donor.tar.gz",
+      "models": [
+        "midigpt"
+      ],
+      "file_sha256": {
+        "midigpt-same_family_donor/seed_202608040.pt": "382b4ecb99e538183f8f7735c9a6d76a2d514774bb1de1bbe580d989f7573ae7",
+        "midigpt-same_family_donor/seed_202608042.pt": "f8d952d43943f007e27de476d6cbbbad339fdd232433e765997859570fab9caa",
+        "midigpt-same_family_donor/seed_202608041.pt": "14ec5d6b6953beb510b7eec65aefd0ae5b16151cb46cb5aee8f92f3828e944cc"
+      }
+    },
+    {
+      "name": "lstm-clean.tar.gz",
+      "sha256": "e4ea21ff7aab33ffc098453d17bbac9d482277d99590811999ac319c71cef50c",
+      "url": "https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/lstm-clean.tar.gz",
+      "models": [
+        "lstm"
+      ],
+      "file_sha256": {
+        "lstm-clean/seed_202608040.pt": "54641e6efba44d4b1b380c31e3696bc51a750adf026a3b8536f16415f1ad820e",
+        "lstm-clean/seed_202608042.pt": "598ce594caef092526c84357922f09c9221f45a65b17e1082d3fc86d197ed389",
+        "lstm-clean/seed_202608041.pt": "b8fe308648ecde0ff7a68a11abf85612b3bbfd49fc60287283edbbcae151c098"
+      }
+    },
+    {
+      "name": "lstm-unrelated_donor.tar.gz",
+      "sha256": "f12d972ea15cdcac4fb66c76dadbdee7f24990a735318e9b3f85445b23cac3cb",
+      "url": "https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/lstm-unrelated_donor.tar.gz",
+      "models": [
+        "lstm"
+      ],
+      "file_sha256": {
+        "lstm-unrelated_donor/seed_202608040.pt": "9654edc1a5fdedab894a5471ae98b220ca8318a449dff9f6e74d34257ff23390",
+        "lstm-unrelated_donor/seed_202608042.pt": "85f58842c2e545cb8725416e66bffff49e558cb544a530e685b04a1a2797161f",
+        "lstm-unrelated_donor/seed_202608041.pt": "45b3404d3788d913ce829d9e2c050a49999c2f764b9ecdd57a0df9c9a27188c6"
+      }
+    },
+    {
+      "name": "lstm-same_family_donor.tar.gz",
+      "sha256": "9c7b13dc27339c687241d4ae1dd6b9fe6438981b70e48582545155cc804e274d",
+      "url": "https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.3.0/lstm-same_family_donor.tar.gz",
+      "models": [
+        "lstm"
+      ],
+      "file_sha256": {
+        "lstm-same_family_donor/seed_202608040.pt": "f798da83d8b3974b4839aefef5111a6963660229f793d1b289f20a1721820717",
+        "lstm-same_family_donor/seed_202608042.pt": "5d744a9e9514e0404a8e8e734340a846edac5eafb2a9ffba2a2d014812c6bfba",
+        "lstm-same_family_donor/seed_202608041.pt": "db76eb746d825baad7d6aec859a3272d4d2836fdf5ddd26238a2a2cfd0f71ee6"
+      }
+    }
+  ],
+  "repeated_asset": {
+    "name": "experiment4-repeated-unrelated-final-checkpoints.tar.gz",
+    "sha256": "02eae5e273e24dae8be1fba25e4af45c966e2d7ed6e301b0e5d22a6a795762d2",
+    "url": "https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/download/v1.9-supplement-checkpoints-20261025/experiment4-repeated-unrelated-final-checkpoints.tar.gz",
+    "file_sha256": {
+      "verify_checkpoint_bundle.py": "517096a13a5c172ab1bb2c6140ceeb14bb5fe0e1dfef58400eaa5db67ab97639",
+      "BUNDLE.json": "0250e04cd3271a27f1d0f58e36089222b03d6e4b1e67aadb8f779d0cde17f00f",
+      "architecture/pilot_model.py": "7688c032223252c6379be47e8f34aae99eefccad2e0d75bd9ded5a455cb1e572",
+      "architecture/external_models.py": "141cb8722c98dfdea16085763e3ef8599fd5acd076d2c2b1550ba9e615754a35",
+      "architecture/causal_tcn_lm.py": "1e7dd17e488e6f16fbd2feab334b46afeac67012cf5a84b2911047cceac43f4a",
+      "architecture/midigpt/inference/model/gpt2.py": "463734de7b718c4ce50bd59546e48ffb5bd9197d5d0534a0d5651f8c388e4392",
+      "architecture/midigpt/inference/model/registry.py": "b8066d2f5b47816720d9eb5acf52aab613f31279948802f1f1021eb2fa67347f",
+      "architecture/midigpt/inference/model/transformer_lm_base.py": "226af3ad62100aff69193fd307d1080583d0c989ae68b80624540bc5e7d8ea15",
+      "checkpoints/transformer_s/seed_202608041/model.pt": "06906d6d5de26b893fa1fd344937870bd5e7d4095537e2f8744a98c620036def",
+      "checkpoints/transformer_s/seed_202608040/model.pt": "34a87025ddb51ed2c19c4ed779d8636e1c9a3b21d2d3bbed3f05b7d3c9e4d0db",
+      "checkpoints/transformer_s/seed_202608042/model.pt": "dd272bd272886404fe61569a7d43dede138ccd09ea39f36213e495f18cffda7f",
+      "checkpoints/lstm/seed_202608041/model.pt": "4a9187a1e6e13f3c3af8680cdb3a839289442ec34903d54183954255ee5f6f0a",
+      "checkpoints/lstm/seed_202608040/model.pt": "8e9d7e0b4ec567c149e97a25c83b0b1f661e9c4015586e3cc34c3b2c56b28855",
+      "checkpoints/lstm/seed_202608042/model.pt": "59d96292a82f6a1dd3ee8e65c7f565a30123772a1ed01235be73a9ca133babae",
+      "checkpoints/transformer_l/seed_202608041/model.pt": "22830070155f5b6fc8ead8f69886b8c4dec3b880b78d1404ae8c04119218926a",
+      "checkpoints/transformer_l/seed_202608040/model.pt": "bd2603179fd0fb28b80faaad7aa01d7857009eabeab2d479d7eb1c0019198d31",
+      "checkpoints/transformer_l/seed_202608042/model.pt": "d7c4acd46cd8856058424dbd4bbafd3d4eec8b57a614518ec8ef519a146981e3",
+      "checkpoints/transformer_m/seed_202608041/model.pt": "bf178e89f3480c40522822b14caa08cbd203212be10bd4e0b44254f1509831f1",
+      "checkpoints/transformer_m/seed_202608040/model.pt": "dfc5cdac839759e69cdd9bb7480b95c2a75601de8aeb3936fe1b3182327086ab",
+      "checkpoints/transformer_m/seed_202608042/model.pt": "a165346df7b89f19a6a54ca76c8ddae13d79e97b6cd3161cad2ce8c693fdb080",
+      "checkpoints/tcn_384/seed_202608041/model.pt": "5210ef1e80148a3469e035fe7b02bd11c3b2df532d68ecd635796dd37aef12f3",
+      "checkpoints/tcn_384/seed_202608040/model.pt": "ba43b5bed0d306dcabafe4027d76ac1d69033a165fd8cc1a975e69ca7735f579",
+      "checkpoints/tcn_384/seed_202608042/model.pt": "f6c233964c6d42e7e3a3894bebc912607ceeba0852905b3b5671b52e1de58300",
+      "checkpoints/midigpt/seed_202608041/model.pt": "6758a8b1c8604dc6dad17bf7f546de575072456f90aa1d93846708a68923253f",
+      "checkpoints/midigpt/seed_202608040/model.pt": "8da0acf4cfd49e51560be3da439ae2a78fe7c692e8c6ab9bcb079179f028b653",
+      "checkpoints/midigpt/seed_202608042/model.pt": "bc4981183d64b41739b7de83e03a36c6302e1226f456f73d8b085d5886d9a2d7"
+    }
+  }
+}

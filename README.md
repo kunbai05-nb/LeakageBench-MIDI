@@ -3,31 +3,77 @@
 <h1>🎼 LeakageBench-MIDI</h1>
 <h3>Work-Level Exposure in Symbolic Music Generation</h3>
 
-<p>Code and checkpoints to reproduce the experiments.</p>
+<p>Measure evaluation bias · Identify same-work versions · Audit datasets · Isolate works</p>
 
-<a href="https://doi.org/10.5281/zenodo.22023100"><img src="https://img.shields.io/badge/DOI-Zenodo-2563eb?style=flat-square" alt="Zenodo archive"></a>
-<a href="https://github.com/kunbai05-nb/LeakageBench-MIDI/releases"><img src="https://img.shields.io/badge/Download-Checkpoints-f59e0b?style=flat-square" alt="Download checkpoints"></a>
-<a href="LICENSE"><img src="https://img.shields.io/badge/Code-MIT-64748b?style=flat-square" alt="MIT license"></a>
+<a href="https://doi.org/10.5281/zenodo.22023100"><img src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.22023100-2563eb?style=flat-square" alt="DOI: Zenodo software archive"></a>
+<a href="#reproduce-result-tables"><img src="https://img.shields.io/badge/Experiments-Reproduce-16a34a?style=flat-square" alt="Reproduce experiments"></a>
+<a href="https://github.com/kunbai05-nb/LeakageBench-MIDI/releases"><img src="https://img.shields.io/badge/Downloads-Checkpoints-f59e0b?style=flat-square" alt="Download checkpoints and reproduction assets"></a>
+<a href="LICENSE"><img src="https://img.shields.io/badge/Code-MIT-64748b?style=flat-square" alt="Code license: MIT"></a>
 
-<p><a href="#setup">Setup</a> · <a href="#experiments">Experiments</a> · <a href="#citation">Citation</a></p>
+<p>
+<a href="#overview">Overview</a> ·
+<a href="#choose-an-experiment">Experiments</a> ·
+<a href="#setup">Quick Start</a> ·
+<a href="#detect-same-work-relations-in-your-own-dataset">Use the Detector</a> ·
+<a href="#tests-and-citation">Citation</a>
+</p>
 
 </div>
 
+---
+
+<a id="overview"></a>
+
+## 🔎 Overview
+
+Code and checkpoints for studying work-level exposure in symbolic music generation: its effect on evaluation, same-work detection, cross-dataset auditing, and work-level isolation.
+
+Different MIDI performances or arrangements of the same work can cross a file-level train/test split. This repository connects four parts of that evaluation problem:
+
+| Measure | Identify | Audit | Mitigate |
+| :--- | :--- | :--- | :--- |
+| Compare controlled exposure conditions | Detect same-work MIDI versions | Measure exposure across datasets | Evaluate models after work-level isolation |
+
+**Start here:** [set up the environment](#setup), then choose an experiment below. Each entry includes its inputs, a copyable command, and the generated result paths.
+
+<a id="choose-an-experiment"></a>
+
+## 🧭 Choose an Experiment
+
+Choose the experiment you want to reproduce. After the one-time setup, run its command from the repository root.
+
+| Experiment | Starting point | Original MIDI needed? | Hardware |
+| --- | --- | --- | --- |
+| [Four-condition controlled exposure](#four-condition-experiment) | 72 generation-model checkpoints and frozen receiver windows | No | BF16-capable NVIDIA GPU |
+| [Six-dataset detector benchmark](#six-dataset-detector-benchmark) | v1.9 checkpoint and frozen MIDI cohorts | Yes: six datasets | CPU |
+| [Fast versus v1.9](#fast-versus-v19) | Candidate features and detector checkpoints | No | CPU |
+| [Seven-dataset deployment audit](#seven-dataset-deployment-audit) | Candidate features and auditor checkpoint | No | CPU |
+| [Five-condition cleaning study](#cleaning-mitigation) | 60 generation-model checkpoints and frozen test windows | No | BF16-capable NVIDIA GPU |
+| [Detector ablation and sensitivity](#detector-ablation-and-sensitivity) | Intermediate features; classifiers retrained | No for the default command | CPU |
+
+**Reproduction starting points:** the feature-based workflows run new inference or training. The table above identifies which stages are rerun and which inputs are frozen.
+
 <a id="setup"></a>
 
-## 🚀 Setup
+## 🚀 Quick Start
 
-Use Ubuntu/Linux and Python 3.10. Install Git, GitHub CLI (`gh`), `curl`, `tar`, and `sha256sum` first. The GPU experiments require an NVIDIA GPU with BF16 support.
+Use Ubuntu/Linux with Python 3.10. You need Git, GitHub CLI (`gh`), `curl`, `tar`, and `sha256sum`. The pinned environment uses PyTorch 2.8.0 and scikit-learn 1.7.2.
 
 <details>
-<summary><b>Private repository: sign in before cloning</b></summary>
+<summary><b>Private repository? Authenticate once before cloning.</b></summary>
+
+**Private repository access:** authorized users must install GitHub CLI (`gh`) and sign in before cloning or downloading release assets:
 
 ```bash
 gh auth login
 gh auth setup-git
 ```
 
+Skip this authentication step when the repository is public.
+
 </details>
+
+### Install
 
 ```bash
 git clone https://github.com/kunbai05-nb/LeakageBench-MIDI.git
@@ -39,116 +85,358 @@ python -m pip install -r requirements.txt
 python -m pip install -e '.[scale]'
 ```
 
-Run the commands below from this folder, with the environment activated. Checkpoints and saved inputs download automatically. Allow space for both downloads and extracted files.
+Run all remaining commands from this directory with the virtual environment activated. The scripts download and verify their release bundles automatically. Leave room for both the archives and their extracted files. No manual checkpoint paths are needed for the table-reproduction commands.
 
-<a id="experiments"></a>
+<a id="reproduce-result-tables"></a>
 
-## 📊 Reproduce the Experiments
+## 📊 Reproduce Result Tables
 
-| Experiment | Hardware | Original MIDI needed? |
-| --- | --- | --- |
-| [Four-condition exposure experiment](#four-condition-experiment) | GPU | No |
-| [Five-condition cleaning experiment](#cleaning-mitigation) | GPU | No |
-| [Six-dataset detector comparison](#six-dataset-detector-benchmark) | CPU | Yes |
-| [Seven-dataset exposure audit](#seven-dataset-deployment-audit) | CPU | No |
-| [Fast versus v1.9](#fast-versus-v19) | CPU | No |
-| [Detector ablation](#detector-ablation-and-sensitivity) | CPU | No |
-
+<a id="three-condition-experiment"></a>
 <a id="four-condition-experiment"></a>
 
-### 1. Four-Condition Exposure Experiment
+### 1. Four-Condition Controlled Exposure
 
-Compare six models trained with clean data, new unrelated versions, repeated unrelated versions, or another version of a test work. Downloads about 2.6 GB; allow 8 GB of free space.
+**Scope:** six autoregressive models × four training conditions × three paired seeds: **72 final checkpoints**. Models are Transformer-S/M/L, MIDI-GPT, LSTM, and TCN-384.
+
+| Condition | Content at the frozen replacement positions |
+| --- | --- |
+| Clean | Original unrelated training content |
+| Unrelated donor | Versions of new unrelated works |
+| Repeated unrelated | Repeated content from unrelated works already represented in training |
+| Same-work donor | Another natural version of each target test work |
+
+**Prepare:** no MIDI download is needed. Use a BF16-capable CUDA GPU and complete the one-time setup above. The scripts reuse the existing checkpoint releases and download the small frozen evaluation bundle automatically. A fresh run downloads about **2.6 GB**; allow **8 GB of free space** for the checkpoint files and extraction.
+
+**Run:**
 
 ```bash
 bash scripts/reproduce_four_condition.sh
 ```
 
-Tables: `reproduced/four_condition/tables/four_condition_results.csv` (also Markdown and JSON).
+The command runs fresh checkpoint inference on the **same 100 intervention groups** used by the original three-condition study. The frozen **1,299 receiver windows**, prompts and scoring masks are unchanged. Each model/condition has three fixed-final **20,000-step** checkpoints with paired seeds `202608040`, `202608041`, and `202608042`. The fourth condition uses the frozen 1,264 replacement positions within the original 38,374-window training stream.
 
-<a id="cleaning-mitigation"></a>
+**Result:**
 
-### 2. Five-Condition Cleaning Experiment
-
-Compare untreated data, random removal, MVA-SWI isolation, CAugBERT+CLaMP cleaning, and label isolation on ATEPP and LMD-clean, using MIDI-GPT and Transformer. Downloads about 4.4 GB; allow 10 GB of free space.
-
-```bash
-bash scripts/reproduce_cleaning_mitigation.sh
+```text
+reproduced/four_condition/tables/four_condition_results.csv
+reproduced/four_condition/tables/four_condition_results.md
+reproduced/four_condition/tables/four_condition_results.json
+reproduced/four_condition/raw/
+reproduced/four_condition/verification.json
 ```
 
-Tables: `reproduced/cleaning_mitigation/tables/cleaning_results.csv` (also Markdown and JSON).
+NLL is token-weighted within each receiver and averaged equally across the 100 groups. The tables report condition NLL means and seed SDs, same-work versus unrelated-donor effects, same-work versus repeated-unrelated effects with paired group-bootstrap intervals, and same-work PPL. Relative reductions average seed NLL within each group before computing group-relative differences. Confidence intervals resample groups and are conditional on the three fitted training seeds.
 
-Both GPU commands evaluate the released checkpoints again. They reuse completed evaluations after an interruption. Each output folder includes `verification.json`: `PASS` means values match within the stated tolerances; `DIFFERENT` lists the numerical differences and keeps the newly calculated results.
+The verification report separates successful result generation from numerical agreement with the frozen evaluations; fresh values are preserved if they differ. Add `--strict-match` to require the documented numerical tolerances. Completed, hash-verified evaluations are reused; `--force-evaluate` recomputes them.
+
+<details>
+<summary><b>Single-model checks, control groups, and the earlier three-condition workflow</b></summary>
+
+```bash
+bash scripts/reproduce_four_condition.sh --model midigpt
+bash scripts/reproduce_four_condition.sh --include-control
+```
+
+`--include-control` also evaluates the original **300 control groups**. This is the frozen control cohort, not a newly assembled external clean test set. Earlier conditions reuse the existing released inference exports; the added condition uses weight-preserving final exports. Original checkpoint dtypes are retained and BF16 scoring is used throughout; numerical differences are recorded. One recorded execution detail is retained: LSTM seed `202608041` in the repeated-unrelated condition used the FP32 training repair; its BF16 evaluation and 20,000-step endpoint are unchanged.
+
+The earlier `bash scripts/reproduce_three_condition.sh` name now forwards to this four-condition entry point. To reproduce the original three-condition table from the LMD MIDI archive, including the VAE and diffusion supplement, prepare `data/lmd_full.tar.gz` and run:
+
+```bash
+bash scripts/reproduce_three_condition_from_midi.sh
+```
+
+VAE and diffusion have no repeated-unrelated checkpoints and are not presented as four-condition experiments.
+
+</details>
 
 <a id="six-dataset-detector-benchmark"></a>
 
-### 3. Six-Dataset Detector Comparison
+### 2. Six-Dataset Detector Benchmark
 
-First place the MIDI datasets in the folders below, preserving the relative paths in the [file lists](reproduction/detector_benchmark/). Existing datasets can be linked instead of copied.
+**Prepare:** place the six datasets in the directories listed under [Original MIDI layout](#original-midi-layout).
 
-<details>
-<summary><b>Required MIDI folders and example file paths</b></summary>
-
-| Dataset | Folder | Example path inside the folder |
-| --- | --- | --- |
-| SHS | `data/shs` | `0/0207f2cc938c3691b3af6d8e359bedfd.mid` |
-| ASAP | `data/asap` | `Bach/Fugue/bwv_846/Shi05M.mid` |
-| ATEPP | `data/atepp` | `Sergei_Rachmaninoff/13_Preludes,_Op._32/No._10_in_B_Minor:_Lento/00046.mid` |
-| LMD-clean | `data/lmd-clean` | `clean_midi/2 Brothers on the 4th Floor/Dreams.1.mid` |
-| Vienna4x22 | `data/vienna4x22` | `Chopin_op10_no3_p01.mid` |
-| PianoVAM | `data/pianovam` | `MIDI/2024-02-14_19-10-09.mid` |
-
-</details>
+**Run:**
 
 ```bash
 bash scripts/reproduce_six_dataset_table.sh --check-only
 bash scripts/reproduce_six_dataset_table.sh
 ```
 
-Tables: `reproduced/six_dataset/tables/six_dataset_results.csv` (also Markdown and JSON).
+The first command verifies the frozen cohorts, MIDI checksums, and detector checkpoint without inference. The second runs v1.9 from MIDI using exact retrieval and generates Precision, Recall, F1, and 95% confidence intervals for two threshold settings:
 
-This runs v1.9 from MIDI and reports fixed-threshold and best-F1-threshold results. It does not rerun the CAugBERT/CLaMP baseline rows.
+- **Fixed:** the released threshold is applied unchanged to every dataset.
+- **Optimal:** the threshold maximizes F1 using that dataset's evaluation labels. This is an oracle comparison, not the deployment setting.
 
-<a id="seven-dataset-deployment-audit"></a>
+**Result:**
 
-### 4. Seven-Dataset Exposure Audit
-
-Recompute exposure on POP909, ASAP, PDMX, GigaMIDI, MAESTRO, LMD, and Aria-MIDI. This starts from saved candidate-pair features and the Precision-First Same-Work Auditor checkpoint; MIDI parsing and candidate search are skipped.
-
-```bash
-bash scripts/reproduce_multidataset_deployment.sh
+```text
+reproduced/six_dataset/tables/six_dataset_results.csv
+reproduced/six_dataset/tables/six_dataset_results.md
+reproduced/six_dataset/tables/six_dataset_results.json
 ```
 
-Tables: `reproduced/multidataset_deployment/multidataset_deployment.csv` (also Markdown). Per-dataset JSON results are in the same folder.
+Per-dataset inference outputs are saved in the raw subdirectory alongside the tables directory.
+
+This command reproduces the v1.9 rows only; it does not rerun CAugBERT/CLaMP. The SHS cohort contains 306 MIDI files and 80 eligible reference pairs. There is no detector retraining or deployment-threshold recalibration on these evaluation cohorts.
 
 <a id="fast-versus-v19"></a>
 
-### 5. Fast versus v1.9
+### 3. Fast versus v1.9
 
-Compare the two detectors on ATEPP, LMD-clean, and ASAP by scoring the saved candidate-pair features again.
+**Prepare:** no MIDI download is needed.
+
+**Run:**
 
 ```bash
 bash scripts/reproduce_fast_vs_v19.sh
 ```
 
-Tables: `reproduced/fast_vs_v19/fast_vs_v19.csv` (also Markdown and JSON).
+The script downloads candidate features, manifests, and both detector checkpoints. It recomputes scores and fixed-threshold metrics on ATEPP, LMD-clean, and ASAP. It does not repeat MIDI feature extraction or candidate retrieval.
+
+**Result:**
+
+```text
+reproduced/fast_vs_v19/fast_vs_v19.csv
+reproduced/fast_vs_v19/fast_vs_v19.md
+reproduced/fast_vs_v19/fast_vs_v19_results.json
+```
+
+<a id="seven-dataset-deployment-audit"></a>
+
+### 4. Seven-Dataset Deployment Audit
+
+**Prepare:** no MIDI download is needed.
+
+**Run:**
+
+```bash
+bash scripts/reproduce_multidataset_deployment.sh
+```
+
+The script audits POP909, ASAP, PDMX, GigaMIDI, MAESTRO, LMD, and Aria-MIDI using the **Precision-First Same-Work Auditor**, a separate checkpoint from the v1.9 benchmark detector.
+
+Starting from frozen candidate-pair features, it recomputes classifier scores, applies the decision threshold, rebuilds protected families, and repeats the 200 train/validation/test splits. It starts after candidate retrieval and cheap-gate filtering; neither of those stages is rerun.
+
+**Result:**
+
+```text
+reproduced/multidataset_deployment/multidataset_deployment.csv
+reproduced/multidataset_deployment/multidataset_deployment.md
+reproduced/multidataset_deployment/<dataset>_results.json
+reproduced/multidataset_deployment/multidataset_verification.json
+```
+
+Family-level and file-level exposure use all test families and all test files, respectively, as denominators. The 95% empirical interval (EI) is the 2.5%–97.5% quantile range across 200 splits. Available official-split results are also reported. Valid-MIDI counts come from the recorded parsing census; multi-version prevalence is recomputed from the rebuilt families.
+
+For the full-MIDI workflow, the downloaded bundle also includes source code in `source/`, file/hash manifests in `midi_hashes/`, and instructions in `FULL_MIDI.md`.
+
+<a id="atepp-mitigation"></a>
+<a id="cleaning-mitigation"></a>
+
+### 5. Five-Condition Cleaning Study
+
+**Scope:** ATEPP and LMD-clean × MIDI-GPT and Transformer × five conditions × three paired seeds: **60 final checkpoints**. This is the current cleaning study, replacing the earlier ATEPP-only experiment.
+
+**Prepare:** no MIDI download is needed. Use a BF16-capable CUDA GPU. The first run downloads approximately **4.4 GB** of checkpoints plus a small evaluation bundle; allow **10 GB of free disk space** for the downloaded and extracted files. The download archives are removed after extraction.
+
+**Run all four result tables:**
+
+```bash
+bash scripts/reproduce_cleaning_mitigation.sh
+```
+
+The script automatically downloads and verifies the frozen checkpoints and evaluation arrays, runs fresh BF16 inference on the original test set and the independent clean test set, and generates the tables. It reuses completed, checksum-verified evaluations after interruption. It does not retrain models or rerun the upstream cleaning decisions.
+
+**Five training conditions:** untreated, matched random removal, MVA-SWI isolation, CAugBERT+CLaMP joint baseline, and label-isolation reference. All models were trained for **3,000 updates and 49,152,000 scored tokens** with paired seeds `202608040`, `202608041`, and `202608042`. Each condition retains its natural training pool; training file and window counts are reported rather than forced to match. Within each dataset, all conditions and both models use identical evaluation arrays and scoring masks.
+
+**Result:** one combined file containing the four dataset/model tables, plus fresh per-file evaluations and a numerical verification report:
+
+```text
+reproduced/cleaning_mitigation/tables/cleaning_results.csv
+reproduced/cleaning_mitigation/tables/cleaning_results.md
+reproduced/cleaning_mitigation/tables/cleaning_results.json
+reproduced/cleaning_mitigation/verification.json
+reproduced/cleaning_mitigation/raw/
+```
+
+Training-pool counts, label-checked exposure and clean-token retention come from the frozen preparation audit; the NLL values are recomputed from checkpoints. The tables report training-file counts, label-checked exposure, clean-token retention, work-macro NLL, seed standard deviations, signed and absolute relative deviations from label isolation, and independent-clean-set NLL. NLL is token-weighted within each file and file-averaged within each work. Three seeds are averaged within each work **before** the relative deviations are calculated; works receive equal weight. LMD-clean uses the frozen reference IDs.
+
+`verification.json` reports whether the newly computed values agree with the frozen evaluations within the documented numerical tolerances. It compares fresh predictions, not saved table files. Scored-token and window counts must match exactly; per-file numerical differences are recorded separately. The final-table tolerances are 0.0001 NLL and 0.01 percentage points. `PASS` means all comparisons meet those tolerances; `DIFFERENT` preserves the newly computed values and lists the differences. Result generation and numerical agreement are reported separately. Add `--strict-match` to treat a numerical difference as an execution error.
+
+<details>
+<summary><b>Run one dataset/model, or adjust evaluation memory use</b></summary>
+
+```bash
+bash scripts/reproduce_cleaning_mitigation.sh --dataset atepp --model gpt
+bash scripts/reproduce_cleaning_mitigation.sh --dataset lmd --model transformer
+```
+
+The default evaluation micro-batch is 16, matching the frozen runs. If GPU memory is insufficient, add `--micro-batch 4`; the scoring masks and statistical aggregation stay the same, and any numerical differences remain subject to verification. Add `--force-evaluate` to recompute completed evaluations.
+
+</details>
 
 <a id="detector-ablation-and-sensitivity"></a>
 
-### 6. Detector Ablation
+### 6. Detector Ablation and Sensitivity
 
-Rebuild the view-count, feature-ablation, Top-K, and classifier-count tables. The command downloads saved features, then retrains and evaluates the classifier variants.
+**Prepare:** no MIDI download is needed for the recommended workflow.
+
+**Run:**
 
 ```bash
 bash scripts/reproduce_detector_ablation.sh
 ```
 
-Tables: `reproduced/detector_ablation/tables/`.
+The script downloads intermediate features, trains and calibrates the classifier variants, evaluates all settings, and generates four tables: view count (Table 1), pairwise-verifier ablation (Table 2), Top-K (Table 4), and classifier count (Table 5). The expensive MIDI feature-extraction stage is skipped; training and evaluation are rerun.
 
-For extra options, add `--help` to an experiment command.
+**Result:** CSV and Markdown tables, generated_results.json, and verification.json are saved in:
 
-<a id="citation"></a>
+```text
+reproduced/detector_ablation/tables/
+```
 
-## 📖 Citation and License
+In verification.json, PASS means the reported values match the frozen paper values; DIFFERENT means the newly generated values differ and should be inspected.
 
-Citation details: [CITATION.cff](CITATION.cff). Code: [MIT](LICENSE). Released weights: CC BY 4.0. See [third-party notices](THIRD_PARTY_NOTICES.md) for other materials.
+To rebuild features from MIDI as well, prepare LMD-clean, ATEPP, and ASAP using the layout below, then run:
+
+```bash
+bash scripts/reproduce_detector_ablation.sh --from-midi
+```
+
+This alternative writes to `reproduced/detector_ablation_from_midi/`. The frozen MAESTRO view-selection input is downloaded automatically.
+
+<a id="original-midi-layout"></a>
+
+## 📁 Original MIDI Layout
+
+Only the six-dataset benchmark and optional full-MIDI workflows require original datasets. The four-condition checkpoint workflow includes frozen evaluation windows. These datasets are not bundled with the repository or downloaded automatically.
+
+For the six-dataset benchmark, each directory must preserve the relative paths in its corresponding manifest under `reproduction/detector_benchmark/`:
+
+| Dataset | Default directory | Example relative path |
+| --- | --- | --- |
+| SHS (LMD-full subset) | `data/shs` | `0/0207f2cc938c3691b3af6d8e359bedfd.mid` |
+| ASAP | `data/asap` | `Bach/Fugue/bwv_846/Shi05M.mid` |
+| ATEPP | `data/atepp` | `Sergei_Rachmaninoff/13_Preludes,_Op._32/No._10_in_B_Minor:_Lento/00046.mid` |
+| LMD-clean | `data/lmd-clean` | `clean_midi/2 Brothers on the 4th Floor/Dreams.1.mid` |
+| Vienna4x22 | `data/vienna4x22` | `Chopin_op10_no3_p01.mid` |
+| PianoVAM | `data/pianovam` | `MIDI/2024-02-14_19-10-09.mid` |
+
+You can use symbolic links instead of copying existing datasets. To use another data location, set `LEAKAGEBENCH_DATA_DIR` once; it must contain the same dataset subdirectories. For example:
+
+```bash
+export LEAKAGEBENCH_DATA_DIR="$PWD/data"
+```
+
+The optional `reproduce_three_condition_from_midi.sh` script expects `lmd_full.tar.gz` directly inside this data directory. Use a script's `--help` for explicit input and output paths.
+
+<a id="detect-same-work-relations-in-your-own-dataset"></a>
+
+## 🎹 Use the Detector on Your Own Dataset
+
+Place your MIDI files in `data/my-midi/`, including subdirectories if needed, then run:
+
+```bash
+python scripts/verify_detector_checkpoint.py checkpoints/same-work-detector-v1.9
+python scripts/detect_same_work.py \
+  ./data/my-midi \
+  ./checkpoints/same-work-detector-v1.9 \
+  ./detector_output \
+  --workers 8 --backend faiss
+```
+
+**Result:**
+
+```text
+detector_output/components.csv
+detector_output/relation_edges.csv
+detector_output/summary.json
+```
+
+These files contain file-to-family assignments, scored relations and merge decisions, and counts and parsing failures, respectively.
+
+v1.9 uses five views, a one-way Top-50 candidate union, and three seeded classifiers with 57 pair features. The scores are calibrated on a work-disjoint calibration split. `--backend faiss` uses HNSW for retrieval; use `--backend exact` for the exact-search setting used by the six-dataset benchmark.
+
+<a id="optional-train-from-scratch"></a>
+
+## 🛠️ Optional: Train from Scratch
+
+Checkpoint reproduction above does not require these training commands.
+
+<details>
+<summary><b>Generation models: data preparation and training</b></summary>
+
+### Generation models
+
+The original three-condition model settings, seeds, and training schedules are specified in [configs/three_condition_models.json](configs/three_condition_models.json). These training commands cover the original conditions; the fourth-condition checkpoint workflow uses the frozen construction metadata included in its evaluation bundle. After placing the LMD archive in `data/`, this example prepares the data and trains one MIDI-GPT condition:
+
+```bash
+python scripts/fetch_reproduction_assets.py three-condition-source-specs
+python scripts/prepare_lmd.py ./data/lmd_full.tar.gz ./prepared_lmd
+python scripts/train_external_models.py midigpt clean 202608040 ./prepared_lmd ./runs/midigpt-clean-202608040
+```
+
+The condition argument is one of:
+
+```text
+clean
+unrelated_donor
+same_family_donor
+```
+
+For the built-in generation-model training options, run:
+
+```bash
+python scripts/train_model.py --help
+```
+
+Released checkpoints are available in the [v1.3.0 release](https://github.com/kunbai05-nb/LeakageBench-MIDI/releases/tag/v1.3.0). The following scripts check a downloaded model bundle and evaluate an individual checkpoint, respectively; use their help messages for the required arguments:
+
+```bash
+python scripts/verify_model_checkpoints.py --help
+python scripts/evaluate_checkpoint.py --help
+```
+
+</details>
+
+<details>
+<summary><b>Same-Work Detector v1.9: rebuild features and train</b></summary>
+
+### Same-Work Detector v1.9
+
+With the MIDI paths required by `reproduction/detector_training/` available under `data/lmd-clean/`, run:
+
+```bash
+python scripts/reproduce_detector_training.py \
+  --repo . \
+  --spec-dir reproduction/detector_training \
+  --midi-root ./data/lmd-clean \
+  --output ./detector_retrained \
+  --parallel 4 --workers-per-job 8
+```
+
+This rebuilds the training/calibration features and trains a new detector. It does not overwrite the released checkpoint.
+
+</details>
+
+<a id="tests-and-citation"></a>
+
+## 📖 Tests and Citation
+
+To run the automated code tests:
+
+```bash
+bash scripts/reproduce_all.sh
+```
+
+Despite its filename, this command runs tests, not all paper experiments. Use the individual commands above to generate the experiment tables.
+
+### Citation and License
+
+Use [CITATION.cff](CITATION.cff) for citation details. The software archive is available on [Zenodo](https://doi.org/10.5281/zenodo.22023100).
+
+- **Code:** [MIT License](LICENSE).
+- **Released weights:** CC BY 4.0.
+- **Third-party materials:** see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
+<p align="right"><a href="#overview">↑ Back to overview</a></p>

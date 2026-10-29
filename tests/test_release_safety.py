@@ -57,23 +57,23 @@ def test_no_absolute_paths_or_obvious_secrets():
 def test_readme_has_primary_workflows():
     text = (ROOT / "README.md").read_text()
     required = (
-        "scripts/reproduce_four_condition.sh",
-        "scripts/reproduce_cleaning_mitigation.sh",
+        "scripts/detect_same_work.py",
+        "scripts/train_external_models.py",
+        "scripts/prepare_lmd.py",
+        "scripts/fetch_reproduction_assets.py",
+        "scripts/train_model.py",
+        "scripts/evaluate_checkpoint.py",
+        "scripts/verify_model_checkpoints.py",
+        "scripts/reproduce_three_condition.sh",
         "scripts/reproduce_fast_vs_v19.sh",
         "scripts/reproduce_multidataset_deployment.sh",
         "scripts/reproduce_detector_ablation.sh",
         "scripts/reproduce_six_dataset_table.sh",
-        "reproduced/four_condition/tables/four_condition_results.csv",
-        "reproduced/cleaning_mitigation/tables/cleaning_results.csv",
-        "data/shs",
-        "data/asap",
-        "data/atepp",
-        "data/lmd-clean",
-        "data/vienna4x22",
-        "data/pianovam",
+        "/releases/tag/v1.3.0",
+        "checkpoints/same-work-detector-v1.9",
+        "scripts/reproduce_detector_training.py",
     )
     assert all(value in text for value in required)
-    assert "reproduce_three_condition" not in text
 
 
 def test_no_obsolete_detector_implementation():

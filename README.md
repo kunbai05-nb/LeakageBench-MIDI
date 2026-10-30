@@ -75,16 +75,16 @@ Keep the terminal in the cloned repository with the virtual environment activate
 
 | Experiment | Starts from | Hardware | Original MIDI |
 | --- | --- | --- | --- |
-| [1. Controlled exposure](#four-condition-experiment) | 72 model checkpoints + evaluation windows | BF16-capable NVIDIA GPU | Not needed |
-| [2. Six-dataset benchmark](#six-dataset-detector-benchmark) | v1.9 detector + frozen MIDI cohorts | CPU | Required |
-| [3. Fast versus v1.9](#fast-versus-v19) | Candidate features + detector checkpoints | CPU | Not needed |
-| [4. Seven-dataset audit](#seven-dataset-deployment-audit) | Candidate features + auditor checkpoint | CPU | Not needed |
-| [5. Cleaning study](#cleaning-mitigation) | 60 model checkpoints + evaluation windows | BF16-capable NVIDIA GPU | Not needed |
-| [6. Detector ablation](#detector-ablation-and-sensitivity) | Intermediate features; classifiers retrained | CPU | Not needed |
+| [1. 🧪 Controlled exposure](#four-condition-experiment) | 72 model checkpoints + evaluation windows | BF16-capable NVIDIA GPU | Not needed |
+| [2. 🎯 Six-dataset benchmark](#six-dataset-detector-benchmark) | v1.9 detector + frozen MIDI cohorts | CPU | Required |
+| [3. ⚡ Fast versus v1.9](#fast-versus-v19) | Candidate features + detector checkpoints | CPU | Not needed |
+| [4. 🌍 Seven-dataset audit](#seven-dataset-deployment-audit) | Candidate features + auditor checkpoint | CPU | Not needed |
+| [5. 🧹 Cleaning study](#cleaning-mitigation) | 60 model checkpoints + evaluation windows | BF16-capable NVIDIA GPU | Not needed |
+| [6. 🔬 Detector ablation](#detector-ablation-and-sensitivity) | Intermediate features; classifiers retrained | CPU | Not needed |
 
 <a id="four-condition-experiment"></a>
 
-### 1. Four-Condition Controlled Exposure
+### 1. 🧪 Four-Condition Controlled Exposure
 
 Six models × four conditions × three seeds. Conditions: clean, new unrelated donor, repeated unrelated content, and same-work donor. **Allow 8 GB free space**; the initial download is about 2.6 GB.
 
@@ -127,7 +127,7 @@ bash scripts/reproduce_three_condition_from_midi.sh
 
 <a id="six-dataset-detector-benchmark"></a>
 
-### 2. Six-Dataset Detector Benchmark
+### 2. 🎯 Six-Dataset Detector Benchmark
 
 **First:** place the six MIDI datasets in the [default directories below](#original-midi-layout). Then check the inputs and run:
 
@@ -146,7 +146,7 @@ This runs the v1.9 detector from MIDI with exact retrieval. It reports Precision
 
 <a id="fast-versus-v19"></a>
 
-### 3. Fast versus v1.9
+### 3. ⚡ Fast versus v1.9
 
 Compare fixed-threshold detection on ATEPP, LMD-clean, and ASAP. Scores are recomputed from candidate features and both checkpoints.
 
@@ -164,7 +164,7 @@ reproduced/fast_vs_v19/fast_vs_v19_results.json
 
 <a id="seven-dataset-deployment-audit"></a>
 
-### 4. Seven-Dataset Deployment Audit
+### 4. 🌍 Seven-Dataset Deployment Audit
 
 Audit POP909, ASAP, PDMX, GigaMIDI, MAESTRO, LMD, and Aria-MIDI with the **Precision-First Same-Work Auditor** checkpoint.
 
@@ -185,7 +185,7 @@ The downloaded bundle includes the full-MIDI source, manifests, and instructions
 
 <a id="cleaning-mitigation"></a>
 
-### 5. Five-Condition Cleaning Study
+### 5. 🧹 Five-Condition Cleaning Study
 
 ATEPP and LMD-clean × MIDI-GPT and Transformer × five conditions × three seeds. Conditions: untreated, matched random removal, MVA-SWI isolation, CAugBERT+CLaMP joint baseline, and label isolation. **Allow 10 GB free space**; checkpoints download about 4.4 GB.
 
@@ -222,7 +222,7 @@ The default micro-batch is 16. If GPU memory is insufficient, add --micro-batch 
 
 <a id="detector-ablation-and-sensitivity"></a>
 
-### 6. Detector Ablation and Sensitivity
+### 6. 🔬 Detector Ablation and Sensitivity
 
 Download intermediate features, retrain/calibrate classifiers, and generate Tables 1, 2, 4, and 5: views, verifier features, Top-K, and classifier count.
 

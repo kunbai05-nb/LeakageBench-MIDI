@@ -1,22 +1,23 @@
 <div align="center">
 
-<h1>🎼 LeakageBench-MIDI</h1>
+<h1>✨ LeakageBench-MIDI ✨</h1>
 <h3>Work-Level Exposure in Symbolic Music Generation</h3>
 
-<p>Measure evaluation bias · Identify same-work versions · Audit datasets · Isolate works</p>
+<p>🎼 Measure evaluation bias · Identify same-work versions · Audit datasets · Isolate works</p>
 
 <p>
-<a href="https://doi.org/10.5281/zenodo.22023100">Zenodo archive</a> ·
-<a href="https://github.com/kunbai05-nb/LeakageBench-MIDI/releases">Download checkpoints</a> ·
-<a href="LICENSE">MIT License</a>
+<a href="https://doi.org/10.5281/zenodo.22023100"><img src="docs/badges/archive.svg" alt="Archive: Zenodo"></a>
+<a href="https://github.com/kunbai05-nb/LeakageBench-MIDI/releases"><img src="docs/badges/checkpoints.svg" alt="Models: Checkpoints"></a>
+<a href="#reproduce-result-tables"><img src="docs/badges/reproduce.svg" alt="Experiments: Reproduce"></a>
+<a href="LICENSE"><img src="docs/badges/license.svg" alt="License: MIT"></a>
 </p>
 
 <p>
-<a href="#overview">Overview</a> ·
-<a href="#choose-an-experiment">Experiments</a> ·
-<a href="#setup">Quick Start</a> ·
-<a href="#detect-same-work-relations-in-your-own-dataset">Use the Detector</a> ·
-<a href="#tests-and-citation">Citation</a>
+<a href="#overview">🔎 Overview</a> ·
+<a href="#setup">🚀 Quick Start</a> ·
+<a href="#choose-an-experiment">📊 Experiments</a> ·
+<a href="#detect-same-work-relations-in-your-own-dataset">🎹 Use the Detector</a> ·
+<a href="#tests-and-citation">📖 Citation</a>
 </p>
 
 </div>
@@ -25,7 +26,7 @@
 
 <a id="overview"></a>
 
-## Overview
+## 🔎 Overview
 
 LeakageBench-MIDI studies how different MIDI versions of the same work affect generation evaluation. It provides same-work detectors, dataset audits, and experiments on work-level isolation.
 
@@ -37,7 +38,7 @@ reproduced/
 
 <a id="setup"></a>
 
-## Step 1 · Install
+## 🚀 Step 1 · Install
 
 Use Ubuntu 22.04 (or another Linux system with Python 3.10). Install the required tools with the following commands:
 
@@ -70,7 +71,7 @@ Keep the terminal in the cloned repository with the virtual environment activate
 <a id="choose-an-experiment"></a>
 <a id="reproduce-result-tables"></a>
 
-## Step 2 · Choose an Experiment
+## 📊 Step 2 · Choose an Experiment
 
 | Experiment | Starts from | Hardware | Original MIDI |
 | --- | --- | --- | --- |
@@ -99,7 +100,7 @@ reproduced/four_condition/raw/
 ```
 
 <details>
-<summary>Protocol and optional commands</summary>
+<summary><b>⚙️ Protocol and optional commands</b></summary>
 
 Models: Transformer-S/M/L, MIDI-GPT, LSTM, and TCN-384. The 72 final checkpoints use 20,000 steps and paired seeds 202608040/041/042. Evaluation uses the same 100 intervention groups and 1,299 receiver windows. The fourth condition replaces the same 1,264 positions in the 38,374-window training stream.
 
@@ -200,7 +201,7 @@ reproduced/cleaning_mitigation/raw/
 ```
 
 <details>
-<summary>Protocol, numerical verification, and smaller runs</summary>
+<summary><b>⚙️ Protocol, numerical verification, and smaller runs</b></summary>
 
 The command evaluates all 60 final checkpoints on the original and independent clean test sets. Each was trained for 3,000 updates and 49,152,000 scored tokens with paired seeds 202608040/041/042. Conditions retain their natural training pools. Evaluation arrays and masks are identical within each dataset.
 
@@ -236,7 +237,7 @@ reproduced/detector_ablation/tables/
 ```
 
 <details>
-<summary>Rebuild the ablation features from MIDI</summary>
+<summary><b>🛠️ Rebuild the ablation features from MIDI</b></summary>
 
 Prepare LMD-clean, ATEPP, and ASAP using the directories below, then run:
 
@@ -250,7 +251,7 @@ Outputs go to reproduced/detector_ablation_from_midi/. The frozen MAESTRO view-s
 
 <a id="original-midi-layout"></a>
 
-## MIDI Directories · For Experiment 2 and Full-MIDI Workflows
+## 📁 MIDI Directories · For Experiment 2 and Full-MIDI Workflows
 
 Place datasets under data/, preserving the relative paths in the frozen manifests under reproduction/detector_benchmark/. Existing datasets can be linked here instead of copied.
 
@@ -271,7 +272,7 @@ export LEAKAGEBENCH_DATA_DIR="/mnt/d/music-data"
 
 <a id="detect-same-work-relations-in-your-own-dataset"></a>
 
-## Use the Detector on Your Own MIDI
+## 🎹 Use the Detector on Your Own MIDI
 
 Place MIDI files in data/my-midi/, then run:
 
@@ -297,7 +298,7 @@ v1.9 uses five views, a one-way Top-50 candidate union, 57 pair features, and th
 <a id="optional-train-from-scratch"></a>
 
 <details>
-<summary><b>Optional: train models and the detector from scratch</b></summary>
+<summary><b>🛠️ Optional: train models and the detector from scratch</b></summary>
 
 Checkpoint reproduction above does not require these training commands.
 
@@ -362,7 +363,7 @@ This rebuilds the training/calibration features and trains a new detector. It do
 
 <a id="tests-and-citation"></a>
 
-## Tests and Citation
+## 📖 Tests and Citation
 
 Run code tests:
 
@@ -373,3 +374,5 @@ bash scripts/reproduce_all.sh
 Experiment tables are generated by the individual commands above.
 
 See [CITATION.cff](CITATION.cff) and the [Zenodo archive](https://doi.org/10.5281/zenodo.22023100). Code: [MIT](LICENSE). Released weights: CC BY 4.0. Third-party materials: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
+<p align="right"><a href="#overview">↑ Back to top</a></p>

@@ -6,7 +6,7 @@
 <p>🎼 Measure evaluation bias · Identify same-work versions · Audit datasets · Isolate works</p>
 
 <p>
-<a href="https://doi.org/10.5281/zenodo.22023100"><img src="docs/badges/archive.svg" alt="Archive: Zenodo"></a>
+<a href="https://doi.org/10.5281/zenodo.22023100"><img src="docs/badges/archive.svg" alt="DOI: 10.5281/zenodo.22023100"></a>
 <a href="https://github.com/kunbai05-nb/LeakageBench-MIDI/releases"><img src="docs/badges/checkpoints.svg" alt="Models: Checkpoints"></a>
 <a href="#reproduce-result-tables"><img src="docs/badges/reproduce.svg" alt="Experiments: Reproduce"></a>
 <a href="LICENSE"><img src="docs/badges/license.svg" alt="License: MIT"></a>

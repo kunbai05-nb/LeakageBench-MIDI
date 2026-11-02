@@ -2,12 +2,14 @@
 from __future__ import annotations
 
 import json
+import importlib.util
 import os
 import queue
 import signal
 import subprocess
 import sys
 import threading
+import time
 import tkinter as tk
 import webbrowser
 from pathlib import Path
@@ -17,6 +19,12 @@ from tkinter import filedialog, messagebox, ttk
 ROOT = Path(__file__).resolve().parents[1]
 CHECKPOINT = ROOT / "checkpoints" / "same-work-detector-v1.9"
 DETECT_SCRIPT = ROOT / "scripts" / "detect_same_work.py"
+DETECT_REQUIREMENTS = ROOT / "requirements-detector.txt"
+REQUIRED_MODULES = ("numpy", "scipy", "sklearn", "mido", "joblib")
+
+
+def missing_modules() -> list[str]:
+    return [name for name in REQUIRED_MODULES if importlib.util.find_spec(name) is None]
 
 
 def count_midi(folder: Path) -> int:
@@ -156,6 +164,7 @@ class DetectorApp:
         self.busy = False
         self.current_proc: subprocess.Popen | None = None
         self.cancel_requested = threading.Event()
+        self.started_at: float | None = None
 
         frame = ttk.Frame(window, padding=28, style="App.TFrame")
         frame.pack(fill="both", expand=True)
@@ -261,6 +270,7 @@ class DetectorApp:
         if self.busy:
             return
         self.busy = True
+        self.started_at = time.monotonic()
         self.cancel_requested.clear()
         self.install_button.configure(state="disabled")
         self.run_button.configure(state="disabled")
@@ -271,11 +281,13 @@ class DetectorApp:
         def worker() -> None:
             try:
                 code = 0
+                child_env = os.environ.copy()
+                child_env["PYTHONPATH"] = str(ROOT) + os.pathsep + child_env.get("PYTHONPATH", "")
                 for cmd in commands:
                     if self.cancel_requested.is_set():
                         code = 130
                         break
-                    proc = subprocess.Popen(cmd, cwd=ROOT, stdout=subprocess.PIPE,
+                    proc = subprocess.Popen(cmd, cwd=ROOT, env=child_env, stdout=subprocess.PIPE,
                                             stderr=subprocess.STDOUT, text=True,
                                             errors="replace", bufsize=1,
                                             start_new_session=(sys.platform != "win32"),
@@ -320,7 +332,7 @@ class DetectorApp:
         if not self.supported_python():
             return
         self.start([[sys.executable, "-m", "pip", "install", "--upgrade", "pip", "setuptools", "wheel"],
-                    [sys.executable, "-m", "pip", "install", str(ROOT)]], "Installing dependencies")
+                    [sys.executable, "-m", "pip", "install", "-r", str(DETECT_REQUIREMENTS)]], "Installing dependencies")
 
     def supported_python(self) -> bool:
         if sys.version_info >= (3, 10):
@@ -347,6 +359,10 @@ class DetectorApp:
             return
         if not CHECKPOINT.is_dir():
             messagebox.showerror("Checkpoint missing", f"Detector checkpoint not found: {CHECKPOINT}")
+            return
+        missing = missing_modules()
+        if missing:
+            messagebox.showerror("Dependencies missing", "Missing: " + ", ".join(missing) + "\nClick Install dependencies first.")
             return
         workers = choose_workers(files) if self.worker_choice.get() == "Auto" else int(self.worker_choice.get())
         self.append(f"Found {files} MIDI files. Using {workers} worker(s) on {available_cpus()} available CPU(s); backend: exact.")
@@ -379,6 +395,7 @@ class DetectorApp:
                     continue
                 result = json.loads(str(payload))
                 self.busy = False
+                self.started_at = None
                 self.install_button.configure(state="normal")
                 self.run_button.configure(state="normal")
                 self.cancel_button.configure(state="disabled")
@@ -397,6 +414,9 @@ class DetectorApp:
                         messagebox.showinfo("Detection complete", f"Results saved to:\n{result['output']}")
         except queue.Empty:
             pass
+        if self.busy and self.started_at is not None and not self.cancel_requested.is_set():
+            elapsed = int(time.monotonic() - self.started_at)
+            self.status.set(f"Running... {elapsed // 60}m {elapsed % 60:02d}s elapsed. Large datasets can take a while.")
         self.window.after(100, self.poll)
 
 

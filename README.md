@@ -274,7 +274,7 @@ export LEAKAGEBENCH_DATA_DIR="/mnt/d/music-data"
 
 ## 🎹 Use the Detector on Your Own MIDI
 
-**Windows desktop:** install Python 3.10+ with Tkinter, download this repository, and double-click `launch_detector.bat`. In the window, select your MIDI folder and a result location. On the first run, click **Install dependencies**, then **Start detection**.
+**Windows desktop:** install Python 3.10+ with Tkinter, download this repository, and double-click `launch_detector.bat`. In the window, select your MIDI folder and a result location. On the first run, click **Install dependencies**, then **Start detection**. The app installs only the detector's five Python dependencies; model-training packages are not required.
 
 **Linux / WSL desktop:** install Tkinter (`sudo apt install python3-tk` on Ubuntu), then run `bash launch_detector.sh`. Click **Install dependencies** on the first run. WSL graphical windows require WSLg or another working display server. Use **Find MIDI folders** to search common dataset and user directories, or **Browse** to choose any other folder.
 

@@ -171,12 +171,14 @@ class DetectorApp:
         self.input_dir = tk.StringVar()
         self.output_dir = tk.StringVar()
         self.worker_choice = tk.StringVar(value="Auto")
+        self.mode_choice = tk.StringVar(value="Exact (v1.9)")
         self.status = tk.StringVar(value="Select a folder containing MIDI files.")
         self.events: queue.Queue[tuple[str, object]] = queue.Queue()
         self.busy = False
         self.current_proc: subprocess.Popen | None = None
         self.cancel_requested = threading.Event()
         self.started_at: float | None = None
+        self.latest_output: Path | None = None
 
         frame = ttk.Frame(window, padding=28, style="App.TFrame")
         frame.pack(fill="both", expand=True)
@@ -192,6 +194,12 @@ class DetectorApp:
         ttk.Label(worker_row, text="CPU workers", width=20, style="Field.TLabel").pack(side="left")
         ttk.Entry(worker_row, textvariable=self.worker_choice, style="Folder.TEntry", width=12).pack(side="left", padx=7)
         ttk.Label(worker_row, text="Auto or a number (available: " + str(available_cpus()) + ")", style="Field.TLabel").pack(side="left")
+        mode_row = ttk.Frame(card, style="Card.TFrame")
+        mode_row.pack(fill="x", pady=7)
+        ttk.Label(mode_row, text="Detection mode", width=20, style="Field.TLabel").pack(side="left")
+        ttk.Combobox(mode_row, textvariable=self.mode_choice,
+                     values=("Exact (v1.9)", "Fast (v1.9 + FAISS)"),
+                     state="readonly", width=27).pack(side="left", padx=7)
         ttk.Label(frame, text="Includes .mid and .midi files in subfolders. Install dependencies before the first run.", style="Hint.TLabel").pack(anchor="w", pady=(13, 14))
 
         buttons = ttk.Frame(frame, style="App.TFrame")
@@ -342,8 +350,11 @@ class DetectorApp:
     def install(self) -> None:
         if not self.supported_python():
             return
-        self.start([[sys.executable, "-m", "pip", "install", "--upgrade", "pip", "setuptools", "wheel"],
-                    [sys.executable, "-m", "pip", "install", "-r", str(DETECT_REQUIREMENTS)]], "Installing dependencies")
+        commands = [[sys.executable, "-m", "pip", "install", "--upgrade", "pip", "setuptools", "wheel"],
+                    [sys.executable, "-m", "pip", "install", "-r", str(DETECT_REQUIREMENTS)]]
+        if self.mode_choice.get() == "Fast (v1.9 + FAISS)":
+            commands.append([sys.executable, "-m", "pip", "install", "faiss-cpu>=1.12,<2"])
+        self.start(commands, "Installing dependencies")
 
     def supported_python(self) -> bool:
         if sys.version_info >= (3, 10):
@@ -360,8 +371,8 @@ class DetectorApp:
         if not source.is_dir() or not target_text:
             messagebox.showerror("Choose folders", "Select a MIDI folder and an output folder.")
             return
-        target = Path(target_text)
-        if source.resolve() == target.resolve():
+        output_root = Path(target_text)
+        if source.resolve() == output_root.resolve():
             messagebox.showerror("Invalid output folder", "The output folder must differ from the MIDI folder.")
             return
         files = count_midi(source)
@@ -375,18 +386,24 @@ class DetectorApp:
         if missing:
             messagebox.showerror("Dependencies missing", "Missing: " + ", ".join(missing) + "\nClick Install dependencies first.")
             return
+        backend = "faiss" if self.mode_choice.get() == "Fast (v1.9 + FAISS)" else "exact"
+        target = output_root / ("fast_v1.9_faiss" if backend == "faiss" else "exact_v1.9")
+        if backend == "faiss" and importlib.util.find_spec("faiss") is None:
+            messagebox.showerror("FAISS missing", "Fast mode needs faiss-cpu. Click Install dependencies first, or select Exact mode.")
+            return
         try:
             workers = parse_worker_choice(self.worker_choice.get(), files)
         except ValueError as exc:
             messagebox.showerror("Invalid worker count", str(exc))
             return
-        self.append(f"Found {files} MIDI files. Using {workers} worker(s) on {available_cpus()} available CPU(s); backend: exact.")
+        self.append(f"Found {files} MIDI files. Using {workers} worker(s) on {available_cpus()} available CPU(s); backend: {backend}.")
+        self.latest_output = target
         self.start([[sys.executable, str(DETECT_SCRIPT), str(source), str(CHECKPOINT),
-                    str(target), "--workers", str(workers), "--backend", "exact"]],
+                    str(target), "--workers", str(workers), "--backend", backend]],
                    "Detecting", target)
 
     def open_output(self) -> None:
-        path = Path(self.output_dir.get().strip())
+        path = self.latest_output or Path(self.output_dir.get().strip())
         if not path.is_dir():
             messagebox.showinfo("No results yet", "The output folder has not been created yet.")
             return

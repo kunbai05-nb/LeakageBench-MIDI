@@ -406,16 +406,22 @@ class DetectorApp:
 
     def open_output(self) -> None:
         path = self.latest_output or Path(self.output_dir.get().strip())
-        if not path.is_dir():
-            messagebox.showinfo("No results yet", "The output folder has not been created yet.")
+        if not path.is_dir() or not (path / "summary.json").is_file():
+            messagebox.showinfo("No completed results", "No completed result files were found. Check the status and log in this window; a cancelled or failed run does not produce a complete result.")
             return
-        import os
-        if sys.platform == "win32":
-            os.startfile(path)  # type: ignore[attr-defined]
-        elif sys.platform == "darwin":
-            subprocess.Popen(["open", str(path)])
-        else:
-            subprocess.Popen(["xdg-open", str(path)])
+        try:
+            if sys.platform == "win32":
+                os.startfile(path)  # type: ignore[attr-defined]
+            elif os.environ.get("WSL_DISTRO_NAME"):
+                windows_path = subprocess.check_output(["wslpath", "-w", str(path)], text=True).strip()
+                subprocess.Popen(["explorer.exe", windows_path], stdout=subprocess.DEVNULL,
+                                 stderr=subprocess.DEVNULL)
+            elif sys.platform == "darwin":
+                subprocess.Popen(["open", str(path)])
+            else:
+                subprocess.Popen(["xdg-open", str(path)])
+        except (OSError, subprocess.SubprocessError) as exc:
+            messagebox.showerror("Cannot open folder", f"Open this path manually:\n{path}\n\n{exc}")
 
     def poll(self) -> None:
         try:

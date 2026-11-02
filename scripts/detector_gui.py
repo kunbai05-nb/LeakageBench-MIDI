@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 import os
 import queue
+import signal
 import subprocess
 import sys
 import threading
@@ -77,6 +78,19 @@ def choose_workers(file_count: int) -> int:
     return min(file_count, cpu_limit, memory_limit, 12)
 
 
+def stop_process_tree(proc: subprocess.Popen) -> None:
+    if proc.poll() is not None:
+        return
+    if sys.platform == "win32":
+        subprocess.run(["taskkill", "/PID", str(proc.pid), "/T", "/F"],
+                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False)
+    else:
+        try:
+            os.killpg(proc.pid, signal.SIGTERM)
+        except ProcessLookupError:
+            pass
+
+
 class DetectorApp:
     def __init__(self, window: tk.Tk) -> None:
         self.window = window
@@ -102,6 +116,8 @@ class DetectorApp:
         self.status = tk.StringVar(value="Select a folder containing MIDI files.")
         self.events: queue.Queue[tuple[str, str]] = queue.Queue()
         self.busy = False
+        self.current_proc: subprocess.Popen | None = None
+        self.cancel_requested = threading.Event()
 
         frame = ttk.Frame(window, padding=28, style="App.TFrame")
         frame.pack(fill="both", expand=True)
@@ -120,7 +136,9 @@ class DetectorApp:
         self.install_button.pack(side="left")
         self.run_button = ttk.Button(buttons, text="Start detection", command=self.run, style="Accent.TButton")
         self.run_button.pack(side="left", padx=10)
-        ttk.Button(buttons, text="Open results", command=self.open_output, style="Soft.TButton").pack(side="left")
+        self.cancel_button = ttk.Button(buttons, text="Cancel detection", command=self.cancel, style="Soft.TButton", state="disabled")
+        self.cancel_button.pack(side="left")
+        ttk.Button(buttons, text="Open results", command=self.open_output, style="Soft.TButton").pack(side="left", padx=10)
         ttk.Label(frame, textvariable=self.status, style="Status.TLabel", wraplength=730).pack(anchor="w", pady=(18, 8))
 
         log_frame = ttk.Frame(frame, style="App.TFrame")
@@ -130,6 +148,7 @@ class DetectorApp:
         scrollbar = ttk.Scrollbar(log_frame, command=self.log.yview)
         scrollbar.pack(side="right", fill="y")
         self.log.configure(yscrollcommand=scrollbar.set)
+        window.protocol("WM_DELETE_WINDOW", self.close)
         window.after(100, self.poll)
 
     def _folder_row(self, parent: ttk.Frame, label: str, variable: tk.StringVar, action) -> None:
@@ -161,8 +180,10 @@ class DetectorApp:
         if self.busy:
             return
         self.busy = True
+        self.cancel_requested.clear()
         self.install_button.configure(state="disabled")
         self.run_button.configure(state="disabled")
+        self.cancel_button.configure(state="normal" if output is not None else "disabled")
         self.status.set(title + " - please wait...")
         self.append(title)
 
@@ -170,22 +191,49 @@ class DetectorApp:
             try:
                 code = 0
                 for cmd in commands:
+                    if self.cancel_requested.is_set():
+                        code = 130
+                        break
                     proc = subprocess.Popen(cmd, cwd=ROOT, stdout=subprocess.PIPE,
                                             stderr=subprocess.STDOUT, text=True,
-                                            errors="replace", bufsize=1)
+                                            errors="replace", bufsize=1,
+                                            start_new_session=(sys.platform != "win32"),
+                                            creationflags=(subprocess.CREATE_NEW_PROCESS_GROUP if sys.platform == "win32" else 0))
+                    self.current_proc = proc
+                    if self.cancel_requested.is_set():
+                        stop_process_tree(proc)
                     assert proc.stdout is not None
                     for line in proc.stdout:
                         self.events.put(("log", line.rstrip()))
                     code = proc.wait()
-                    if code:
+                    self.current_proc = None
+                    if code or self.cancel_requested.is_set():
                         break
                 self.events.put(("done", json.dumps({"code": code, "title": title,
-                                                       "output": str(output) if output else ""})))
+                                                       "output": str(output) if output else "",
+                                                       "cancelled": self.cancel_requested.is_set()})))
             except Exception as exc:
+                self.current_proc = None
                 self.events.put(("done", json.dumps({"code": -1, "title": title,
                                                        "error": str(exc)})))
 
         threading.Thread(target=worker, daemon=True).start()
+
+    def cancel(self) -> None:
+        if not self.busy or self.cancel_requested.is_set():
+            return
+        self.cancel_requested.set()
+        self.cancel_button.configure(state="disabled")
+        self.status.set("Stopping detection...")
+        self.append("Cancellation requested. Waiting for detector processes to stop...")
+        if self.current_proc is not None:
+            threading.Thread(target=stop_process_tree, args=(self.current_proc,), daemon=True).start()
+
+    def close(self) -> None:
+        if self.busy and self.current_proc is not None:
+            self.cancel_requested.set()
+            stop_process_tree(self.current_proc)
+        self.window.destroy()
 
     def install(self) -> None:
         if not self.supported_python():
@@ -249,7 +297,11 @@ class DetectorApp:
                 self.busy = False
                 self.install_button.configure(state="normal")
                 self.run_button.configure(state="normal")
-                if result["code"]:
+                self.cancel_button.configure(state="disabled")
+                if result.get("cancelled"):
+                    self.status.set("Detection cancelled.")
+                    self.append("Detection cancelled. Any files already in the output folder may be incomplete.")
+                elif result["code"]:
                     self.status.set("Failed. Check the log below.")
                     if result.get("error"):
                         self.append(result["error"])

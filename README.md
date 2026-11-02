@@ -278,7 +278,7 @@ export LEAKAGEBENCH_DATA_DIR="/mnt/d/music-data"
 
 **Linux / WSL desktop:** install Tkinter (`sudo apt install python3-tk` on Ubuntu), then run `bash launch_detector.sh`. Click **Install dependencies** on the first run. WSL graphical windows require WSLg or another working display server. Use **Find MIDI folders** to search common dataset and user directories, or **Browse** to choose any other folder.
 
-The interface uses the included v1.9 checkpoint and the exact CPU backend. **CPU workers** defaults to Auto, which uses available CPUs and memory while leaving headroom; a manual worker count is available if you prefer. The log shows the count used. **Cancel detection** stops a running job and its workers. It does not change source MIDI files. Large collections can take a long time. Results include `components.csv` (same-work groups), `relation_edges.csv` (scored candidate links and merge decisions), and `summary.json` (counts and unreadable files). A group is a detector prediction, not a verified label.
+The interface uses the included v1.9 checkpoint and the exact CPU backend. **CPU workers** accepts `Auto` or a positive integer up to the CPUs available to the application. Auto uses available CPUs and memory while leaving headroom; it has no fixed 12-worker cap. The log shows the count used. **Cancel detection** stops a running job and its workers. It does not change source MIDI files. Large collections can take a long time. Results include `components.csv` (same-work groups), `relation_edges.csv` (scored candidate links and merge decisions), and `summary.json` (counts and unreadable files). A group is a detector prediction, not a verified label.
 
 **Command line:**
 

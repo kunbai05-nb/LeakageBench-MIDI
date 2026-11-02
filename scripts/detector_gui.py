@@ -120,7 +120,19 @@ def choose_workers(file_count: int) -> int:
     cpu_limit = max(1, available_cpus() - 1)
     memory = available_memory_gib()
     memory_limit = max(1, int(memory - 2)) if memory is not None else 4
-    return min(file_count, cpu_limit, memory_limit, 12)
+    return min(file_count, cpu_limit, memory_limit)
+
+
+def parse_worker_choice(choice: str, file_count: int) -> int:
+    choice = choice.strip()
+    if choice.lower() == "auto":
+        return choose_workers(file_count)
+    if not choice.isdecimal() or int(choice) < 1:
+        raise ValueError("Enter Auto or a positive whole number of CPU workers.")
+    workers = int(choice)
+    if workers > available_cpus():
+        raise ValueError(f"This environment has {available_cpus()} available CPUs. Enter a number no greater than that.")
+    return workers
 
 
 def stop_process_tree(proc: subprocess.Popen) -> None:
@@ -178,10 +190,8 @@ class DetectorApp:
         worker_row = ttk.Frame(card, style="Card.TFrame")
         worker_row.pack(fill="x", pady=7)
         ttk.Label(worker_row, text="CPU workers", width=20, style="Field.TLabel").pack(side="left")
-        ttk.Combobox(worker_row, textvariable=self.worker_choice,
-                     values=["Auto"] + [str(i) for i in range(1, available_cpus() + 1)],
-                     state="readonly", width=12).pack(side="left", padx=7)
-        ttk.Label(worker_row, text="Auto leaves memory headroom", style="Field.TLabel").pack(side="left")
+        ttk.Entry(worker_row, textvariable=self.worker_choice, style="Folder.TEntry", width=12).pack(side="left", padx=7)
+        ttk.Label(worker_row, text="Auto or a number (available: " + str(available_cpus()) + ")", style="Field.TLabel").pack(side="left")
         ttk.Label(frame, text="Includes .mid and .midi files in subfolders. Install dependencies before the first run.", style="Hint.TLabel").pack(anchor="w", pady=(13, 14))
 
         buttons = ttk.Frame(frame, style="App.TFrame")
@@ -364,7 +374,11 @@ class DetectorApp:
         if missing:
             messagebox.showerror("Dependencies missing", "Missing: " + ", ".join(missing) + "\nClick Install dependencies first.")
             return
-        workers = choose_workers(files) if self.worker_choice.get() == "Auto" else int(self.worker_choice.get())
+        try:
+            workers = parse_worker_choice(self.worker_choice.get(), files)
+        except ValueError as exc:
+            messagebox.showerror("Invalid worker count", str(exc))
+            return
         self.append(f"Found {files} MIDI files. Using {workers} worker(s) on {available_cpus()} available CPU(s); backend: exact.")
         self.start([[sys.executable, str(DETECT_SCRIPT), str(source), str(CHECKPOINT),
                     str(target), "--workers", str(workers), "--backend", "exact"]],

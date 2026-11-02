@@ -204,6 +204,7 @@ class DetectorApp:
         self.cancel_button.pack(side="left")
         ttk.Button(buttons, text="Open results", command=self.open_output, style="Soft.TButton").pack(side="left", padx=10)
         ttk.Button(buttons, text="Find MIDI folders", command=self.search_folders, style="Soft.TButton").pack(side="left")
+        ttk.Button(buttons, text="Exit", command=self.close, style="Soft.TButton").pack(side="right")
         ttk.Label(frame, textvariable=self.status, style="Status.TLabel", wraplength=730).pack(anchor="w", pady=(18, 8))
 
         log_frame = ttk.Frame(frame, style="App.TFrame")

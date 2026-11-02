@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 import csv
 import base64
+import ctypes
 import hashlib
 import importlib.util
 import os
@@ -210,22 +211,35 @@ class DetectorApp:
     def __init__(self, window: tk.Tk) -> None:
         self.window = window
         self.window.title("MIDI Same-Work Detector")
-        self.window.geometry("820x610")
-        self.window.minsize(690, 530)
-        self.window.configure(bg="#f4f7fb")
+        self.ui_scale = max(1.0, window.winfo_fpixels("1i") / 96.0)
+        main_width = min(round(900 * self.ui_scale), window.winfo_screenwidth() - 80)
+        main_height = min(round(670 * self.ui_scale), window.winfo_screenheight() - 120)
+        self.window.geometry(f"{main_width}x{main_height}")
+        self.window.minsize(min(round(760 * self.ui_scale), main_width),
+                            min(round(650 * self.ui_scale), main_height))
+        self.window.configure(bg="#090f1d")
         style = ttk.Style(window)
         style.theme_use("clam")
-        style.configure("App.TFrame", background="#f4f7fb")
-        style.configure("Card.TFrame", background="#ffffff")
-        style.configure("Title.TLabel", background="#f4f7fb", foreground="#142438", font=("Arial", 21, "bold"))
-        style.configure("Hint.TLabel", background="#f4f7fb", foreground="#607286", font=("Arial", 10))
-        style.configure("Field.TLabel", background="#ffffff", foreground="#23364a", font=("Arial", 10, "bold"))
-        style.configure("Status.TLabel", background="#f4f7fb", foreground="#244f67", font=("Arial", 10))
-        style.configure("Accent.TButton", background="#167c90", foreground="white", font=("Arial", 10, "bold"), padding=(16, 9))
-        style.map("Accent.TButton", background=[("active", "#12677a"), ("disabled", "#a9c8cd")])
-        style.configure("Soft.TButton", background="#e9f0f5", foreground="#24455a", font=("Arial", 10), padding=(12, 9))
-        style.map("Soft.TButton", background=[("active", "#dbeaf1")])
-        style.configure("Folder.TEntry", padding=8, font=("Arial", 10))
+        style.configure("App.TFrame", background="#090f1d")
+        style.configure("Card.TFrame", background="#142137")
+        style.configure("Title.TLabel", background="#090f1d", foreground="#f1f7ff", font=("Arial", 23, "bold"))
+        style.configure("Hint.TLabel", background="#090f1d", foreground="#8fa3bf", font=("Arial", 10))
+        style.configure("Field.TLabel", background="#142137", foreground="#c8d8ee", font=("Arial", 10, "bold"))
+        style.configure("Status.TLabel", background="#090f1d", foreground="#48d7df", font=("Arial", 10, "bold"))
+        style.configure("Accent.TButton", background="#21c9d3", foreground="#06131e", font=("Arial", 10, "bold"), padding=(16, 9), borderwidth=0)
+        style.map("Accent.TButton", background=[("active", "#65e8e9"), ("disabled", "#506c77")])
+        style.configure("Soft.TButton", background="#243653", foreground="#e6f2ff", font=("Arial", 10), padding=(12, 9), borderwidth=0)
+        style.map("Soft.TButton", background=[("active", "#345172"), ("disabled", "#1a2739")])
+        style.configure("Folder.TEntry", padding=8, fieldbackground="#0d192c", foreground="#eef7ff", font=("Arial", 10))
+        style.configure("Dark.TCombobox", fieldbackground="#0d192c", background="#243653",
+                        foreground="#eef7ff", arrowcolor="#8fd4e1", bordercolor="#2a4260",
+                        selectbackground="#0d192c", selectforeground="#eef7ff")
+        style.map("Dark.TCombobox", fieldbackground=[("readonly", "#0d192c")],
+                  foreground=[("readonly", "#eef7ff")], background=[("readonly", "#243653")])
+        style.configure("Dark.Vertical.TScrollbar", background="#2d4765", troughcolor="#101b2d",
+                        arrowcolor="#91b5ce", bordercolor="#101b2d", lightcolor="#2d4765",
+                        darkcolor="#2d4765", relief="flat")
+        style.map("Dark.Vertical.TScrollbar", background=[("active", "#3d6883")])
         self.input_dir = tk.StringVar()
         self.output_dir = tk.StringVar()
         self.worker_choice = tk.StringVar(value="Auto")
@@ -244,8 +258,8 @@ class DetectorApp:
         header.pack(fill="x")
         ttk.Label(header, text="MIDI Same-Work Detector", style="Title.TLabel").pack(side="left")
         ttk.Button(header, text="Exit", command=self.close, style="Soft.TButton").pack(side="right")
-        ttk.Button(header, text="View matches", command=self.show_matches, style="Soft.TButton").pack(side="right", padx=8)
-        ttk.Label(frame, text="Find MIDI files that may be versions of the same musical work.", style="Hint.TLabel").pack(anchor="w", pady=(5, 20))
+        ttk.Label(frame, text="DISCOVER  /  COMPARE  /  REVIEW", style="Status.TLabel").pack(anchor="w", pady=(4, 3))
+        ttk.Label(frame, text="Find different MIDI versions of the same musical work.", style="Hint.TLabel").pack(anchor="w", pady=(0, 20))
 
         card = ttk.Frame(frame, padding=20, style="Card.TFrame")
         card.pack(fill="x")
@@ -261,8 +275,8 @@ class DetectorApp:
         ttk.Label(mode_row, text="Detection mode", width=20, style="Field.TLabel").pack(side="left")
         ttk.Combobox(mode_row, textvariable=self.mode_choice,
                      values=("Exact (v1.9)", "Fast (v1.9 + FAISS)"),
-                     state="readonly", width=27).pack(side="left", padx=7)
-        ttk.Label(frame, text="Includes .mid and .midi files in subfolders. Install dependencies before the first run.", style="Hint.TLabel").pack(anchor="w", pady=(13, 14))
+                     state="readonly", width=27, style="Dark.TCombobox").pack(side="left", padx=7)
+        ttk.Label(frame, text="Includes MIDI files in subfolders  |  Choose a mode  |  Run the detector", style="Hint.TLabel").pack(anchor="w", pady=(13, 14))
 
         buttons = ttk.Frame(frame, style="App.TFrame")
         buttons.pack(fill="x")
@@ -272,15 +286,18 @@ class DetectorApp:
         self.run_button.pack(side="left", padx=10)
         self.cancel_button = ttk.Button(buttons, text="Cancel detection", command=self.cancel, style="Soft.TButton", state="disabled")
         self.cancel_button.pack(side="left")
-        ttk.Button(buttons, text="Open results", command=self.open_output, style="Soft.TButton").pack(side="left", padx=10)
-        ttk.Button(buttons, text="Find MIDI folders", command=self.search_folders, style="Soft.TButton").pack(side="left")
+        tools_row = ttk.Frame(frame, style="App.TFrame")
+        tools_row.pack(fill="x", pady=(8, 0))
+        ttk.Button(tools_row, text="Explore matches", command=self.show_matches, style="Accent.TButton").pack(side="left")
+        ttk.Button(tools_row, text="Open result folder", command=self.open_output, style="Soft.TButton").pack(side="left", padx=10)
+        ttk.Button(tools_row, text="Find MIDI folders", command=self.search_folders, style="Soft.TButton").pack(side="left")
         ttk.Label(frame, textvariable=self.status, style="Status.TLabel", wraplength=730).pack(anchor="w", pady=(18, 8))
 
         log_frame = ttk.Frame(frame, style="App.TFrame")
         log_frame.pack(fill="both", expand=True)
-        self.log = tk.Text(log_frame, height=12, wrap="word", state="disabled", bg="#15283a", fg="#d9e9ee", insertbackground="white", relief="flat", padx=13, pady=11, font=("Consolas", 10))
+        self.log = tk.Text(log_frame, height=11, wrap="word", state="disabled", bg="#101b2d", fg="#bad0e4", insertbackground="#4ee6df", relief="flat", padx=16, pady=14, font=("Consolas", 10), highlightbackground="#2a4260", highlightthickness=1)
         self.log.pack(side="left", fill="both", expand=True)
-        scrollbar = ttk.Scrollbar(log_frame, command=self.log.yview)
+        scrollbar = ttk.Scrollbar(log_frame, command=self.log.yview, style="Dark.Vertical.TScrollbar")
         scrollbar.pack(side="right", fill="y")
         self.log.configure(yscrollcommand=scrollbar.set)
         window.protocol("WM_DELETE_WINDOW", self.close)
@@ -316,15 +333,23 @@ class DetectorApp:
         self.status.set(f"Found {len(folders)} MIDI folders. Select one from the list.")
         dialog = tk.Toplevel(self.window)
         dialog.title("Found MIDI folders")
-        dialog.geometry("780x430")
-        dialog.configure(bg="#f4f7fb")
+        folder_width = min(round(780 * self.ui_scale), dialog.winfo_screenwidth() - 80)
+        folder_height = min(round(430 * self.ui_scale), dialog.winfo_screenheight() - 120)
+        dialog.geometry(f"{folder_width}x{folder_height}")
+        dialog.configure(bg="#090f1d")
         dialog.transient(self.window)
         frame = ttk.Frame(dialog, padding=18, style="App.TFrame")
         frame.pack(fill="both", expand=True)
         ttk.Label(frame, text="Choose a MIDI folder", style="Title.TLabel").pack(anchor="w", pady=(0, 12))
-        listbox = tk.Listbox(frame, font=("Arial", 10), bg="white", fg="#23364a",
-                             selectbackground="#167c90", selectforeground="white")
-        listbox.pack(fill="both", expand=True)
+        list_frame = ttk.Frame(frame, style="App.TFrame")
+        list_frame.pack(fill="both", expand=True)
+        listbox = tk.Listbox(list_frame, font=("Arial", 10), bg="#142137", fg="#dcecff",
+                             selectbackground="#1d8494", selectforeground="white",
+                             relief="flat", borderwidth=0, highlightthickness=0)
+        listbox.pack(side="left", fill="both", expand=True)
+        list_scroll = ttk.Scrollbar(list_frame, command=listbox.yview, style="Dark.Vertical.TScrollbar")
+        list_scroll.pack(side="right", fill="y")
+        listbox.configure(yscrollcommand=list_scroll.set)
         for path, count in folders:
             listbox.insert("end", f"{count:>5} MIDI   {path}")
 
@@ -500,78 +525,63 @@ class DetectorApp:
             return
 
         dialog = tk.Toplevel(self.window)
-        dialog.title("Matched works")
-        dialog.geometry("960x650")
-        dialog.minsize(650, 420)
-        dialog.configure(bg="#f4f7fb")
-        frame = ttk.Frame(dialog, padding=18, style="App.TFrame")
-        frame.pack(fill="both", expand=True)
-        ttk.Label(frame, text="Matched works", style="Title.TLabel").pack(anchor="w")
+        dialog.title("Matched Works  |  Review Studio")
+        dialog_width = min(round(1160 * self.ui_scale), dialog.winfo_screenwidth() - 80)
+        dialog_height = min(round(740 * self.ui_scale), dialog.winfo_screenheight() - 120)
+        dialog.geometry(f"{dialog_width}x{dialog_height}")
+        dialog.minsize(min(round(800 * self.ui_scale), dialog_width),
+                       min(round(560 * self.ui_scale), dialog_height))
+        dialog.configure(bg="#090f1d")
+        shell = tk.Frame(dialog, bg="#090f1d", padx=24, pady=20)
+        shell.pack(fill="both", expand=True)
+        tk.Label(shell, text="MATCHED WORKS", bg="#090f1d", fg="#f1f7ff",
+                 font=("Arial", 23, "bold")).pack(anchor="w")
         matched_files = sum(map(len, groups))
         total = int(summary["files"])
-        detail = (f"{len(groups)} groups  |  {matched_files} files in groups  |  "
-                  f"{total - matched_files} files without a match  |  {total} total")
-        ttk.Label(frame, text=detail, style="Hint.TLabel").pack(anchor="w", pady=(5, 5))
-        ttk.Label(frame, text="Double-click a MIDI file to open it. Review marks are saved separately from detector results.",
-                  style="Hint.TLabel").pack(anchor="w", pady=(0, 12))
+        stats = (f"{len(groups)} GROUPS     /     {matched_files} MATCHED FILES     /     "
+                 f"{total - matched_files} UNMATCHED     /     {total} TOTAL")
+        tk.Label(shell, text=stats, bg="#090f1d", fg="#4cdae1",
+                 font=("Arial", 10, "bold")).pack(anchor="w", pady=(5, 14))
         search = tk.StringVar()
-        search_row = ttk.Frame(frame, style="App.TFrame")
-        search_row.pack(fill="x", pady=(0, 9))
-        ttk.Label(search_row, text="Find file:", style="Status.TLabel").pack(side="left")
-        ttk.Entry(search_row, textvariable=search, style="Folder.TEntry").pack(side="left", fill="x", expand=True, padx=8)
-        tree_frame = ttk.Frame(frame, style="App.TFrame")
-        tree_frame.pack(fill="both", expand=True)
-        tree = ttk.Treeview(tree_frame, columns=("count", "review", "file"), show="tree headings")
-        tree.heading("#0", text="Matched group")
-        tree.heading("count", text="Files")
-        tree.heading("review", text="Manual review")
-        tree.heading("file", text="MIDI file (relative path)")
-        tree.column("#0", width=130, stretch=False)
-        tree.column("count", width=70, anchor="center", stretch=False)
-        tree.column("review", width=140, stretch=False)
-        tree.column("file", width=570)
-        tree.tag_configure("group", background="#dceef1", foreground="#173a48")
-        tree.tag_configure("confirmed", background="#dbf0df", foreground="#175b32")
-        tree.tag_configure("flagged", background="#fff0d3", foreground="#7b4d10")
-        tree.pack(side="left", fill="both", expand=True)
-        scrollbar = ttk.Scrollbar(tree_frame, orient="vertical", command=tree.yview)
+        search_row = tk.Frame(shell, bg="#090f1d")
+        search_row.pack(fill="x", pady=(0, 14))
+        tk.Label(search_row, text="SEARCH MIDI", bg="#090f1d", fg="#94a9c4",
+                 font=("Arial", 10, "bold")).pack(side="left")
+        tk.Entry(search_row, textvariable=search, bg="#142137", fg="#f1f7ff",
+                 insertbackground="#4cdae1", relief="flat", font=("Arial", 11)).pack(side="left", fill="x", expand=True, padx=(12, 0), ipady=8)
+
+        body = tk.Frame(shell, bg="#090f1d")
+        body.pack(fill="both", expand=True)
+        tiles = tk.Frame(body, bg="#090f1d")
+        tiles.pack(side="left", fill="both", expand=True, padx=(0, 14))
+        canvas = tk.Canvas(tiles, bg="#090f1d", highlightthickness=0)
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar = ttk.Scrollbar(tiles, orient="vertical", command=canvas.yview,
+                                  style="Dark.Vertical.TScrollbar")
         scrollbar.pack(side="right", fill="y")
-        tree.configure(yscrollcommand=scrollbar.set)
+        canvas.configure(yscrollcommand=scrollbar.set)
+        tile_grid = tk.Frame(canvas, bg="#090f1d")
+        grid_window = canvas.create_window((0, 0), window=tile_grid, anchor="nw")
+        tile_grid.bind("<Configure>", lambda _e: canvas.configure(scrollregion=canvas.bbox("all")))
+        canvas.bind("<Configure>", lambda event: canvas.itemconfigure(grid_window, width=event.width))
 
-        item_files: dict[str, str] = {}
-        item_groups: dict[str, int] = {}
+        details = tk.Frame(body, bg="#142137", width=round(340 * self.ui_scale), padx=18, pady=18,
+                           highlightbackground="#274363", highlightthickness=1)
+        details.pack(side="right", fill="y")
+        details.pack_propagate(False)
+        selected = {"index": 0}
+        shown = {"limit": 80, "columns": 2}
+        pending_resize = {"after": None}
 
-        def populate(*_args) -> None:
-            tree.delete(*tree.get_children())
-            item_files.clear()
-            item_groups.clear()
-            query = search.get().strip().casefold()
-            for number, files in enumerate(groups, 1):
-                if query and not any(query in name.casefold() for name in files):
-                    continue
-                mark = marks.get(group_key(files), "Not reviewed")
-                tag = "confirmed" if mark == "Confirmed" else "flagged" if mark == "Flagged" else "group"
-                parent = tree.insert("", "end", text=f"Group {number}", values=(len(files), mark, ""),
-                                     tags=(tag,), open=bool(query) or number <= 8)
-                item_groups[parent] = number - 1
-                for name in files:
-                    child = tree.insert(parent, "end", text="", values=("", "", name))
-                    item_files[child] = name
-                    item_groups[child] = number - 1
-
-        def open_selected(_event=None) -> None:
-            selection = tree.selection()
-            if not selection or selection[0] not in item_files:
-                messagebox.showinfo("Select a MIDI", "Select a file inside a group, then click Open MIDI.", parent=dialog)
-                return
-            relative = Path(item_files[selection[0]])
+        def open_file(name: str) -> None:
+            relative = Path(name)
             source = Path(self.input_dir.get().strip())
             candidate = (source / relative).resolve()
             if not source.is_dir() or not candidate.is_file():
-                selected = filedialog.askdirectory(title="Find the original MIDI folder", parent=dialog)
-                if not selected:
+                chosen = filedialog.askdirectory(title="Find the original MIDI folder", parent=dialog)
+                if not chosen:
                     return
-                source = Path(selected)
+                source = Path(chosen)
                 self.input_dir.set(str(source))
                 candidate = (source / relative).resolve()
             try:
@@ -582,12 +592,10 @@ class DetectorApp:
             except (OSError, ValueError, subprocess.SubprocessError) as exc:
                 messagebox.showerror("Cannot open MIDI", f"File: {candidate}\n\n{exc}", parent=dialog)
 
-        def mark_selected(mark: str) -> None:
-            selection = tree.selection()
-            if not selection or selection[0] not in item_groups:
-                messagebox.showinfo("Select a group", "Select a group or one of its MIDI files first.", parent=dialog)
+        def set_mark(mark: str) -> None:
+            if not groups:
                 return
-            key = group_key(groups[item_groups[selection[0]]])
+            key = group_key(groups[selected["index"]])
             if mark == "Not reviewed":
                 marks.pop(key, None)
             else:
@@ -597,19 +605,110 @@ class DetectorApp:
             except OSError as exc:
                 messagebox.showerror("Cannot save review", str(exc), parent=dialog)
                 return
-            populate()
+            render_tiles()
+            render_details()
 
-        actions = ttk.Frame(frame, style="App.TFrame")
-        actions.pack(fill="x", pady=(12, 0))
-        ttk.Button(actions, text="Open MIDI", command=open_selected, style="Accent.TButton").pack(side="left")
-        ttk.Button(actions, text="Confirm group", command=lambda: mark_selected("Confirmed"), style="Soft.TButton").pack(side="left", padx=8)
-        ttk.Button(actions, text="Flag group", command=lambda: mark_selected("Flagged"), style="Soft.TButton").pack(side="left")
-        ttk.Button(actions, text="Clear mark", command=lambda: mark_selected("Not reviewed"), style="Soft.TButton").pack(side="left", padx=8)
-        ttk.Label(actions, text="Saved to manual_review.csv", style="Hint.TLabel").pack(side="right")
+        def render_details() -> None:
+            for child in details.winfo_children():
+                child.destroy()
+            if not groups:
+                tk.Label(details, text="NO MATCHES", bg="#142137", fg="#4cdae1",
+                         font=("Arial", 16, "bold")).pack(anchor="w")
+                return
+            index = selected["index"]
+            files = groups[index]
+            mark = marks.get(group_key(files), "Not reviewed")
+            tk.Label(details, text=f"GROUP {index + 1:03d}", bg="#142137", fg="#f1f7ff",
+                     font=("Arial", 19, "bold")).pack(anchor="w")
+            tk.Label(details, text=f"{len(files)} MIDI FILES   /   {mark.upper()}", bg="#142137",
+                     fg="#4cdae1" if mark == "Confirmed" else "#f7c96a" if mark == "Flagged" else "#94a9c4",
+                     font=("Arial", 10, "bold")).pack(anchor="w", pady=(4, 14))
+            tk.Label(details, text="CLICK A FILE TO OPEN", bg="#142137", fg="#94a9c4",
+                     font=("Arial", 9, "bold")).pack(anchor="w", pady=(0, 7))
+            list_frame = tk.Frame(details, bg="#142137")
+            list_frame.pack(fill="both", expand=True)
+            file_canvas = tk.Canvas(list_frame, bg="#142137", highlightthickness=0)
+            file_canvas.pack(side="left", fill="both", expand=True)
+            file_scroll = ttk.Scrollbar(list_frame, orient="vertical", command=file_canvas.yview,
+                                        style="Dark.Vertical.TScrollbar")
+            file_scroll.pack(side="right", fill="y")
+            file_canvas.configure(yscrollcommand=file_scroll.set)
+            rows = tk.Frame(file_canvas, bg="#142137")
+            file_window = file_canvas.create_window((0, 0), window=rows, anchor="nw")
+            rows.bind("<Configure>", lambda _e: file_canvas.configure(scrollregion=file_canvas.bbox("all")))
+            file_canvas.bind("<Configure>", lambda event: file_canvas.itemconfigure(file_window, width=event.width))
+            for name in files:
+                tk.Button(rows, text="OPEN  " + (name if len(name) <= 37 else "..." + name[-34:]),
+                          command=lambda item=name: open_file(item), bg="#203551", fg="#e5f4ff",
+                          activebackground="#2a6a7d", activeforeground="white", relief="flat",
+                          anchor="w", padx=10, pady=9, font=("Arial", 9), cursor="hand2").pack(fill="x", pady=3)
+            for label, mark_value, color in (("CONFIRM GROUP", "Confirmed", "#1b856f"),
+                                             ("FLAG FOR REVIEW", "Flagged", "#9a632e"),
+                                             ("CLEAR MARK", "Not reviewed", "#30435f")):
+                tk.Button(details, text=label, command=lambda value=mark_value: set_mark(value),
+                          bg=color, fg="white", activebackground="#39aeb4", relief="flat",
+                          font=("Arial", 9, "bold"), pady=9, cursor="hand2").pack(fill="x", pady=(6, 0))
+            tk.Label(details, text="Review marks: manual_review.csv", bg="#142137", fg="#8097b4",
+                     font=("Arial", 9)).pack(anchor="w", pady=(13, 0))
 
-        search.trace_add("write", populate)
-        tree.bind("<Double-Button-1>", open_selected)
-        populate()
+        def select_group(index: int) -> None:
+            selected["index"] = index
+            render_tiles()
+            render_details()
+
+        def render_tiles(*_args) -> None:
+            for child in tile_grid.winfo_children():
+                child.destroy()
+            query = search.get().strip().casefold()
+            visible = [(i, files) for i, files in enumerate(groups)
+                       if not query or any(query in name.casefold() for name in files)]
+            columns = shown["columns"]
+            for position, (index, files) in enumerate(visible[:shown["limit"]]):
+                mark = marks.get(group_key(files), "Not reviewed")
+                accent = "#43e5dc" if selected["index"] == index else "#2e4562"
+                canvas_width = max(384, canvas.winfo_width())
+                tile_width = max(250, (canvas_width - columns * 10) // columns)
+                tile = tk.Frame(tile_grid, bg="#142137", width=tile_width,
+                                height=round(180 * self.ui_scale), highlightbackground=accent, highlightthickness=2,
+                                cursor="hand2")
+                tile.grid(row=position // columns, column=position % columns, padx=5, pady=5, sticky="nw")
+                tile.pack_propagate(False)
+                title = tk.Label(tile, text=f"GROUP {index + 1:03d}     {len(files)} FILES",
+                                 bg="#142137", fg="#f1f7ff", font=("Arial", 11, "bold"), anchor="w")
+                title.pack(fill="x", padx=12, pady=(11, 5))
+                preview = "\n".join(name if len(name) <= 31 else "..." + name[-28:] for name in files[:3])
+                tk.Label(tile, text=preview, bg="#142137", fg="#9bb1cc", font=("Arial", 9),
+                         justify="left", anchor="nw").pack(fill="x", padx=12)
+                tk.Label(tile, text=mark.upper(), bg="#142137",
+                         fg="#54deba" if mark == "Confirmed" else "#f7c96a" if mark == "Flagged" else "#4cdae1",
+                         font=("Arial", 9, "bold"), anchor="w").pack(side="bottom", fill="x", padx=12, pady=9)
+                for widget in (tile, *tile.winfo_children()):
+                    widget.bind("<Button-1>", lambda _event, n=index: select_group(n))
+            if len(visible) > shown["limit"]:
+                tk.Button(tile_grid, text=f"LOAD MORE  ({len(visible) - shown['limit']} remaining)",
+                          command=load_more, bg="#243653", fg="#e5f4ff", relief="flat",
+                          font=("Arial", 10, "bold"), pady=10).grid(row=(shown["limit"] + columns - 1) // columns,
+                                                                    column=0, columnspan=columns, sticky="ew", pady=12)
+            canvas.configure(scrollregion=canvas.bbox("all"))
+
+        def load_more() -> None:
+            shown["limit"] += 80
+            render_tiles()
+
+        def resize(event) -> None:
+            if event.widget is not canvas:
+                return
+            columns = (3 if event.width >= max(780, round(700 * self.ui_scale))
+                       else 2 if event.width >= round(580 * self.ui_scale) else 1)
+            shown["columns"] = columns
+            if pending_resize["after"] is not None:
+                dialog.after_cancel(pending_resize["after"])
+            pending_resize["after"] = dialog.after(120, render_tiles)
+
+        search.trace_add("write", render_tiles)
+        canvas.bind("<Configure>", resize, add="+")
+        render_tiles()
+        render_details()
 
     def poll(self) -> None:
         try:
@@ -649,6 +748,11 @@ class DetectorApp:
 
 
 def main() -> None:
+    if sys.platform == "win32":
+        try:
+            ctypes.windll.shcore.SetProcessDpiAwareness(1)
+        except (AttributeError, OSError):
+            pass
     window = tk.Tk()
     DetectorApp(window)
     window.mainloop()

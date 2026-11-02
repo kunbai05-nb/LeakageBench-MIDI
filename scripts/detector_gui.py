@@ -106,7 +106,7 @@ def choose_workers(file_count: int) -> int:
         return 1
     cpu_limit = max(1, available_cpus() - 1)
     memory = available_memory_gib()
-    memory_limit = max(1, int(memory // 2)) if memory is not None else 4
+    memory_limit = max(1, int(memory)) if memory is not None else 4
     return min(file_count, cpu_limit, memory_limit, 12)
 
 

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import csv
 import importlib.util
 import os
 import queue
@@ -12,6 +13,7 @@ import threading
 import time
 import tkinter as tk
 import webbrowser
+from collections import defaultdict
 from pathlib import Path
 from tkinter import filedialog, messagebox, ttk
 
@@ -25,6 +27,19 @@ REQUIRED_MODULES = ("numpy", "scipy", "sklearn", "mido", "joblib")
 
 def missing_modules() -> list[str]:
     return [name for name in REQUIRED_MODULES if importlib.util.find_spec(name) is None]
+
+
+def load_match_groups(folder: Path) -> tuple[dict, list[list[str]]]:
+    summary = json.loads((folder / "summary.json").read_text(encoding="utf-8"))
+    grouped: dict[str, list[str]] = defaultdict(list)
+    with (folder / "components.csv").open(newline="", encoding="utf-8-sig") as handle:
+        for row in csv.DictReader(handle):
+            grouped[row["component"]].append(row["file"])
+    if sum(map(len, grouped.values())) != int(summary["files"]):
+        raise ValueError("Result file count does not match the summary.")
+    matches = [sorted(files, key=str.lower) for files in grouped.values() if len(files) > 1]
+    matches.sort(key=lambda files: (-len(files), files[0].lower()))
+    return summary, matches
 
 
 def count_midi(folder: Path) -> int:
@@ -186,6 +201,7 @@ class DetectorApp:
         header.pack(fill="x")
         ttk.Label(header, text="MIDI Same-Work Detector", style="Title.TLabel").pack(side="left")
         ttk.Button(header, text="Exit", command=self.close, style="Soft.TButton").pack(side="right")
+        ttk.Button(header, text="View matches", command=self.show_matches, style="Soft.TButton").pack(side="right", padx=8)
         ttk.Label(frame, text="Find MIDI files that may be versions of the same musical work.", style="Hint.TLabel").pack(anchor="w", pady=(5, 20))
 
         card = ttk.Frame(frame, padding=20, style="Card.TFrame")
@@ -423,6 +439,71 @@ class DetectorApp:
         except (OSError, subprocess.SubprocessError) as exc:
             messagebox.showerror("Cannot open folder", f"Open this path manually:\n{path}\n\n{exc}")
 
+    def show_matches(self) -> None:
+        folder = self.latest_output
+        if folder is None:
+            root = Path(self.output_dir.get().strip()) if self.output_dir.get().strip() else None
+            if root is not None:
+                mode = "fast_v1.9_faiss" if self.mode_choice.get() == "Fast (v1.9 + FAISS)" else "exact_v1.9"
+                folder = root / mode
+        if folder is None or not (folder / "summary.json").is_file():
+            messagebox.showinfo("No completed results", "Run a detection first, or select an output folder containing completed results.")
+            return
+        try:
+            summary, groups = load_match_groups(folder)
+        except (OSError, KeyError, ValueError, json.JSONDecodeError) as exc:
+            messagebox.showerror("Cannot read results", str(exc))
+            return
+
+        dialog = tk.Toplevel(self.window)
+        dialog.title("Matched works")
+        dialog.geometry("960x650")
+        dialog.minsize(650, 420)
+        dialog.configure(bg="#f4f7fb")
+        frame = ttk.Frame(dialog, padding=18, style="App.TFrame")
+        frame.pack(fill="both", expand=True)
+        ttk.Label(frame, text="Matched works", style="Title.TLabel").pack(anchor="w")
+        matched_files = sum(map(len, groups))
+        total = int(summary["files"])
+        detail = (f"{len(groups)} groups  |  {matched_files} files in groups  |  "
+                  f"{total - matched_files} files without a match  |  {total} total")
+        ttk.Label(frame, text=detail, style="Hint.TLabel").pack(anchor="w", pady=(5, 5))
+        ttk.Label(frame, text="Predicted same-work groups; review the MIDI files before treating them as verified labels.",
+                  style="Hint.TLabel").pack(anchor="w", pady=(0, 12))
+        search = tk.StringVar()
+        search_row = ttk.Frame(frame, style="App.TFrame")
+        search_row.pack(fill="x", pady=(0, 9))
+        ttk.Label(search_row, text="Find file:", style="Status.TLabel").pack(side="left")
+        ttk.Entry(search_row, textvariable=search, style="Folder.TEntry").pack(side="left", fill="x", expand=True, padx=8)
+        tree_frame = ttk.Frame(frame, style="App.TFrame")
+        tree_frame.pack(fill="both", expand=True)
+        tree = ttk.Treeview(tree_frame, columns=("count", "file"), show="tree headings")
+        tree.heading("#0", text="Matched group")
+        tree.heading("count", text="Files")
+        tree.heading("file", text="MIDI file (relative path)")
+        tree.column("#0", width=210, stretch=False)
+        tree.column("count", width=70, anchor="center", stretch=False)
+        tree.column("file", width=600)
+        tree.tag_configure("group", background="#dceef1", foreground="#173a48")
+        tree.pack(side="left", fill="both", expand=True)
+        scrollbar = ttk.Scrollbar(tree_frame, orient="vertical", command=tree.yview)
+        scrollbar.pack(side="right", fill="y")
+        tree.configure(yscrollcommand=scrollbar.set)
+
+        def populate(*_args) -> None:
+            tree.delete(*tree.get_children())
+            query = search.get().strip().casefold()
+            for number, files in enumerate(groups, 1):
+                if query and not any(query in name.casefold() for name in files):
+                    continue
+                parent = tree.insert("", "end", text=f"Group {number}", values=(len(files), ""),
+                                     tags=("group",), open=bool(query) or number <= 8)
+                for name in files:
+                    tree.insert(parent, "end", text="", values=("", name))
+
+        search.trace_add("write", populate)
+        populate()
+
     def poll(self) -> None:
         try:
             while True:
@@ -451,7 +532,7 @@ class DetectorApp:
                     self.status.set("Done. " + ("Results saved." if result.get("output") else "Dependencies installed."))
                     if result.get("output"):
                         self.append("Results: components.csv (groups), relation_edges.csv (pair evidence), summary.json (counts).")
-                        messagebox.showinfo("Detection complete", f"Results saved to:\n{result['output']}")
+                        self.show_matches()
         except queue.Empty:
             pass
         if self.busy and self.started_at is not None and not self.cancel_requested.is_set():

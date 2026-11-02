@@ -3,6 +3,8 @@ from __future__ import annotations
 
 import json
 import csv
+import base64
+import hashlib
 import importlib.util
 import os
 import queue
@@ -40,6 +42,47 @@ def load_match_groups(folder: Path) -> tuple[dict, list[list[str]]]:
     matches = [sorted(files, key=str.lower) for files in grouped.values() if len(files) > 1]
     matches.sort(key=lambda files: (-len(files), files[0].lower()))
     return summary, matches
+
+
+def group_key(files: list[str]) -> str:
+    return hashlib.sha256("\0".join(files).encode("utf-8")).hexdigest()[:16]
+
+
+def load_review_marks(folder: Path) -> dict[str, str]:
+    path = folder / "manual_review.csv"
+    if not path.is_file():
+        return {}
+    with path.open(newline="", encoding="utf-8-sig") as handle:
+        return {row["group_id"]: row["review"] for row in csv.DictReader(handle)}
+
+
+def save_review_marks(folder: Path, groups: list[list[str]], marks: dict[str, str]) -> None:
+    path = folder / "manual_review.csv"
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.writer(handle)
+        writer.writerow(("group_id", "review", "midi_files"))
+        for files in groups:
+            key = group_key(files)
+            if key in marks:
+                writer.writerow((key, marks[key], json.dumps(files, ensure_ascii=False)))
+
+
+def launch_midi_file(path: Path) -> None:
+    if sys.platform == "win32":
+        os.startfile(path)  # type: ignore[attr-defined]
+    elif os.environ.get("WSL_DISTRO_NAME"):
+        windows_path = subprocess.check_output(["wslpath", "-w", str(path)], text=True).strip()
+        escaped = windows_path.replace("'", "''")
+        script = f"Start-Process -FilePath '{escaped}'"
+        encoded = base64.b64encode(script.encode("utf-16le")).decode("ascii")
+        result = subprocess.run(["powershell.exe", "-NoProfile", "-NonInteractive", "-EncodedCommand", encoded],
+                                stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=15)
+        if result.returncode:
+            raise OSError("Windows could not open the MIDI file. Check that a MIDI player is installed.")
+    elif sys.platform == "darwin":
+        subprocess.Popen(["open", str(path)])
+    else:
+        subprocess.Popen(["xdg-open", str(path)])
 
 
 def count_midi(folder: Path) -> int:
@@ -451,6 +494,7 @@ class DetectorApp:
             return
         try:
             summary, groups = load_match_groups(folder)
+            marks = load_review_marks(folder)
         except (OSError, KeyError, ValueError, json.JSONDecodeError) as exc:
             messagebox.showerror("Cannot read results", str(exc))
             return
@@ -468,7 +512,7 @@ class DetectorApp:
         detail = (f"{len(groups)} groups  |  {matched_files} files in groups  |  "
                   f"{total - matched_files} files without a match  |  {total} total")
         ttk.Label(frame, text=detail, style="Hint.TLabel").pack(anchor="w", pady=(5, 5))
-        ttk.Label(frame, text="Predicted same-work groups; review the MIDI files before treating them as verified labels.",
+        ttk.Label(frame, text="Double-click a MIDI file to open it. Review marks are saved separately from detector results.",
                   style="Hint.TLabel").pack(anchor="w", pady=(0, 12))
         search = tk.StringVar()
         search_row = ttk.Frame(frame, style="App.TFrame")
@@ -477,31 +521,94 @@ class DetectorApp:
         ttk.Entry(search_row, textvariable=search, style="Folder.TEntry").pack(side="left", fill="x", expand=True, padx=8)
         tree_frame = ttk.Frame(frame, style="App.TFrame")
         tree_frame.pack(fill="both", expand=True)
-        tree = ttk.Treeview(tree_frame, columns=("count", "file"), show="tree headings")
+        tree = ttk.Treeview(tree_frame, columns=("count", "review", "file"), show="tree headings")
         tree.heading("#0", text="Matched group")
         tree.heading("count", text="Files")
+        tree.heading("review", text="Manual review")
         tree.heading("file", text="MIDI file (relative path)")
-        tree.column("#0", width=210, stretch=False)
+        tree.column("#0", width=130, stretch=False)
         tree.column("count", width=70, anchor="center", stretch=False)
-        tree.column("file", width=600)
+        tree.column("review", width=140, stretch=False)
+        tree.column("file", width=570)
         tree.tag_configure("group", background="#dceef1", foreground="#173a48")
+        tree.tag_configure("confirmed", background="#dbf0df", foreground="#175b32")
+        tree.tag_configure("flagged", background="#fff0d3", foreground="#7b4d10")
         tree.pack(side="left", fill="both", expand=True)
         scrollbar = ttk.Scrollbar(tree_frame, orient="vertical", command=tree.yview)
         scrollbar.pack(side="right", fill="y")
         tree.configure(yscrollcommand=scrollbar.set)
 
+        item_files: dict[str, str] = {}
+        item_groups: dict[str, int] = {}
+
         def populate(*_args) -> None:
             tree.delete(*tree.get_children())
+            item_files.clear()
+            item_groups.clear()
             query = search.get().strip().casefold()
             for number, files in enumerate(groups, 1):
                 if query and not any(query in name.casefold() for name in files):
                     continue
-                parent = tree.insert("", "end", text=f"Group {number}", values=(len(files), ""),
-                                     tags=("group",), open=bool(query) or number <= 8)
+                mark = marks.get(group_key(files), "Not reviewed")
+                tag = "confirmed" if mark == "Confirmed" else "flagged" if mark == "Flagged" else "group"
+                parent = tree.insert("", "end", text=f"Group {number}", values=(len(files), mark, ""),
+                                     tags=(tag,), open=bool(query) or number <= 8)
+                item_groups[parent] = number - 1
                 for name in files:
-                    tree.insert(parent, "end", text="", values=("", name))
+                    child = tree.insert(parent, "end", text="", values=("", "", name))
+                    item_files[child] = name
+                    item_groups[child] = number - 1
+
+        def open_selected(_event=None) -> None:
+            selection = tree.selection()
+            if not selection or selection[0] not in item_files:
+                messagebox.showinfo("Select a MIDI", "Select a file inside a group, then click Open MIDI.", parent=dialog)
+                return
+            relative = Path(item_files[selection[0]])
+            source = Path(self.input_dir.get().strip())
+            candidate = (source / relative).resolve()
+            if not source.is_dir() or not candidate.is_file():
+                selected = filedialog.askdirectory(title="Find the original MIDI folder", parent=dialog)
+                if not selected:
+                    return
+                source = Path(selected)
+                self.input_dir.set(str(source))
+                candidate = (source / relative).resolve()
+            try:
+                candidate.relative_to(source.resolve())
+                if not candidate.is_file():
+                    raise FileNotFoundError(candidate)
+                launch_midi_file(candidate)
+            except (OSError, ValueError, subprocess.SubprocessError) as exc:
+                messagebox.showerror("Cannot open MIDI", f"File: {candidate}\n\n{exc}", parent=dialog)
+
+        def mark_selected(mark: str) -> None:
+            selection = tree.selection()
+            if not selection or selection[0] not in item_groups:
+                messagebox.showinfo("Select a group", "Select a group or one of its MIDI files first.", parent=dialog)
+                return
+            key = group_key(groups[item_groups[selection[0]]])
+            if mark == "Not reviewed":
+                marks.pop(key, None)
+            else:
+                marks[key] = mark
+            try:
+                save_review_marks(folder, groups, marks)
+            except OSError as exc:
+                messagebox.showerror("Cannot save review", str(exc), parent=dialog)
+                return
+            populate()
+
+        actions = ttk.Frame(frame, style="App.TFrame")
+        actions.pack(fill="x", pady=(12, 0))
+        ttk.Button(actions, text="Open MIDI", command=open_selected, style="Accent.TButton").pack(side="left")
+        ttk.Button(actions, text="Confirm group", command=lambda: mark_selected("Confirmed"), style="Soft.TButton").pack(side="left", padx=8)
+        ttk.Button(actions, text="Flag group", command=lambda: mark_selected("Flagged"), style="Soft.TButton").pack(side="left")
+        ttk.Button(actions, text="Clear mark", command=lambda: mark_selected("Not reviewed"), style="Soft.TButton").pack(side="left", padx=8)
+        ttk.Label(actions, text="Saved to manual_review.csv", style="Hint.TLabel").pack(side="right")
 
         search.trace_add("write", populate)
+        tree.bind("<Double-Button-1>", open_selected)
         populate()
 
     def poll(self) -> None:

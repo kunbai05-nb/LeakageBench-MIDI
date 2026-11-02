@@ -274,7 +274,11 @@ export LEAKAGEBENCH_DATA_DIR="/mnt/d/music-data"
 
 ## 🎹 Use the Detector on Your Own MIDI
 
-**Windows desktop (no commands):** install Python 3.10+ with Tkinter, download this repository, and double-click `打开MIDI检测器.bat`. In the window, select your MIDI folder and a result location. On the first run, click **安装依赖（首次）**, then **开始检测**. The window shows progress and offers a button to open the results. Detection uses the included v1.9 checkpoint and the exact CPU backend; the source MIDI files are not changed. Large collections can take a long time. Results include `components.csv` (same-work groups), `relation_edges.csv` (scored candidate links and merge decisions), and `summary.json` (counts and unreadable files). A group is a detector prediction, not a verified label.
+**Windows desktop:** install Python 3.10+ with Tkinter, download this repository, and double-click `launch_detector.bat`. In the window, select your MIDI folder and a result location. On the first run, click **Install dependencies**, then **Start detection**.
+
+**Linux / WSL desktop:** install Tkinter (`sudo apt install python3-tk` on Ubuntu), then run `bash launch_detector.sh`. Click **Install dependencies** on the first run. WSL graphical windows require WSLg or another working display server.
+
+The interface uses the included v1.9 checkpoint and the exact CPU backend; it does not change source MIDI files. Large collections can take a long time. Results include `components.csv` (same-work groups), `relation_edges.csv` (scored candidate links and merge decisions), and `summary.json` (counts and unreadable files). A group is a detector prediction, not a verified label.
 
 **Command line:**
 

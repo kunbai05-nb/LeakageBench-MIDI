@@ -23,6 +23,38 @@ def count_midi(folder: Path) -> int:
     return sum(p.suffix.lower() in {".mid", ".midi"} for p in folder.rglob("*") if p.is_file())
 
 
+def find_midi_folders() -> list[tuple[Path, int]]:
+    """Scan common user locations without traversing an entire disk."""
+    roots = [Path.home() / "datasets", ROOT / "data", Path.home() / "Music",
+             Path.home() / "Desktop", Path.home() / "Downloads"]
+    if sys.platform.startswith("linux") and Path("/mnt/c/Users").is_dir():
+        roots.extend((Path("/mnt/c/Users/ASUS/Desktop"), Path("/mnt/c/Users/ASUS/Music")))
+    totals: dict[Path, int] = {}
+    for root in dict.fromkeys(path.resolve() for path in roots if path.is_dir()):
+        scanned = 0
+        for current, dirs, files in os.walk(root):
+            scanned += 1
+            current_path = Path(current)
+            depth = len(current_path.relative_to(root).parts)
+            if scanned > 12000 or depth >= 7:
+                dirs[:] = []
+            else:
+                dirs[:] = [name for name in dirs if not name.startswith(".") and name not in
+                           {"node_modules", "venv", ".venv", "__pycache__", "site-packages"}]
+            direct = sum(Path(name).suffix.lower() in {".mid", ".midi"} for name in files)
+            if not direct:
+                continue
+            # Count MIDI files in every ancestor so dataset-level folders appear.
+            ancestor = current_path
+            while True:
+                totals[ancestor] = totals.get(ancestor, 0) + direct
+                if ancestor == root:
+                    break
+                ancestor = ancestor.parent
+    return sorted(((path, count) for path, count in totals.items() if count >= 2),
+                  key=lambda item: (-item[1], str(item[0])))[:60]
+
+
 def available_cpus() -> int:
     cpus = len(os.sched_getaffinity(0)) if hasattr(os, "sched_getaffinity") else (os.cpu_count() or 1)
     if sys.platform.startswith("linux"):
@@ -114,7 +146,7 @@ class DetectorApp:
         self.input_dir = tk.StringVar()
         self.output_dir = tk.StringVar()
         self.status = tk.StringVar(value="Select a folder containing MIDI files.")
-        self.events: queue.Queue[tuple[str, str]] = queue.Queue()
+        self.events: queue.Queue[tuple[str, object]] = queue.Queue()
         self.busy = False
         self.current_proc: subprocess.Popen | None = None
         self.cancel_requested = threading.Event()
@@ -139,6 +171,7 @@ class DetectorApp:
         self.cancel_button = ttk.Button(buttons, text="Cancel detection", command=self.cancel, style="Soft.TButton", state="disabled")
         self.cancel_button.pack(side="left")
         ttk.Button(buttons, text="Open results", command=self.open_output, style="Soft.TButton").pack(side="left", padx=10)
+        ttk.Button(buttons, text="Find MIDI folders", command=self.search_folders, style="Soft.TButton").pack(side="left")
         ttk.Label(frame, textvariable=self.status, style="Status.TLabel", wraplength=730).pack(anchor="w", pady=(18, 8))
 
         log_frame = ttk.Frame(frame, style="App.TFrame")
@@ -169,6 +202,41 @@ class DetectorApp:
         selected = filedialog.askdirectory(title="Select output folder")
         if selected:
             self.output_dir.set(selected)
+
+    def search_folders(self) -> None:
+        self.status.set("Searching common folders for MIDI files...")
+        threading.Thread(target=lambda: self.events.put(("folders", find_midi_folders())), daemon=True).start()
+
+    def show_folders(self, folders: list[tuple[Path, int]]) -> None:
+        if not folders:
+            self.status.set("No MIDI folders found in common locations. Use Browse to choose another folder.")
+            return
+        self.status.set(f"Found {len(folders)} MIDI folders. Select one from the list.")
+        dialog = tk.Toplevel(self.window)
+        dialog.title("Found MIDI folders")
+        dialog.geometry("780x430")
+        dialog.configure(bg="#f4f7fb")
+        dialog.transient(self.window)
+        frame = ttk.Frame(dialog, padding=18, style="App.TFrame")
+        frame.pack(fill="both", expand=True)
+        ttk.Label(frame, text="Choose a MIDI folder", style="Title.TLabel").pack(anchor="w", pady=(0, 12))
+        listbox = tk.Listbox(frame, font=("Arial", 10), bg="white", fg="#23364a",
+                             selectbackground="#167c90", selectforeground="white")
+        listbox.pack(fill="both", expand=True)
+        for path, count in folders:
+            listbox.insert("end", f"{count:>5} MIDI   {path}")
+
+        def select(_event=None) -> None:
+            selection = listbox.curselection()
+            if not selection:
+                return
+            path = folders[selection[0]][0]
+            self.input_dir.set(str(path))
+            self.output_dir.set(str(path.parent / (path.name + "_detector_results")))
+            dialog.destroy()
+
+        ttk.Button(frame, text="Use selected folder", command=select, style="Accent.TButton").pack(anchor="e", pady=(12, 0))
+        listbox.bind("<Double-Button-1>", select)
 
     def append(self, line: str) -> None:
         self.log.configure(state="normal")
@@ -290,10 +358,13 @@ class DetectorApp:
         try:
             while True:
                 kind, payload = self.events.get_nowait()
-                if kind == "log":
-                    self.append(payload)
+                if kind == "folders":
+                    self.show_folders(payload)
                     continue
-                result = json.loads(payload)
+                if kind == "log":
+                    self.append(str(payload))
+                    continue
+                result = json.loads(str(payload))
                 self.busy = False
                 self.install_button.configure(state="normal")
                 self.run_button.configure(state="normal")

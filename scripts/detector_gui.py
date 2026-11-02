@@ -69,18 +69,23 @@ def available_cpus() -> int:
 
 def available_memory_gib() -> float | None:
     if sys.platform.startswith("linux"):
+        available = None
+        try:
+            for line in Path("/proc/meminfo").read_text().splitlines():
+                if line.startswith("MemAvailable:"):
+                    available = int(line.split()[1]) / (1024 ** 2)
+                    break
+        except (OSError, ValueError):
+            pass
         try:
             limit = Path("/sys/fs/cgroup/memory.max").read_text().strip()
             if limit != "max":
-                return int(limit) / (1024 ** 3)
+                current = int(Path("/sys/fs/cgroup/memory.current").read_text().strip())
+                remaining = max(0, int(limit) - current) / (1024 ** 3)
+                return min(available, remaining) if available is not None else remaining
         except (OSError, ValueError):
             pass
-        try:
-            for line in Path("/proc/meminfo").read_text().splitlines():
-                if line.startswith("MemTotal:"):
-                    return int(line.split()[1]) / (1024 ** 2)
-        except (OSError, ValueError):
-            pass
+        return available
     elif sys.platform == "win32":
         try:
             import ctypes
@@ -106,7 +111,7 @@ def choose_workers(file_count: int) -> int:
         return 1
     cpu_limit = max(1, available_cpus() - 1)
     memory = available_memory_gib()
-    memory_limit = max(1, int(memory)) if memory is not None else 4
+    memory_limit = max(1, int(memory - 2)) if memory is not None else 4
     return min(file_count, cpu_limit, memory_limit, 12)
 
 
@@ -145,6 +150,7 @@ class DetectorApp:
         style.configure("Folder.TEntry", padding=8, font=("Arial", 10))
         self.input_dir = tk.StringVar()
         self.output_dir = tk.StringVar()
+        self.worker_choice = tk.StringVar(value="Auto")
         self.status = tk.StringVar(value="Select a folder containing MIDI files.")
         self.events: queue.Queue[tuple[str, object]] = queue.Queue()
         self.busy = False
@@ -160,6 +166,13 @@ class DetectorApp:
         card.pack(fill="x")
         self._folder_row(card, "MIDI folder", self.input_dir, self.choose_input)
         self._folder_row(card, "Output folder", self.output_dir, self.choose_output)
+        worker_row = ttk.Frame(card, style="Card.TFrame")
+        worker_row.pack(fill="x", pady=7)
+        ttk.Label(worker_row, text="CPU workers", width=20, style="Field.TLabel").pack(side="left")
+        ttk.Combobox(worker_row, textvariable=self.worker_choice,
+                     values=["Auto"] + [str(i) for i in range(1, available_cpus() + 1)],
+                     state="readonly", width=12).pack(side="left", padx=7)
+        ttk.Label(worker_row, text="Auto leaves memory headroom", style="Field.TLabel").pack(side="left")
         ttk.Label(frame, text="Includes .mid and .midi files in subfolders. Install dependencies before the first run.", style="Hint.TLabel").pack(anchor="w", pady=(13, 14))
 
         buttons = ttk.Frame(frame, style="App.TFrame")
@@ -335,7 +348,7 @@ class DetectorApp:
         if not CHECKPOINT.is_dir():
             messagebox.showerror("Checkpoint missing", f"Detector checkpoint not found: {CHECKPOINT}")
             return
-        workers = choose_workers(files)
+        workers = choose_workers(files) if self.worker_choice.get() == "Auto" else int(self.worker_choice.get())
         self.append(f"Found {files} MIDI files. Using {workers} worker(s) on {available_cpus()} available CPU(s); backend: exact.")
         self.start([[sys.executable, str(DETECT_SCRIPT), str(source), str(CHECKPOINT),
                     str(target), "--workers", str(workers), "--backend", "exact"]],

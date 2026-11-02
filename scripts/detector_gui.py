@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import os
 import queue
 import subprocess
 import sys
@@ -19,6 +20,61 @@ DETECT_SCRIPT = ROOT / "scripts" / "detect_same_work.py"
 
 def count_midi(folder: Path) -> int:
     return sum(p.suffix.lower() in {".mid", ".midi"} for p in folder.rglob("*") if p.is_file())
+
+
+def available_cpus() -> int:
+    cpus = len(os.sched_getaffinity(0)) if hasattr(os, "sched_getaffinity") else (os.cpu_count() or 1)
+    if sys.platform.startswith("linux"):
+        try:
+            quota, period = Path("/sys/fs/cgroup/cpu.max").read_text().split()[:2]
+            if quota != "max":
+                cpus = min(cpus, max(1, int(quota) // int(period)))
+        except (OSError, ValueError):
+            pass
+    return max(1, cpus)
+
+
+def available_memory_gib() -> float | None:
+    if sys.platform.startswith("linux"):
+        try:
+            limit = Path("/sys/fs/cgroup/memory.max").read_text().strip()
+            if limit != "max":
+                return int(limit) / (1024 ** 3)
+        except (OSError, ValueError):
+            pass
+        try:
+            for line in Path("/proc/meminfo").read_text().splitlines():
+                if line.startswith("MemTotal:"):
+                    return int(line.split()[1]) / (1024 ** 2)
+        except (OSError, ValueError):
+            pass
+    elif sys.platform == "win32":
+        try:
+            import ctypes
+
+            class MemoryStatus(ctypes.Structure):
+                _fields_ = [("length", ctypes.c_ulong), ("memory_load", ctypes.c_ulong),
+                            ("total_physical", ctypes.c_ulonglong), ("available_physical", ctypes.c_ulonglong),
+                            ("total_page_file", ctypes.c_ulonglong), ("available_page_file", ctypes.c_ulonglong),
+                            ("total_virtual", ctypes.c_ulonglong), ("available_virtual", ctypes.c_ulonglong),
+                            ("available_extended_virtual", ctypes.c_ulonglong)]
+
+            status = MemoryStatus()
+            status.length = ctypes.sizeof(status)
+            if ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(status)):
+                return status.available_physical / (1024 ** 3)
+        except (AttributeError, OSError):
+            pass
+    return None
+
+
+def choose_workers(file_count: int) -> int:
+    if file_count < 20:
+        return 1
+    cpu_limit = max(1, available_cpus() - 1)
+    memory = available_memory_gib()
+    memory_limit = max(1, int(memory // 2)) if memory is not None else 4
+    return min(file_count, cpu_limit, memory_limit, 12)
 
 
 class DetectorApp:
@@ -163,9 +219,10 @@ class DetectorApp:
         if not CHECKPOINT.is_dir():
             messagebox.showerror("Checkpoint missing", f"Detector checkpoint not found: {CHECKPOINT}")
             return
-        self.append(f"Found {files} MIDI files. Larger collections take longer to process.")
+        workers = choose_workers(files)
+        self.append(f"Found {files} MIDI files. Using {workers} worker(s) on {available_cpus()} available CPU(s); backend: exact.")
         self.start([[sys.executable, str(DETECT_SCRIPT), str(source), str(CHECKPOINT),
-                    str(target), "--workers", "1", "--backend", "exact"]],
+                    str(target), "--workers", str(workers), "--backend", "exact"]],
                    "Detecting", target)
 
     def open_output(self) -> None:

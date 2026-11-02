@@ -7,6 +7,7 @@ import subprocess
 import sys
 import threading
 import tkinter as tk
+import webbrowser
 from pathlib import Path
 from tkinter import filedialog, messagebox, ttk
 
@@ -23,36 +24,52 @@ def count_midi(folder: Path) -> int:
 class DetectorApp:
     def __init__(self, window: tk.Tk) -> None:
         self.window = window
-        self.window.title("同作品 MIDI 检测器 · v1.9")
-        self.window.geometry("730x540")
-        self.window.minsize(600, 460)
+        self.window.title("MIDI 同作品检测器")
+        self.window.geometry("820x610")
+        self.window.minsize(690, 530)
+        self.window.configure(bg="#f4f7fb")
+        style = ttk.Style(window)
+        style.theme_use("clam")
+        style.configure("App.TFrame", background="#f4f7fb")
+        style.configure("Card.TFrame", background="#ffffff")
+        style.configure("Title.TLabel", background="#f4f7fb", foreground="#142438", font=("Microsoft YaHei UI", 21, "bold"))
+        style.configure("Hint.TLabel", background="#f4f7fb", foreground="#607286", font=("Microsoft YaHei UI", 10))
+        style.configure("Field.TLabel", background="#ffffff", foreground="#23364a", font=("Microsoft YaHei UI", 10, "bold"))
+        style.configure("Status.TLabel", background="#f4f7fb", foreground="#244f67", font=("Microsoft YaHei UI", 10))
+        style.configure("Accent.TButton", background="#167c90", foreground="white", font=("Microsoft YaHei UI", 10, "bold"), padding=(16, 9))
+        style.map("Accent.TButton", background=[("active", "#12677a"), ("disabled", "#a9c8cd")])
+        style.configure("Soft.TButton", background="#e9f0f5", foreground="#24455a", font=("Microsoft YaHei UI", 10), padding=(12, 9))
+        style.map("Soft.TButton", background=[("active", "#dbeaf1")])
+        style.configure("Folder.TEntry", padding=8, font=("Microsoft YaHei UI", 10))
         self.input_dir = tk.StringVar()
         self.output_dir = tk.StringVar()
         self.status = tk.StringVar(value="选择包含 MIDI 文件的文件夹。")
         self.events: queue.Queue[tuple[str, str]] = queue.Queue()
         self.busy = False
 
-        frame = ttk.Frame(window, padding=20)
+        frame = ttk.Frame(window, padding=28, style="App.TFrame")
         frame.pack(fill="both", expand=True)
-        ttk.Label(frame, text="同作品 MIDI 检测", font=("Arial", 18, "bold")).pack(anchor="w")
-        ttk.Label(frame, text="查找可能属于同一作品的不同 MIDI 版本；不会修改原始文件。", wraplength=650).pack(anchor="w", pady=(5, 18))
+        ttk.Label(frame, text="MIDI 同作品检测", style="Title.TLabel").pack(anchor="w")
+        ttk.Label(frame, text="选一个文件夹，自动找出可能属于同一作品的不同 MIDI 版本。", style="Hint.TLabel").pack(anchor="w", pady=(5, 20))
 
-        self._folder_row(frame, "MIDI 文件夹", self.input_dir, self.choose_input)
-        self._folder_row(frame, "结果保存到", self.output_dir, self.choose_output)
-        ttk.Label(frame, text="支持子文件夹中的 .mid / .midi；初次运行请先安装依赖。", wraplength=650).pack(anchor="w", pady=(8, 16))
+        card = ttk.Frame(frame, padding=20, style="Card.TFrame")
+        card.pack(fill="x")
+        self._folder_row(card, "① 选择 MIDI 文件夹", self.input_dir, self.choose_input)
+        self._folder_row(card, "② 选择结果位置", self.output_dir, self.choose_output)
+        ttk.Label(frame, text="支持子文件夹中的 .mid / .midi 文件。首次使用请先安装运行环境。", style="Hint.TLabel").pack(anchor="w", pady=(13, 14))
 
-        buttons = ttk.Frame(frame)
+        buttons = ttk.Frame(frame, style="App.TFrame")
         buttons.pack(fill="x")
-        self.install_button = ttk.Button(buttons, text="① 安装依赖（首次）", command=self.install)
+        self.install_button = ttk.Button(buttons, text="安装运行环境（首次）", command=self.install, style="Soft.TButton")
         self.install_button.pack(side="left")
-        self.run_button = ttk.Button(buttons, text="② 开始检测", command=self.run)
+        self.run_button = ttk.Button(buttons, text="开始检测", command=self.run, style="Accent.TButton")
         self.run_button.pack(side="left", padx=10)
-        ttk.Button(buttons, text="打开结果文件夹", command=self.open_output).pack(side="left")
-        ttk.Label(frame, textvariable=self.status, wraplength=650).pack(anchor="w", pady=(15, 7))
+        ttk.Button(buttons, text="查看结果", command=self.open_output, style="Soft.TButton").pack(side="left")
+        ttk.Label(frame, textvariable=self.status, style="Status.TLabel", wraplength=730).pack(anchor="w", pady=(18, 8))
 
-        log_frame = ttk.Frame(frame)
+        log_frame = ttk.Frame(frame, style="App.TFrame")
         log_frame.pack(fill="both", expand=True)
-        self.log = tk.Text(log_frame, height=13, wrap="word", state="disabled")
+        self.log = tk.Text(log_frame, height=12, wrap="word", state="disabled", bg="#15283a", fg="#d9e9ee", insertbackground="white", relief="flat", padx=13, pady=11, font=("Consolas", 10))
         self.log.pack(side="left", fill="both", expand=True)
         scrollbar = ttk.Scrollbar(log_frame, command=self.log.yview)
         scrollbar.pack(side="right", fill="y")
@@ -60,11 +77,11 @@ class DetectorApp:
         window.after(100, self.poll)
 
     def _folder_row(self, parent: ttk.Frame, label: str, variable: tk.StringVar, action) -> None:
-        row = ttk.Frame(parent)
-        row.pack(fill="x", pady=5)
-        ttk.Label(row, text=label, width=13).pack(side="left")
-        ttk.Entry(row, textvariable=variable).pack(side="left", fill="x", expand=True, padx=6)
-        ttk.Button(row, text="浏览…", command=action).pack(side="right")
+        row = ttk.Frame(parent, style="Card.TFrame")
+        row.pack(fill="x", pady=7)
+        ttk.Label(row, text=label, width=20, style="Field.TLabel").pack(side="left")
+        ttk.Entry(row, textvariable=variable, style="Folder.TEntry").pack(side="left", fill="x", expand=True, padx=7)
+        ttk.Button(row, text="浏览…", command=action, style="Soft.TButton").pack(side="right")
 
     def choose_input(self) -> None:
         selected = filedialog.askdirectory(title="选择 MIDI 文件夹")
@@ -84,7 +101,7 @@ class DetectorApp:
         self.log.see("end")
         self.log.configure(state="disabled")
 
-    def start(self, cmd: list[str], title: str, output: Path | None = None) -> None:
+    def start(self, commands: list[list[str]], title: str, output: Path | None = None) -> None:
         if self.busy:
             return
         self.busy = True
@@ -95,13 +112,17 @@ class DetectorApp:
 
         def worker() -> None:
             try:
-                proc = subprocess.Popen(cmd, cwd=ROOT, stdout=subprocess.PIPE,
-                                        stderr=subprocess.STDOUT, text=True,
-                                        errors="replace", bufsize=1)
-                assert proc.stdout is not None
-                for line in proc.stdout:
-                    self.events.put(("log", line.rstrip()))
-                code = proc.wait()
+                code = 0
+                for cmd in commands:
+                    proc = subprocess.Popen(cmd, cwd=ROOT, stdout=subprocess.PIPE,
+                                            stderr=subprocess.STDOUT, text=True,
+                                            errors="replace", bufsize=1)
+                    assert proc.stdout is not None
+                    for line in proc.stdout:
+                        self.events.put(("log", line.rstrip()))
+                    code = proc.wait()
+                    if code:
+                        break
                 self.events.put(("done", json.dumps({"code": code, "title": title,
                                                        "output": str(output) if output else ""})))
             except Exception as exc:
@@ -111,9 +132,21 @@ class DetectorApp:
         threading.Thread(target=worker, daemon=True).start()
 
     def install(self) -> None:
-        self.start([sys.executable, "-m", "pip", "install", "-e", str(ROOT)], "安装依赖")
+        if not self.supported_python():
+            return
+        self.start([[sys.executable, "-m", "pip", "install", "--upgrade", "pip", "setuptools", "wheel"],
+                    [sys.executable, "-m", "pip", "install", str(ROOT)]], "安装运行环境")
+
+    def supported_python(self) -> bool:
+        if sys.version_info >= (3, 10):
+            return True
+        if messagebox.askyesno("Python 版本过旧", "检测器需要 Python 3.10 或更新版本。\n当前版本：" + sys.version.split()[0] + "\n\n打开 Python 下载页面？"):
+            webbrowser.open("https://www.python.org/downloads/windows/")
+        return False
 
     def run(self) -> None:
+        if not self.supported_python():
+            return
         source = Path(self.input_dir.get().strip())
         target_text = self.output_dir.get().strip()
         if not source.is_dir() or not target_text:
@@ -131,8 +164,8 @@ class DetectorApp:
             messagebox.showerror("模型缺失", f"找不到模型：{CHECKPOINT}")
             return
         self.append(f"找到 {files} 个 MIDI 文件。规模越大，检测时间越长。")
-        self.start([sys.executable, str(DETECT_SCRIPT), str(source), str(CHECKPOINT),
-                    str(target), "--workers", "1", "--backend", "exact"],
+        self.start([[sys.executable, str(DETECT_SCRIPT), str(source), str(CHECKPOINT),
+                    str(target), "--workers", "1", "--backend", "exact"]],
                    "检测中", target)
 
     def open_output(self) -> None:

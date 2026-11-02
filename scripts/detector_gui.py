@@ -18,7 +18,7 @@ import tkinter as tk
 import webbrowser
 from collections import defaultdict
 from pathlib import Path
-from tkinter import filedialog, messagebox, ttk
+from tkinter import filedialog, font as tkfont, messagebox, ttk
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -212,34 +212,41 @@ class DetectorApp:
         self.window = window
         self.window.title("MIDI Same-Work Detector")
         self.ui_scale = max(1.0, window.winfo_fpixels("1i") / 96.0)
-        main_width = min(round(900 * self.ui_scale), window.winfo_screenwidth() - 80)
-        main_height = min(round(670 * self.ui_scale), window.winfo_screenheight() - 120)
+        main_width = min(round(1050 * self.ui_scale), window.winfo_screenwidth() - 80)
+        main_height = min(round(760 * self.ui_scale), window.winfo_screenheight() - 120)
         self.window.geometry(f"{main_width}x{main_height}")
-        self.window.minsize(min(round(760 * self.ui_scale), main_width),
-                            min(round(650 * self.ui_scale), main_height))
+        self.window.minsize(min(round(900 * self.ui_scale), main_width),
+                            min(round(700 * self.ui_scale), main_height))
         self.window.configure(bg="#090f1d")
+        available_fonts = set(tkfont.families(root=window))
+        self.font_family = next((name for name in ("Segoe UI Variable Text", "Segoe UI", "Inter", "Noto Sans", "DejaVu Sans", "Arial")
+                                 if name in available_fonts), "TkDefaultFont")
+        self.mono_font = next((name for name in ("Cascadia Code", "Consolas", "DejaVu Sans Mono")
+                               if name in available_fonts), self.font_family)
         style = ttk.Style(window)
         style.theme_use("clam")
         style.configure("App.TFrame", background="#090f1d")
         style.configure("Card.TFrame", background="#142137")
-        style.configure("Title.TLabel", background="#090f1d", foreground="#f1f7ff", font=("Arial", 23, "bold"))
-        style.configure("Hint.TLabel", background="#090f1d", foreground="#8fa3bf", font=("Arial", 10))
-        style.configure("Field.TLabel", background="#142137", foreground="#c8d8ee", font=("Arial", 10, "bold"))
-        style.configure("Status.TLabel", background="#090f1d", foreground="#48d7df", font=("Arial", 10, "bold"))
-        style.configure("Accent.TButton", background="#21c9d3", foreground="#06131e", font=("Arial", 10, "bold"), padding=(16, 9), borderwidth=0)
+        style.configure("Title.TLabel", background="#090f1d", foreground="#f1f7ff", font=(self.font_family, 27, "bold"))
+        style.configure("Hint.TLabel", background="#090f1d", foreground="#8fa3bf", font=(self.font_family, 12))
+        style.configure("Field.TLabel", background="#142137", foreground="#c8d8ee", font=(self.font_family, 12, "bold"))
+        style.configure("Status.TLabel", background="#090f1d", foreground="#48d7df", font=(self.font_family, 12, "bold"))
+        style.configure("Accent.TButton", background="#21c9d3", foreground="#06131e", font=(self.font_family, 12, "bold"), padding=(18, 11), borderwidth=0)
         style.map("Accent.TButton", background=[("active", "#65e8e9"), ("disabled", "#506c77")])
-        style.configure("Soft.TButton", background="#243653", foreground="#e6f2ff", font=("Arial", 10), padding=(12, 9), borderwidth=0)
+        style.configure("Soft.TButton", background="#243653", foreground="#e6f2ff", font=(self.font_family, 12), padding=(15, 11), borderwidth=0)
         style.map("Soft.TButton", background=[("active", "#345172"), ("disabled", "#1a2739")])
-        style.configure("Folder.TEntry", padding=8, fieldbackground="#0d192c", foreground="#eef7ff", font=("Arial", 10))
+        style.configure("Folder.TEntry", padding=10, fieldbackground="#0d192c", foreground="#eef7ff", font=(self.font_family, 12))
         style.configure("Dark.TCombobox", fieldbackground="#0d192c", background="#243653",
                         foreground="#eef7ff", arrowcolor="#8fd4e1", bordercolor="#2a4260",
-                        selectbackground="#0d192c", selectforeground="#eef7ff")
+                        selectbackground="#0d192c", selectforeground="#eef7ff",
+                        font=(self.font_family, 12), padding=7)
         style.map("Dark.TCombobox", fieldbackground=[("readonly", "#0d192c")],
                   foreground=[("readonly", "#eef7ff")], background=[("readonly", "#243653")])
         style.configure("Dark.Vertical.TScrollbar", background="#2d4765", troughcolor="#101b2d",
                         arrowcolor="#91b5ce", bordercolor="#101b2d", lightcolor="#2d4765",
                         darkcolor="#2d4765", relief="flat")
         style.map("Dark.Vertical.TScrollbar", background=[("active", "#3d6883")])
+        window.option_add("*TCombobox*Listbox.font", (self.font_family, 12))
         self.input_dir = tk.StringVar()
         self.output_dir = tk.StringVar()
         self.worker_choice = tk.StringVar(value="Auto")
@@ -291,11 +298,11 @@ class DetectorApp:
         ttk.Button(tools_row, text="Explore matches", command=self.show_matches, style="Accent.TButton").pack(side="left")
         ttk.Button(tools_row, text="Open result folder", command=self.open_output, style="Soft.TButton").pack(side="left", padx=10)
         ttk.Button(tools_row, text="Find MIDI folders", command=self.search_folders, style="Soft.TButton").pack(side="left")
-        ttk.Label(frame, textvariable=self.status, style="Status.TLabel", wraplength=730).pack(anchor="w", pady=(18, 8))
+        ttk.Label(frame, textvariable=self.status, style="Status.TLabel", wraplength=900).pack(anchor="w", pady=(18, 8))
 
         log_frame = ttk.Frame(frame, style="App.TFrame")
         log_frame.pack(fill="both", expand=True)
-        self.log = tk.Text(log_frame, height=11, wrap="word", state="disabled", bg="#101b2d", fg="#bad0e4", insertbackground="#4ee6df", relief="flat", padx=16, pady=14, font=("Consolas", 10), highlightbackground="#2a4260", highlightthickness=1)
+        self.log = tk.Text(log_frame, height=11, wrap="word", state="disabled", bg="#101b2d", fg="#bad0e4", insertbackground="#4ee6df", relief="flat", padx=16, pady=14, font=(self.mono_font, 12), highlightbackground="#2a4260", highlightthickness=1)
         self.log.pack(side="left", fill="both", expand=True)
         scrollbar = ttk.Scrollbar(log_frame, command=self.log.yview, style="Dark.Vertical.TScrollbar")
         scrollbar.pack(side="right", fill="y")
@@ -333,8 +340,8 @@ class DetectorApp:
         self.status.set(f"Found {len(folders)} MIDI folders. Select one from the list.")
         dialog = tk.Toplevel(self.window)
         dialog.title("Found MIDI folders")
-        folder_width = min(round(780 * self.ui_scale), dialog.winfo_screenwidth() - 80)
-        folder_height = min(round(430 * self.ui_scale), dialog.winfo_screenheight() - 120)
+        folder_width = min(round(850 * self.ui_scale), dialog.winfo_screenwidth() - 80)
+        folder_height = min(round(500 * self.ui_scale), dialog.winfo_screenheight() - 120)
         dialog.geometry(f"{folder_width}x{folder_height}")
         dialog.configure(bg="#090f1d")
         dialog.transient(self.window)
@@ -343,7 +350,7 @@ class DetectorApp:
         ttk.Label(frame, text="Choose a MIDI folder", style="Title.TLabel").pack(anchor="w", pady=(0, 12))
         list_frame = ttk.Frame(frame, style="App.TFrame")
         list_frame.pack(fill="both", expand=True)
-        listbox = tk.Listbox(list_frame, font=("Arial", 10), bg="#142137", fg="#dcecff",
+        listbox = tk.Listbox(list_frame, font=(self.font_family, 12), bg="#142137", fg="#dcecff",
                              selectbackground="#1d8494", selectforeground="white",
                              relief="flat", borderwidth=0, highlightthickness=0)
         listbox.pack(side="left", fill="both", expand=True)
@@ -526,29 +533,29 @@ class DetectorApp:
 
         dialog = tk.Toplevel(self.window)
         dialog.title("Matched Works  |  Review Studio")
-        dialog_width = min(round(1160 * self.ui_scale), dialog.winfo_screenwidth() - 80)
-        dialog_height = min(round(740 * self.ui_scale), dialog.winfo_screenheight() - 120)
+        dialog_width = min(round(1260 * self.ui_scale), dialog.winfo_screenwidth() - 80)
+        dialog_height = min(round(800 * self.ui_scale), dialog.winfo_screenheight() - 120)
         dialog.geometry(f"{dialog_width}x{dialog_height}")
-        dialog.minsize(min(round(800 * self.ui_scale), dialog_width),
-                       min(round(560 * self.ui_scale), dialog_height))
+        dialog.minsize(min(round(900 * self.ui_scale), dialog_width),
+                       min(round(620 * self.ui_scale), dialog_height))
         dialog.configure(bg="#090f1d")
         shell = tk.Frame(dialog, bg="#090f1d", padx=24, pady=20)
         shell.pack(fill="both", expand=True)
         tk.Label(shell, text="MATCHED WORKS", bg="#090f1d", fg="#f1f7ff",
-                 font=("Arial", 23, "bold")).pack(anchor="w")
+                 font=(self.font_family, 27, "bold")).pack(anchor="w")
         matched_files = sum(map(len, groups))
         total = int(summary["files"])
         stats = (f"{len(groups)} GROUPS     /     {matched_files} MATCHED FILES     /     "
                  f"{total - matched_files} UNMATCHED     /     {total} TOTAL")
         tk.Label(shell, text=stats, bg="#090f1d", fg="#4cdae1",
-                 font=("Arial", 10, "bold")).pack(anchor="w", pady=(5, 14))
+                 font=(self.font_family, 12, "bold")).pack(anchor="w", pady=(5, 14))
         search = tk.StringVar()
         search_row = tk.Frame(shell, bg="#090f1d")
         search_row.pack(fill="x", pady=(0, 14))
         tk.Label(search_row, text="SEARCH MIDI", bg="#090f1d", fg="#94a9c4",
-                 font=("Arial", 10, "bold")).pack(side="left")
+                 font=(self.font_family, 12, "bold")).pack(side="left")
         tk.Entry(search_row, textvariable=search, bg="#142137", fg="#f1f7ff",
-                 insertbackground="#4cdae1", relief="flat", font=("Arial", 11)).pack(side="left", fill="x", expand=True, padx=(12, 0), ipady=8)
+                 insertbackground="#4cdae1", relief="flat", font=(self.font_family, 13)).pack(side="left", fill="x", expand=True, padx=(12, 0), ipady=10)
 
         body = tk.Frame(shell, bg="#090f1d")
         body.pack(fill="both", expand=True)
@@ -565,7 +572,7 @@ class DetectorApp:
         tile_grid.bind("<Configure>", lambda _e: canvas.configure(scrollregion=canvas.bbox("all")))
         canvas.bind("<Configure>", lambda event: canvas.itemconfigure(grid_window, width=event.width))
 
-        details = tk.Frame(body, bg="#142137", width=round(340 * self.ui_scale), padx=18, pady=18,
+        details = tk.Frame(body, bg="#142137", width=round(380 * self.ui_scale), padx=18, pady=18,
                            highlightbackground="#274363", highlightthickness=1)
         details.pack(side="right", fill="y")
         details.pack_propagate(False)
@@ -613,18 +620,18 @@ class DetectorApp:
                 child.destroy()
             if not groups:
                 tk.Label(details, text="NO MATCHES", bg="#142137", fg="#4cdae1",
-                         font=("Arial", 16, "bold")).pack(anchor="w")
+                         font=(self.font_family, 19, "bold")).pack(anchor="w")
                 return
             index = selected["index"]
             files = groups[index]
             mark = marks.get(group_key(files), "Not reviewed")
             tk.Label(details, text=f"GROUP {index + 1:03d}", bg="#142137", fg="#f1f7ff",
-                     font=("Arial", 19, "bold")).pack(anchor="w")
+                     font=(self.font_family, 22, "bold")).pack(anchor="w")
             tk.Label(details, text=f"{len(files)} MIDI FILES   /   {mark.upper()}", bg="#142137",
                      fg="#4cdae1" if mark == "Confirmed" else "#f7c96a" if mark == "Flagged" else "#94a9c4",
-                     font=("Arial", 10, "bold")).pack(anchor="w", pady=(4, 14))
+                     font=(self.font_family, 12, "bold")).pack(anchor="w", pady=(4, 14))
             tk.Label(details, text="CLICK A FILE TO OPEN", bg="#142137", fg="#94a9c4",
-                     font=("Arial", 9, "bold")).pack(anchor="w", pady=(0, 7))
+                     font=(self.font_family, 11, "bold")).pack(anchor="w", pady=(0, 7))
             list_frame = tk.Frame(details, bg="#142137")
             list_frame.pack(fill="both", expand=True)
             file_canvas = tk.Canvas(list_frame, bg="#142137", highlightthickness=0)
@@ -638,18 +645,18 @@ class DetectorApp:
             rows.bind("<Configure>", lambda _e: file_canvas.configure(scrollregion=file_canvas.bbox("all")))
             file_canvas.bind("<Configure>", lambda event: file_canvas.itemconfigure(file_window, width=event.width))
             for name in files:
-                tk.Button(rows, text="OPEN  " + (name if len(name) <= 37 else "..." + name[-34:]),
+                tk.Button(rows, text="OPEN  " + (name if len(name) <= 34 else "..." + name[-31:]),
                           command=lambda item=name: open_file(item), bg="#203551", fg="#e5f4ff",
                           activebackground="#2a6a7d", activeforeground="white", relief="flat",
-                          anchor="w", padx=10, pady=9, font=("Arial", 9), cursor="hand2").pack(fill="x", pady=3)
+                          anchor="w", padx=10, pady=10, font=(self.font_family, 11), cursor="hand2").pack(fill="x", pady=3)
             for label, mark_value, color in (("CONFIRM GROUP", "Confirmed", "#1b856f"),
                                              ("FLAG FOR REVIEW", "Flagged", "#9a632e"),
                                              ("CLEAR MARK", "Not reviewed", "#30435f")):
                 tk.Button(details, text=label, command=lambda value=mark_value: set_mark(value),
                           bg=color, fg="white", activebackground="#39aeb4", relief="flat",
-                          font=("Arial", 9, "bold"), pady=9, cursor="hand2").pack(fill="x", pady=(6, 0))
+                          font=(self.font_family, 11, "bold"), pady=10, cursor="hand2").pack(fill="x", pady=(6, 0))
             tk.Label(details, text="Review marks: manual_review.csv", bg="#142137", fg="#8097b4",
-                     font=("Arial", 9)).pack(anchor="w", pady=(13, 0))
+                     font=(self.font_family, 11)).pack(anchor="w", pady=(13, 0))
 
         def select_group(index: int) -> None:
             selected["index"] = index
@@ -669,25 +676,25 @@ class DetectorApp:
                 canvas_width = max(384, canvas.winfo_width())
                 tile_width = max(250, (canvas_width - columns * 10) // columns)
                 tile = tk.Frame(tile_grid, bg="#142137", width=tile_width,
-                                height=round(180 * self.ui_scale), highlightbackground=accent, highlightthickness=2,
+                                height=round(205 * self.ui_scale), highlightbackground=accent, highlightthickness=2,
                                 cursor="hand2")
                 tile.grid(row=position // columns, column=position % columns, padx=5, pady=5, sticky="nw")
                 tile.pack_propagate(False)
                 title = tk.Label(tile, text=f"GROUP {index + 1:03d}     {len(files)} FILES",
-                                 bg="#142137", fg="#f1f7ff", font=("Arial", 11, "bold"), anchor="w")
+                                 bg="#142137", fg="#f1f7ff", font=(self.font_family, 13, "bold"), anchor="w")
                 title.pack(fill="x", padx=12, pady=(11, 5))
                 preview = "\n".join(name if len(name) <= 31 else "..." + name[-28:] for name in files[:3])
-                tk.Label(tile, text=preview, bg="#142137", fg="#9bb1cc", font=("Arial", 9),
+                tk.Label(tile, text=preview, bg="#142137", fg="#9bb1cc", font=(self.font_family, 11),
                          justify="left", anchor="nw").pack(fill="x", padx=12)
                 tk.Label(tile, text=mark.upper(), bg="#142137",
                          fg="#54deba" if mark == "Confirmed" else "#f7c96a" if mark == "Flagged" else "#4cdae1",
-                         font=("Arial", 9, "bold"), anchor="w").pack(side="bottom", fill="x", padx=12, pady=9)
+                         font=(self.font_family, 11, "bold"), anchor="w").pack(side="bottom", fill="x", padx=12, pady=9)
                 for widget in (tile, *tile.winfo_children()):
                     widget.bind("<Button-1>", lambda _event, n=index: select_group(n))
             if len(visible) > shown["limit"]:
                 tk.Button(tile_grid, text=f"LOAD MORE  ({len(visible) - shown['limit']} remaining)",
                           command=load_more, bg="#243653", fg="#e5f4ff", relief="flat",
-                          font=("Arial", 10, "bold"), pady=10).grid(row=(shown["limit"] + columns - 1) // columns,
+                          font=(self.font_family, 12, "bold"), pady=10).grid(row=(shown["limit"] + columns - 1) // columns,
                                                                     column=0, columnspan=columns, sticky="ew", pady=12)
             canvas.configure(scrollregion=canvas.bbox("all"))
 
